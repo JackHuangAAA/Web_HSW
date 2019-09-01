@@ -213,7 +213,7 @@ module.exports = {
        * @param requestBody
        * @returns {Promise.<[*,*,*,*,*]>}
        */
-      reciveVaccination: async function(requestBody) {
+      receiveVaccination: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = {
             customer:{
@@ -223,9 +223,19 @@ module.exports = {
                 vaccineCode: 'ym20190920134508999',
                 vaccineName: '脊髓灰质炎疫苗',
                 vaccineNum: 1
-            }
+            },
+            cabinetNo:"1100002"
         };
-        return result;
+        let device_result = await Domain.models.device.find({cabinetNo:result.cabinetNo});
+
+        let channel = "receiveVaccination";
+        result.code = device_result[0].code;
+        result.type = channel;
+
+        let message = JSON.stringify(result);
+
+        await Domain.redis.pub.publishAsync(channel, message);
+
       },
 
     /**
@@ -233,12 +243,23 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<{customer: {code: string, name: string, age: number, vaccineCode: string, vaccineName: string, vaccineNum: number}}>}
      */
-    reciveVaccinationStatus: async function(requestBody) {
-        logger.debug(`reciveVaccinationStatus param: ${JSON.stringify(requestBody)}`);
+    receiveVaccinationStatus: async function(requestBody) {
+        logger.debug(`receiveVaccinationStatus param: ${JSON.stringify(requestBody)}`);
         let result = {
-            status: finish
+            status: "finish",
+            cabinetNo:"1100002"
         };
-        return result;
+
+        let device = await Domain.models.device.find({cabinetNo:result.cabinetNo});
+
+        let channel = "receiveVaccinationStatus";
+        result.code = device[0].code;
+        result.type = channel;
+
+        let message = JSON.stringify(result);
+
+        Domain.redis.pub.publishAsync(channel, message);
+        //return result;
     },
 
     /**

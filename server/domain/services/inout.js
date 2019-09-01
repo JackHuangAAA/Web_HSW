@@ -200,7 +200,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.date)) {
             let date = moment(requestBody.date);
             query.push({"createDate": {"$gte": date.startOf('day').toDate()}});
-            query.push({openingTime: {"$lte": date.endOf('day').toDate()}});
+            query.push({"createDate": {"$lte": date.endOf('day').toDate()}});
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         return await Domain.models.inout.find(query,null, sort);

@@ -147,14 +147,28 @@ module.exports = {
         logger.debug(`queryDeviceStock param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.type)) {
-            query.push({"type": requestBody.type});
+            query.push({"type": parseInt(requestBody.type)});
         }
         if (!_.isEmpty(requestBody.unitName)) {
             query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
         }
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         //查询疫苗不足的设备信息
-        let result = await Domain.models.vaccine.find({surplus:0});
+
+        return await  Domain.models.device.aggregate([
+
+            {$match:query},
+            {
+                $lookup:{
+                    from:"vaccines",
+                    localField:"_id",
+                    foreignField:"device",
+                    as:"stockdocs"
+                }
+            },
+        ]);
+
+        /*let result = await Domain.models.vaccine.find({surplus:0});
         let deviceId_array = [];
         for (let index in result){//生成疫苗不足的设备ID数组
             deviceId_array.push(result[index].device.toString());
@@ -188,7 +202,7 @@ module.exports = {
             }
             result_objarray.push(newObj)
         };
-        return {rs:result_objarray,total:result_device.total};
+        return {rs:result_objarray,total:result_device.total};*/
 
     },
 
