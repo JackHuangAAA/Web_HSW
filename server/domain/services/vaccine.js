@@ -53,7 +53,7 @@ module.exports = {
             query.push({ "name": {'$lte':10}});
         }
         if (_.isEmpty(requestBody.product)) {
-            query.push({ "product": {'$lte':10}});
+            query.push({ "product": new RegExp(requestBody.product)});
         }
         if (!_.isEmpty(requestBody['ids[]'])) {
             let temp = _.map(requestBody['ids[]'], item => {
