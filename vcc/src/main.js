@@ -1,28 +1,27 @@
-import './polyfill'
-import lodash from 'lodash'
-global._ = lodash
-import Vue from "vue"
-import router from "@/router"
-import App from "@/App.vue"
-import store from "@/store"
-import '@/theme/index'
+// import './polyfill'
+// import '@/theme/index'
 import '@/style/index'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
+import lodash from 'lodash'
+import Vue from 'vue'
+import router from '@/router'
+import App from '@/App.vue'
+import store from '@/store'
 import api from '@/api'
 import iView from 'iview'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'iview/dist/styles/iview.css'
 import config from '@/config'
 
-Vue.use(iView);
-Vue.use(VueAwesomeSwiper);
+let _ = lodash
+
+Vue.use(iView)
 
 global.__app = new Vue({
-    el: '#app',
-    router: router,
-    store: store,
-    render: h => h(App)
-});
+  el: '#app',
+  router,
+  store,
+  render: h => h(App)
+})
 
-Vue.prototype.$cookies = Cookies;
-Vue.prototype.$api = api;
-Vue.prototype.$config = config;
+Vue.prototype.$api = api
+Vue.prototype.$config = config
