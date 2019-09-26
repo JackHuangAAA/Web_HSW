@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import loginform from './module/loginform'
-import fplogin from './module/fplogin'
+import loginform from '_c/loginform'
+import fplogin from '_c/fplogin'
 export default {
   components: {
     loginform,

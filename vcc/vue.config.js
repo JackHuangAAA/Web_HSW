@@ -15,8 +15,13 @@ module.exports = {
   publicPath: BASE_URL,
   lintOnSave: false,
   chainWebpack: config => {
+    //热更新
+    config.resolve.symlinks(true)
     //src别名配置
-    config.resolve.alias.set('@', resolve('src'))
+    config.resolve.alias
+      .set('@', resolve('src'))
+      .set('_c', resolve('src/components'))
+      .set('_a', resolve('src/assets'))
     //less解析
     config.resolve.extensions.add('.less')
     //iview es6编译

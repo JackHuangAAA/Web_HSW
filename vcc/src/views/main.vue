@@ -10,7 +10,9 @@
           二号接种台
         </div>
         <div class="userinfo">李晓文</div>
-        <div class="datetime">2019-09-18 12:30:28 星期一</div>
+        <div class="datetime">
+          <datetime></datetime>
+        </div>
       </Row>
     </div>
     <div class="main">
@@ -21,8 +23,12 @@
 </template>
 
 <script>
+import datetime from '_c/datetime'
 export default {
   name: 'main',
+  components: {
+    datetime
+  },
   data () {
     return {
 
@@ -57,12 +63,14 @@ export default {
   margin: 20px 18px 0px 23px;
 }
 .menu {
+  position: absolute;
   width: 180px;
   height: 60px;
+  z-index: 200;
   background-color: @blue;
 }
 .title {
-  margin-left: 30px;
+  margin-left: 30px+180px;
   height: 60px;
   display: flex;
   justify-content: center;
