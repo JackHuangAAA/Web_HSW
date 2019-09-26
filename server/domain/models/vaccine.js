@@ -6,7 +6,7 @@ const vaccineSchema = mongoose.Schema({
     code: String,     //疫苗编号
     name: String,     //疫苗名称
     total: Number,    //数量(入库总数)
-    use: Number,      //使用数量
+    surplus: Number,  //剩余数量
     updateDate: {type: Date, default: Date.now}  //更新时间
 }, {autoIndex: false});
 vaccineSchema.plugin(paginate);
