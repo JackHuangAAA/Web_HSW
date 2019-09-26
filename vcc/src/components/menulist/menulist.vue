@@ -151,10 +151,6 @@ export default {
   background-size: 134px 18px;
   margin: 34px auto 0px auto;
 }
-.menulist {
-  width: 180px;
-  overflow: hidden;
-}
 .menu-button {
   width: 180px;
   height: 60px;
@@ -162,9 +158,14 @@ export default {
   cursor: pointer;
   background-color: @blue;
 }
+.menulist {
+  width: 180px;
+  overflow: hidden;
+  transition: all 0.5s;
+  background-color: @white;
+}
 .menuopen {
   height: 100%;
-  background-color: @white;
 }
 .menuclose {
   height: 60px;
