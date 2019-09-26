@@ -1,15 +1,28 @@
-import Vuex from 'vuex'
-import Vue from 'vue'
-
-const store = {
+export default {
   state: {
     user: null,
+    username: '李晓文',
+    position: '2号接种台',
+    routerTitle: '主页',
+    location: '西湖区',
     currentMenu: {} //当前菜单
   },
 
   getters: {
+    location: state => {
+      return state.location
+    },
     user: state => {
       return state.user
+    },
+    routerTitle: state => {
+      return state.routerTitle
+    },
+    username: state => {
+      return state.username
+    },
+    position: state => {
+      return state.position
     },
     currentMenu: state => {
       return state.currentMenu
@@ -34,8 +47,3 @@ const store = {
     }
   }
 }
-
-Vue.use(Vuex)
-let Store = new Vuex.Store(store)
-
-export default Store

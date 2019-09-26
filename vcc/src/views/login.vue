@@ -88,7 +88,7 @@ export default {
   background-size: 100% 100%;
 }
 .header {
-  align-content: center;
+  align-items: center;
   justify-content: center;
   display: flex;
   // flex-direction: column;
@@ -99,7 +99,7 @@ export default {
 }
 .login {
   flex-wrap: wrap;
-  align-content: center;
+  align-items: center;
   justify-content: center;
   display: flex;
   position: absolute;
@@ -108,7 +108,7 @@ export default {
 }
 .item {
   display: flex;
-  align-content: inherit;
+  align-items: inherit;
   justify-content: inherit;
   width: 100%;
 }

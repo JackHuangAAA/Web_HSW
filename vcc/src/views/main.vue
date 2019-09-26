@@ -1,15 +1,19 @@
 <template>
   <div class="layout">
+    <div class="menu">
+      <menu-list :lists="menulist"></menu-list>
+    </div>
     <div class="header">
       <Row type="flex">
-        <div class="menu"></div>
-        <div class="title">
-          <p>路径名字</p>
+        <div class="routerlink">
+          <routerlink></routerlink>
         </div>
         <div class="position">
-          二号接种台
+          <position></position>
         </div>
-        <div class="userinfo">李晓文</div>
+        <div class="userinfo">
+          <userinfo></userinfo>
+        </div>
         <div class="datetime">
           <datetime></datetime>
         </div>
@@ -24,26 +28,47 @@
 
 <script>
 import datetime from '_c/datetime'
+import userinfo from '_c/userinfo'
+import position from '_c/position'
+import routerlink from '_c/routerlink'
+import menuList from '_c/menulist'
+import iviotp from '@/router/iviotp'
 export default {
   name: 'main',
   components: {
-    datetime
+    datetime,
+    userinfo,
+    position,
+    routerlink,
+    menuList
   },
   data () {
     return {
-
+      menulist: []
     }
-  }
+  },
+  created () {
+    this.getmenulist()
+  },
+  methods: {
+    getmenulist () {
+      let menulist = iviotp.map(el => {
+        let path = { path: el.path, name: el.name, ...el.meta }
+        return path
+      })
+      this.menulist = menulist
+    }
+  },
 }
 </script>
 
 <style lang="less" scoped>
-@import "../style/color.less";
+@import "~@/style/color.less";
 .layout {
   width: 100%;
   height: 100%;
-  background: @bgcolor;
-  position: relative;
+  background: @gray;
+  position: fixed;
   color: @black;
 }
 .header {
@@ -57,7 +82,6 @@ export default {
 .main {
   top: 60px;
   position: absolute;
-  background: rgba(255, 255, 255, 1);
   width: ~"calc(100% - 41px)";
   height: ~"calc(100% - 118px)";
   margin: 20px 18px 0px 23px;
@@ -65,16 +89,17 @@ export default {
 .menu {
   position: absolute;
   width: 180px;
-  height: 60px;
+  height: 100%;
   z-index: 200;
-  background-color: @blue;
+  // background-color: @blue;
 }
-.title {
+.routerlink {
   margin-left: 30px+180px;
   height: 60px;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
+  color: @black;
 }
 .title p {
   margin: auto;
@@ -85,22 +110,13 @@ export default {
 }
 .position {
   margin: auto;
-  font-size: 20px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
   color: @blue;
 }
 .userinfo {
   margin: auto 26px auto 0px;
-  font-size: 16px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
 }
 .datetime {
   margin: auto 21px auto 0px;
-  font-size: 14px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
   color: @black;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>{{nowdate}}</div>
+  <div class="date">{{nowdate}}</div>
 </template>
 
 <script>
@@ -8,7 +8,7 @@ export default {
   name: 'datetime',
   data () {
     return {
-      nowdate: 'asd'
+      nowdate: 'null'
     }
   },
   computed: {
@@ -62,4 +62,9 @@ export default {
 </script>
 
 <style lang="less">
+.date {
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+}
 </style>

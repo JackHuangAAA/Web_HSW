@@ -1,28 +1,17 @@
 import Main from '@/views/main.vue'
+import iviotp from './iviotp'
 const routers = [
   {
     path: '/',
-    component: Main
-    // children: [
-    //   {
-    //     path: '/50x',
-    //     final: true,
-    //     component: () => import('@/views/error/50x.vue')
-    //   }
-    //   //   {
-    //   //     path: '/main',
-    //   //     component: resolve => require(['@/views/main.vue'], resolve)
-    //   //   },
-    //   //   {
-    //   //     path: '/system/user',
-    //   //     component: resolve => require(['@/views/system/user.vue'], resolve)
-    //   //   }
-    // ]
-  },
-  {
-    path: '/main',
-    final: true,
-    component: () => import('@/views/main.vue')
+    component: Main,
+    children: [
+      ...iviotp,
+      {
+        path: '/50x',
+        final: true,
+        component: () => import('@/views/error/50x.vue')
+      }
+    ]
   },
   {
     path: '/login',
