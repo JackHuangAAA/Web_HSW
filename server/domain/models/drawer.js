@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const paginate = require('mongoose-paginate');
+
 /**
  * 抽屉信息
  */
