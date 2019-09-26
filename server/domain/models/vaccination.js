@@ -18,8 +18,8 @@ const vaccinationSchema = mongoose.Schema({
     match:{                 //匹配信息(政采云响应结果)
         vaccineCode: String,//疫苗编号
         vaccineName: String,//疫苗名称
-        batch: String,      //批次编号
-        expiry: Date,       //有效期
+        supervisionCode: String,//药品监管码
+        expiry: Date,       //药品监管码
         producer: String    //生产商
     },
     result:Number,          //匹配结果(0:不匹配;1:匹配)

@@ -10,13 +10,14 @@ const deviceSchema = mongoose.Schema({
     address:{
         provinceCode: String,   //省份编码
         provinceName: String,   //省份名称
-        cityCode: String,       //市
+        cityCode: String,       //市编码
         cityName: String,       //市
-        countyCode: String,     //县(区)
+        countyCode: String,     //县(区)编码
         countyName: String,     //县(区)
-        townCode: String,        //镇(乡、街道)
+        townCode: String,       //镇(乡、街道)编码
         townName: String        //镇(乡、街道)
     },
+    cabinetNo: String,//接种台好
     unit: String,     //所属单位
     notes: String,    //备注
     createDate: {type: Date, default: Date.now}, //创建时间
