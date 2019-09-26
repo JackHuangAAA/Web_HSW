@@ -1,3 +1,6 @@
+const mongoose = require('mongoose');
+const paginate = require('mongoose-paginate');
+
 /**
  * 疫苗信息(抽屉疫苗信息)
  */
