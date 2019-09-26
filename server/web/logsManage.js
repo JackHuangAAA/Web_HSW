@@ -39,7 +39,7 @@ async function housekeeping () {
         msg = err.message;
     }finally {
         time = Date.now() - start;
-        await Domain.services.execution.saveExecution({name:'logsManage', time:time, status:status, reason:msg});
+        //await Domain.services.execution.saveExecution({name:'logsManage', time:time, status:status, reason:msg});
     }
     logger.info('end clean log files,use time:'+time);
 }

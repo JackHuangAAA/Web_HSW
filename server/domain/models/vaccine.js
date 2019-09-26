@@ -1,0 +1,13 @@
+/**
+ * 疫苗信息(抽屉疫苗信息)
+ */
+const vaccineSchema = mongoose.Schema({
+    device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
+    code: String,     //疫苗编号
+    name: String,     //疫苗名称
+    total: Number,    //数量(入库总数)
+    use: Number,      //使用数量
+    updateDate: {type: Date, default: Date.now}  //更新时间
+}, {autoIndex: false});
+vaccineSchema.plugin(paginate);
+module.exports = mongoose.model('vaccine', vaccineSchema);
