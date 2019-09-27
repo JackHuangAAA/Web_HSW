@@ -43,7 +43,7 @@ module.exports = {
         return Domain.models.user.find(query);
     },
 
-    /**
+ /**
  *  按用户id更新指纹信息
  * @param requestBody
  * @returns {Promise.<{rs: *, total: (*|number)}>}
