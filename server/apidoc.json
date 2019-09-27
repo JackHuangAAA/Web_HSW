@@ -1,0 +1,13 @@
+{
+  "name": "SmartVaccineAPIs",
+  "version": "1.0.0",
+  "description": "智慧疫苗项目接口文档",
+  "title": "SmartVaccineAPIs",
+  "url" : "http://localhost:9999",
+  "forceLanguage":"zh-cn",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  }
+
+}
