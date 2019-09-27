@@ -85,6 +85,7 @@ export default {
   height: ~"calc(100% - 337px)";
 }
 .vaccine-set {
+  display: flex;
   padding: 0px;
   margin: 0px;
   border-radius: 10px;
@@ -97,19 +98,25 @@ export default {
   overflow: hidden;
 }
 .vaccine-set p {
-  width: 72px;
-  height: 17px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
   position: absolute;
   font-size: 18px;
   font-weight: 400;
   color: rgba(255, 255, 255, 1);
+  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
 }
 .vaccine-set img {
+  z-index: 0;
   position: relative;
   top: -5px;
   left: -10px;
   height: 80px;
-  width: 350px;
+  min-width: 340px;
 }
 .vaccine-in {
   bottom: 84px;
