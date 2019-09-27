@@ -71,6 +71,7 @@ export default {
   position: fixed;
   color: @black;
   min-width: @minhtmlwidth;
+  min-height: @minhtmlheight;
 }
 .header {
   width: 100%;
