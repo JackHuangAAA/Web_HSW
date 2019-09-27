@@ -13,7 +13,7 @@ const logger = Libs.logger.getLogger('temperature');
  * @apiParam {String} [deviceId] 设备id
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间
- * @apiSuccess {JSON}  Object  inout model 数组
+ * @apiSuccess {JSON}  Object  temperature model 数组
  */
 router.get('/queryTemperatures',
     Libs.router( async (ctx, next) => {

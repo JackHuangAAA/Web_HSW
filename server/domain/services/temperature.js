@@ -12,7 +12,7 @@ module.exports = {
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
     queryTemperatures: async function(requestBody){
-        logger.debug(`queryTemperatures param: ${json.stringify(requestBody)}`);
+        logger.debug(`queryTemperatures param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.deviceId)) {
             query.push({"device": requestBody.deviceId});
@@ -20,12 +20,12 @@ module.exports = {
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
             begin = begin.startOf('day').toDate();
-            query.push({createDate: {"$gte": begin}});
+            query.push({"createDate": {"$gte": begin}});
         }
         if (!_.isEmpty(requestBody.end)) {
             let end = moment(requestBody.end);
             end = end.endOf('day').toDate();
-            query.push({createDate: {"$lte": end}});
+            query.push({"createDate": {"$lte": end}});
         }
         query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.temperature.paginate(query, {
@@ -43,7 +43,7 @@ module.exports = {
      * @returns {Promise.<requestBody>}
      */
     saveTemperature: async function(requestBody){
-        logger.debug(`saveTemperature param: ${json.stringify(requestBody)}`);
+        logger.debug(`saveTemperature param: ${JSON.stringify(requestBody)}`);
         return Domain.models.temperature.create(requestBody);
     }
 

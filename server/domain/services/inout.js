@@ -13,7 +13,7 @@ module.exports = {
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
     queryInouts: async function(requestBody){
-        logger.debug(`queryInouts param: ${json.stringify(requestBody)}`);
+        logger.debug(`queryInouts param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.deviceId)) {
             query.push({"device": requestBody.deviceId});
@@ -27,19 +27,18 @@ module.exports = {
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
             begin = begin.startOf('day').toDate();
-            query.push({createDate: {"$gte": begin}});
+            query.push({"createDate": {"$gte": begin}});
         }
         if (!_.isEmpty(requestBody.end)) {
             let end = moment(requestBody.end);
             end = end.endOf('day').toDate();
-            query.push({createDate: {"$lte": end}});
+            query.push({"createDate": {"$lte": end}});
         }
         query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,
-            limit: parseInt(requestBody.size),
-            lean:true
+            limit: parseInt(requestBody.size)
         });
         return {rs: result.docs, total: result.total};
     },
@@ -50,7 +49,7 @@ module.exports = {
      * @returns {Promise.<requestBody>}
      */
     saveInout: async function(requestBody){
-        logger.debug(`saveInout param: ${json.stringify(requestBody)}`);
+        logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
     }
 
