@@ -59,57 +59,57 @@ module.exports = {
         );
     },
 
-    // /**
-    //  * 检查token
-    //  * @param token
-    //  * @returns {Promise.<{_id, code, name, password, role: *, phone: (*|string|Array)}>}
-    //  */
-    // checkToken: async function (token) {
-    //     logger.debug(`checkToken param: ${token}`);
-    //     let op = await Domain.models.user.findOne({token: token},null,{lean:true});
-    //     if (op != null) {
-    //         await this.refreshLastLogin(op.code);
-    //         return {
-    //                 _id: op._id,
-    //                 code: op.code,
-    //                 name: op.name,
-    //                 password: op.password,
-    //                 role: op.role,
-    //                 phone: op.phone
-    //         };
-    //     } else {
-    //         throw Libs.error('0001','无效token');
-    //     }
-    // },
+    /**
+     * 检查token
+     * @param token
+     * @returns {Promise.<{_id, code, name, password, role: *, phone: (*|string|Array)}>}
+     */
+    checkToken: async function (token) {
+        logger.debug(`checkToken param: ${token}`);
+        let op = await Domain.models.user.findOne({token: token},null,{lean:true});
+        if (op != null) {
+            await this.refreshLastLogin(op.code);
+            return {
+                    _id: op._id,
+                    code: op.code,
+                    name: op.name,
+                    password: op.password,
+                    role: op.role,
+                    phone: op.phone
+            };
+        } else {
+            throw Libs.error('0001','无效token');
+        }
+    },
 
-    // /**
-    //  * 登录
-    //  * @param code
-    //  * @param password
-    //  * @returns {Promise.<*>}
-    //  */
-    // login: async function (code, password) {
-    //     logger.debug(`login param code: ${code}, password: ${password}`);
-    //     let op = await Domain.models.user.findOne({code: code});
-    //     logger.debug(op, code)
-    //     if(op != null) {
-    //         if (op.password == password) {
-    //             let token = null;
-    //             if (moment().diff(moment(op.lastLogin), 'minutes') <= 30 && !_.isEmpty(op.token)) {
-    //                 token = op.token;
-    //             } else {
-    //                 token = generator.next().toString('hex').toUpperCase();
-    //             }
-    //             await this.updateUserToken(code, token);
-    //             return token;
+    /**
+     * 登录
+     * @param code
+     * @param password
+     * @returns {Promise.<*>}
+     */
+    login: async function (code, password) {
+        logger.debug(`login param code: ${code}, password: ${password}`);
+        let op = await Domain.models.user.findOne({code: code});
+        logger.debug(op, code)
+        if(op != null) {
+            if (op.password == password) {
+                let token = null;
+                if (moment().diff(moment(op.lastLogin), 'minutes') <= 30 && !_.isEmpty(op.token)) {
+                    token = op.token;
+                } else {
+                    token = generator.next().toString('hex').toUpperCase();
+                }
+                await this.updateUserToken(code, token);
+                return token;
 
-    //         } else {
-    //             throw Libs.error('0003','密码错误');     //密码错误
-    //         }
-    //     }else{
-    //         throw Libs.error('0002',`用户${code}不存在`);//用户${code}不存在
-    //     }
-    // },
+            } else {
+                throw Libs.error('0003','密码错误');     //密码错误
+            }
+        }else{
+            throw Libs.error('0002',`用户${code}不存在`);//用户${code}不存在
+        }
+    },
 
     // /**
     //  * 更新用户最近一次token

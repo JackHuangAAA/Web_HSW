@@ -6,7 +6,7 @@ const logger = Libs.logger.getLogger('drawer');
 module.exports = {
 
     /**
-     * 
+     *  查询抽屉里疫苗为空的数据
      * 
      * @param {any} requestBody 
      * @returns 
@@ -20,7 +20,7 @@ module.exports = {
         let result = await Domain.models.drawer.find(query).populate("vaccine");
         console.log(result, 'result')
         result = result.filter(item => {
-            return item.vaccine.length > 0
+            return item.vaccine == null
         })
         return { rs: result, total: result.length }
     },
@@ -41,13 +41,16 @@ module.exports = {
     },
 
     /**
-     *  按设备id查询抽屉信息，并按坐标排序
+     *   根据条件查询抽屉信息，并按坐标排序
      * 
      * @param {any} requestBody 
      * @returns 
      */
     queryDrawerByCondition: async function (requestBody) {
         let query = [];
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
         if (!_.isEmpty(requestBody.id)) {
             query.push({ "device": requestBody.id });
         }

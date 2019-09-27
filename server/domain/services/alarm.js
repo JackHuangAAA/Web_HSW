@@ -42,4 +42,14 @@ module.exports = {
     },
 
 
+     /**
+     * 保存报警信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveAlarm: async function(requestBody){
+        logger.debug(`saveAlarm param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.alarm.create(requestBody);
+    },
+
 };
