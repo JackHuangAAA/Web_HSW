@@ -68,12 +68,13 @@ module.exports = {
         let vaccineArr = drawerData.vaccine;
         let vaccineId = vaccineData._id
         vaccineArr.push(vaccineId)
-        return Domain.models.drawer.update(
+        await Domain.models.drawer.update(
             { _id: requestBody.id },
             {
                 $set: { vaccine: vaccineArr }
             }
         );
+        return {vaccineData: vaccineData}
     },
     /**
   * 
@@ -84,7 +85,7 @@ module.exports = {
     modifyDrawerByIdDec: async function (requestBody) {
         logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
         let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
-        let vaccineData = await Domain.models.vaccine.findOne({_id: requestBody.vaccineId});
+        let vaccineData = await Domain.models.vaccine.findOneAndRemove({_id: requestBody.vaccineId});
         let vaccineArr = drawerData.vaccine;
         let vaccineId = vaccineData._id
         vaccineArr = vaccineArr.filter(item=>{

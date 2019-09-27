@@ -39,7 +39,7 @@ router.get('/queryDrawerByCondition',
  * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）
  * @apiParam {String} id 抽屉id
  * @apiParam {Object} vaccine 疫苗json数据
- * @apiSuccess {Object} data 操作返回数据
+ * @apiSuccess {Object} data 操作返回数据 新增疫苗数据
  */
 router.post('/modifyDrawerById',
     Libs.router(async (ctx, next) => {
@@ -54,7 +54,7 @@ router.post('/modifyDrawerById',
  * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）
  * @apiParam {String} id 抽屉id
  * @apiParam {Object} vaccineId 疫苗id
- * @apiSuccess {Object} data 操作返回数据
+ * @apiSuccess {Object} data 操作返回数据的
  */
 router.post('/modifyDrawerByIdDec',
     Libs.router(async (ctx, next) => {
