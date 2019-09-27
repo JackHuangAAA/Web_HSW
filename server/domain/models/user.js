@@ -6,7 +6,7 @@ const paginate = require('mongoose-paginate');
  */
 const userSchema = mongoose.Schema({
     code: String,   //登录账号
-    name: String,   //登录密码
+    name: String,   //登录名称
     finger1: String,//指纹1
     finger2: String,//指纹2
     token: String,  //token值
