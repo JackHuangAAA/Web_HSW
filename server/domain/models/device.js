@@ -7,6 +7,7 @@ const paginate = require('mongoose-paginate');
 const deviceSchema = mongoose.Schema({
     code: String, //设备编号（设备上送）
     alias: String,//别名（客户自定义）
+    type: Number, //类型(1:接种柜;2:冷藏柜)
     address:{
         provinceCode: String,   //省份编码
         provinceName: String,   //省份名称
@@ -17,7 +18,8 @@ const deviceSchema = mongoose.Schema({
         townCode: String,       //镇(乡、街道)编码
         townName: String        //镇(乡、街道)
     },
-    cabinetNo: String,//接种台好
+    cabinetNo: String,//接种台号
+    unitCode: String, //所属单位编号
     unit: String,     //所属单位
     notes: String,    //备注
     createDate: {type: Date, default: Date.now}, //创建时间
