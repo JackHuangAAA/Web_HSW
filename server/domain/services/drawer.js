@@ -24,6 +24,39 @@ module.exports = {
         })
         return { rs: result, total: result.length }
     },
+    /**
+     * 
+     * 根据抽屉id更新抽屉信息
+     * @param {any} requestBody 
+     * @returns 
+     */
+    modifyDrawerById: async function (requestBody) {
+        logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.drawer.update(
+            { _id: requestBody.id },
+            {
+                $set: { vaccine: requestBody.vaccine }
+            }
+        );
+    },
+
+    /**
+     *  按设备id查询抽屉信息，并按坐标排序
+     * 
+     * @param {any} requestBody 
+     * @returns 
+     */
+    queryDrawerByCondition: async function (requestBody) {
+        let query = [];
+        if (!_.isEmpty(requestBody.id)) {
+            query.push({ "device": requestBody.id });
+        }
+        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        let result = await Domain.models.drawer.find(query).sort({"x":1, "y": 1}).populate("vaccine");
+
+        return { rs: result, total: result.length }
+    },
+
 
 
 };

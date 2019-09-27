@@ -17,16 +17,17 @@ router.get('/queryAlarmDailyInfo',
 );
 
 /**
- * @api {GET} /queryAlarmByTemp  查询温度报警次数
+ * @api {GET} /queryAlarmByByCondition  查询报警次数
  * @apiGroup Alarm
  * @apiVersion 1.0.0
- * @apiDescription 查询温度报警次数
- * @apiSuccess {Array}  rs  当天温度报警次数信息数组
- * @apiSuccess {Number}  total 当天温度报警次数
+ * @apiDescription 查询报警次数
+ * @apiParam {Number} type 报警类型(1:温度异常;2:库存不足,不传查询全部)
+ * @apiSuccess {Array}  rs  当天报警次数信息数组
+ * @apiSuccess {Number}  total 当天报警次数
  */
-router.get('/queryAlarmByTemp',
+router.get('/queryAlarmByByCondition',
     Libs.router(async (ctx, next) => {
-       return await Domain.services.alarm.queryAlarmByTemp(ctx.request.query);
+       return await Domain.services.alarm.queryAlarmByByCondition(ctx.request.query);
     })
 );
 
