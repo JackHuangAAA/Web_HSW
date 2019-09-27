@@ -36,7 +36,7 @@ router.get('/queryUserByCondition',
 );
 
 /**
- * @api {GET} /user/queryUserByCondition  按用户id更新指纹信息
+ * @api {POST} /user/queryUserByCondition  按用户id更新指纹信息
  * @apiGroup User
  * @apiVersion 1.0.0
  * @apiDescription 按用户id更新指纹信息

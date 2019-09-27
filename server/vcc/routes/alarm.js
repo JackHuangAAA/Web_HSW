@@ -32,7 +32,7 @@ router.get('/queryAlarmByByCondition',
 );
 
 /**
- * @api {GET} /alarm/saveAlarm  保存报警信息
+ * @api {POST} /alarm/saveAlarm  保存报警信息
  * @apiGroup Alarm
  * @apiVersion 1.0.0
  * @apiDescription 保存报警信息

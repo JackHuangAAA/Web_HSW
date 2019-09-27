@@ -70,6 +70,22 @@ module.exports = {
         return { rs: result, total: result.length }
     },
 
+    /**
+     *  更新抽屉内疫苗数量信息
+     * 
+     * @param {any} requestBody 
+     * @returns 
+     */
+    modifyVaccine: async function (requestBody) {
+        logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
+        return await Domain.models.vaccine.update(
+            { _id: requestBody.id },
+            {
+                $set: { total: requestBody.total, updateDate: new Date()}
+            }
+        );
+    },
+
 
 
 };

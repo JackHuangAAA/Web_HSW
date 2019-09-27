@@ -33,7 +33,7 @@ router.get('/queryDrawerByCondition',
 );
 
 /**
- * @api {GET} /drawer/modifyDrawerById  根据抽屉id更新抽屉信息 （区域划分）
+ * @api {POST} /drawer/modifyDrawerById  根据抽屉id更新抽屉信息 （区域划分）TODO
  * @apiGroup  Drawer
  * @apiVersion 1.0.0
  * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）

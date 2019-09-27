@@ -48,4 +48,19 @@ router.get('/queryVaccineStorageNum',
     })
 );
 
+/**
+ * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗数量信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 更新抽屉内疫苗数量信息
+ * @apiParam {String} id 疫苗id
+ * @apiParam {Number} total 入库数量
+ * @apiSuccess {OBject}  json  操作返回数据
+ */
+router.post('/modifyVaccine',
+    Libs.router(async (ctx, next) => {
+       return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+    })
+);
+
 module.exports = router;
