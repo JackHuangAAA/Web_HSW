@@ -22,8 +22,19 @@ module.exports = {
         result = result.filter(item => {
             return item.vaccine.length > 0
         })
-        return { rs: result, total: result.length }
+        return { rs: result, total: result.length };
     },
+
+    /**
+     * 增加抽屉信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveDrawer: async function(requestBody){
+        logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.drawer.insertMany(requestBody);
+    },
+
     /**
      * 
      * 根据抽屉id更新抽屉信息

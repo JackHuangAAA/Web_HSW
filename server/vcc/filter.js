@@ -45,18 +45,30 @@ const deviceFilter = async (ctx) => {
         logger.info(`device header info:${JSON.stringify(ctx.header)}`);
         let deviceCode = ctx.header['deviceid'];
         if(deviceCode != null){
-            let device = await Domain.services.device.queryDeviceByCondition ({code: deviceCode});console.log(_.isEmpty(device)+'55--------'+(device == null));
-            if(_.isEmpty(device)){console.log('--------999');
+            let device = await Domain.services.device.queryDeviceByCondition ({code: deviceCode});
+            if(_.isEmpty(device)){
                 //初始化设备
                 logger.info(`add device,deviceCode:${deviceCode}`);
                 device = await Domain.services.device.saveDevice(
                     {
-                        deviceCode: deviceCode,//设备序列号
-                        type:1 //设备类型(1:接种柜;2:冷藏柜)
+                        code: deviceCode,//设备序列号
+                        type: 1  //设备类型(1:接种柜;2:冷藏柜)
                     }
                 );
-                //初始添加药格
-                await Domain.services.device.saveDrawer(device);
+                //初始添加抽屉
+                let darwers = [];
+                for(let y=1;y<6;y++){
+                    for(let x=1;x<3;x++){
+                        let temp = {
+                            'device': device._id,
+                            'x':x, //列
+                            'y':y, //行
+                            'vaccine': null
+                        };
+                        darwers.push(temp);
+                    }
+                }
+                await Domain.services.drawer.saveDrawer(darwers);
             }
             //保存心跳时间
             let now = new moment();
