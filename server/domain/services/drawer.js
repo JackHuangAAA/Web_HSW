@@ -30,25 +30,9 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveDrawer: async function(requestBody){
+    saveDrawer: async function (requestBody) {
         logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
         return Domain.models.drawer.insertMany(requestBody);
-    },
-
-    /**
-     * 
-     * 根据抽屉id更新抽屉信息
-     * @param {any} requestBody 
-     * @returns 
-     */
-    modifyDrawerById: async function (requestBody) {
-        logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
-        return Domain.models.drawer.update(
-            { _id: requestBody.id },
-            {
-                $set: { vaccine: requestBody.vaccine }
-            }
-        );
     },
 
     /**
@@ -66,10 +50,54 @@ module.exports = {
             query.push({ "device": requestBody.id });
         }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
-        let result = await Domain.models.drawer.find(query).sort({"x":1, "y": 1}).populate("vaccine");
+        let result = await Domain.models.drawer.find(query).sort({ "x": 1, "y": 1 }).populate("vaccine");
 
         return { rs: result, total: result.length }
     },
+
+    /**
+  * 
+  * 根据抽屉id更新抽屉信息 增加
+  * @param {any} requestBody 
+  * @returns 
+  */
+    modifyDrawerById: async function (requestBody) {
+        logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
+        let vaccineData = await Domain.models.vaccine.create(requestBody.vaccine);
+        let vaccineArr = drawerData.vaccine;
+        let vaccineId = vaccineData._id
+        vaccineArr.push(vaccineId)
+        return Domain.models.drawer.update(
+            { _id: requestBody.id },
+            {
+                $set: { vaccine: vaccineArr }
+            }
+        );
+    },
+    /**
+  * 
+  * 根据抽屉id更新抽屉信息 减少
+  * @param {any} requestBody 
+  * @returns 
+  */
+    modifyDrawerByIdDec: async function (requestBody) {
+        logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
+        let vaccineData = await Domain.models.vaccine.findOne({_id: requestBody.vaccineId});
+        let vaccineArr = drawerData.vaccine;
+        let vaccineId = vaccineData._id
+        vaccineArr = vaccineArr.filter(item=>{
+            return item != vaccineId
+        })
+        return Domain.models.drawer.update(
+            { _id: requestBody.id },
+            {
+                $set: { vaccine: vaccineArr }
+            }
+        );
+    },
+
 
 
 

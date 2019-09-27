@@ -33,17 +33,32 @@ router.get('/queryDrawerByCondition',
 );
 
 /**
- * @api {POST} /drawer/modifyDrawerById  根据抽屉id更新抽屉信息 （区域划分）TODO
+ * @api {POST} /drawer/modifyDrawerById  根据抽屉id更新抽屉信息 （区域划分 增加）
  * @apiGroup  Drawer
  * @apiVersion 1.0.0
  * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）
  * @apiParam {String} id 抽屉id
- * @apiParam {Array} vaccine 疫苗数组数组
+ * @apiParam {Object} vaccine 疫苗json数据
  * @apiSuccess {Object} data 操作返回数据
  */
 router.post('/modifyDrawerById',
     Libs.router(async (ctx, next) => {
         return await Domain.services.drawer.modifyDrawerById(ctx.request.body);
+    })
+);
+
+/**
+ * @api {POST} /drawer/modifyDrawerByIdDec  根据抽屉id更新抽屉信息 （区域划分 减少）
+ * @apiGroup  Drawer
+ * @apiVersion 1.0.0
+ * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）
+ * @apiParam {String} id 抽屉id
+ * @apiParam {Object} vaccineId 疫苗id
+ * @apiSuccess {Object} data 操作返回数据
+ */
+router.post('/modifyDrawerByIdDec',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.drawer.modifyDrawerByIdDec(ctx.request.body);
     })
 );
 
