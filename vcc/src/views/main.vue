@@ -84,7 +84,7 @@ export default {
   position: absolute;
   width: ~"calc(100% - 41px)";
   height: ~"calc(100% - 118px)";
-  margin: 20px 18px 0px 23px;
+  margin: 20px 18px 0px 20px;
 }
 .menu {
   position: absolute;
@@ -104,7 +104,6 @@ export default {
 .title p {
   margin: auto;
   font-size: 18px;
-  font-family: Microsoft YaHei;
   font-weight: bold;
   color: @black;
 }

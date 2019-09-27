@@ -7,7 +7,7 @@ export default [
       title: '首页',
       icon: 'home'
     },
-    component: () => import('@/views/home.vue')
+    component: () => import('@/views/iviotp/home.vue')
   },
   {
     path: '/inoculate',
@@ -20,7 +20,7 @@ export default [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/home.vue')
+        component: () => import('@/views/iviotp/home.vue')
       }
     ]
   },
@@ -35,7 +35,7 @@ export default [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/home.vue')
+        component: () => import('@/views/iviotp/home.vue')
       }
     ]
   },
@@ -50,7 +50,7 @@ export default [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/home.vue')
+        component: () => import('@/views/iviotp/home.vue')
       }
     ]
   },
@@ -65,7 +65,7 @@ export default [
     children: [
       {
         path: '/home',
-        component: () => import('@/views/home.vue')
+        component: () => import('@/views/iviotp/home.vue')
       }
     ]
   }
