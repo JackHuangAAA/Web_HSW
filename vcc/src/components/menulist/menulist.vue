@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       menuOpen: false,
-      activeMenu: '',
+      activeMenu: 'home',
     }
   },
   computed: {
@@ -69,8 +69,14 @@ export default {
       return `/static/img/icon/${icon}.png`
     },
     menuClick (item) {
+      let route = item.name
+      if (typeof item.main !== 'undefined') {
+        route = item.main
+      }
       this.activeMenu = item.name
       this.menuOpen = false
+      this.$router.push({ name: route })
+      console.log(this.$route)
     }
   },
 }

@@ -19,11 +19,13 @@
       <div class="alarminfo card">
         <alarminfo></alarminfo>
       </div>
-      <div class="vaccine-set vaccine-in button">
+      <div class="vaccine-set vaccine-in button"
+           @click="routerto('inbound')">
         <p>疫苗入库</p>
         <img src="/static/img/vaccine-in.png">
       </div>
-      <div class="vaccine-set vaccine-out button">
+      <div class="vaccine-set vaccine-out button"
+           @click="routerto('outbound')">
         <p>疫苗出库</p>
         <img src="/static/img/vaccine-out.png">
       </div>
@@ -48,6 +50,11 @@ export default {
     return {
       homecard: homecard,
       lists: testli
+    }
+  },
+  methods: {
+    routerto (link) {
+      this.$router.push({ name: link })
     }
   },
 }

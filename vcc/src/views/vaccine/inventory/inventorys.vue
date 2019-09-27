@@ -1,10 +1,10 @@
 <template>
-
+  <div>inventorys</div>
 </template>
 
 <script>
 export default {
-  name: 'inventory',
+  name: 'inventorys',
   data () {
     return {
 

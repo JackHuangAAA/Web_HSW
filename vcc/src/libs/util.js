@@ -28,3 +28,35 @@ export const dateFmt = (fmt, date) => {
       )
   return fmt
 }
+
+export const SetCache = (key, value) => {
+  sessionStorage.setItem(key, value)
+  return value
+}
+export const GetCache = key => {
+  let value = sessionStorage.getItem(key)
+  return value
+}
+export const CleanCache = key => {
+  sessionStorage.removeItem(key)
+  return true
+}
+export const SaveStorage = (key, value) => {
+  localStorage.setItem(key, value)
+}
+export const GetStorage = key => {
+  let value = localStorage.getItem(key)
+  return value
+}
+export const CleanStorage = key => {
+  localStorage.removeItem(key)
+  return true
+}
+export const Storage = {
+  SetCache,
+  GetCache,
+  CleanCache,
+  SaveStorage,
+  GetStorage,
+  CleanStorage
+}

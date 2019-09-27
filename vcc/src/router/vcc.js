@@ -16,28 +16,17 @@ export default [
       title: '接种',
       icon: 'inoculate'
     },
-    component: Main,
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/home.vue')
-      }
-    ]
+    component: () => import('@/views/inoculate/inoculate.vue')
   },
   {
     path: '/inventory',
     name: 'inventory',
+    redirect: '/vaccine/inventorys',
     meta: {
       title: '库存',
-      icon: 'inventory'
-    },
-    component: Main,
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/home.vue')
-      }
-    ]
+      icon: 'inventory',
+      main: 'inventorys'
+    }
   },
   {
     path: '/alarm',
@@ -46,13 +35,7 @@ export default [
       title: '报警',
       icon: 'alarm'
     },
-    component: Main,
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/home.vue')
-      }
-    ]
+    component: () => import('@/views/alarm/alarm.vue')
   },
   {
     path: '/setting',
@@ -61,12 +44,6 @@ export default [
       title: '设置',
       icon: 'setting'
     },
-    component: Main,
-    children: [
-      {
-        path: '/home',
-        component: () => import('@/views/home/home.vue')
-      }
-    ]
+    component: () => import('@/views/setting/setting.vue')
   }
 ]

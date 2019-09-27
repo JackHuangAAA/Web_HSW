@@ -1,8 +1,7 @@
 <template>
   <div class="layout">
-    <div class="menu">
-      <menu-list :lists="menulist"></menu-list>
-    </div>
+    <menu-list class="menu"
+               :lists="menulist"></menu-list>
     <div class="header">
       <Row type="flex">
         <div class="routerlink">
@@ -34,7 +33,7 @@ import routerlink from '_c/routerlink'
 import menuList from '_c/menulist'
 import vcc from '@/router/vcc'
 export default {
-  name: 'main',
+  name: 'Main',
   components: {
     datetime,
     userinfo,

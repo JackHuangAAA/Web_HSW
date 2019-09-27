@@ -29,3 +29,4 @@ SDB/code/StandardDataBase/Release/build
 out/
 packages/
 /UI/html1.5
+/server/apidoc
