@@ -7,7 +7,7 @@ import Vue from 'vue'
 import router from '@/router'
 import App from '@/App.vue'
 import store from '@/store'
-// import api from '@/api'
+import api from '@/api'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import config from '@/config'
@@ -23,8 +23,8 @@ if (process.env.NODE_ENV !== 'production') {
 Vue.devtools = processmod //开发环境true 生产环境 fasle
 Vue.config.productionTip = processmod
 
-// Vue.prototype.$api = api
-// Vue.prototype.$config = config
+Vue.prototype.$api = api
+Vue.prototype.$config = config
 
 new Vue({
   el: '#app',

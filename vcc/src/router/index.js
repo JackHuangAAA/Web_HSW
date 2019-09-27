@@ -2,8 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Routers from './routers'
 // import store from '@/store'
-// import config from '@/config'
-// import api from '@/api'
+import config from '@/config'
+import api from '@/api'
 
 Vue.use(VueRouter)
 
