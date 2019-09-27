@@ -1,11 +1,11 @@
 import Main from '@/views/main.vue'
-import iviotp from './iviotp'
+import vcc from './vcc'
 const routers = [
   {
     path: '/',
     component: Main,
     children: [
-      ...iviotp,
+      ...vcc,
       {
         path: '/50x',
         final: true,

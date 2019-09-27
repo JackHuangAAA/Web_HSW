@@ -32,7 +32,7 @@ import userinfo from '_c/userinfo'
 import position from '_c/position'
 import routerlink from '_c/routerlink'
 import menuList from '_c/menulist'
-import iviotp from '@/router/iviotp'
+import vcc from '@/router/vcc'
 export default {
   name: 'main',
   components: {
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     getmenulist () {
-      let menulist = iviotp.map(el => {
+      let menulist = vcc.map(el => {
         let path = { path: el.path, name: el.name, ...el.meta }
         return path
       })

@@ -16,7 +16,9 @@
     </div>
     <div class="rightbox">
       <div class="thermometer"></div>
-      <div class="alarminfo"></div>
+      <div class="alarminfo card">
+        <alarminfo></alarminfo>
+      </div>
       <div class="vaccine-set vaccine-in button">
         <p>疫苗入库</p>
         <img src="/static/img/vaccine-in.png">
@@ -32,14 +34,15 @@
 <script>
 
 import testli from './data/testlackitem.js'
-
+import alarminfo from './alarminfo'
 import homecard from './data/homecard'
 import itemCard from '_c/main/itemcard'
 import lackinventory from './lackinventory'
 export default {
   components: {
     itemCard,
-    lackinventory
+    lackinventory,
+    alarminfo
   },
   data () {
     return {
@@ -80,7 +83,6 @@ export default {
 .alarminfo {
   margin-top: 13px;
   position: relative;
-  background: aqua;
   width: 100%;
   height: ~"calc(100% - 337px)";
 }
