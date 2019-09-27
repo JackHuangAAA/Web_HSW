@@ -63,13 +63,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~@/style/color.less";
+@import "~@/style/index.less";
 .layout {
   width: 100%;
   height: 100%;
   background: @gray;
   position: fixed;
   color: @black;
+  min-width: @minhtmlwidth;
 }
 .header {
   width: 100%;
@@ -89,7 +90,7 @@ export default {
 .menu {
   position: absolute;
   width: 180px;
-  height: 100%;
+  // height: 100%;
   z-index: 200;
   // background-color: @blue;
 }

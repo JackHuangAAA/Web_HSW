@@ -161,7 +161,6 @@ export default {
 .menulist {
   width: 180px;
   overflow: hidden;
-  transition: all 0.5s;
   background-color: @white;
 }
 .menuopen {
