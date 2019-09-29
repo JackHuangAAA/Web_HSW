@@ -34,7 +34,15 @@
 </template>
 
 <script>
-
+const changeItem = (key, value, obj) => {
+  let tmp = obj.map(el => {
+    el.name
+    if (el.name === key) {
+      el.value = value
+    }
+    return el
+  })
+}
 import testli from './data/testlackitem.js'
 import alarminfo from './alarminfo'
 import homecard from './data/homecard'
@@ -52,7 +60,30 @@ export default {
       lists: testli
     }
   },
+  created () {
+    this.getHomeData()
+  },
   methods: {
+    getHomeData () {
+      this.queryVaccine()
+      this.queryAlarmByByCondition()
+      // this.queryDrawerEmpty()
+    },
+    queryVaccine () {
+      this.getTotal('inoculate', '/Vaccine/queryVaccine')
+    },
+    queryAlarmByByCondition () {
+      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition')
+    },
+    queryDrawerEmpty () {
+      this.getTotal('drawer', '/Drawer/queryDrawerEmpty')
+    },
+    getTotal (key, url) {
+      this.$api.get(url).then(res => {
+        let data = res.data
+        changeItem(key, data.total, this.homecard)
+      })
+    },
     routerto (link) {
       this.$router.push({ name: link })
     }

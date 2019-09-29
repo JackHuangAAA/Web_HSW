@@ -26,7 +26,7 @@ Vue.config.productionTip = processmod
 Vue.prototype.$api = api
 Vue.prototype.$config = config
 
-new Vue({
+let __app__=new Vue({
   el: '#app',
   router,
   store,
