@@ -3,7 +3,7 @@ const router = require('koa-router')();
 const logger = Libs.logger.getLogger('alarm');
 
 /**
- * @api {GET} /queryAlarmDailyInfo  查询当天报警信息
+ * @api {GET} /alarm/queryAlarmDailyInfo  查询当天报警信息
  * @apiGroup Alarm
  * @apiVersion 1.0.0
  * @apiDescription 查询当天报警信息
@@ -17,7 +17,7 @@ router.get('/queryAlarmDailyInfo',
 );
 
 /**
- * @api {GET} /queryAlarmByByCondition  查询报警次数
+ * @api {GET} /alarm/queryAlarmByByCondition  查询报警次数
  * @apiGroup Alarm
  * @apiVersion 1.0.0
  * @apiDescription 查询报警次数
@@ -28,6 +28,20 @@ router.get('/queryAlarmDailyInfo',
 router.get('/queryAlarmByByCondition',
     Libs.router(async (ctx, next) => {
        return await Domain.services.alarm.queryAlarmByByCondition(ctx.request.query);
+    })
+);
+
+/**
+ * @api {POST} /alarm/saveAlarm  保存报警信息
+ * @apiGroup Alarm
+ * @apiVersion 1.0.0
+ * @apiDescription 保存报警信息
+ * @apiParam {Object} json  报警信息
+ * @apiSuccess {Object}  json  保存成功的报警信息
+ */
+router.post('/saveAlarm',
+    Libs.router(async (ctx, next) => {
+       return await Domain.services.alarm.saveAlarm(ctx.request.body);
     })
 );
 

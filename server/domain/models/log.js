@@ -5,6 +5,7 @@ const paginate = require('mongoose-paginate');
  * 日志信息(操作日志)
  */
 const logSchema = mongoose.Schema({
+    userCode: String,   //用户账号
     userName: String,   //用户名称
     deviceCode: String, //设备编号
     action: String,     //动作（1、签到；2、签退;3、取疫苗;4、入库;5、出库）

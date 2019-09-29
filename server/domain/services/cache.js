@@ -26,6 +26,7 @@ module.exports = {
      * @returns {Promise.<*>}
      */
     setCacheToString: async function (key, value) {
+        logger.info(`setCacheToString:{ key:${key},value:${value}}`);
         return await Domain.redis.client.setAsync(key, value);//set成功，返回ok
     },
 
