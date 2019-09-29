@@ -87,7 +87,7 @@ export default {
   height: 100px;
   background-color: #b1d9ff;
   display: flex;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
 }
 </style>

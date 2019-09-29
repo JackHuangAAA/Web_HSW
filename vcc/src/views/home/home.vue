@@ -67,7 +67,7 @@ export default {
     getHomeData () {
       this.queryVaccine()
       this.queryAlarmByByCondition()
-      // this.queryDrawerEmpty()
+      this.queryDrawerEmpty()
     },
     queryVaccine () {
       this.getTotal('inoculate', '/Vaccine/queryVaccine')
@@ -92,77 +92,5 @@ export default {
 </script>
 
 <style lang="less">
-.lackinventory {
-  height: ~"calc(100% - 250px)";
-  min-height: 318px;
-  overflow: hidden;
-}
-.homebox {
-  width: 100%;
-  height: 100%;
-}
-.rightbox {
-  position: absolute;
-  width: 320px;
-  height: 100%;
-  right: 0px;
-}
-.leftbox {
-  position: absolute;
-  width: ~"calc(100% - 334px)";
-  height: 100%;
-  left: 0px;
-}
-.thermometer {
-  position: relative;
-  height: 134px;
-  background: blue;
-}
-.alarminfo {
-  margin-top: 13px;
-  position: relative;
-  width: 100%;
-  height: ~"calc(100% - 337px)";
-}
-.vaccine-set {
-  display: flex;
-  padding: 0px;
-  margin: 0px;
-  border-radius: 10px;
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: 64px;
-  max-height: 64px;
-  cursor: pointer;
-  overflow: hidden;
-}
-.vaccine-set p {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-  position: absolute;
-  font-size: 18px;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 1);
-  text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
-}
-.vaccine-set img {
-  z-index: 0;
-  position: relative;
-  top: -5px;
-  left: -10px;
-  height: 80px;
-  min-width: 340px;
-}
-.vaccine-in {
-  bottom: 84px;
-  margin-bottom: 13px;
-}
-.vaccine-out {
-  bottom: 20px;
-}
+@import "~@/style/main/home.less";
 </style>

@@ -38,7 +38,7 @@ export default {
   background-color: @gray;
   position: relative;
   display: flex;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
 }
 .lack-card-title {
