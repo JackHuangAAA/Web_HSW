@@ -1,7 +1,7 @@
 <template>
   <div class="userinfoType">
     <div class="headportait">
-      <img src="/static/img/userph1.png">
+      <img src="~@/assets/userph1.png">
     </div>
     <div class="username">
       {{username}}

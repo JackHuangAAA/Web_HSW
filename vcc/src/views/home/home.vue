@@ -19,15 +19,19 @@
       <div class="alarminfo card">
         <alarminfo :alarmlist="alarmlist"></alarminfo>
       </div>
+      <!-- <div class="vaccine-set vaccine-in button"
+           @click="routerto('inbound')"> -->
       <div class="vaccine-set vaccine-in button"
-           @click="routerto('inbound')">
+           @click="androidtest1()">
         <p>疫苗入库</p>
-        <img src="/static/img/vaccine-in.png">
+        <img src="~@/assets/vaccine-in.png">
       </div>
+      <!-- <div class="vaccine-set vaccine-out button"
+           @click="routerto('outbound')"> -->
       <div class="vaccine-set vaccine-out button"
-           @click="routerto('outbound')">
+           @click="androidtest2()">
         <p>疫苗出库</p>
-        <img src="/static/img/vaccine-out.png">
+        <img src="~@/assets/vaccine-out.png">
       </div>
     </div>
   </div>
@@ -112,7 +116,17 @@ export default {
     },
     routerto (link) {
       this.$router.push({ name: link })
-    }
+    },
+    androidtest1 () {
+      console.log('click1')
+      let a = this.$device.andriod('open')
+      console.log(a)
+    },
+    androidtest2 () {
+      console.log('click2')
+      let b = this.$device.subscribe('open')
+      console.log(b)
+    },
   },
 }
 </script>

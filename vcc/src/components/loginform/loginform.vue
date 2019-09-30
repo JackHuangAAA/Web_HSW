@@ -3,7 +3,7 @@
     <Row>
       <Input v-model="user.user"
              autocomplete="off"
-             placeholder="账号"><img src="/static/img/user.png"
+             placeholder="账号"><img src="~@/assets/user.png"
            class="icon"
            slot="suffix"></Input>
     </Row>
@@ -12,7 +12,7 @@
              type="password"
              autocomplete="off"
              placeholder="密码">
-      <img src="/static/img/pwd.png"
+      <img src="~@/assets/pwd.png"
            class="icon"
            slot="suffix"></Input>
     </Row>

@@ -1,5 +1,7 @@
 <template>
-  <div>inventorys</div>
+  <div class="card">
+    <div class="header"></div>
+  </div>
 </template>
 
 <script>

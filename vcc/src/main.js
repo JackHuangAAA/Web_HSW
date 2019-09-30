@@ -12,6 +12,7 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import config from '@/config'
 import util from '@/libs/util.js'
+import device from '@/libs/device.js'
 let _ = lodash
 
 Vue.use(iView)
@@ -25,8 +26,8 @@ Vue.config.productionTip = processmod
 
 Vue.prototype.$api = api
 Vue.prototype.$config = config
-
-let __app__=new Vue({
+Vue.prototype.$device = device
+let __app__ = new Vue({
   el: '#app',
   router,
   store,

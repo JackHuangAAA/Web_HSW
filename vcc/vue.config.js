@@ -9,7 +9,7 @@ const resolve = dir => {
 }
 
 //静态文件基础路径
-const BASE_URL = process.env.NODE_ENV === 'production' ? '/' : '/'
+const BASE_URL = process.env.NODE_ENV === 'production' ? './' : '/'
 
 module.exports = {
   publicPath: BASE_URL,

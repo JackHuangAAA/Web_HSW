@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     menuIcon (icon) {
-      return `/static/img/icon/${icon}.png`
+      return `~@/assets/icon/${icon}.png`
     },
     menuClick (item) {
       let route = item.name
@@ -129,7 +129,7 @@ export default {
   width: 12px;
   height: 16px;
   margin: auto 0px auto 15px;
-  background-image: url("/static/img/location-icon.png");
+  background-image: url("~@/assets/location-icon.png");
 }
 .menu-location {
   display: flex;
@@ -153,7 +153,7 @@ export default {
   position: relative;
   width: 134px;
   height: 18px;
-  background-image: url("/static/img/logo.png");
+  background-image: url("~@/assets/logo.png");
   background-size: 134px 18px;
   margin: 34px auto 0px auto;
 }
@@ -181,11 +181,11 @@ export default {
   margin: auto 17px auto 23px;
 }
 .icon-open {
-  background-image: url("/static/img/menuopen.png");
+  background-image: url("~@/assets/menuopen.png");
   background-size: 20px 22px;
 }
 .icon-close {
-  background-image: url("/static/img/menuclose.png");
+  background-image: url("~@/assets/menuclose.png");
   background-size: 20px 22px;
 }
 .menu-status {

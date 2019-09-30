@@ -4,7 +4,7 @@
       <div class="bg1"></div>
       <div class="bg2"></div>
       <div class="header">
-        <div class="logo item"><img src="/static/img/ETHINK-lan.png"></div>
+        <div class="logo item"><img :src="ETHINK"></div>
         <div class="logoinfo item">银信疫苗接种平台</div>
         <div class="title item">welcome to login system</div>
       </div>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import ETHINK from '@/assets/logo.png'
 import loginform from '_c/loginform'
 import fplogin from '_c/fplogin'
 export default {
@@ -36,7 +37,8 @@ export default {
   data () {
     return {
       login1: true,
-      login2: false
+      login2: false,
+      ETHINK
     }
   },
   methods: {

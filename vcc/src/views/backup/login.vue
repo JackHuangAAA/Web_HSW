@@ -4,7 +4,7 @@
       <div class="header">
         <div class="wrap">
           <div class="image">
-            <img src="/static/img/logo.png" />
+            <img src="~@/assets/logo.png" />
           </div>
           <div class="version">
             版本号：{{version}}
@@ -17,7 +17,7 @@
             <span>欢迎登陆银信博荣智慧疫苗接种柜</span>
           </div>
           <div class="login-img">
-            <img src="/static/img/login.png" />
+            <img src="~@/assets/login.png" />
           </div>
           <div class="login">
             <div class="title"><span>请登录</span></div>
