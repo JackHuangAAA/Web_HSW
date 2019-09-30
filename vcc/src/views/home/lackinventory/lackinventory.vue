@@ -7,9 +7,8 @@
          :gutter="10">
       <Col v-for="el in lists"
            span="6">
-      <lackcard :title="el.title"
-                :value="el.value"
-                :unit="el.unit"></lackcard>
+      <lackcard :title="el.name"
+                :value="el.surplus"></lackcard>
       </Col>
     </Row>
   </div>

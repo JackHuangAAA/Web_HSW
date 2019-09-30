@@ -17,7 +17,7 @@
     <div class="rightbox">
       <div class="thermometer"></div>
       <div class="alarminfo card">
-        <alarminfo></alarminfo>
+        <alarminfo :alarmlist="alarmlist"></alarminfo>
       </div>
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
@@ -57,7 +57,8 @@ export default {
   data () {
     return {
       homecard: homecard,
-      lists: testli
+      lists: [],
+      alarmlist: [],
     }
   },
   created () {
@@ -66,22 +67,47 @@ export default {
   methods: {
     getHomeData () {
       this.queryVaccine()
-      this.queryAlarmByByCondition()
+      this.queryAlarmDailyInfo()
       this.queryDrawerEmpty()
+      this.queryVaccineLowerThreshold()
+      this.queryAlarmTemperature()
     },
     queryVaccine () {
       this.getTotal('inoculate', '/Vaccine/queryVaccine')
     },
-    queryAlarmByByCondition () {
-      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition')
+    queryAlarmDailyInfo () {
+      this.getTotal('alarm', '/Alarm/queryAlarmDailyInfo').then(res => {
+        this.alarmlist = res.rs
+      })
+    },
+    queryAlarmTemperature () {
+      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', 1).then(res => {
+        this.alarmlist = res.rs
+      })
     },
     queryDrawerEmpty () {
       this.getTotal('drawer', '/Drawer/queryDrawerEmpty')
     },
-    getTotal (key, url) {
-      this.$api.get(url).then(res => {
-        let data = res.data
-        changeItem(key, data.total, this.homecard)
+    async queryVaccineLowerThreshold () {
+      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold').then(res => {
+        this.lists = res.rs
+      })
+    },
+    getTotal (key, url, params = null) {
+      return new Promise((resolve, reject) => {
+        if (params != null) {
+          this.$api.get(url, params).then(res => {
+            let data = res.data
+            changeItem(key, data.total, this.homecard)
+            resolve(data)
+          })
+        } else {
+          this.$api.get(url).then(res => {
+            let data = res.data
+            changeItem(key, data.total, this.homecard)
+            resolve(data)
+          })
+        }
       })
     },
     routerto (link) {

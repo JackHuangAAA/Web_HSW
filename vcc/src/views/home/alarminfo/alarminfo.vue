@@ -5,8 +5,16 @@
       <p>设备报警</p>
     </div>
     <div class="alarminfo-main">
-      <div class="alarminfo-main-data"></div>
-      <div class="alarminfo-main-null">
+      <div class="alarminfo-main-data">
+        <div class="alarminfo-main-data-title">
+          警示:接种柜温度异常
+        </div>
+        <div class="alarminfo-main-data-memo">
+          接种柜温度过高,请及将温度调整至2-8℃范围内!
+        </div>
+      </div>
+      <div class="alarminfo-main-null"
+           v-if="isNull">
         <p>暂无数据</p>
       </div>
     </div>
@@ -17,16 +25,44 @@
 <script>
 export default {
   name: 'alarminfo',
+  props: {
+    alarmlist: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
+  },
   data () {
     return {
+      alarmtype: {
 
+      }
     }
-  }
+  },
+  computed: {
+    isNull () {
+      return this.alarmlist.length != 0 ? false : true
+    }
+  },
+  mounted () {
+  },
 }
 </script>
 
 <style lang="less">
 @import "~@/style/color";
+.alarminfo-main-data-title {
+  color: #ff5e45;
+  font-size: 16px;
+  font-weight: bold;
+}
+.alarminfo-main-data-memo {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 12px;
+  line-height: 40px;
+}
 .alarminfo-main {
   position: relative;
   width: 100%;
@@ -35,6 +71,8 @@ export default {
 .alarminfo-main-data {
   position: absolute;
   display: flex;
+  flex-direction: column;
+  padding: 26px;
 }
 .alarminfo-main-null {
   position: absolute;

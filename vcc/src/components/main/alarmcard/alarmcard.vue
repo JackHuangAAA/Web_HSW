@@ -49,7 +49,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.value, this.columns)
   }
 }
 </script>

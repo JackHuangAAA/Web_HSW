@@ -60,3 +60,13 @@ export const Storage = {
   GetStorage,
   CleanStorage
 }
+
+const alarmType = {
+  1: {
+    info: '温度异常'
+  },
+  2: {
+    info: '库存不足'
+  }
+}
+export const discernAlarmType = type => {}
