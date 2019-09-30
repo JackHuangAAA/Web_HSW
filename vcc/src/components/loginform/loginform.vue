@@ -3,7 +3,7 @@
     <Row>
       <Input v-model="user.user"
              autocomplete="off"
-             placeholder="账号"><img src="~@/assets/user.png"
+             placeholder="账号"><img :src="userpng"
            class="icon"
            slot="suffix"></Input>
     </Row>
@@ -12,13 +12,12 @@
              type="password"
              autocomplete="off"
              placeholder="密码">
-      <img src="~@/assets/pwd.png"
+      <img :src="passpng"
            class="icon"
            slot="suffix"></Input>
     </Row>
     <Row style="padding-top:19px">
-      <Checkbox :size="large"
-                style="font-size:16px;"
+      <Checkbox style="font-size:16px;"
                 v-model="rember">记住密码</Checkbox>
     </Row>
     <Row style="padding-top:34px">
@@ -30,10 +29,14 @@
 </template>
 
 <script>
+import userpng from '@/assets/user.png';
+import passpng from '@/assets/pwd.png'
 export default {
   name: 'loginform',
   data () {
     return {
+      userpng,
+      passpng,
       value: '',
       rember: false,
       user: {

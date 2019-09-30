@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <div class="main">
+    <div class="login-main">
       <div class="bg1"></div>
       <div class="bg2"></div>
       <div class="header">
