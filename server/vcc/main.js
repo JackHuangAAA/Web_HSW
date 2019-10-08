@@ -58,7 +58,7 @@ if (cluster.isMaster) {
     app.use(koaBody());
 
     let start = async ()=>{
-        // await filter.register(app);
+        await filter.register(app);
         await router.register(app);
 
         app.use(async (ctx,next) => {

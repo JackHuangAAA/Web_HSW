@@ -17,9 +17,9 @@ module.exports = {
     checkUser: async function (requestBody) {
         logger.debug(`checkUser param: ${JSON.stringify(requestBody)}`);
         if(requestBody.code=='admin' && requestBody.password=='000000'){
-            return true;
+            return {code:'admin',name:'小米',check:true};
         }
-        return false;
+        return {check:false};
     },
 
     /**

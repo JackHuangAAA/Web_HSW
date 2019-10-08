@@ -10,7 +10,7 @@ const logger = Libs.logger.getLogger('zcy');
  * @apiDescription 调用政采云用户信息接口，校验用户登录信息
  * @apiParam {String} code  登陆账号
  * @apiSuccess {String}  password  登陆密码
- * @apiSuccess {Boolean}  result  返回:true(通过)；false(失败)
+ * @apiSuccess {Json}  Object  返回:{code:'xxx',name:'xxx',check:true|false}
  */
 router.get('/checkUser',
     Libs.router(async (ctx, next) => {

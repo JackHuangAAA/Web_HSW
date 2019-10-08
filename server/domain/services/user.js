@@ -66,16 +66,14 @@ module.exports = {
      */
     checkToken: async function (token) {
         logger.debug(`checkToken param: ${token}`);
-        let op = await Domain.models.user.findOne({token: token},null,{lean:true});
-        if (op != null) {
-            await this.refreshLastLogin(op.code);
+        let user = await Domain.models.user.findOne({token: token},null,{lean:true});
+        if (user != null) {
+            await this.refreshLastLogin(user.code);
             return {
-                    _id: op._id,
-                    code: op.code,
-                    name: op.name,
-                    password: op.password,
-                    role: op.role,
-                    phone: op.phone
+                    _id: user._id,
+                    code: user.code,
+                    name: user.name,
+                    finger: user.finger
             };
         } else {
             throw Libs.error('0001','无效token');
@@ -163,9 +161,6 @@ module.exports = {
      */
     saveUser: async function(requestBody){
         logger.debug(`saveUser param: ${json.stringify(requestBody)}`);
-        requestBody.password = _.toUpper(crypto.createHash('md5').update("000000").digest('hex'));
-        let role = await this.getRoleById(requestBody.roles);
-        requestBody.role = role;
         return Domain.models.user.create(requestBody);
     },
 
@@ -176,14 +171,8 @@ module.exports = {
      */
     modifyUser: async function(requestBody){
         logger.debug(`modifyUser param: ${json.stringify(requestBody)}`);
-        let role = await this.getRoleById(requestBody.roles);
         return Domain.models.user.updateOne({_id: requestBody.id}, {
-            $set: {
-                name: requestBody.name,
-                phone: requestBody.phone,
-                remark: requestBody.remark,
-                role: role
-            }
+            $set: { ...requestBody }
         });
     },
 
