@@ -6,6 +6,10 @@ const paginate = require('mongoose-paginate');
  */
 const vaccinationSchema = mongoose.Schema({
     user: {type:mongoose.Schema.Types.ObjectId, ref:'user'}, //操作医生
+    device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
+    deviceType: Number, //设备类型
+    unitCode: String,   //所属单位编号
+    unitName: String,   //所属单位
     sort: String,       //排队序号(叫号码)
     customer:{          //顾客
         code: String,   //接种序号

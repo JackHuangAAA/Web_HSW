@@ -1,0 +1,13 @@
+{
+  "name": "iviotp-server",
+  "version": "1.0.0",
+  "description": "iviotp项目API DOC",
+  "title": "iviotp-server API",
+  "url" : "http://localhost:9998",
+  "forceLanguage":"zh-cn",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  }
+
+}
