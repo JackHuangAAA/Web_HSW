@@ -7,7 +7,8 @@ const logger = Libs.logger.getLogger('drawer');
  * @apiGroup  Drawer
  * @apiVersion 1.0.0
  * @apiDescription 查询抽屉里疫苗为空的数据
- * @apiParam {String} device 设备id.
+ * @apiParam {String} device 设备id
+ * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {Array}  rs  疫苗为空的数据数组
  * @apiSuccess {Number}  total 疫苗为空的数据总数
  */
@@ -24,6 +25,7 @@ router.get('/queryDrawerEmpty',
  * @apiDescription 根据条件查询抽屉信息，并按坐标排序
  * @apiParam {String} id 抽屉id
  * @apiParam {String} device 设备id
+ * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {Array}  data 操作返回数据数组  
  */
 router.get('/queryDrawerByCondition',
