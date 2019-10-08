@@ -17,5 +17,6 @@ module.exports = {
     //设备模块
     DEVICE_MODULE:{
 
-    }
+    },
+    TIMEDATA: "timedData",
 };

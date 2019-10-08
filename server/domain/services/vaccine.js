@@ -14,17 +14,7 @@ module.exports = {
      * @returns 
      */
     queryVaccine: async function (requestBody) {
-        // $match ：条件查询
-        // $group ： 分组
-        // _id ： 以_id内的字段进行分组
-        // $sum ： 求和(以pk和pkName组合字段进行分组，算出该组内某一向的总和)
-        // $sort ： 排序 -1 倒叙 1 正序
-        // $limit ： 分页
-        // let query = {}
-        // if (!_.isEmpty(requestBody.device)) {
-        //     query["device"] = requestBody.device;
-        // }
-
+        logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
             { $match: {device: deviceId} },
@@ -43,6 +33,7 @@ module.exports = {
      * @returns 
      */
     queryVaccineLowerThreshold: async function (requestBody) {
+        logger.debug(`queryVaccineLowerThreshold param: ${JSON.stringify(requestBody)}`);
         let query = [{ surplus: { $lt: 10 } }]
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
@@ -59,6 +50,7 @@ module.exports = {
      * @returns 
      */
     queryVaccineStorageNum: async function (requestBody) {
+        logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
             { $match: {device: deviceId} },

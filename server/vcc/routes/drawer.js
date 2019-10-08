@@ -20,7 +20,7 @@ router.get('/queryDrawerEmpty',
 
 /**
  * @api {GET} /drawer/queryDrawerByCondition 根据条件查询抽屉信息，并按坐标排序
- * @apiGroup User
+ * @apiGroup Drawer
  * @apiVersion 1.0.0
  * @apiDescription 根据条件查询抽屉信息，并按坐标排序
  * @apiParam {String} id 抽屉id

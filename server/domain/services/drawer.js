@@ -90,7 +90,7 @@ module.exports = {
   * @returns 
   */
     modifyDrawerByIdDec: async function (requestBody) {
-        logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        logger.debug(`modifyDrawerByIdDec param: ${JSON.stringify(requestBody)}`);
         let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
         let vaccineData = await Domain.models.vaccine.findOneAndRemove({_id: requestBody.vaccineId});
         let vaccineArr = drawerData.vaccine;
