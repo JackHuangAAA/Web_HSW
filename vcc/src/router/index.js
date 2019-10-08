@@ -30,7 +30,6 @@ let getRouterConfig = function(path) {
 
 router.beforeEach((to, from, next) => {
   let menu = getRouterConfig(to.path)
-  console.log(menu)
   if (menu != null) {
     let p = Promise.resolve()
     if (store.getters.user == null && to.path != '/login') {

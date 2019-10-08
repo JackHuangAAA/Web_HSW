@@ -17,6 +17,10 @@ global._ = lodash
 global._static = enums
 Vue.use(iView)
 
+//导入socket.io模块
+import io from 'socket.io-client'
+global.io = io
+
 let processmod = false
 if (process.env.NODE_ENV !== 'production') {
   processmod = true

@@ -75,6 +75,10 @@ export default {
       this.queryDrawerEmpty()
       this.queryVaccineLowerThreshold()
       this.queryAlarmTemperature()
+      this.queryVaccinationByCustomerCode()
+    },
+    queryVaccinationByCustomerCode () {
+      this.getTotal('customer', '/Vaccine/queryVaccinationByCustomerCode')
     },
     queryVaccine () {
       this.getTotal('inoculate', '/Vaccine/queryVaccine')

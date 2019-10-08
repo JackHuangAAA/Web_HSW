@@ -44,7 +44,14 @@ export default {
       ETHINK
     }
   },
+  mounted () {
+    this.getDeviceId()
+  },
   methods: {
+    getDeviceId () {
+      let a = this.$device.getDeviceId()
+      console.log(a)
+    },
     ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
       switch (type) {
@@ -61,7 +68,7 @@ export default {
       }
     },
     test () {
-      let test = this.$device.android('open').then(res => { }).catch(err => {
+      let test = this.$device.finger('open').catch(err => {
         console.log(err)
       })
       console.log(test)

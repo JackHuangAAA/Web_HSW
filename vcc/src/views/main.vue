@@ -52,11 +52,15 @@ export default {
   data () {
     return {
       menulist: [],
-      menuOpen: false
+      menuOpen: false,
+      socket: '',
     }
   },
   created () {
     this.getmenulist()
+  },
+  mounted () {
+    this.websocket()
   },
   methods: {
     menuItemClick (item) {
@@ -76,6 +80,9 @@ export default {
         return path
       })
       this.menulist = menulist
+    },
+    websocket () {
+      this.socket = io()
     }
   },
 }
