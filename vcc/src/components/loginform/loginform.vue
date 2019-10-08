@@ -1,14 +1,14 @@
 <template>
   <div class="lform">
     <Row>
-      <Input v-model="user.user"
+      <Input v-model="user"
              autocomplete="off"
              placeholder="账号"><img :src="userpng"
            class="icon"
            slot="suffix"></Input>
     </Row>
     <Row style="padding-top:24px;">
-      <Input v-model="user.pwd"
+      <Input v-model="pwd"
              type="password"
              autocomplete="off"
              placeholder="密码">
@@ -23,6 +23,7 @@
     <Row style="padding-top:34px">
       <Button style="height:53px;font-size:20px;margin-bottom:7px;"
               type="primary"
+              @click="handleSubmit()"
               long>登录</Button>
     </Row>
   </div>
@@ -39,10 +40,17 @@ export default {
       passpng,
       value: '',
       rember: false,
-      user: {
-        user: '',
-        pwd: ''
+      user: '',
+      pwd: ''
+    }
+  },
+  methods: {
+    handleSubmit () {
+      let form = {
+        code: this.user,
+        password: this.pwd
       }
+      this.$emit('Submit', form)
     }
   }
 }

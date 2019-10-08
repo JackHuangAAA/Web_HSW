@@ -19,7 +19,8 @@
         <div class="loginform item">
           <fplogin v-if="login1"
                    @click="test()"></fplogin>
-          <loginform v-if="login2"></loginform>
+          <loginform v-if="login2"
+                     @Submit="checkUser"></loginform>
         </div>
       </div>
     </div>
@@ -60,6 +61,9 @@ export default {
     test () {
       let test = this.$device.android('open')
       console.log(test)
+    },
+    checkUser (form) {
+      this.$api.get('/checkUser', form)
     }
   }
 }
