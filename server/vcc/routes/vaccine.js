@@ -4,7 +4,7 @@ const logger = Libs.logger.getLogger('vaccine');
 
 
 /**
- * @api {GET} /queryVaccine  查询疫苗种类
+ * @api {GET} /vaccine/queryVaccine  查询疫苗种类
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 查询疫苗种类
@@ -19,7 +19,7 @@ router.get('/queryVaccine',
 );
 
 /**
- * @api {GET} /queryVaccineLowerThreshold  查询疫苗剩余数量小于报警阈值的疫苗信息
+ * @api {GET} /vaccine/queryVaccineLowerThreshold  查询疫苗剩余数量小于报警阈值的疫苗信息
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 查询疫苗剩余数量小于报警阈值的疫苗信息
@@ -30,6 +30,36 @@ router.get('/queryVaccine',
 router.get('/queryVaccineLowerThreshold',
     Libs.router(async (ctx, next) => {
        return await Domain.services.vaccine.queryVaccineLowerThreshold(ctx.request.query);
+    })
+);
+
+/**
+ * @api {GET} /vaccine/queryVaccineStorageNum  按设备id查询，疫苗code分组合计疫苗数量
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 按设备id查询，疫苗code分组合计疫苗数量
+ * @apiParam {String} device 设备id
+ * @apiSuccess {Array}  rs  查询疫苗种类数组
+ * @apiSuccess {Number}  total 查询疫苗种类总数
+ */
+router.get('/queryVaccineStorageNum',
+    Libs.router(async (ctx, next) => {
+       return await Domain.services.vaccine.queryVaccineStorageNum(ctx.request.query);
+    })
+);
+
+/**
+ * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗数量信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 更新抽屉内疫苗数量信息
+ * @apiParam {String} id 疫苗id
+ * @apiParam {Number} total 入库数量
+ * @apiSuccess {OBject}  json  操作返回数据
+ */
+router.post('/modifyVaccine',
+    Libs.router(async (ctx, next) => {
+       return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
     })
 );
 
