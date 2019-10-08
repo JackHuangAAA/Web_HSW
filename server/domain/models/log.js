@@ -7,7 +7,10 @@ const paginate = require('mongoose-paginate');
 const logSchema = mongoose.Schema({
     userCode: String,   //用户账号
     userName: String,   //用户名称
-    deviceCode: String, //设备编号
+    device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
+    deviceType: Number, //设备类型
+    unitCode: String,   //所属单位编号
+    unitName: String,   //所属单位
     action: String,     //动作（1、签到；2、签退;3、取疫苗;4、入库;5、出库）
     content: String,    //详细内容
     operatorDate: {type: Date, default: Date.now}  //操作时间
