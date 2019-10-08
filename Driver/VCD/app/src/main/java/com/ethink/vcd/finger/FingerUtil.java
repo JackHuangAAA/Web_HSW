@@ -328,8 +328,13 @@ public class FingerUtil {
             } else {
                 fingerData.setMsg(String.format("Result : Success\rTemplate No : %d", m_nUserID));
                 Log.i(TAG, "run:成功录入指纹：" + fingerData.getMsg());
-
-                ResponseUtil.success(pluginMessage,"录入成功",ResponseUtil.data("no",String.valueOf(m_nUserID)));
+                //录入成功下载指纹特征
+                byte[] p_pbyTemplate = new byte[512];
+                int    re = fingerCommon.Run_UpChar(1, p_pbyTemplate);
+                if(re==FingerCommon.ERR_SUCCESS){
+                    ResponseUtil.success(pluginMessage,"录入成功",ResponseUtil.data("no",String.valueOf(m_nUserID),"finger",fingerCommon.byte2HexStr(p_pbyTemplate,498)));
+                }
+              else          ResponseUtil.fail(pluginMessage,GetErrorMsg(re));
             }
             Log.i(TAG, fingerData.getMsg());
             fingerData.setBinImage(m_binImage);
