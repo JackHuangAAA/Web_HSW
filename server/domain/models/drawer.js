@@ -6,8 +6,10 @@ const paginate = require('mongoose-paginate');
  */
 const drawerSchema = mongoose.Schema({
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
-    x: String,     //横坐标
-    y: String,      //纵坐标
+    unitCode: String, //所属单位编号
+    unitName: String, //所属单位
+    x: String,        //横坐标
+    y: String,        //纵坐标
     vaccine: [{type:mongoose.Schema.Types.ObjectId, ref:'vaccine'}] //疫苗
 }, {autoIndex: false});
 drawerSchema.plugin(paginate);

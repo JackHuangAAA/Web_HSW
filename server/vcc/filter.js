@@ -5,7 +5,7 @@
 
 const logger = Libs.logger.getLogger('filter');
 let moment = require('moment');
-const excluded = ['/user/login'];
+const excluded = ['/user/login','/device'];
 
 const bindUserFilter = async (ctx,next) => {
     try {

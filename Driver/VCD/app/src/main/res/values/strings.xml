@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">育苗接种柜</string>
+    <string name="server_err">服务器异常，修复中</string>
+    <string name="nomore">没有更多数据</string>
+    <string name="nointentet">亲,没有网络</string>
+    <string name="net_error">网络错误请重新尝试</string>
+    <string name="empty"> 亲，没有找到新的数据</string>
+    <string name="loading">正在加载中</string>
+    <string name="reload">重新加载</string>
+    <string name="no_net">亲,您的手机网络不太给力哦！</string>
+    <string name="tip">别担心,试试重新刷新页面</string>
+
+</resources>
