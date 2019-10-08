@@ -31,7 +31,7 @@
 import ETHINK from '@/assets/logo.png'
 import loginform from '_c/loginform'
 import fplogin from '_c/fplogin'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     loginform,
@@ -44,13 +44,31 @@ export default {
       ETHINK
     }
   },
+  computed: {
+    ...mapGetters({
+      user: 'user',
+      device: 'device'
+    })
+  },
   mounted () {
     this.getDeviceId()
   },
   methods: {
+    ...mapActions({
+      saveUser: 'saveUser',
+      saveDevice: 'saveDevice'
+    }),
     getDeviceId () {
-      let a = this.$device.getDeviceId()
-      console.log(a)
+      this.$device.getDeviceId().then(res => {
+        this.$api.get(`/device/queryDeviceByCondition?code=${res.deviceId}`).then((response) => {
+          console.log('response.data====>' + JSON.stringify(response.data));
+          this.saveDevice(response.data);
+        });
+      });
+      // console.log('====currentDevice=========%j', this.user)
+      console.log('====currentDevice=========%j', this.device)
+      // let a = this.$device.getDeviceId()
+      // console.log(a)
     },
     ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
