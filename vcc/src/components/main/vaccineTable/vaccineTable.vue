@@ -106,6 +106,8 @@ export default {
   height: 100%;
 }
 .vTable-cloumns {
+  margin-top: -20px;
+  margin-bottom: 10px;
   text-align: center;
   font-size: 14px;
   font-weight: bold;

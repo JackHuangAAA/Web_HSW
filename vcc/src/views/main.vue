@@ -7,7 +7,7 @@
                @click="menuClick()"></menu-list>
     <div class="menu-shade"
          v-show="menuOpen"
-         @click="menuClose()">asd</div>
+         @click="menuClose()"></div>
     <div class="header">
       <Row type="flex">
         <div class="routerlink">
