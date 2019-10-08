@@ -90,10 +90,4 @@ export default {
 
 <style lang="less" scoped>
 @import "~@/style/index.less";
-.menu-shade {
-  z-index: 10;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}
 </style>
