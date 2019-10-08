@@ -14,7 +14,7 @@ export default {
   getVersion() {
     return $d.invoke('UPDATER', 'GetCurrentVersion')
   },
-  getDeviceId() {
+  async getDeviceId() {
     console.log('GetDeviceId')
     if (config.env == 'development') return 'DT0001'
     else return $d.invoke('DRIVER', 'GetDeviceId')

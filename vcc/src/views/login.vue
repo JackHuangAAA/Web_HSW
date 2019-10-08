@@ -60,15 +60,12 @@ export default {
     }),
     getDeviceId () {
       this.$device.getDeviceId().then(res => {
-        this.$api.get(`/device/queryDeviceByCondition?code=${res.deviceId}`).then((response) => {
+        this.$api.get(`/device/queryDeviceByCondition?code=${res}`).then((response) => {
           console.log('response.data====>' + JSON.stringify(response.data));
           this.saveDevice(response.data);
+          console.log('====currentDevice=========%j', this.device)
         });
       });
-      // console.log('====currentDevice=========%j', this.user)
-      console.log('====currentDevice=========%j', this.device)
-      // let a = this.$device.getDeviceId()
-      // console.log(a)
     },
     ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
