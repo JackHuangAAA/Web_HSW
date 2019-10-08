@@ -17,6 +17,8 @@ module.exports = {
         let query = [];
         query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         let result = await Domain.models.alarm.find({ "$and": query });
+        
+
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length }
     },

@@ -10,8 +10,9 @@ global._ = require('lodash');
 global.Config = require(`${process.cwd()}/config`);
 global.Libs = require('../libs/index');
 global.Domain = require('../domain/index');
-let checkDevStatus = require('./checkDevStatus');
-let dailyEndTask = require('./dailyEndTask');
+// let checkDevStatus = require('./checkDevStatus');
+// let dailyEndTask = require('./dailyEndTask');
+let homeData = require('./homeData');
 Libs.logger.configure(Config.logger.admin);
 const logger = Libs.logger.getLogger('push');
 
@@ -37,7 +38,7 @@ let map = {
 let push = {
     init(io){
         io.on('connection', (socket) => {
-            //预置socket到socket.io客户端接收目标
+            // //预置socket到socket.io客户端接收目标
             map['DEV_STATUS'].push(socket);
             map['RECIPE_PROCESS'].push(socket);
             map['RECIPE_ADD'].push(socket);
