@@ -32,7 +32,7 @@ export default {
       }
     },
     columns: {
-      tyep: Array,
+      type: Array,
       deafult () {
         return []
       }
@@ -40,7 +40,6 @@ export default {
   },
   data () {
     return {
-
     }
   },
   computed: {

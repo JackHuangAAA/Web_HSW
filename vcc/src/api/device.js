@@ -1,15 +1,19 @@
 // 与硬件交互
 require('./bridge.js')
 export default {
-  andriod(eventName, params) {
-    return $d.invoke('FINGER', eventName, params)
-  },
-  subscribe(eventName, callback) {
-    return $d.subscribe(eventName, callback)
+  android(eventName, params) {
+    if (typeof params !== 'undefined') {
+      return $d.invoke('FINGER', eventName, params)
+    } else {
+      return $d.invoke('FINGER', eventName)
+    }
   }
-  //     checkDeviceModule(){
-  //         return $d.invoke('DRIVER', 'CheckAll')
-  //     },
+  // subscribe(eventName, callback) {
+  //   return $d.subscribe(eventName, callback)
+  // },
+  // checkDeviceModule() {
+  //   return $d.invoke('DRIVER', 'CheckAll')
+  // }
   //     getVersion(){
   //          return $d.invoke('UPDATER', 'GetCurrentVersion')
   //     },

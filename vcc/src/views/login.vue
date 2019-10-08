@@ -17,7 +17,8 @@
              @click="login('up')">用户密码登录</p>
         </div>
         <div class="loginform item">
-          <fplogin v-if="login1"></fplogin>
+          <fplogin v-if="login1"
+                   @click="test()"></fplogin>
           <loginform v-if="login2"></loginform>
         </div>
       </div>
@@ -55,6 +56,10 @@ export default {
         default:
           break;
       }
+    },
+    test () {
+      let test = this.$device.android('open')
+      console.log(test)
     }
   }
 }

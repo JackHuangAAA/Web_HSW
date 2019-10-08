@@ -3,6 +3,7 @@
 import '@/style/index'
 // import Cookies from 'js-cookie'
 import lodash from 'lodash'
+import enums from '@/libs/enum.js'
 import Vue from 'vue'
 import router from '@/router'
 import App from '@/App.vue'
@@ -11,10 +12,9 @@ import api from '@/api'
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import config from '@/config'
-import util from '@/libs/util.js'
-import device from '@/libs/device.js'
-let _ = lodash
-
+import device from '@/api/device.js'
+global._ = lodash
+global._static = enums
 Vue.use(iView)
 
 let processmod = false
@@ -27,7 +27,7 @@ Vue.config.productionTip = processmod
 Vue.prototype.$api = api
 Vue.prototype.$config = config
 Vue.prototype.$device = device
-let __app__ = new Vue({
+global.__app = new Vue({
   el: '#app',
   router,
   store,

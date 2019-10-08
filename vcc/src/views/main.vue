@@ -57,7 +57,6 @@ export default {
   },
   created () {
     this.getmenulist()
-    this.$device.subscribe()
   },
   methods: {
     menuItemClick (item) {

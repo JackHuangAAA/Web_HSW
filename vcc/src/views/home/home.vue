@@ -117,16 +117,6 @@ export default {
     routerto (link) {
       this.$router.push({ name: link })
     },
-    androidtest1 () {
-      console.log('click1')
-      let a = this.$device.andriod('open')
-      console.log(a)
-    },
-    androidtest2 () {
-      console.log('click2')
-      let b = this.$device.subscribe('open')
-      console.log(b)
-    },
   },
 }
 </script>

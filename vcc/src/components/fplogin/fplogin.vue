@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="disclick()">
     <Row type="flex"
          justify="center">
       <div class='fpbg'></div>
@@ -18,6 +18,11 @@ export default {
   data () {
     return {
 
+    }
+  },
+  methods: {
+    disclick () {
+      this.$emit('click')
     }
   }
 }
