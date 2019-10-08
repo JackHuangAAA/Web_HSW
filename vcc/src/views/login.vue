@@ -3,7 +3,7 @@
     <div class="login-main">
       <div class="bg1"></div>
       <div class="bg2"></div>
-      <div class="header">
+      <div class="login-header">
         <div class="logo item"><img :src="ETHINK"></div>
         <div class="logoinfo item">银信疫苗接种平台</div>
         <div class="title item">welcome to login system</div>

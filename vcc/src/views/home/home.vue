@@ -19,7 +19,7 @@
         <!-- <thermometer></thermometer> -->
       </div>
       <div class="alarminfo card">
-        <alarminfo :alarmlist="alarmlist"></alarminfo>
+        <alarminfo :alarm="alarmcode"></alarminfo>
       </div>
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
@@ -56,13 +56,15 @@ export default {
     thermometer,
     itemCard,
     lackinventory,
-    alarminfo
+    alarminfo,
+
   },
   data () {
     return {
       homecard: homecard,
       lists: [],
       alarmlist: [],
+      alarmcode: 0
     }
   },
   created () {

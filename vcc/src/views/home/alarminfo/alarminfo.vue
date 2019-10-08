@@ -4,7 +4,12 @@
       <img src="~@/assets/icon/alarm-yellow.png">
       <p>设备报警</p>
     </div>
-    <div class="alarminfo-main">
+    <div class="alarminfo-main-null"
+         v-if="isNull">
+      <p>暂无数据</p>
+    </div>
+    <div v-else
+         class="alarminfo-main">
       <div class="alarminfo-main-data">
         <div class="alarminfo-main-data-title">
           警示:接种柜温度异常
@@ -13,10 +18,7 @@
           接种柜温度过高,请及将温度调整至2-8℃范围内!
         </div>
       </div>
-      <div class="alarminfo-main-null"
-           v-if="isNull">
-        <p>暂无数据</p>
-      </div>
+
     </div>
 
   </div>
@@ -26,7 +28,7 @@
 export default {
   name: 'alarminfo',
   props: {
-    alarmlist: {
+    alarm: {
       type: Array,
       default () {
         return []
@@ -42,7 +44,7 @@ export default {
   },
   computed: {
     isNull () {
-      return this.alarmlist.length != 0 ? false : true
+      return this.alarm === 0
     }
   },
   mounted () {
