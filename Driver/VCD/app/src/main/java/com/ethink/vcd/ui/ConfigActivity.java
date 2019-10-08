@@ -1,22 +1,39 @@
 package com.ethink.vcd.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.ethink.vcd.Const;
 import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
 import com.ethink.vcd.server.VCDService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConfigActivity extends AppCompatActivity {
+
+    private static final String[] REQUIRED_PERMISSION_LIST = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.RECORD_AUDIO,
+    };
+    private static final int REQUEST_CODE = 1;
+    private List<String> mMissPermissions = new ArrayList<>();
+
 
     @BindView(R.id.et_url)
     EditText etUrl;
@@ -55,7 +72,50 @@ public class ConfigActivity extends AppCompatActivity {
         }else{
             et_redisport.setText(redisPort+"");
         }
+
+        if (isVersionM()) {
+            checkAndRequestPermissions();
+        }
+
     }
+    private boolean isVersionM() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+    }
+    private void checkAndRequestPermissions() {
+        mMissPermissions.clear();
+        for (String permission : REQUIRED_PERMISSION_LIST) {
+            int result = ContextCompat.checkSelfPermission(this, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                mMissPermissions.add(permission);
+            }
+        }
+        // check permissions has granted
+        if (!mMissPermissions.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                    mMissPermissions.toArray(new String[mMissPermissions.size()]),
+                    REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            for (int i = grantResults.length - 1; i >= 0; i--) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    mMissPermissions.remove(permissions[i]);
+                }
+            }
+        }
+
+        if (!mMissPermissions.isEmpty()) {
+            Toast.makeText(this, "get permissions failed,exiting...",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
+
 
     @Override
     protected void onStart() {
@@ -77,7 +137,7 @@ public class ConfigActivity extends AppCompatActivity {
             return;
         }
 //        if (!redisIp.isEmpty()){
-//            SPUtils.setSharedStringData(getApplication(),Const.REDIS_IP,redisIp);
+//            SPUtils.setSharedStringData(get-Application(),Const.REDIS_IP,redisIp);
 //        }else {
 //            Toast.makeText(this,"请输入推送IP",Toast.LENGTH_LONG).show();
 //            return;

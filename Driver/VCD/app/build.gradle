@@ -59,5 +59,6 @@ dependencies {
    // implementation 'com.github.lzyzsd:jsbridge:1.0.4'
     implementation 'com.blankj:utilcodex:1.25.8'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.github.jiangdongguo:AndroidUSBCamera:2.3.1'
 
 }
