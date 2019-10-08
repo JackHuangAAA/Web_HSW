@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public class FingerCommon {
 
@@ -765,4 +766,16 @@ public class FingerCommon {
     private byte HIBYTE(short s) {
         return (byte)(s >> 8 & 255);
     }
+
+    private final static char[] mChars = "0123456789ABCDEF".toCharArray();
+    public     String byte2HexStr(byte[] b, int iLen) {
+        StringBuilder sb = new StringBuilder();
+        for (int n = 0; n < iLen; n++) {
+            sb.append(mChars[(b[n] & 0xFF) >> 4]);
+            sb.append(mChars[b[n] & 0x0F]);
+            sb.append(' ');
+        }
+        return sb.toString().trim().toUpperCase(Locale.US);
+    }
+
 }

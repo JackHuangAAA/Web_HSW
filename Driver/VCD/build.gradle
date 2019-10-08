@@ -23,6 +23,8 @@ allprojects {
         maven{
             url 'http://maven.ethinkbank.com/repository/maven-public/'
         }
+        //AndroidUSBCamera，UVCCamera开发通用库
+        maven { url 'http://raw.github.com/saki4510t/libcommon/master/repository/' }
 
         
     }
