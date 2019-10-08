@@ -57,7 +57,7 @@ export const CleanStorage = key => {
   localStorage.removeItem(key)
   return true
 }
-export const Storage = {
+export const Storages = {
   SetCache,
   GetCache,
   CleanCache,

@@ -5,7 +5,12 @@
 
 const logger = Libs.logger.getLogger('filter')
 let moment = require('moment')
-const excluded = ['/zcy/checkUser', '/user/modifyUserByCode', '/device']
+const excluded = [
+  '/zcy/checkUser',
+  '/user/modifyUserByCode',
+  '/device/queryDeviceByCondition',
+  '/device'
+]
 
 const bindUserFilter = async (ctx, next) => {
   // console.log(ctx)

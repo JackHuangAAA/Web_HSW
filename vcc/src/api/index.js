@@ -2,10 +2,11 @@ import axios from 'axios'
 import config from '@/config'
 import router from '@/router'
 import Message from 'iview/src/components/message'
-
+import { mapState } from 'vuex'
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = true
+console.log(...mapState)
 axios.defaults.headers.common['deviceid'] = config.deviceid
 axios.defaults.headers.common['type'] = config.type
 const RSP_CODE = {

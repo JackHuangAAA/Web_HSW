@@ -60,7 +60,7 @@ export default {
     this.getmenulist()
   },
   mounted () {
-    this.websocket()
+    // this.websocket()
   },
   methods: {
     menuItemClick (item) {

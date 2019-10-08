@@ -45,29 +45,21 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      user: 'user',
-      device: 'device'
-    })
+    ...mapGetters(['user', 'device'])
   },
   mounted () {
     this.getDeviceId()
   },
   methods: {
-    ...mapActions({
-      saveUser: 'saveUser',
-      saveDevice: 'saveDevice'
-    }),
+    ...mapActions(['saveUser', 'saveUserInfo', 'saveDevice']),
     getDeviceId () {
       this.$device.getDeviceId().then(res => {
-        this.$api.get(`/device/queryDeviceByCondition?code=${res}`).then((response) => {
-          console.log('response.data====>' + JSON.stringify(response.data));
+        this.$api.get(`/device/queryDeviceByCondition`, { code: res.deviceId }).then((response) => {
           this.saveDevice(response.data);
-          console.log('====currentDevice=========%j', this.device)
+          console.log(this.device)
         });
       });
     },
-    ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
       switch (type) {
         case 'fp':

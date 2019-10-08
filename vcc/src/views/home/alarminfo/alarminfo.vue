@@ -12,10 +12,10 @@
          class="alarminfo-main">
       <div class="alarminfo-main-data">
         <div class="alarminfo-main-data-title">
-          警示:接种柜温度异常
+          警示:{{alarmpart}}
         </div>
         <div class="alarminfo-main-data-memo">
-          接种柜温度过高,请及将温度调整至2-8℃范围内!
+          {{alarmsolution}}
         </div>
       </div>
 
@@ -29,7 +29,7 @@ export default {
   name: 'alarminfo',
   props: {
     alarm: {
-      type: Array,
+      type: Number,
       default () {
         return []
       }
@@ -45,6 +45,12 @@ export default {
   computed: {
     isNull () {
       return this.alarm === 0
+    },
+    alarmpart () {
+      return _static.alarminfo[this.alarm].part
+    },
+    alarmsolution () {
+      return _static.alarminfo[this.alarm].solution
     }
   },
   mounted () {
