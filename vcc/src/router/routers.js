@@ -1,11 +1,6 @@
 import Main from '@/views/main.vue'
 import vcc from './vcc'
 const routers = [
-  // {
-  //   path: '/',
-  //   final: true,
-  //   component: () => import('@/views/login.vue')
-  // },
   {
     path: '/',
     component: Main,

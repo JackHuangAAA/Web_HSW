@@ -15,6 +15,9 @@ export default {
     user: state => {
       return state.user
     },
+    code: state => {
+      return state.user
+    },
     routerTitle: state => {
       return state.routerTitle
     },
@@ -35,12 +38,18 @@ export default {
     },
     ['CURRENT_MENU']: (state, action) => {
       state.currentMenu = action
+    },
+    ['SAVE_USER_INFO']: (state, userinfo) => {
+      state.username = userinfo.name
     }
   },
 
   actions: {
     saveUser({ commit }, user) {
       commit('SAVE_USER', user)
+    },
+    saveUserInfo({ commit }, userinfo) {
+      commit('SAVE_USER_INFO', userinfo)
     },
     setCurrentMenu({ commit }, currentMenu) {
       commit('CURRENT_MENU', currentMenu)

@@ -1,11 +1,10 @@
 // 与硬件交互
-require('./bridge.js')
 export default {
-  android(eventName, params) {
+  android(functionName, params) {
     if (typeof params !== 'undefined') {
-      return $d.invoke('FINGER', eventName, params)
+      return $d.invoke('FINGER', functionName, params)
     } else {
-      return $d.invoke('FINGER', eventName)
+      return $d.invoke('FINGER', functionName)
     }
   }
   // subscribe(eventName, callback) {

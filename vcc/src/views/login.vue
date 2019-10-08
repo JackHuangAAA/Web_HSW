@@ -31,6 +31,7 @@
 import ETHINK from '@/assets/logo.png'
 import loginform from '_c/loginform'
 import fplogin from '_c/fplogin'
+import { mapActions } from 'vuex'
 export default {
   components: {
     loginform,
@@ -44,6 +45,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
       switch (type) {
         case 'fp':
@@ -59,11 +61,21 @@ export default {
       }
     },
     test () {
-      let test = this.$device.android('open')
+      let test = this.$device.android('open').then(res => { }).catch(err => {
+        console.log(err)
+      })
       console.log(test)
     },
-    checkUser (form) {
-      this.$api.get('/checkUser', form)
+    async checkUser (form) {
+      let res = await this.$api.get('/zcy/checkUser', form)
+      let check = res.data.check
+      if (check) {
+        let data = res.data
+        await this.saveUser(form.code)
+        await this.saveUserInfo(data)
+        await this.$api.post('/user/modifyUserByCode', { code: data.code, name: data.name })
+        this.$router.push({ name: 'home' })
+      }
     }
   }
 }

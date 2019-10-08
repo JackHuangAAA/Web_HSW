@@ -80,7 +80,7 @@ export default {
       this.getTotal('inoculate', '/Vaccine/queryVaccine')
     },
     queryAlarmDailyInfo () {
-      this.getTotal('alarm', '/Alarm/queryAlarmDailyInfo').then(res => {
+      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition').then(res => {
         this.alarmlist = res.rs
       })
     },

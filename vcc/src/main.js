@@ -27,9 +27,22 @@ Vue.config.productionTip = processmod
 Vue.prototype.$api = api
 Vue.prototype.$config = config
 Vue.prototype.$device = device
-global.__app = new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
-})
+if (config.env == 'development') {
+  global.__app = new Vue({
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
+  })
+} else {
+  // 安卓环境使用
+  window.$d.onReady = function() {
+    console.log('$d.ready')
+    global.__app = new Vue({
+      el: '#app',
+      router: router,
+      store: store,
+      render: h => h(App)
+    })
+  }
+}
