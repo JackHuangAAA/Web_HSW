@@ -23,14 +23,14 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                currentMenu: 'currentMenu',
+                device: 'device'
             })
         },
         components:{},
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
-                setCurrentMenu: 'setCurrentMenu'
+                saveDevice: 'saveDevice'
             })
 
         },

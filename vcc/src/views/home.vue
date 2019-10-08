@@ -145,7 +145,7 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                currentMenu: 'currentMenu'
+                device: 'device'
             })
         },
         components:{},
@@ -157,7 +157,7 @@
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
-                setCurrentMenu: 'setCurrentMenu'
+                saveDevice: 'saveDevice'
             }),
             logout: function () {
                 this.$api.get('/user/logout').then(()=>{
@@ -208,9 +208,21 @@
             });
         },
         mounted(){
+            this.$api.get('/user/current').then((result) => {
+                this.saveUser(result.data);
+            });
+            //加载当设备信息
+            this.$device.getDeviceId().then(res => {
+                this.$api.get(`/device/queryDeviceByCondition?code=${res.deviceId}`).then((response) => {
+                    console.log('response.data====>'+JSON.stringify(response.data));
+                    this.saveDevice(response.data);
+                });
+            });
             if(this.$route.path == '/'){
                 this.$router.push('/main');
             }
+            console.log('====currentDevice=========%j',this.user)
+            console.log('====currentDevice=========%j',this.device)
         }
     }
 </script>
