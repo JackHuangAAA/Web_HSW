@@ -57,7 +57,14 @@
     </Row>
     <Row>
       <div class="inculate-box-button">
-
+        <div class="inculate-box-icon">
+          <Spin>
+            <Icon type="ios-loading"
+                  size=50
+                  class="inculate-box-spin-icon-load"></Icon>
+          </Spin>
+        </div>
+        <div class="inculate-box-checkedinfo">疫苗接种信息</div>
       </div>
     </Row>
   </div>
@@ -108,4 +115,31 @@ export default {
 
 <style lang="less">
 @import "./inoculateBox.less";
+.inculate-box-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+}
+.inculate-box-checkedinfo {
+  margin-left: 40px;
+  font-size: 30px;
+  font-weight: 400;
+  color: rgba(62, 73, 85, 1);
+}
+.inculate-box-spin-icon-load {
+  animation: ani-spin 1s linear infinite;
+}
+@keyframes ani-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

@@ -15,21 +15,19 @@
       </Row>
     </div>
     <div class="rightbox">
-      <div class="thermometer"></div>
+      <div class="thermometer">
+        <thermometer></thermometer>
+      </div>
       <div class="alarminfo card">
         <alarminfo :alarmlist="alarmlist"></alarminfo>
       </div>
-      <!-- <div class="vaccine-set vaccine-in button"
-           @click="routerto('inbound')"> -->
       <div class="vaccine-set vaccine-in button"
-           @click="androidtest1()">
+           @click="routerto('inbound')">
         <p>疫苗入库</p>
         <img src="~@/assets/vaccine-in.png">
       </div>
-      <!-- <div class="vaccine-set vaccine-out button"
-           @click="routerto('outbound')"> -->
       <div class="vaccine-set vaccine-out button"
-           @click="androidtest2()">
+           @click="routerto('outbound')">
         <p>疫苗出库</p>
         <img src="~@/assets/vaccine-out.png">
       </div>
@@ -50,10 +48,12 @@ const changeItem = (key, value, obj) => {
 import testli from './data/testlackitem.js'
 import alarminfo from './alarminfo'
 import homecard from './data/homecard'
+import thermometer from './thermometer'
 import itemCard from '_c/main/itemcard'
 import lackinventory from './lackinventory'
 export default {
   components: {
+    thermometer,
     itemCard,
     lackinventory,
     alarminfo

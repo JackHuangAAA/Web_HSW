@@ -1,7 +1,13 @@
 <template>
   <div class="layout">
     <menu-list class="menu"
-               :lists="menulist"></menu-list>
+               :lists="menulist"
+               :menuOpen='menuOpen'
+               @clickitem='menuItemClick'
+               @click="menuClick()"></menu-list>
+    <div class="menu-shade"
+         v-show="menuOpen"
+         @click="menuClose()">asd</div>
     <div class="header">
       <Row type="flex">
         <div class="routerlink">
@@ -45,7 +51,8 @@ export default {
   },
   data () {
     return {
-      menulist: []
+      menulist: [],
+      menuOpen: false
     }
   },
   created () {
@@ -53,6 +60,17 @@ export default {
     this.$device.subscribe()
   },
   methods: {
+    menuItemClick (item) {
+      this.menuClose()
+    },
+    menuClick () {
+      this.$nextTick(() => {
+        this.menuOpen = !this.menuOpen
+      })
+    },
+    menuClose () {
+      this.menuOpen = false
+    },
     getmenulist () {
       let menulist = vcc.map(el => {
         let path = { path: el.path, name: el.name, ...el.meta }
@@ -66,4 +84,10 @@ export default {
 
 <style lang="less" scoped>
 @import "~@/style/index.less";
+.menu-shade {
+  z-index: 10;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
 </style>

@@ -58,6 +58,11 @@ const routers = [
     ]
   },
   {
+    path: '/test',
+    final: true,
+    component: () => import('@/views/home/thermometer/thermometer.vue')
+  },
+  {
     path: '/login',
     final: true,
     component: () => import('@/views/login.vue')

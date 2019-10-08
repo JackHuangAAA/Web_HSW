@@ -45,7 +45,7 @@ export default {
 
   position: relative;
   display: flex;
-  justify-items: center;
+  justify-content: center;
   align-items: center;
 }
 .item-number {

@@ -4,7 +4,7 @@
          :class="{'menuopen':menuOpen,'menuclose':!menuOpen}">
       <Row>
         <div class="menu-button"
-             @click="menuOpen=!menuOpen">
+             @click="buttonClick()">
           <div class="menu-icon"
                :class="{'icon-open':!menuOpen,'icon-close':menuOpen}"></div>
           <div class="menu-status">{{menustatus}}</div>
@@ -48,11 +48,14 @@ export default {
       default () {
         return []
       }
+    },
+    menuOpen: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
-      menuOpen: false,
       activeMenu: 'home',
     }
   },
@@ -69,14 +72,16 @@ export default {
       return `~@/assets/icon/${icon}.png`
     },
     menuClick (item) {
+      this.$emit('clickitem', item)
       let route = item.name
       if (typeof item.main !== 'undefined') {
         route = item.main
       }
       this.activeMenu = item.name
-      this.menuOpen = false
       this.$router.push({ name: route })
-      console.log(this.$route)
+    },
+    buttonClick () {
+      this.$emit('click', this.menuOpen)
     }
   },
 }
@@ -111,7 +116,6 @@ export default {
 }
 .menu-main-title {
   font-size: 13px;
-  font-family: Microsoft YaHei;
   font-weight: bold;
   color: rgba(138, 147, 155, 1);
   margin-left: 24px;
@@ -119,7 +123,6 @@ export default {
 }
 .menu-location-info {
   font-size: 13px;
-  font-family: Microsoft YaHei;
   font-weight: bold;
   color: @white;
   margin: auto auto auto 8px;

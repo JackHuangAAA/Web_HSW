@@ -3,22 +3,30 @@
     <Col class="tabs-style"
          span="24">
     <Tabs :animated="false">
-      <TabPane label="标签一">
+      <TabPane label="设置">
         <basic-setting style="height:100%"></basic-setting>
       </TabPane>
-      <TabPane label="标签二">标签二的内容</TabPane>
-      <TabPane label="标签三">标签三的内容</TabPane>
+      <TabPane label="指纹录入">
+        <fingerprint></fingerprint>
+      </TabPane>
+      <TabPane label="疫苗区域划分">
+        <vaccine-setting></vaccine-setting>
+      </TabPane>
     </Tabs>
     </Col>
   </Row>
 </template>
 
 <script>
+import fingerprint from './fingerprint'
+import VaccineSetting from './VaccineSetting'
 import basicSetting from './basicSetting'
 export default {
   name: 'setting',
   components: {
-    basicSetting
+    basicSetting,
+    VaccineSetting,
+    fingerprint
   },
   data () {
     return {
@@ -40,7 +48,8 @@ export default {
   height: 100%;
 }
 .tabs-style .ivu-tabs-tab {
-  padding: 12px 48px;
+  padding-top: 14px;
+  text-align: center;
   width: 142px;
   height: 50px;
   background-color: @white;
