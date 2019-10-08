@@ -12,7 +12,16 @@
         <div class="ivt">
           <p>{{column.title}}</p>
         </div>
-        <div class="ivh">
+        <div v-if="column.static"
+             class="ivh">
+          <p>{{content(el[column.key],column.map)}}</p>
+        </div>
+        <div v-else-if="column.type==='datetime'"
+             class="ivh">
+          <p>{{datetime(el[column.key])}}</p>
+        </div>
+        <div v-else
+             class="ivh">
           <p>{{el[column.key]}}</p>
         </div>
       </div>
@@ -22,6 +31,7 @@
 </template>
 
 <script>
+import { dbDateFmt } from '@/libs/util.js'
 export default {
   name: 'alarmcard',
   props: {
@@ -43,8 +53,16 @@ export default {
     }
   },
   computed: {
-    columnlist () {
+    datetime () {
+      return createDate => {
+        return dbDateFmt(createDate)
 
+      }
+    },
+    content () {
+      return (param, map) => {
+        return _static[map][param]
+      }
     }
   },
   mounted () {

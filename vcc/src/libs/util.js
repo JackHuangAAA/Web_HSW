@@ -28,6 +28,11 @@ export const dateFmt = (fmt, date) => {
       )
   return fmt
 }
+export const dbDateFmt = datetime => {
+  let date = datetime.substr(0, 10)
+  let time = datetime.substr(11, 8)
+  return `${date} ${time}`
+}
 
 export const SetCache = (key, value) => {
   sessionStorage.setItem(key, value)

@@ -27,7 +27,17 @@ export default {
   data () {
     return {
       columns: columns,
-      lists: testdata
+      lists: []
+    }
+  },
+  created () {
+    this.getAlarms()
+  },
+  methods: {
+    getAlarms () {
+      this.$api.get('alarm/queryAlarmByByCondition').then(res => {
+        this.lists = res.data.rs
+      })
     }
   }
 }
