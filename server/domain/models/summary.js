@@ -6,6 +6,9 @@ const paginate = require('mongoose-paginate');
  */
 const summarySchema = mongoose.Schema({
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
+    deviceType: Number, //设备类型
+    unitCode: String,   //所属单位编号
+    unitName: String,   //所属单位
     code: String,    //疫苗编号
     name: String,    //疫苗名称
     total: Number,   //数量(入库总数)

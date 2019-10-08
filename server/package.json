@@ -4,6 +4,7 @@
   "scripts": {
     "web": "node web/main.js dev",
     "vcc": "node vcc/main.js dev",
+    "vccpush": "node vcc/push.js dev",
     "vfc": "node vfc/main.js dev",
     "build": "node build/build.js"
   },

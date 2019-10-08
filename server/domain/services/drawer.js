@@ -12,13 +12,16 @@ module.exports = {
      * @returns 
      */
     queryDrawerEmpty: async function (requestBody) {
+         logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).populate("vaccine");
-        console.log(result, 'result')
         result = result.filter(item => {
             return item.vaccine == null
         })
@@ -42,12 +45,16 @@ module.exports = {
      * @returns 
      */
     queryDrawerByCondition: async function (requestBody) {
+        logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
         if (!_.isEmpty(requestBody.id)) {
             query.push({ "device": requestBody.id });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
         }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).sort({ "x": 1, "y": 1 }).populate("vaccine");

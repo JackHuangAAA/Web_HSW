@@ -7,6 +7,8 @@ const logger = Libs.logger.getLogger('alarm');
  * @apiGroup Alarm
  * @apiVersion 1.0.0
  * @apiDescription 查询当天报警信息
+ * @apiParam {Number} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {Array}  rs  当天报警信息数组
  * @apiSuccess {Number}  total 当天报警次数
  */
@@ -17,11 +19,13 @@ router.get('/queryAlarmDailyInfo',
 );
 
 /**
- * @api {GET} /alarm/queryAlarmByByCondition  查询报警次数
+ * @api {GET} /alarm/queryAlarmByByCondition  查询报警次数及报警信息
  * @apiGroup Alarm
  * @apiVersion 1.0.0
- * @apiDescription 查询报警次数
- * @apiParam {Number} type 报警类型(1:温度异常;2:库存不足,不传查询全部)
+ * @apiDescription 查询报警次数及报警信息
+ * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足,不传查询全部)
+ * @apiParam {Number} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {Array}  rs  当天报警次数信息数组
  * @apiSuccess {Number}  total 当天报警次数
  */

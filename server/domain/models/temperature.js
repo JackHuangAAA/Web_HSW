@@ -6,6 +6,9 @@ const paginate = require('mongoose-paginate');
  */
 const temperatureSchema = mongoose.Schema({
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
+    deviceType: Number, //设备类型
+    unitCode: String,   //所属单位编号
+    unitName: String,   //所属单位
     degree: [{
         time: String, //时间
         value: Number //温度值

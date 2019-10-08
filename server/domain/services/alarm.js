@@ -16,7 +16,14 @@ module.exports = {
         let today = moment();
         let query = [];
         query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({ "deviceType": requestBody.deviceType });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
         let result = await Domain.models.alarm.find({ "$and": query });
+
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length }
     },
@@ -34,6 +41,12 @@ module.exports = {
         query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({ "deviceType": requestBody.deviceType });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
         }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);

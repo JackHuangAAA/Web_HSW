@@ -28,6 +28,7 @@ if (cluster.isMaster) {
     logger.info(`主进程[${process.pid}]启动...`);
     //日志清理
     require('./logsManage');
+    require('./homeData');
 
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
@@ -57,7 +58,7 @@ if (cluster.isMaster) {
     app.use(koaBody());
 
     let start = async ()=>{
-        // await filter.register(app);
+        await filter.register(app);
         await router.register(app);
 
         app.use(async (ctx,next) => {
