@@ -71,6 +71,19 @@ router.get('/queryVaccine',
 );
 
 /**
+ * @api {GET} /queryVaccineKinds  查询疫苗总种类信息
+ * @apiGroup zcy
+ * @apiVersion 1.0.0
+ * @apiDescription 调用政采云柜台编号信息接口，查询疫苗信息
+ * @apiSuccess Json  Object 疫苗信息
+ */
+router.get('/queryVaccineKinds',
+    Libs.router(async (ctx, next) => {
+        return await Domain.thirds.zcy.queryVaccineKinds(ctx.request.query);
+    })
+);
+
+/**
  * @api {POST} /reciveVaccination  接收接种信息
  * @apiGroup zcy
  * @apiVersion 1.0.0
