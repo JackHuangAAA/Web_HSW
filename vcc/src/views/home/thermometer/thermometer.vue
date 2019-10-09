@@ -16,6 +16,10 @@
         {{value}}
       </p>
       <p class="header-thermometer-icon">℃</p>
+      <div class="header-right">
+        <p>正常</p>
+        <p>室温：26℃</p>
+      </div>
     </div>
     <div class="slider-contont"
          :style="sliderStyle">
@@ -91,11 +95,25 @@ export default {
   z-index: 1;
   margin: 18px 10px 0px 24px;
   display: flex;
+  position: relative;
 }
 .header-thermometer-item {
-  display: inline-block;
+  width: 60px;
   font-size: 48px;
-  vertical-align: top;
+  text-align: end;
+  color: rgba(235, 235, 236, 1);
+}
+.header-right {
+  position: absolute;
+  right: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  p {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: 2px;
+  }
 }
 .header-thermometer-icon {
   font-size: 18px;
