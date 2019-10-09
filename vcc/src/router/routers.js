@@ -22,6 +22,9 @@ const routers = [
       {
         path: 'inventorys',
         name: 'inventorys',
+        meta: {
+          title: '库存'
+        },
         component: () => import('@/views/vaccine/inventory/inventorys.vue')
       },
       {

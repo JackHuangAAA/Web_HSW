@@ -8,7 +8,7 @@ const store = {
   state: {
     user: null,
     device: null, //当前设备
-    username: '李晓文',
+    username: '',
     position: '2号接种台',
     routerTitle: '主页',
     location: '西湖区'
@@ -50,6 +50,9 @@ const store = {
     },
     ['SAVE_USER_INFO']: (state, userinfo) => {
       state.username = userinfo.name
+    },
+    ChangeRoute(state, title) {
+      state.routerTitle = title
     }
   },
 
@@ -62,6 +65,9 @@ const store = {
     },
     saveUserInfo({ commit }, userinfo) {
       commit('SAVE_USER_INFO', userinfo)
+    },
+    ChangeRoute({ commit }, routertitle) {
+      commit('ChangeRoute', routertitle)
     }
   }
 }

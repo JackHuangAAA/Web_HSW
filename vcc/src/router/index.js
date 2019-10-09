@@ -29,6 +29,7 @@ let getRouterConfig = function(path) {
 }
 
 router.beforeEach((to, from, next) => {
+  if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title)
   let menu = getRouterConfig(to.path)
   if (menu != null) {
     let p = Promise.resolve()
@@ -40,6 +41,7 @@ router.beforeEach((to, from, next) => {
       })
     }
     if (menu.access != null) {
+      //如果有权限
       p.then(() => {
         //校验权限
         if (config.env == 'development') {
