@@ -76,8 +76,13 @@ export default {
           break;
       }
     },
+<<<<<<< HEAD
     test () {
       let test = this.$device.finger('open').catch(err => {
+=======
+    test() {
+      let test = this.$device.android('open').then(res => { }).catch(err => {
+>>>>>>> hzz
         console.log(err)
       })
       console.log(test)

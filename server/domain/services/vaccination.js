@@ -13,6 +13,7 @@ module.exports = {
      * @returns 
      */
     queryVaccinationByCustomerCode: async function (requestBody) {
+        logger.debug(`queryVaccinationByCustomerCode param: ${JSON.stringify(requestBody)}`);
         let query = [];
         let today = moment();
         query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
