@@ -71,7 +71,7 @@ const store = {
       commit('ChangeRoute', routertitle)
     },
     async getVaccineKinds({ state, commit }) {
-      let res = await axios.queryVaccineKinds()
+      let res = await queryVaccineKinds()
       commit('SaveVaccineKinds', res.data)
       return res.data
     },

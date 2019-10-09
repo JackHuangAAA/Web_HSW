@@ -29,7 +29,8 @@
         <Col span="2"
              class="vTableContent-index"> 第一行 </Col>
         <Col span="11">
-        <vaccineCard :type='type'></vaccineCard>
+        <vaccineCard :type='type'
+                     :vacclists='vacclists'></vaccineCard>
         </Col>
         <Col span="11">
         <vaccineCard :type='type'></vaccineCard>
@@ -56,61 +57,30 @@ export default {
   },
   data () {
     return {
-      t2b, l2r
+      t2b, l2r,
+      vacclists: null
+    }
+  },
+  computed: {
+    vacc () {
+      return this.$store.state.vacc
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    async init () {
+      if (this.vacc === null) {
+        this.vacclists = await this.$store.dispatch('getVaccineKinds')
+      } else {
+        this.vacclists = this.vacc
+      }
     }
   }
 }
 </script>
 
 <style lang="less">
-.vTableContent-index {
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 14px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-  color: rgba(62, 73, 85, 1);
-}
-.vTable {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vTable-t-b,
-.vTable-l-r {
-  position: absolute;
-  p {
-    font-size: 16px;
-    font-family: Microsoft YaHei;
-    font-weight: bold;
-    color: rgba(62, 73, 85, 1);
-  }
-}
-.vTable-t-b {
-  display: flex;
-  flex-direction: column;
-  left: 108px;
-}
-.vTable-l-r {
-  display: flex;
-  flex-direction: row;
-  top: 88px;
-}
-.vTableContent {
-  padding: 100px 150px;
-  width: 100%;
-  height: 100%;
-}
-.vTable-cloumns {
-  margin-top: -20px;
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(62, 73, 85, 1);
-}
+@import "./vaccineTable.less";
 </style>

@@ -18,19 +18,19 @@
           </p>
         </Row>
       </div>
-      <div v-esle
+      <div v-else
            class="vCard-edit">
         <Select v-model="model1"
                 style="width:200px">
-          <Option v-for="item in cityList"
-                  :value="item.value"
-                  :key="item.value">{{ item.label }}</Option>
+          <Option v-for="item in vacclists"
+                  :value="item.code"
+                  :key="item.code">{{ item.name }}</Option>
         </Select>
         <div class="vCard-edit-d">
-          <img :src="add">
+          <img :src="addpng">
         </div>
         <div class="vCard-edit-d">
-          <img :src="del">
+          <img :src="delpng">
         </div>
       </div>
       </Col>
@@ -79,22 +79,35 @@
 </template>
 
 <script>
-import add from '_a/add.png'
-import del from '_a/del.png'
+import addpng from '_a/add.png'
+import delpng from '_a/del.png'
 export default {
   name: 'vaccineCard',
   props: {
     type: {
       type: String,
       default: 'Router'
+    },
+    vacclists: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+    x: {
+      type: Number
+    },
+    y: {
+      type: Number
     }
   },
   data () {
     return {
-      add, del,
+      addpng, delpng,
       Selection: false,
       vCardModal: false,
       input: '',
+      model1: '',
     }
   },
   computed: {
@@ -106,6 +119,13 @@ export default {
     },
     checked () {
       return this.type === "check"
+    }
+  },
+  mounted () {
+  },
+  watch: {
+    vacclists (value) {
+      console.log(value)
     }
   },
   methods: {
@@ -134,48 +154,5 @@ export default {
 </script>
 
 <style lang="less">
-.footerButton {
-  display: flex;
-  justify-content: center;
-  button {
-    width: 40%;
-    height: 46px;
-  }
-}
-.vCard-checkbox {
-  position: absolute;
-  left: 20px;
-  top: 10px;
-}
-.vCard {
-  cursor: pointer;
-  height: 100px;
-  width: 100%;
-  box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.19);
-}
-.vCard-name {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: rgba(45, 153, 255, 1);
-}
-.vCard-count {
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(255, 136, 39, 1);
-}
-.vCard-edit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  .vCard-edit-d {
-    margin-left: 9px;
-    display: flex;
-    align-items: center;
-    width: 14px;
-    height: 14px;
-  }
-}
+@import "./vaccineCard.less";
 </style>
