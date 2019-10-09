@@ -7,7 +7,7 @@ const moment = require('moment');
 module.exports = {
 
     /**
-     * 
+     * 查询今日报警信息
      * 
      * @param {any} requestBody 
      * @returns 
@@ -22,6 +22,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({ "type": requestBody.type });
+        }
         let result = await Domain.models.alarm.find({ "$and": query });
 
         logger.debug(`result: ${result}`);
@@ -29,16 +32,14 @@ module.exports = {
     },
 
     /**
+     * 按条件查询报警信息（温度/库存、设备类型、单位）
      * 
-     * 
-     * @param {any} requestBody 
+     * @param {any} requestBody
      * @returns 
      */
-    queryAlarmByByCondition: async function (requestBody) {
-        logger.debug(`queryAlarmByTemp param: ${JSON.stringify(requestBody)}`);
-        let today = moment();
+    queryAlarm: async function (requestBody) {
+        logger.debug(`queryAlarm param: ${JSON.stringify(requestBody)}`);
         let query = [];
-        query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
         }
@@ -48,6 +49,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
+
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
         logger.debug(`result: ${result}`);

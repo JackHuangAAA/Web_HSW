@@ -8,6 +8,7 @@ const deviceSchema = mongoose.Schema({
     code: String, //设备编号（设备上送）
     alias: String,//别名（客户自定义）
     type: Number, //类型(1:接种柜;2:冷藏柜)
+    status: Number, //状态（0:离线 1:在线 2:故障）
     address:{
         provinceCode: String,   //省份编码
         provinceName: String,   //省份名称

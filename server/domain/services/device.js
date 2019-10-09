@@ -26,6 +26,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
+        if (!_.isEmpty(requestBody.status)) {
+            query.push({"status": requestBody.status});
+        }
         if (!_.isEmpty(requestBody.cabinetNo)) {
             query.push({"cabinetNo": requestBody.cabinetNo});
         }
@@ -35,6 +38,7 @@ module.exports = {
             page: requestBody.page,
             limit: parseInt(requestBody.size)
         });
+
         return {rs: result.docs, total: result.total};
     },
 
@@ -45,11 +49,11 @@ module.exports = {
      */
     saveDevice: async function(requestBody){
         logger.debug(`saveDevice param: ${JSON.stringify(requestBody)}`);
-        return Domain.models.device.create(requestBody);
+        return await Domain.models.device.create(requestBody);
     },
 
     /**
-     * 按条件查询设备信息
+     * 按条件查询设备信息（状态/类型/单位）
      * @param requestBody
      * @returns {Promise.<T|Query|*>}
      */
@@ -65,8 +69,46 @@ module.exports = {
         if (!_.isEmpty(requestBody.cabinetNo)) {
             query.push({"cabinetNo": requestBody.cabinetNo});
         }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.status)) {
+            query.push({"status": requestBody.status});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
         query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
         return await Domain.models.device.find(query);
-    }
+    },
 
+    /**
+     * 聚合查询，各单位各设备类型不同状态的设备数量统计(所属单位编号待定)
+     * @param requestBody
+     * @returns {JSON}  Object  version model数组，不同类型的数量统计
+     */
+    queryDeviceByAggregate: async function(currentUser,requestBody){
+        logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
+        console.log(currentUser);
+        /*
+        if(currentUser.unitCode!=undefined){
+            let $unitCode = currentUser.unitCode;
+        }else{
+            let $unitCode = '0000';
+        };
+        */
+        let $unitCode = '0002';
+        let $group={
+            _id:{
+                "type":"$type",
+                "status":"$status"
+            },
+            count:{$sum:1}
+        };
+
+        let $match={
+            unitCode:$unitCode
+        };
+        return await Domain.models.device.aggregate([{$match:$match},{$group:$group}]);
+    }
 };
