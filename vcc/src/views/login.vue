@@ -10,17 +10,12 @@
       </div>
       <div class="login">
         <div class="tab item">
-          <p :class="{'tabactive':login1}"
-             @click="login('fp')">指纹登陆</p>
-          <p :class="{'tabactive':login2}"
-             style="padding-left:62px;"
-             @click="login('up')">用户密码登录</p>
+          <p :class="{'tabactive':login1}" @click="login('fp')">指纹登陆</p>
+          <p :class="{'tabactive':login2}" style="padding-left:62px;" @click="login('up')">用户密码登录</p>
         </div>
         <div class="loginform item">
-          <fplogin v-if="login1"
-                   @click="test()"></fplogin>
-          <loginform v-if="login2"
-                     @Submit="checkUser"></loginform>
+          <fplogin v-if="login1" @click="test()"></fplogin>
+          <loginform v-if="login2" @Submit="checkUser"></loginform>
         </div>
       </div>
     </div>
@@ -37,7 +32,7 @@ export default {
     loginform,
     fplogin
   },
-  data () {
+  data() {
     return {
       login1: true,
       login2: false,
@@ -46,7 +41,7 @@ export default {
   },
   methods: {
     ...mapActions(['saveUser', 'saveUserInfo']),
-    login (type) {
+    login(type) {
       switch (type) {
         case 'fp':
           this.login1 = true;
@@ -60,13 +55,13 @@ export default {
           break;
       }
     },
-    test () {
+    test() {
       let test = this.$device.android('open').then(res => { }).catch(err => {
         console.log(err)
       })
       console.log(test)
     },
-    async checkUser (form) {
+    async checkUser(form) {
       let res = await this.$api.get('/zcy/checkUser', form)
       let check = res.data.check
       if (check) {

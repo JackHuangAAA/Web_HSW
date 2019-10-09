@@ -54,12 +54,13 @@ module.exports = {
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
             { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }} },
-            { $project: { _id: 1, name: 1, num_movie: 1 } }
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name:{"$first":"$name"},code:{"$first":"$code"},total:{"$sum":"$total"},surplus:{"$sum":"$surplus"},updateDate:{"$first":"$updateDate"} }},
+          
+            { $project: { _id: 1, num_movie: 1,name: 1,code: 1,total: 1, surplus: 1, updateDate: 1, use:{"$subtract": ["$total", "$surplus"]} } }
 
         ])
         logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
+        return { rs: result, total: result.length, device: requestBody}
     },
 
     /**
@@ -73,7 +74,7 @@ module.exports = {
         return await Domain.models.vaccine.update(
             { _id: requestBody.id },
             {
-                $set: { total: requestBody.total, updateDate: new Date()}
+                $set: { vaccine: requestBody.vaccine, updateDate: new Date()}
             }
         );
     },

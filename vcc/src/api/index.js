@@ -41,6 +41,7 @@ const errorHandler = err => {
 
 export default {
   get: function(url, data) {
+    console.log('in get')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
@@ -55,6 +56,7 @@ export default {
   },
 
   post: function(url, data) {
+    console.log('in post')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
