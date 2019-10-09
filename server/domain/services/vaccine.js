@@ -18,7 +18,7 @@ module.exports = {
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
             { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }} },
+            { $group: { _id: '$code', num_movie: { $sum: 1 },name: { $first: "$name"}} },
             { $project: { _id: 1, name: 1, num_movie: 1 } }
 
         ])

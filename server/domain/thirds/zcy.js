@@ -154,6 +154,45 @@ module.exports = {
     }
     return result
   },
+  /**
+   * 查询疫苗总种类信息
+   * @param requestBody
+   * @returns {Promise.<[*,*,*,*,*]>}
+   */
+  queryVaccineKinds: async function(requestBody) {
+    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`)
+    let result = [
+      {
+      code: 'ym20190920134508991',
+      name: '脊髓灰质炎疫苗',
+      supervisionCode: 'jg20190920001',
+      expiry: new Date(),
+      producer: '长春生物制药'
+    },
+      {
+      code: 'ym20190920134508992',
+      name: '麻疹疫苗',
+      supervisionCode: 'jg20190920001',
+      expiry: new Date(),
+      producer: '长春生物制药'
+    },
+      {
+      code: 'ym20190920134508993',
+      name: '乙肝疫苗',
+      supervisionCode: 'jg20190920001',
+      expiry: new Date(),
+      producer: '长春生物制药'
+    },
+      {
+      code: 'ym20190920134508994',
+      name: '水痘',
+      supervisionCode: 'jg20190920001',
+      expiry: new Date(),
+      producer: '长春生物制药'
+    }
+  ]
+    return result
+  },
 
   /**
    * 接收接种信息
