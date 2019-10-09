@@ -27,13 +27,10 @@
       </Row>
       <Row :gutter="12">
         <Col span="2"
-             class="vTableContent-index"> 第一行 </Col>
+             class="vTableContent-index"> 第1行 </Col>
         <Col span="11">
         <vaccineCard :type='type'
                      :vacclists='vacclists'></vaccineCard>
-        </Col>
-        <Col span="11">
-        <vaccineCard :type='type'></vaccineCard>
         </Col>
       </Row>
     </div>
@@ -58,25 +55,42 @@ export default {
   data () {
     return {
       t2b, l2r,
-      vacclists: null
+      vacclists: null,
+      drawers: null,
     }
   },
   computed: {
-    vacc () {
+    storevacc () {
       return this.$store.state.vacc
+    },
+    storedrawer () {
+      return this.$store.state.drawer
     }
   },
   mounted () {
     this.init()
   },
   methods: {
-    async init () {
-      if (this.vacc === null) {
+    init () {
+      this.getVacc()
+      this.getDrawer()
+    },
+    async getVacc () {
+      if (this.storevacc === null) {
         this.vacclists = await this.$store.dispatch('getVaccineKinds')
       } else {
-        this.vacclists = this.vacc
+        this.vacclists = this.storevacc
       }
-    }
+    },
+    async getDrawer () {
+      console.log(this.storedrawer)
+      if (this.storedrawer === null) {
+        let drawer = await this.$store.dispatch('getDrawer')
+        this.drawers = drawer
+      } else {
+        this.drawers = this.storedrawer
+      }
+    },
   }
 }
 </script>

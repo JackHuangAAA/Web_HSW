@@ -1,16 +1,22 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { queryDeviceByCondition, queryVaccineKinds } from '@/libs/axios.js'
+import {
+  queryDeviceByCondition,
+  queryVaccineKinds,
+  queryDrawerByCondition
+} from '@/libs/axios.js'
 import { getid, Storages } from '@/libs/util.js'
 const store = {
   state: {
     user: null,
     device: null, //当前设备
+    deviceid: null,
     username: '',
     position: '2号接种台',
     routerTitle: '主页',
     location: '西湖区',
-    vacc: null
+    vacc: null,
+    drawer: null
   },
 
   getters: {
@@ -44,6 +50,7 @@ const store = {
     ['SAVE_DEVICE']: (state, action) => {
       state.location = action.address.countyName
       state.position = action.alias
+      state.deviceid = action._id
       state.device = action
     },
     ['SAVE_USER_INFO']: (state, userinfo) => {
@@ -54,6 +61,9 @@ const store = {
     },
     SaveVaccineKinds(state, lists) {
       state.vacc = lists
+    },
+    SaveDrawer(state, drawer) {
+      state.drawer = drawer
     }
   },
 
@@ -70,12 +80,21 @@ const store = {
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle)
     },
-    async getVaccineKinds({ state, commit }) {
+    async getDrawer({ state, commit }) {
+      if (state.drawer === null) {
+        let res = await queryDrawerByCondition()
+        commit('SaveDrawer', res.data)
+        return res.data
+      } else {
+        return state.drawer
+      }
+    },
+    async getVaccineKinds({ commit }) {
       let res = await queryVaccineKinds()
       commit('SaveVaccineKinds', res.data)
       return res.data
     },
-    async getDevice({ commit, dispatch }) {
+    async getDevice({ dispatch }) {
       let id = await getid()
       let res = await queryDeviceByCondition(id)
       dispatch('saveDevice', res.data[0])

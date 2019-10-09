@@ -6,3 +6,7 @@ export const queryDeviceByCondition = async deviceId => {
 export const queryVaccineKinds = async () => {
   return await axios.get(`/zcy/queryVaccineKinds`)
 }
+
+export const queryDrawerByCondition = async () => {
+  return await axios.get(`/drawer/queryDrawerByCondition`)
+}

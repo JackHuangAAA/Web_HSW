@@ -11,6 +11,10 @@
       <div v-if="type!='edit'">
         <Row>
           <p class="vCard-name">狂犬疫苗</p>
+          <div class="vCard-edit-d">
+            <img style="margin-top:-10px"
+                 :src="delpng">
+          </div>
         </Row>
         <Row>
           <p class="vCard-count">
@@ -21,28 +25,17 @@
       <div v-else
            class="vCard-edit">
         <Select v-model="model1"
-                style="width:200px">
+                style="width:200px;z-index:10;">
           <Option v-for="item in vacclists"
                   :value="item.code"
                   :key="item.code">{{ item.name }}</Option>
         </Select>
-        <div class="vCard-edit-d">
+        <div class="vCard-edit-d"
+             @click="Vaccine('add')">
           <img :src="addpng">
         </div>
-        <div class="vCard-edit-d">
-          <img :src="delpng">
-        </div>
+
       </div>
-      </Col>
-      <Col span="12">
-      <Row>
-        <p class="vCard-name">百白破疫苗</p>
-      </Row>
-      <Row>
-        <p class="vCard-count">
-          100支
-        </p>
-      </Row>
       </Col>
     </Row>
     <div>
@@ -108,6 +101,9 @@ export default {
       vCardModal: false,
       input: '',
       model1: '',
+      handle: ['Router', 'edit', 'add', 'check'],
+      count: 0,
+
     }
   },
   computed: {
@@ -119,16 +115,23 @@ export default {
     },
     checked () {
       return this.type === "check"
-    }
+    },
+
+  },
+  created () {
+    this.init()
   },
   mounted () {
   },
   watch: {
-    vacclists (value) {
-      console.log(value)
-    }
   },
   methods: {
+    init () {
+
+    },
+
+    Vaccine (handle) {
+    },
     vCardClick () {
       this[this.type]()
     },
@@ -137,6 +140,8 @@ export default {
     },
     Router () {
       console.log('router')
+    },
+    edit () {
     },
     add () {
       console.log('add')
