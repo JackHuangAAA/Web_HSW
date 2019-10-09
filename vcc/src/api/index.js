@@ -6,8 +6,6 @@ import { mapState } from 'vuex'
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = true
-console.log(...mapState)
-axios.defaults.headers.common['deviceid'] = config.deviceid
 axios.defaults.headers.common['type'] = config.type
 const RSP_CODE = {
   NO_LOGIN: '0001',
@@ -67,5 +65,10 @@ export default {
         })
         .catch(errorHandler)
     })
+  },
+  setHeaders: function(common, value) {
+    if (value != undefined) {
+      axios.defaults.headers.common[common] = value
+    }
   }
 }

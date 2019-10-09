@@ -16,7 +16,8 @@
     </div>
     <div class="rightbox">
       <div class="thermometer">
-        <!-- <thermometer></thermometer> -->
+        <thermometer :value="0"
+                     :indoor="20"></thermometer>
       </div>
       <div class="alarminfo card">
         <alarminfo :alarm="alarmcode"></alarminfo>

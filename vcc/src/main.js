@@ -28,6 +28,11 @@ if (process.env.NODE_ENV !== 'production') {
 Vue.devtools = processmod //开发环境true 生产环境 fasle
 Vue.config.productionTip = processmod
 
+//设置deviceId
+device.getDeviceId().then(res => {
+  api.setHeaders('deviceid', res.deviceId)
+})
+
 Vue.prototype.$api = api
 Vue.prototype.$config = config
 Vue.prototype.$device = device

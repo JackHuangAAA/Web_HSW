@@ -94,7 +94,7 @@ export default {
   margin: auto;
   font-size: 18px;
   font-weight: 400;
-  color: @gray;
+  color: #7f8589;
 }
 .alarminfo-title {
   padding-top: 20px;
