@@ -46,6 +46,8 @@ const store = {
       state.user = action
     },
     ['SAVE_DEVICE']: (state, action) => {
+      state.location = action.address.countyName
+      state.position = action.alias
       state.device = action
     },
     ['SAVE_USER_INFO']: (state, userinfo) => {

@@ -17,6 +17,6 @@ export default {
   async getDeviceId() {
     console.log('GetDeviceId')
     if (config.env == 'development') return { deviceId: 'DT0001' }
-    else return $d.invoke('DRIVER', 'GetDeviceId')
+    else return $d.invoke('SERVER', 'GetDeviceId')
   }
 }

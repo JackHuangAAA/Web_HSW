@@ -16,7 +16,8 @@
         <div class="position">
           <position></position>
         </div>
-        <div class="userinfo">
+        <div class="userinfo"
+             @click="test()">
           <userinfo></userinfo>
         </div>
         <div class="datetime">
@@ -63,6 +64,10 @@ export default {
     // this.websocket()
   },
   methods: {
+    test () {
+      console.log('123')
+      this.$router.push('/login')
+    },
     menuItemClick (item) {
       this.menuClose()
     },

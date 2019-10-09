@@ -36,11 +36,11 @@ const errorHandler = err => {
     console.error(`=> ${err}`)
   }
   Message.error({ content: '请求异常', closable: true, duration: 0 })
+  router.push('/login')
 }
 
 export default {
   get: function(url, data) {
-    console.log('in get')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
@@ -55,7 +55,6 @@ export default {
   },
 
   post: function(url, data) {
-    console.log('in post')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
