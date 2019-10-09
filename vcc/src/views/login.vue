@@ -53,15 +53,7 @@ export default {
   mounted () {
   },
   methods: {
-    ...mapActions(['saveUser', 'saveUserInfo', 'saveDevice']),
-    getDeviceId () {
-      //main.js中会进行初次加载设置
-      this.$device.getDeviceId().then(res => {
-        this.$api.get(`/device/queryDeviceByCondition`, { code: res.deviceId }).then((response) => {
-          this.saveDevice(response.data[0]);
-        });
-      });
-    },
+    ...mapActions(['saveUser', 'saveUserInfo']),
     login (type) {
       switch (type) {
         case 'fp':

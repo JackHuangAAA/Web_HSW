@@ -32,6 +32,9 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title)
   let menu = getRouterConfig(to.path)
   if (menu != null) {
+    if (store.state.device === null) {
+      store.dispatch('getDevice')
+    }
     let p = Promise.resolve()
     if (to.path == '/login') {
       next()

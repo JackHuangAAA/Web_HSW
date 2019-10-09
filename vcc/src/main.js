@@ -13,8 +13,11 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import config from '@/config'
 import device from '@/api/device.js'
+import { Storages } from '@/libs/util.js'
 global._ = lodash
 global._static = enums
+global.storage = Storages
+
 Vue.use(iView)
 
 //导入socket.io模块
@@ -27,11 +30,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 Vue.devtools = processmod //开发环境true 生产环境 fasle
 Vue.config.productionTip = processmod
-
-//设置deviceId
-device.getDeviceId().then(res => {
-  api.setHeaders('deviceid', res.deviceId)
-})
 
 Vue.prototype.$api = api
 Vue.prototype.$config = config

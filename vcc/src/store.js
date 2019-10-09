@@ -1,9 +1,7 @@
-/**
- * Created by Administrator on 2017/10/11.
- */
 import Vuex from 'vuex'
 import Vue from 'vue'
-
+import { queryDeviceByCondition, queryVaccineKinds } from '@/libs/axios.js'
+import { getid, Storages } from '@/libs/util.js'
 const store = {
   state: {
     user: null,
@@ -11,7 +9,8 @@ const store = {
     username: '',
     position: '2号接种台',
     routerTitle: '主页',
-    location: '西湖区'
+    location: '西湖区',
+    vacc: null
   },
 
   getters: {
@@ -35,9 +34,6 @@ const store = {
     },
     position: state => {
       return state.position
-    },
-    currentMenu: state => {
-      return state.currentMenu
     }
   },
 
@@ -55,6 +51,9 @@ const store = {
     },
     ChangeRoute(state, title) {
       state.routerTitle = title
+    },
+    SaveVaccineKinds(state, lists) {
+      state.vacc = lists
     }
   },
 
@@ -70,6 +69,17 @@ const store = {
     },
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle)
+    },
+    async getVaccineKinds({ state, commit }) {
+      let res = await axios.queryVaccineKinds()
+      commit('SaveVaccineKinds', res.data)
+      return res.data
+    },
+    async getDevice({ commit, dispatch }) {
+      let id = await getid()
+      let res = await queryDeviceByCondition(id)
+      dispatch('saveDevice', res.data[0])
+      return res.data[0]
     }
   }
 }
