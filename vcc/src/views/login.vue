@@ -48,7 +48,6 @@ export default {
     ...mapGetters(['device'])
   },
   created () {
-    this.getDeviceId()
   },
   mounted () {
   },

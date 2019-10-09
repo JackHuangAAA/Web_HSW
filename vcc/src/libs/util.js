@@ -71,20 +71,20 @@ export const Storages = {
   GetStorage,
   CleanStorage
 }
-export const getid = async () => {
-  const deviceid = GetStorage('deviceid')
-  api.setHeaders('deviceid', deviceid)
-  if (deviceid) return deviceid
+export const getcode = async () => {
+  const deviceCode = GetStorage('deviceCode')
+  api.setHeaders('deviceid', deviceCode)
+  if (deviceCode) return deviceCode
   else {
-    return await getDeviceId()
+    return await GetDeviceCode()
   }
 }
 
-const getDeviceId = () => {
-  device.getDeviceId().then(res => {
-    let deviceid = res.deviceId
-    api.setHeaders('deviceid', deviceid)
-    SaveStorage('deviceid', deviceid)
-    return deviceid
+const GetDeviceCode = () => {
+  device.getDeviceCode().then(res => {
+    let deviceCode = res.deviceId
+    api.setHeaders('deviceid', deviceCode)
+    SaveStorage('deviceCode', deviceCode)
+    return deviceCode
   })
 }

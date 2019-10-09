@@ -5,7 +5,7 @@ import {
   queryVaccineKinds,
   queryDrawerByCondition
 } from '@/libs/axios.js'
-import { getid, Storages } from '@/libs/util.js'
+import { getcode, Storages } from '@/libs/util.js'
 const store = {
   state: {
     user: null,
@@ -82,7 +82,9 @@ const store = {
     },
     async getDrawer({ state, commit }) {
       if (state.drawer === null) {
-        let res = await queryDrawerByCondition()
+        console.log(state.deviceid)
+        let deviceid = state.deviceid
+        let res = await queryDrawerByCondition(deviceid)
         commit('SaveDrawer', res.data)
         return res.data
       } else {
@@ -95,8 +97,8 @@ const store = {
       return res.data
     },
     async getDevice({ dispatch }) {
-      let id = await getid()
-      let res = await queryDeviceByCondition(id)
+      let devicecode = await getcode()
+      let res = await queryDeviceByCondition(devicecode)
       dispatch('saveDevice', res.data[0])
       return res.data[0]
     }

@@ -83,13 +83,13 @@ export default {
       }
     },
     async getDrawer () {
-      console.log(this.storedrawer)
       if (this.storedrawer === null) {
         let drawer = await this.$store.dispatch('getDrawer')
         this.drawers = drawer
       } else {
         this.drawers = this.storedrawer
       }
+      console.log(this.drawers)
     },
   }
 }

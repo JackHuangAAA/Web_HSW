@@ -66,6 +66,8 @@ export default {
   methods: {
     test () {
       console.log('123')
+      storage.CleanStorage('deviceid')
+      storage.CleanStorage('devicecode')
       this.$router.push('/login')
     },
     menuItemClick (item) {

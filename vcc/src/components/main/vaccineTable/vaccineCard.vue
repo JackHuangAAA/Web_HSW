@@ -7,14 +7,11 @@
     <Row type="flex"
          class="vCard"
          align="middle">
-      <Col span="12">
-      <div v-if="type!='edit'">
+      <Col span="12"
+           v-if="type != 'edit'">
+      <div>
         <Row>
           <p class="vCard-name">狂犬疫苗</p>
-          <div class="vCard-edit-d">
-            <img style="margin-top:-10px"
-                 :src="delpng">
-          </div>
         </Row>
         <Row>
           <p class="vCard-count">
@@ -22,8 +19,10 @@
           </p>
         </Row>
       </div>
-      <div v-else
-           class="vCard-edit">
+      </Col>
+      <Col span="12">
+      <div class="vCard-edit">
+        <p class="vCard-name">狂犬疫苗</p>
         <Select v-model="model1"
                 style="width:200px;z-index:10;">
           <Option v-for="item in vacclists"
@@ -34,7 +33,9 @@
              @click="Vaccine('add')">
           <img :src="addpng">
         </div>
-
+        <div class="vCard-edit-d">
+          <img :src="delpng">
+        </div>
       </div>
       </Col>
     </Row>
@@ -103,7 +104,6 @@ export default {
       model1: '',
       handle: ['Router', 'edit', 'add', 'check'],
       count: 0,
-
     }
   },
   computed: {
