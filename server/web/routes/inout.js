@@ -6,6 +6,20 @@ const router = require('koa-router')();
 const logger = Libs.logger.getLogger('inout');
 
 /**
+ * @api {POST} /inout/saveInouts  保存出入库信息
+ * @apiGroup inout
+ * @apiVersion 1.0.0
+ * @apiDescription 保存出入库信息
+ * @apiParam {JSON}  Object  inout model
+ * @apiSuccess {JSON}  Object  inout model 数组
+ */
+router.post('/saveInouts',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.inout.saveInouts(ctx.request.body);
+    })
+);
+
+/**
  * @api {GET} /inout/queryInouts  查询出入库信息
  * @apiGroup inout
  * @apiVersion 1.0.0
@@ -20,6 +34,23 @@ const logger = Libs.logger.getLogger('inout');
 router.get('/queryInouts',
     Libs.router( async (ctx, next) => {
         return await Domain.services.inout.queryInouts(ctx.request.query);
+    })
+);
+
+/**
+ * @api {GET} /inout/queryInoutsByUnitCode  查询各单位冷藏柜、接种柜的历史出入库信息
+ * @apiGroup inout
+ * @apiVersion 1.0.0
+ * @apiDescription 查询各单位冷藏柜、接种柜的历史出入库信息
+ * @apiParam {String} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} begin 开始时间
+ * @apiParam {String} end 结束时间
+ * @apiSuccess {JSON}  Object  inout model 数组
+ */
+router.get('/queryInoutsByUnitCode',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.inout.queryInoutsByUnitCode(ctx.request.query);
     })
 );
 

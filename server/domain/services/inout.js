@@ -48,9 +48,41 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveInout: async function(requestBody){
+    saveInouts: async function(requestBody){
         logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
-    }
+    },
+
+    /**
+     * 查询各单位冷藏柜、接种柜的历史出入库信息
+     * @param requestBody
+     * @returns {Promise.<{rs: *, total: (*|number)}>}
+     */
+    queryInoutsByUnitCode: async function(requestBody){
+        logger.debug(`queryInouts param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.begin)) {
+            let begin = moment(requestBody.begin);
+            begin = begin.startOf('day').toDate();
+            query.push({"createDate": {"$gte": begin}});
+        }
+        if (!_.isEmpty(requestBody.end)) {
+            let end = moment(requestBody.end);
+            end = end.endOf('day').toDate();
+            query.push({"createDate": {"$lte": end}});
+        }
+        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+
+        return await Domain.models.inout.find(query);
+    },
 
 };

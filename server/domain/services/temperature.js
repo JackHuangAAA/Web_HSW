@@ -15,7 +15,13 @@ module.exports = {
         logger.debug(`queryTemperatures param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.deviceId)) {
-            query.push({"device": requestBody.deviceId});
+            query.push({"deviceId": requestBody.deviceId});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
@@ -42,8 +48,8 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveTemperature: async function(requestBody){
-        logger.debug(`saveTemperature param: ${JSON.stringify(requestBody)}`);
+    saveTemperatures: async function(requestBody){
+        logger.debug(`saveTemperatures param: ${JSON.stringify(requestBody)}`);
         return Domain.models.temperature.create(requestBody);
     }
 
