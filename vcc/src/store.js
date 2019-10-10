@@ -15,8 +15,8 @@ const store = {
     position: '2号接种台',
     routerTitle: '主页',
     location: '西湖区',
-    vacc: null,
-    drawer: null
+    vacc: null, //通过zcy获取的疫苗列表
+    drawer: null //缓存的抽屉柜子
   },
 
   getters: {
@@ -80,21 +80,32 @@ const store = {
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle)
     },
-    async getDrawer({ state, commit }) {
+    async getDrawer({ state, dispatch }) {
       if (state.drawer === null) {
-        console.log(state.deviceid)
-        let deviceid = state.deviceid
-        let res = await queryDrawerByCondition(deviceid)
-        commit('SaveDrawer', res.data)
+        let res = await dispatch('updateDrawe')
         return res.data
       } else {
         return state.drawer
       }
     },
-    async getVaccineKinds({ commit }) {
+    async getVaccineKinds({ state, dispatch }) {
+      if (state.vacc === null) {
+        let res = await dispatch('updateVaccineKinds')
+        return res.data
+      } else {
+        return state.vacc
+      }
+    },
+    async updateDrawe({ state, commit }) {
+      let deviceid = state.deviceid
+      let res = await queryDrawerByCondition(deviceid)
+      commit('SaveDrawer', res.data)
+      return res
+    },
+    async updateVaccineKinds({ state, commit }) {
       let res = await queryVaccineKinds()
       commit('SaveVaccineKinds', res.data)
-      return res.data
+      return res
     },
     async getDevice({ dispatch }) {
       let devicecode = await getcode()

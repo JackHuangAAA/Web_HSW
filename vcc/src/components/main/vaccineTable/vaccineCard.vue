@@ -29,7 +29,7 @@
         <p class="vCard-name editfont">{{vc.name}}</p>
         <div class="vCard-edit-d">
           <div class="vCard-edit-img"
-               @click="Vaccine('del')"
+               @click="Vaccine('del',vc)"
                :class="{'cur-po':!NotEdit}">
             <img :src="delpng">
           </div>
@@ -126,7 +126,7 @@ export default {
       model1: '',
       handle: ['Router', 'edit', 'add', 'check'],
       count: 0,
-      max: 2,
+      max: 2,//最大显示数量，vcc为2
     }
   },
   computed: {
@@ -138,8 +138,8 @@ export default {
       else return []
     },
     wspan () {
-      let length = this.value.length
-      length = Math.max(length, 1)
+      let length = this.value.length + 1
+      length = Math.min(length, this.max)
       return 24 / length
     },
     routerto () {
@@ -165,7 +165,17 @@ export default {
       // console.log(this.id)
       // console.log(this.value)
     },
-    Vaccine (handle) {
+    Vaccine (handle, vc) {
+      switch (handle) {
+        case 'add':
+          this.$emit('vaccine-add', this.model1, this.id)
+          break;
+        case 'del':
+          this.$emit('vaccine-del', vc, this.id)
+          break;
+        default:
+          break;
+      }
     },
     vCardClick () {
       this[this.type]()
@@ -179,7 +189,6 @@ export default {
     edit () {
     },
     add () {
-      console.log('add')
       this.vCardModal = true
     },
     cancel () {

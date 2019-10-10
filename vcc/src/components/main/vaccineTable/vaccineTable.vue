@@ -34,6 +34,8 @@
         <Col span="11"
              v-for="item of lineRow">
         <vaccineCard :type='type'
+                     @vaccine-add='vaccineadd'
+                     @vaccine-del='vaccinedel'
                      :vacclists='vacclists'
                      :values='item.vaccine'
                      :id='item._id'
@@ -65,48 +67,46 @@ export default {
       vacclists: null,
       drawers: null,
       max: 2,//指定疫苗最大数
-      // DrawerTree: {//处理数据为树状结构方便遍历抽屉格式
-      //   yNumb: {
-      //     xNumb: {
-      //       vaccine: {}
-      //     }
-      //   }
-      // }
-      DrawerTree: {}
+      DrawerTree: {
+        //处理数据为树状结构方便遍历抽屉格式
+        //   yNumb: {
+        //     xNumb: {
+        //       vaccine: {}
+        //     }
+        //   }
+        // }
+      }
     }
   },
   computed: {
-    storevacc () {
-      return this.$store.state.vacc
-    },
-    storedrawer () {
-      return this.$store.state.drawer
-    }
   },
   watch: {
+    '$store.state.drawer': function (value) {
+      this.drawerinit(value.rs)
+    }
   },
   mounted () {
     this.init()
   },
   methods: {
+    vaccineadd (code, drawerid) {
+      let va = this.vacclists.filter(el => {
+        return el.code === code
+      })
+      this.$emit('vaccine-add', va[0], drawerid)
+    },
+    vaccinedel (va, drawerid) {
+      this.$emit('vaccine-del', va, drawerid)
+    },
     init () {
       this.getVacc()
       this.getDrawer()
     },
     async getVacc () {
-      if (this.storevacc === null) {
-        this.vacclists = await this.$store.dispatch('getVaccineKinds')
-      } else {
-        this.vacclists = this.storevacc
-      }
+      this.vacclists = await this.$store.dispatch('getVaccineKinds')
     },
     async getDrawer () {
-      if (this.storedrawer === null) {
-        let drawer = await this.$store.dispatch('getDrawer')
-        this.drawers = drawer
-      } else {
-        this.drawers = this.storedrawer
-      }
+      this.drawers = await this.$store.dispatch('getDrawer')
       this.drawerinit(this.drawers.rs)
     },
     drawerinit (values) {
@@ -116,7 +116,9 @@ export default {
         if (tree[el.y][el.x] === undefined) tree[el.y][el.x] = []
         tree[el.y][el.x] = el
       }
-      this.DrawerTree = tree
+      this.$nextTick(() => {
+        this.DrawerTree = tree
+      })
     }
   }
 }
