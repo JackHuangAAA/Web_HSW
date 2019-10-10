@@ -5,7 +5,8 @@
                   :active="1">请选择疫苗入库的抽屉</nav-header>
     </div>
     <div class="bound-content card">
-      <vaccine-table>
+      <vaccine-table :type="`check`"
+                     @click-button="outbound()">
       </vaccine-table>
     </div>
   </div>
@@ -25,6 +26,11 @@ export default {
     return {
       indexlist
     };
+  },
+  methods: {
+    outbound() {
+      console.log("outbound"  );
+    }
   }
 };
 </script>

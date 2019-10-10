@@ -4,10 +4,10 @@
          span="24">
     <Tabs :animated="false">
       <TabPane label="设置">
-        <!-- <basic-setting style="height:100%"></basic-setting> -->
+        <basic-setting style="height:100%"></basic-setting>
       </TabPane>
       <TabPane label="指纹录入">
-        <!-- <fingerprint></fingerprint> -->
+        <fingerprint></fingerprint>
       </TabPane>
       <TabPane label="疫苗区域划分">
         <vaccine-setting></vaccine-setting>

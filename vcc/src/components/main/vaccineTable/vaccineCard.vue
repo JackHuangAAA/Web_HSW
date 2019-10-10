@@ -76,7 +76,7 @@
               {{vc.name}}:
             </p>
             </Col>
-            <Col span="17">
+            <Col span="15">
             <Input v-model="input[vc.name]"></Input>
             </Col>
           </Row>
@@ -127,7 +127,7 @@ export default {
     return {
       addpng,
       delpng,
-      Selection: false,
+      Selection: true,
       vCardModal: false,
       input: {},
       model1: "",

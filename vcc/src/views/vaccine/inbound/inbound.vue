@@ -6,7 +6,8 @@
     </div>
     <div class="bound-content card">
       <vaccine-table :type="`add`"
-                     @submit="submit">
+                     @submit="submit"
+                     @click-button="inbound()">
       </vaccine-table>
     </div>
   </div>
@@ -35,6 +36,9 @@ export default {
       }));
       let res = this.$api.post("/drawer/modifyDrawerById", { id, vaccine });
       this.$store.dispatch("updateDrawe");
+    },
+    inbound() {
+      console.log("inbound");
     }
   }
 };

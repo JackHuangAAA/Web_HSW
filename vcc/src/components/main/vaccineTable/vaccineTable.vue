@@ -44,6 +44,11 @@
         </Col>
       </Row>
     </div>
+    <div class="vTableButton"
+         v-if="type!='edit'&&type!='Router'">
+      <Button type="primary"
+              @click="clickButton()">确定</Button>
+    </div>
   </div>
 </template>
 
@@ -123,6 +128,9 @@ export default {
     },
     modelSubmit(vaccinetotal, id, vaccines) {
       this.$emit("submit", vaccinetotal, id, vaccines);
+    },
+    clickButton() {
+      this.$emit("click-button");
     }
   }
 };
