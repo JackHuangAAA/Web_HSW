@@ -12,33 +12,14 @@ module.exports = {
      * @param {any} requestBody 
      * @returns 
      */
-    queryAlarmDailyInfo: async function (requestBody) {
-        let today = moment();
-        let query = [];
-        query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
-        if (!_.isEmpty(requestBody.deviceType)) {
-            query.push({ "deviceType": requestBody.deviceType });
-        }
-        if (!_.isEmpty(requestBody.unitCode)) {
-            query.push({ "unitCode": requestBody.unitCode });
-        }
-        let result = await Domain.models.alarm.find({ "$and": query });
-
-        logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
-    },
-
-    /**
-     * 
-     * 
-     * @param {any} requestBody 
-     * @returns 
-     */
     queryAlarmByByCondition: async function (requestBody) {
-        logger.debug(`queryAlarmByTemp param: ${JSON.stringify(requestBody)}`);
+        logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
         let today = moment();
         let query = [];
         query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
         }

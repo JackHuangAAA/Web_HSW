@@ -7,24 +7,59 @@ let moment = require('moment');
 let path = require('path');
 let fs = require('fs');
 later.date.localTime();//设置本地时区
+global._ = require('lodash');
 
-async function execute () {
-    logger.info('home data starting......');
-    console.time("home data execute");
+// deviceId和socket实例一一对应
+let map = {} 
 
-    let now = moment()+"";
+let push = {
+    init(io) {
+        io.on('connection', (socket) => {
+            logger.info('set socket.id: ' + socket.id)
+            //接收客户端
+            socket.on('register', function (msg) {
+                map[msg.deviceId] = socket;
+                logger.info("receive register data: " + msg);
+            });
+        });
+        //断开连接
+        io.on('disconnect', function (reason) {
+            logger.info("websocket服务断开:" + reason);
+        });
+    }
+};
 
-    // //按设备、药品汇总每天的处方
-    // let summary = await Domain.services.recipe.dailyEndSummary();
-    let alarmData = await Domain.services.alarm.queryAlarmDailyInfo();
-    console.log(alarmData, 'alarmData----------')
-   
-    console.timeEnd("home data execute");
-    logger.info('home data end......');
+const http = require('http').Server();
+const io = require('socket.io')(http);
+push.init(io);
+
+async function execute() {
+    _.mapKeys(map, async function (value, key) {
+        // 报警信息 （温度报警次数、报警次数、报警信息）
+        let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: key });
+        // 疫苗种类
+        let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: key });
+        // 缺少库存
+         let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: key });
+        // 空余药柜
+         let drawerEmptyArr = await Domain.services.drawer.queryDrawerEmpty({ device: key });
+        // 接种顾客
+         let customerNum = await Domain.services.vaccination.queryVaccinationByCustomerCode({ device: key });
+         let timedData = {
+             alarmData: alarmData,
+             vaccineNum: vaccineNum,
+             vaccineLowerThreshold: vaccineLowerThreshold,
+             drawerEmptyArr: drawerEmptyArr,
+             customerNum: customerNum,
+         }
+        value.emit( Domain.enum.TIMEDATA, timedData);
+    });
+
+
+
 }
 
-later.setInterval(execute,later.parse.cron('0 0 * * *'));
-//later.setInterval(housekeeping, later.parse.recur().every(24).hour());
+later.setInterval(execute, later.parse.cron('3 * * * *'));
 
 
 

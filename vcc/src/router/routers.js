@@ -1,19 +1,77 @@
-const routers = [{
+import Main from '@/views/main.vue'
+import vcc from './vcc'
+const routers = [
+  {
     path: '/',
-    component: (resolve) => require(['@/views/home.vue'], resolve),
+    component: Main,
+    redirect: '/home',
     children: [
-        { path: '/50x', final: true, component: (resolve) =>  require(['@/views/error/50x.vue'], resolve) },
-        { path: '/main', component: (resolve) => require(['@/views/main.vue'], resolve) },
-        { path: '/system/user', component: (resolve) => require(['@/views/system/user.vue'], resolve) }
+      ...vcc,
+      {
+        path: '/50x',
+        final: true,
+        component: () => import('@/views/error/50x.vue')
+      }
     ]
-}, {
+  },
+  {
+    path: '/vaccine',
+    name: 'vaccine',
+    component: Main,
+    children: [
+      {
+        path: 'inventorys',
+        name: 'inventorys',
+        component: () => import('@/views/vaccine/inventory/inventorys.vue')
+      },
+      {
+        path: 'Details',
+        name: 'inventoryDetails',
+        component: () =>
+          import('@/views/vaccine/inventory/inventoryDetails.vue')
+      },
+      {
+        path: 'inbound',
+        name: 'inbound',
+        component: () => import('@/views/vaccine/inbound/inbound.vue')
+      },
+      {
+        path: 'checkin',
+        name: 'checkin',
+        component: () => import('@/views/vaccine/inbound/checkin.vue')
+      },
+      {
+        path: 'outbound',
+        name: 'outbound',
+        component: () => import('@/views/vaccine/outbound/outbound.vue')
+      },
+      {
+        path: 'opendrawer',
+        name: 'opendrawer',
+        component: () => import('@/views/vaccine/outbound/opendrawer.vue')
+      },
+      {
+        path: 'complete',
+        name: 'complete',
+        component: () => import('@/views/vaccine/complete/complete.vue')
+      }
+    ]
+  },
+  {
+    path: '/test',
+    final: true,
+    component: () => import('@/views/home/thermometer/thermometer.vue')
+  },
+  {
     path: '/login',
     final: true,
-    component: (resolve) => require(['@/views/login.vue'], resolve)
-}, {
+    component: () => import('@/views/login.vue')
+  },
+  {
     path: '*',
     final: true,
-    component: (resolve) => require(['@/views/error/404.vue'],resolve)
-}];
+    component: () => import('@/views/error/404.vue')
+  }
+]
 
-export default routers;
+export default routers
