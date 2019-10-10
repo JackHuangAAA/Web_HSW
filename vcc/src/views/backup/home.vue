@@ -98,27 +98,26 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
-import md5 from 'js-md5'
-import routerConfig from '@/router'
+import { mapGetters, mapActions, mapState } from "vuex";
+import md5 from "js-md5";
+import routerConfig from "@/router";
 
 export default {
-
-  data () {
+  data() {
     const checkOldPwd = (rule, value, callback, source, options) => {
-      if (value == '') {
-        return callback(new Error('请输入密码'));
+      if (value == "") {
+        return callback(new Error("请输入密码"));
       } else if (md5(value).toUpperCase() != this.user.password) {
-        return callback(new Error('输入旧密码不正确!'));
+        return callback(new Error("输入旧密码不正确!"));
       } else {
         callback();
       }
     };
     const checkPwd = (rule, value, callback, source, options) => {
-      if (value == '') {
-        return callback(new Error('请再次输入密码'));
+      if (value == "") {
+        return callback(new Error("请再次输入密码"));
       } else if (value != this.frmSetting.newpassword) {
-        return callback(new Error('两次密码不一致'));
+        return callback(new Error("两次密码不一致"));
       } else {
         callback();
       }
@@ -130,118 +129,118 @@ export default {
       loading: false,
       menus: [],
       title: this.$config.appName,
-      userPic: 'tuichu',
+      userPic: "tuichu",
       //activeMenu: null,
       frmSetting: {
-        name: '',
-        phone: '',
-        password: '',
-        newpassword: '',
-        newpassword1: ''
+        name: "",
+        phone: "",
+        password: "",
+        newpassword: "",
+        newpassword1: ""
       },
       ruleValidate: {
         name: [
-          { required: true, message: '用户名称不能为空', trigger: 'blur' }
+          { required: true, message: "用户名称不能为空", trigger: "blur" }
         ],
         phone: [
-          { required: true, message: '移动电话不能为空', trigger: 'blur' },
-          { min: 11, message: '移动电话号超短', trigger: 'blur' },
-          { max: 11, message: '移动电话号超长', trigger: 'blur' },
+          { required: true, message: "移动电话不能为空", trigger: "blur" },
+          { min: 11, message: "移动电话号超短", trigger: "blur" },
+          { max: 11, message: "移动电话号超长", trigger: "blur" },
           {
-            validator (rule, value, callback, source, options) {
+            validator(rule, value, callback, source, options) {
               var errors = [];
               if (!/^[0-9]{11}$/.test(value)) {
-                callback('手机号输入错误');
+                callback("手机号输入错误");
               }
               callback(errors);
             }
           }
         ],
         password: [
-          { required: true, message: '请输入旧密码', trigger: 'blur' },
+          { required: true, message: "请输入旧密码", trigger: "blur" },
           { validator: checkOldPwd }
         ],
         newpassword: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, message: '请输入最少6位' }
+          { required: true, message: "请输入新密码", trigger: "blur" },
+          { min: 6, message: "请输入最少6位" }
         ],
         newpassword1: [
-          { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { min: 6, message: '请输入最少6位' },
+          { required: true, message: "请再次输入密码", trigger: "blur" },
+          { min: 6, message: "请输入最少6位" },
           { validator: checkPwd }
         ]
       }
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      user: 'user',
-      currentMenu: 'currentMenu'
+      user: "user",
+      currentMenu: "currentMenu"
     })
   },
   components: {},
   watch: {
-    '$route.path': function (n, o) {
-      this.currentPath = n
+    "$route.path": function(n, o) {
+      this.currentPath = n;
     }
   },
   methods: {
     ...mapActions({
-      saveUser: 'saveUser',
-      setCurrentMenu: 'setCurrentMenu'
+      saveUser: "saveUser",
+      setCurrentMenu: "setCurrentMenu"
     }),
-    logout: function () {
-      this.$api.get('/user/logout').then(() => {
+    logout: function() {
+      this.$api.get("/user/logout").then(() => {
         this.saveUser(null);
         window.location.href = "/";
       });
     },
     //菜单切换
-    selectMenu: function (item) {
-      this.$router.push(item.url)
+    selectMenu: function(item) {
+      this.$router.push(item.url);
     },
-    setting: function () {
+    setting: function() {
       this.frmSetting = {
-        password: '',
-        newpassword: '',
-        newpassword1: ''
+        password: "",
+        newpassword: "",
+        newpassword1: ""
       };
       this.$refs.settingModal.show();
     },
-    saveSetting: function (name) {
+    saveSetting: function(name) {
       let me = this;
       let sets = { id: me.user._id };
-      sets.name = '超级管理员';
+      sets.name = "超级管理员";
       sets.password = md5(me.frmSetting.newpassword).toUpperCase();
-      this.$refs[name].validate((valid) => {
+      this.$refs[name].validate(valid => {
         if (valid) {
-          this.$api.post('/user/updatePassword', sets).then(rsp => {
+          this.$api.post("/user/updatePassword", sets).then(rsp => {
             //修改密碼后重新存入緩存currentUser
-            this.$Message.success('修改密码成功！');
+            this.$Message.success("修改密码成功！");
             this.logout();
             this.$refs[name].resetFields();
             this.$refs.settingModal.close();
           });
         }
-      })
+      });
     },
-    cancelSetting: function (name) {
+    cancelSetting: function(name) {
       this.$refs[name].resetFields();
       this.$refs.settingModal.close();
     }
   },
 
-  updated () {
+  updated() {
     this.$nextTick(() => {
       if (this.$refs.menuView) {
         this.$refs.menuView.updateOpened();
       }
     });
   },
-  mounted () {
-    if (this.$route.path == '/') {
-      this.$router.push('/main');
+  mounted() {
+    if (this.$route.path == "/") {
+      this.$router.push("/main");
     }
   }
-}
+};
 </script>

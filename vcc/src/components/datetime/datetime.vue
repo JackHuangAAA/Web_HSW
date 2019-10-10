@@ -3,62 +3,60 @@
 </template>
 
 <script>
-import { dateFmt } from '@/libs/util.js'
+import { dateFmt } from "@/libs/util.js";
 export default {
-  name: 'datetime',
-  data () {
+  name: "datetime",
+  data() {
     return {
-      nowdate: 'null'
-    }
+      nowdate: "null"
+    };
   },
-  computed: {
-
-  },
-  created () {
-    this.dateint()
+  computed: {},
+  created() {
+    this.dateint();
   },
   methods: {
-    dateint () {
+    dateint() {
       setInterval(() => {
-        let date = new Date()
+        let date = new Date();
         //初步格式化
-        let nowdate = this.DateConver(date) + " " + this.getday(date)
-        this.nowdate = nowdate
+        let nowdate = this.DateConver(date) + " " + this.getday(date);
+        this.nowdate = nowdate;
       }, 500);
     },
-    DateConver (date) {
-      return dateFmt("yyyy-MM-dd hh:mm:ss", date)
+    DateConver(date) {
+      return dateFmt("yyyy-MM-dd hh:mm:ss", date);
     },
-    getday (date) {
-      let day = date.getDay(date)
-      let week = ""
+    getday(date) {
+      let day = date.getDay(date);
+      let week = "";
       switch (day) {
         case 1:
-          week = "星期一"
+          week = "星期一";
           break;
         case 2:
-          week = "星期二"
+          week = "星期二";
           break;
         case 3:
-          week = "星期三"
+          week = "星期三";
           break;
         case 4:
-          week = "星期四"
+          week = "星期四";
           break;
         case 5:
-          week = "星期五"
+          week = "星期五";
           break;
         case 6:
-          week = "星期六"
+          week = "星期六";
           break;
         default:
-          week = "星期日"
+          week = "星期日";
           break;
       }
-      return week
+      return week;
     }
   }
-}
+};
 </script>
 
 <style lang="less">

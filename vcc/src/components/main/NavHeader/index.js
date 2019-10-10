@@ -1,2 +1,2 @@
-import NavHeader from './NavHeader.vue'
-export default NavHeader
+import NavHeader from './NavHeader.vue';
+export default NavHeader;

@@ -31,44 +31,41 @@
 </template>
 
 <script>
-import { dbDateFmt } from '@/libs/util.js'
+import { dbDateFmt } from "@/libs/util.js";
 export default {
-  name: 'alarmcard',
+  name: "alarmcard",
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     columns: {
       type: Array,
-      deafult () {
-        return []
+      deafult() {
+        return [];
       }
     }
   },
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
   computed: {
-    datetime () {
+    datetime() {
       return createDate => {
-        return dbDateFmt(createDate)
-
-      }
+        return dbDateFmt(createDate);
+      };
     },
-    content () {
+    content() {
       return (param, map) => {
-        console.log(_static[map][param].title)
-        return _static[map][param].title
-      }
+        console.log(_static[map][param].title);
+        return _static[map][param].title;
+      };
     }
   },
-  mounted () {
-  }
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less">

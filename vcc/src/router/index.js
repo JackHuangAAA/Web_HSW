@@ -1,49 +1,50 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Routers from './routers'
-import store from '@/store'
-import config from '@/config'
-import api from '@/api'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Routers from './routers';
+import store from '@/store';
+import config from '@/config';
+import api from '@/api';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 // 路由配置
 const RouterConfig = {
   mode: 'hash',
   routes: Routers
-}
+};
 
-const router = new VueRouter(RouterConfig)
+const router = new VueRouter(RouterConfig);
 
-let routers = []
+let routers = [];
 _.forEach(RouterConfig.routes, v => {
-  routers.push(v)
+  routers.push(v);
   if (v.children != null) {
-    routers = _.concat(routers, v.children)
+    routers = _.concat(routers, v.children);
   }
-})
+});
 
 let getRouterConfig = function(path) {
-  let config = _.find(routers, { path: path })
-  return config
-}
+  let config = _.find(routers, { path: path });
+  return config;
+};
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title)
-  let menu = getRouterConfig(to.path)
+  if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title);
+  if (store.state.device === null) {
+    store.dispatch('getDevice');
+  }
+  let menu = getRouterConfig(to.path);
   if (menu != null) {
-    if (store.state.device === null) {
-      store.dispatch('getDevice')
-    }
-    let p = Promise.resolve()
+    //不写在home下就无法被识别
+    let p = Promise.resolve();
     if (to.path == '/login') {
-      next()
+      next();
     } else if (store.getters.user == null) {
       //当前用户信息不存在
       p = api.get('/user/current').then(result => {
-        store.dispatch('saveUser', result.data)
-        return Promise.resolve()
-      })
+        store.dispatch('saveUser', result.data);
+        return Promise.resolve();
+      });
     }
     if (menu.access != null) {
       //如果有权限
@@ -54,21 +55,21 @@ router.beforeEach((to, from, next) => {
             `check permission`,
             menu.access,
             store.getters.user.role.name
-          )
+          );
         }
         if (_.indexOf(menu.access, store.getters.user.role.name) >= 0) {
-          next()
+          next();
         } else {
-          next({ path: '/50x', query: { message: '没有权限访问' } })
+          next({ path: '/50x', query: { message: '没有权限访问' } });
         }
-      })
+      });
     } else {
-      next()
+      next();
     }
   } else {
     //找不到页面自动匹配最后404
-    next()
+    next();
   }
-})
+});
 
-export default router
+export default router;

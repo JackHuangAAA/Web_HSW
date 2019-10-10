@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'lackCard',
+  name: "lackCard",
   props: {
     title: {
       type: String,
@@ -19,15 +19,13 @@ export default {
     },
     unit: {
       type: String,
-      default: '支'
+      default: "支"
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

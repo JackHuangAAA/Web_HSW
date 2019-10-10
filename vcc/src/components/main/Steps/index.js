@@ -1,2 +1,2 @@
-import Steps from './Steps.vue'
-export default Steps
+import Steps from './Steps.vue';
+export default Steps;

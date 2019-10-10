@@ -39,99 +39,111 @@
 <script>
 const changeItem = (key, value, obj) => {
   let tmp = obj.map(el => {
-    el.name
+    el.name;
     if (el.name === key) {
-      el.value = value
+      el.value = value;
     }
-    return el
-  })
-}
-import testli from './data/testlackitem.js'
-import alarminfo from './alarminfo'
-import homecard from './data/homecard'
-import thermometer from './thermometer'
-import itemCard from '_c/main/itemcard'
-import lackinventory from './lackinventory'
+    return el;
+  });
+};
+import testli from "./data/testlackitem.js";
+import alarminfo from "./alarminfo";
+import homecard from "./data/homecard";
+import thermometer from "./thermometer";
+import itemCard from "_c/main/itemcard";
+import lackinventory from "./lackinventory";
 export default {
   components: {
     thermometer,
     itemCard,
     lackinventory,
-    alarminfo,
-
+    alarminfo
   },
-  data () {
+  data() {
     return {
       homecard: homecard,
       lists: [],
       alarmlist: [],
       alarmcode: 0
-    }
+    };
   },
-  created () {
-    this.getHomeData()
+  created() {
+    this.getHomeData();
   },
   computed: {
-    deviceid () {
-      return this.$store.state.deviceid
+    deviceid() {
+      return this.$store.state.deviceid;
     }
   },
   methods: {
-    getHomeData () {
-      this.queryVaccine()
-      this.queryAlarmDailyInfo()
-      this.queryDrawerEmpty()
-      this.queryVaccineLowerThreshold()
-      this.queryAlarmTemperature()
-      this.queryVaccinationByCustomerCode()
+    getHomeData() {
+      this.queryVaccine();
+      this.queryAlarmDailyInfo();
+      this.queryDrawerEmpty();
+      this.queryVaccineLowerThreshold();
+      this.queryAlarmTemperature();
+      this.queryVaccinationByCustomerCode();
     },
-    queryVaccinationByCustomerCode () {
-      this.getTotal('customer', '/Vaccine/queryVaccinationByCustomerCode', { device: this.deviceid })
+    queryVaccinationByCustomerCode() {
+      this.getTotal("customer", "/Vaccine/queryVaccinationByCustomerCode", {
+        device: this.deviceid
+      });
     },
-    queryVaccine () {
-      this.getTotal('inoculate', '/Vaccine/queryVaccine', { device: this.deviceid })
+    queryVaccine() {
+      this.getTotal("inoculate", "/Vaccine/queryVaccine", {
+        device: this.deviceid
+      });
     },
-    queryAlarmDailyInfo () {
-      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition', { device: this.deviceid }).then(res => {
-        this.alarmlist = res.rs
-      })
+    queryAlarmDailyInfo() {
+      this.getTotal("alarm", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    queryAlarmTemperature () {
-      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', { device: this.deviceid, type: 1 }).then(res => {
-        this.alarmlist = res.rs
-      })
+    queryAlarmTemperature() {
+      this.getTotal("temperature", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid,
+        type: 1
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    queryDrawerEmpty () {
-      console.log(this.deviceid)
-      this.getTotal('drawer', '/Drawer/queryDrawerEmpty', { device: this.deviceid })
+    queryDrawerEmpty() {
+      console.log(this.deviceid);
+      this.getTotal("drawer", "/Drawer/queryDrawerEmpty", {
+        device: this.deviceid
+      });
     },
-    async queryVaccineLowerThreshold () {
-      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold', { device: this.deviceid }).then(res => {
-        this.lists = res.rs
-      })
+    async queryVaccineLowerThreshold() {
+      await this.getTotal("inventory", "/vaccine/queryVaccineLowerThreshold", {
+        device: this.deviceid
+      }).then(res => {
+        this.lists = res.rs;
+      });
     },
-    getTotal (key, url, params = null) {
+    getTotal(key, url, params = null) {
       return new Promise((resolve, reject) => {
         if (params != null) {
           this.$api.get(url, params).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
+            let data = res.data;
+            changeItem(key, data.total, this.homecard);
+            resolve(data);
+          });
         } else {
           this.$api.get(url).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
+            let data = res.data;
+            changeItem(key, data.total, this.homecard);
+            resolve(data);
+          });
         }
-      })
+      });
     },
-    routerto (link) {
-      this.$router.push({ name: link })
-    },
-  },
-}
+    routerto(link) {
+      this.$router.push({ name: link });
+    }
+  }
+};
 </script>
 
 <style lang="less">

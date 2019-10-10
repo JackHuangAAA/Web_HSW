@@ -1,5 +1,5 @@
-import Main from '@/views/main.vue'
-import vcc from './vcc'
+import Main from '@/views/main.vue';
+import vcc from './vcc';
 const routers = [
   {
     path: '/',
@@ -75,6 +75,6 @@ const routers = [
     final: true,
     component: () => import('@/views/error/404.vue')
   }
-]
+];
 
-export default routers
+export default routers;

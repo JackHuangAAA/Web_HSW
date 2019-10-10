@@ -10,23 +10,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  name: 'userinfo',
-  data () {
-    return {
-
-    }
+  name: "userinfo",
+  data() {
+    return {};
   },
   computed: {
-    ...mapGetters(['username'])
+    ...mapGetters(["username"])
   },
-  created () {
-  },
-  methods: {
-
-  },
-}
+  created() {},
+  methods: {}
+};
 </script>
 
 <style lang="less" scoped>

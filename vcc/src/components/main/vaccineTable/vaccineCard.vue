@@ -8,15 +8,16 @@
          class="vCard"
          :class="{'cur-po':NotEdit}"
          align="middle">
-      <Col span="12"
-           v-if="type != 'edit'">
+      <Col :span="span"
+           v-if="type != 'edit' && value"
+           v-for="vc in value">
       <div>
         <Row>
-          <p class="vCard-name">狂犬疫苗</p>
+          <p class="vCard-name">{{vc.name}}</p>
         </Row>
         <Row>
           <p class="vCard-count">
-            100支
+            {{surplus(vc)}}
           </p>
         </Row>
       </div>
@@ -64,16 +65,19 @@
              :styles="{top: '30%'}">
         <div style="text-align:center;margin:30px 0px;">
           <Row type="flex"
-               align="middle">
+               align="middle"
+               v-if="type != 'edit' && value"
+               v-for="vc in value">
             <Col type="flex"
                  justify="end"
-                 span="4">
-            <p style="font-size:16px;font-weight:bold;color:rgba(50,58,68,1);margin:auto;">
-              狂犬疫苗:
+                 style="padding:10px;"
+                 span="7">
+            <p class="vCard-modal-p">
+              {{vc.name}}:
             </p>
             </Col>
-            <Col span="20">
-            <Input v-model="input"></Input>
+            <Col span="17">
+            <Input v-model="input[vc.name]"></Input>
             </Col>
           </Row>
         </div>
@@ -84,7 +88,7 @@
                   style="background:rgba(153,153,153,1);color:rgba(255,255,255,1);">取消</Button>
           <Button type="primary"
                   size="large"
-                  @click="handleSubmit()">确定</Button>
+                  @click="handleSubmit(value)">确定</Button>
         </div>
       </Modal>
     </div>
@@ -92,114 +96,133 @@
 </template>
 
 <script>
-import addpng from '_a/add.png'
-import delpng from '_a/del.png'
+import addpng from "_a/add.png";
+import delpng from "_a/del.png";
 export default {
-  name: 'vaccineCard',
+  name: "vaccineCard",
   props: {
-    id: {//抽屉ID
+    id: {
+      //抽屉ID
       type: String
     },
     type: {
       type: String,
-      default: 'Router'
+      default: "Router"
     },
-    vacclists: {//疫苗下拉列表
+    vacclists: {
+      //疫苗下拉列表
       type: Array,
       default: () => {
-        return []
+        return [];
       }
     },
     values: {
       type: Array,
       default: () => {
-        return []
+        return [];
       }
-    },
-  },
-  data () {
-    return {
-      addpng, delpng,
-      Selection: false,
-      vCardModal: false,
-      input: '',
-      model1: '',
-      handle: ['Router', 'edit', 'add', 'check'],
-      count: 0,
-      max: 2,//最大显示数量，vcc为2
     }
   },
+  data() {
+    return {
+      addpng,
+      delpng,
+      Selection: false,
+      vCardModal: false,
+      input: {},
+      model1: "",
+      handle: ["Router", "edit", "add", "check"],
+      count: 0,
+      max: 2 //最大显示数量，vcc为2
+    };
+  },
   computed: {
-    NotEdit () {
-      return this.type != 'edit'
+    NotEdit() {
+      return this.type != "edit";
     },
-    value () {
-      if (this.values) return this.values
-      else return []
+    value() {
+      if (this.values) return this.values;
+      else return [];
     },
-    wspan () {
-      let length = this.value.length + 1
-      length = Math.min(length, this.max)
-      return 24 / length
+    wspan() {
+      let length = this.value.length + 1;
+      length = Math.min(length, this.max);
+      return 24 / length;
     },
-    routerto () {
-      return this.type === 'Router'
+    span() {
+      let length = this.value.length;
+      length = length < 1 ? 1 : length;
+      length = Math.min(length, this.max);
+      return 24 / length;
     },
-    additem () {
-      return this.type === "add"
+    routerto() {
+      return this.type === "Router";
     },
-    checked () {
-      return this.type === "check"
+    additem() {
+      return this.type === "add";
     },
-
+    checked() {
+      return this.type === "check";
+    },
+    surplus() {
+      return vc => {
+        if (this.type == "add") {
+          return vc.total === undefined ? "" : vc.total + "支";
+        } else {
+          return vc.surplus === undefined ? 0 + "支" : vc.surplus + "支";
+        }
+      };
+    }
   },
-  created () {
-    this.init()
+  created() {
+    this.init();
   },
-  mounted () {
-  },
-  watch: {
-  },
+  mounted() {},
+  watch: {},
   methods: {
-    init () {
+    init() {
       // console.log(this.id)
       // console.log(this.value)
     },
-    Vaccine (handle, vc) {
+    Vaccine(handle, vc) {
       switch (handle) {
-        case 'add':
-          this.$emit('vaccine-add', this.model1, this.id)
+        case "add":
+          this.$emit("vaccine-add", this.model1, this.id);
           break;
-        case 'del':
-          this.$emit('vaccine-del', vc, this.id)
+        case "del":
+          this.$emit("vaccine-del", vc, this.id);
           break;
         default:
           break;
       }
     },
-    vCardClick () {
-      this[this.type]()
+    vCardClick() {
+      this[this.type]();
     },
-    handlesubmit () {
-      this.vCardModal = true
+    handleSubmit(vcs) {
+      this.$emit("handleSubmit", this.input, this.id, vcs);
+      this.vCardModal = false;
     },
-    Router () {
-      console.log('router')
+    Router() {
+      console.log("router");
     },
-    edit () {
+    edit() {},
+    add() {
+      if (this.value.length > 0) {
+        this.vCardModal = true;
+      } else {
+        this.$Message.info("请在设置中划分该区域疫苗");
+      }
     },
-    add () {
-      this.vCardModal = true
+    cancel() {
+      this.vCardModal = false;
     },
-    cancel () {
-      this.vCardModal = false
-    },
-    check () {
-      console.log('check')
-      this.Selection = !this.Selection
+    check() {
+      console.log("check");
+      this.Selection = !this.Selection;
     }
   }
-}
+};
 </script>
 
 <style lang="less">

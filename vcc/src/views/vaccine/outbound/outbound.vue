@@ -12,21 +12,21 @@
 </template>
 
 <script>
-import indexlist from './indexlist.js'
-import NavHeader from '_c/main/NavHeader'
-import vaccineTable from '_c/main/vaccineTable'
+import indexlist from "./indexlist.js";
+import NavHeader from "_c/main/NavHeader";
+import vaccineTable from "_c/main/vaccineTable";
 export default {
-  name: 'outbound',
+  name: "outbound",
   components: {
     vaccineTable,
     NavHeader
   },
-  data () {
+  data() {
     return {
       indexlist
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="less">

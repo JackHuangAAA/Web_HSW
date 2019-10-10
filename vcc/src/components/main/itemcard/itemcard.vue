@@ -13,28 +13,26 @@
 
 <script>
 export default {
-  name: 'itemCard',
+  name: "itemCard",
   props: {
     title: {
       type: String,
-      default: ''
+      default: ""
     },
     icon: {
       type: String,
-      default: ''
+      default: ""
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   methods: {
-    reicon (icon) {
-      return `/static/img/icon/home/${icon}`
+    reicon(icon) {
+      return `/static/img/icon/home/${icon}`;
     }
   }
-}
+};
 </script>
 
 <style lang="less">

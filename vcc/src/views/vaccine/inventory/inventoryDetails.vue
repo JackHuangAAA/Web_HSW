@@ -4,13 +4,11 @@
 
 <script>
 export default {
-  name: 'inventoryDetails',
-  data () {
-    return {
-
-    }
+  name: "inventoryDetails",
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

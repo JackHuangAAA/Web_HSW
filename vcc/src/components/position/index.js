@@ -1,2 +1,2 @@
-import position from './position.vue'
-export default position
+import position from './position.vue';
+export default position;

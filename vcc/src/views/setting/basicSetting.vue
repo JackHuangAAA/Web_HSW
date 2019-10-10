@@ -100,15 +100,13 @@
 </template>
 
 <script>
-import cities from "./cities.js"
+import cities from "./cities.js";
 export default {
-  name: 'basicSetting',
-  data () {
-    return {
-
-    }
+  name: "basicSetting",
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

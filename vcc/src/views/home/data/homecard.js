@@ -35,4 +35,4 @@ export default [
     icon: 'alarm.png',
     value: 3
   }
-]
+];

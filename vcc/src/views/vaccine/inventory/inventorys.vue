@@ -11,18 +11,16 @@
 </template>
 
 <script>
-import vaccineTable from '_c/main/vaccineTable'
+import vaccineTable from "_c/main/vaccineTable";
 export default {
-  name: 'inventorys',
+  name: "inventorys",
   components: {
     vaccineTable
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

@@ -15,30 +15,26 @@
 </template>
 
 <script>
-import lackcard from "_c/main/lackcard"
+import lackcard from "_c/main/lackcard";
 export default {
-  name: 'lackInventory',
+  name: "lackInventory",
   components: {
     lackcard
   },
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  mounted () {
-  },
-  methods: {
-  },
-}
+  mounted() {},
+  methods: {}
+};
 </script>
 
 <style lang="less">

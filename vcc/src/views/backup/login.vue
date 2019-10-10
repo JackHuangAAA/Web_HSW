@@ -224,20 +224,20 @@
 }
 </style>
 <script>
-import md5 from 'js-md5'
-import { mapGetters } from 'vuex'
+import md5 from "js-md5";
+import { mapGetters } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
-      usererror: '',
-      pwderror: '',
+      usererror: "",
+      pwderror: "",
       userErrShow: false,
       pwdErrShow: false,
       showLogin: false,
       loginFrm: {
-        user: '',
-        password: '',
+        user: "",
+        password: ""
       },
       title: this.$config.appName,
       rember: false,
@@ -251,16 +251,15 @@ export default {
               { required: true, message: '用户名不能为空', trigger: 'blur'}
           ]
       }*/
-    }
+    };
   },
   computed: {
     ...mapGetters({
-      loginUser: 'user'
-    }),
-
+      loginUser: "user"
+    })
   },
   methods: {
-    userChange: function () {
+    userChange: function() {
       this.usererror = "";
       this.userErrShow = false;
       if (localStorage.user == this.loginFrm.user) {
@@ -268,18 +267,20 @@ export default {
         this.loginFrm.password = localStorage.password;
         this.rember = true;
       } else {
-        this.loginFrm.password = '';
+        this.loginFrm.password = "";
         this.rember = false;
       }
     },
-    pwdChange: function () {
+    pwdChange: function() {
       this.pwderror = "";
       this.pwdErrShow = false;
     },
     //登录
-    login: function (data) {
-      this.usererror = ""; this.pwderror = "";
-      this.userErrShow = false; this.pwdErrShow = false;
+    login: function(data) {
+      this.usererror = "";
+      this.pwderror = "";
+      this.userErrShow = false;
+      this.pwdErrShow = false;
       if (_.isEmpty(this.loginFrm.user) && _.isEmpty(this.loginFrm.password)) {
         this.usererror = "用户名不能为空";
         this.pwderror = "密码不能为空";
@@ -299,15 +300,20 @@ export default {
       }
       //this.$refs['loginFrm'].validate((valid) => {
       //if (valid) {
-      this.$api.post('/user/login', { code: this.loginFrm.user, password: md5(this.loginFrm.password).toUpperCase() }).then((result) => {
-        if (result.code == '0002') {
-          this.$Message.error(`用户${data.user}不存在`);
-        } else if (result.code == '0003') {
-          this.$Message.error(`密码错误`);
-        } else if (result.code == '0000') {
-          this.$router.push('/');
-        }
-      });
+      this.$api
+        .post("/user/login", {
+          code: this.loginFrm.user,
+          password: md5(this.loginFrm.password).toUpperCase()
+        })
+        .then(result => {
+          if (result.code == "0002") {
+            this.$Message.error(`用户${data.user}不存在`);
+          } else if (result.code == "0003") {
+            this.$Message.error(`密码错误`);
+          } else if (result.code == "0000") {
+            this.$router.push("/");
+          }
+        });
       /*} else {
               this.$Message.error('表单验证失败!');
           }*/
@@ -315,7 +321,7 @@ export default {
     },
 
     //记住密码
-    save: function () {
+    save: function() {
       if (this.rember) {
         localStorage.user = this.loginFrm.user;
         localStorage.password = this.loginFrm.password;
@@ -326,9 +332,9 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     if (this.loginUser) {
-      this.$router.push('/');
+      this.$router.push("/");
     }
     if (localStorage.user != null) {
       this.loginFrm.user = localStorage.user;
@@ -339,6 +345,5 @@ export default {
     }
     this.$refs.userInput.focus();
   }
-}
-
+};
 </script>

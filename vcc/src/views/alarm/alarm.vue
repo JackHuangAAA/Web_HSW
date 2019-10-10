@@ -16,31 +16,31 @@
 </template>
 
 <script>
-import alarmcard from "_c/main/alarmcard"
-import columns from "./data/columns"
+import alarmcard from "_c/main/alarmcard";
+import columns from "./data/columns";
 // import testdata from "./data/testdata"
 export default {
-  name: 'alarm',
+  name: "alarm",
   components: {
     alarmcard
   },
-  data () {
+  data() {
     return {
       columns: columns,
       lists: []
-    }
+    };
   },
-  created () {
-    this.getAlarms()
+  created() {
+    this.getAlarms();
   },
   methods: {
-    getAlarms () {
-      this.$api.get('alarm/queryAlarmByByCondition').then(res => {
-        this.lists = res.data.rs
-      })
+    getAlarms() {
+      this.$api.get("alarm/queryAlarmByByCondition").then(res => {
+        this.lists = res.data.rs;
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="less">

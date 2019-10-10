@@ -26,36 +26,33 @@
 
 <script>
 export default {
-  name: 'alarminfo',
+  name: "alarminfo",
   props: {
     alarm: {
       type: Number,
-      default () {
-        return []
+      default() {
+        return [];
       }
     }
   },
-  data () {
+  data() {
     return {
-      alarmtype: {
-
-      }
-    }
+      alarmtype: {}
+    };
   },
   computed: {
-    isNull () {
-      return this.alarm === 0
+    isNull() {
+      return this.alarm === 0;
     },
-    alarmpart () {
-      return _static.alarminfo[this.alarm].part
+    alarmpart() {
+      return _static.alarminfo[this.alarm].part;
     },
-    alarmsolution () {
-      return _static.alarminfo[this.alarm].solution
+    alarmsolution() {
+      return _static.alarminfo[this.alarm].solution;
     }
   },
-  mounted () {
-  },
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less">

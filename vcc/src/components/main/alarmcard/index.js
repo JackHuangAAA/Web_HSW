@@ -1,2 +1,2 @@
-import alarmcard from './alarmcard.vue'
-export default alarmcard
+import alarmcard from './alarmcard.vue';
+export default alarmcard;

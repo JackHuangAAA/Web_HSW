@@ -15,18 +15,18 @@
 </template>
 
 <script>
-import Steps from '_c/main/Steps'
-import back from '_a/back.png'
+import Steps from "_c/main/Steps";
+import back from "_a/back.png";
 export default {
-  name: 'NavHeader',
+  name: "NavHeader",
   components: {
     Steps
   },
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     active: {
@@ -34,17 +34,17 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       back
-    }
+    };
   },
   methods: {
-    goback () {
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     }
   }
-}
+};
 </script>
 
 <style lang="less">

@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'inoculateBoxItem',
+  name: "inoculateBoxItem",
   props: {
     ekey: {
       type: String
@@ -34,20 +34,18 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   computed: {
-    valuefocus () {
-      let tmp = {}
-      let css = 'ibiv-' + this.focus
-      tmp[css] = true
-      return css
+    valuefocus() {
+      let tmp = {};
+      let css = "ibiv-" + this.focus;
+      tmp[css] = true;
+      return css;
     }
-  },
-}
+  }
+};
 </script>
   
 <style lang="less" scoped>

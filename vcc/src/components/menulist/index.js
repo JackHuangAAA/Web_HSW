@@ -1,2 +1,2 @@
-import menulist from './menulist.vue'
-export default menulist
+import menulist from './menulist.vue';
+export default menulist;

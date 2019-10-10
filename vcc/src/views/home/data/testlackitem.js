@@ -19,4 +19,4 @@ export default [
     value: 0,
     unit: '支'
   }
-]
+];

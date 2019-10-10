@@ -39,14 +39,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  name: 'menulist',
+  name: "menulist",
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     menuOpen: {
@@ -54,37 +54,36 @@ export default {
       default: false
     }
   },
-  data () {
+  data() {
     return {
-      activeMenu: 'home',
-    }
+      activeMenu: "home"
+    };
   },
   computed: {
-    ...mapGetters(['location']),
-    menustatus () {
-      return this.menuOpen === false ? '展开菜单' : '折叠菜单'
+    ...mapGetters(["location"]),
+    menustatus() {
+      return this.menuOpen === false ? "展开菜单" : "折叠菜单";
     }
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    menuIcon (icon) {
-      return `~@/assets/icon/${icon}.png`
+    menuIcon(icon) {
+      return `~@/assets/icon/${icon}.png`;
     },
-    menuClick (item) {
-      this.$emit('clickitem', item)
-      let route = item.name
-      if (typeof item.main !== 'undefined') {
-        route = item.main
+    menuClick(item) {
+      this.$emit("clickitem", item);
+      let route = item.name;
+      if (typeof item.main !== "undefined") {
+        route = item.main;
       }
-      this.activeMenu = item.name
-      this.$router.push({ name: route })
+      this.activeMenu = item.name;
+      this.$router.push({ name: route });
     },
-    buttonClick () {
-      this.$emit('click', this.menuOpen)
+    buttonClick() {
+      this.$emit("click", this.menuOpen);
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="less">

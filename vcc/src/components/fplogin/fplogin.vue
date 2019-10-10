@@ -14,18 +14,16 @@
 
 <script>
 export default {
-  name: 'fplogin',
-  data () {
-    return {
-
-    }
+  name: "fplogin",
+  data() {
+    return {};
   },
   methods: {
-    disclick () {
-      this.$emit('click')
+    disclick() {
+      this.$emit("click");
     }
   }
-}
+};
 </script>
 
 <style lang="less">

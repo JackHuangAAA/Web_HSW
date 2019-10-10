@@ -1,7 +1,7 @@
 /**
  * 静态变量
  */
-'use strict'
+'use strict';
 export const alarminfo = {
   1: {
     title: '温度异常',
@@ -13,7 +13,7 @@ export const alarminfo = {
     part: '库存疫苗过少',
     solution: '库存不足，请及时补充疫苗!'
   }
-}
+};
 export default {
   alarminfo: alarminfo
-}
+};
