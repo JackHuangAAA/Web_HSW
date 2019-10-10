@@ -61,7 +61,8 @@ export default {
     },
     content () {
       return (param, map) => {
-        return _static[map][param]
+        console.log(_static[map][param].title)
+        return _static[map][param].title
       }
     }
   },

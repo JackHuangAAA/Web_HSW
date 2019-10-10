@@ -13,9 +13,16 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 import config from '@/config'
 import device from '@/api/device.js'
+import { Storages } from '@/libs/util.js'
 global._ = lodash
 global._static = enums
+global.storage = Storages
+
 Vue.use(iView)
+
+//导入socket.io模块
+import io from 'socket.io-client'
+global.io = io
 
 let processmod = false
 if (process.env.NODE_ENV !== 'production') {

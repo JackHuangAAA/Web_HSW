@@ -3,19 +3,24 @@
     <div class="login-main">
       <div class="bg1"></div>
       <div class="bg2"></div>
-      <div class="header">
+      <div class="login-header">
         <div class="logo item"><img :src="ETHINK"></div>
         <div class="logoinfo item">银信疫苗接种平台</div>
         <div class="title item">welcome to login system</div>
       </div>
       <div class="login">
         <div class="tab item">
-          <p :class="{'tabactive':login1}" @click="login('fp')">指纹登陆</p>
-          <p :class="{'tabactive':login2}" style="padding-left:62px;" @click="login('up')">用户密码登录</p>
+          <p :class="{'tabactive':login1}"
+             @click="login('fp')">指纹登陆</p>
+          <p :class="{'tabactive':login2}"
+             style="padding-left:62px;"
+             @click="login('up')">用户密码登录</p>
         </div>
         <div class="loginform item">
-          <fplogin v-if="login1" @click="test()"></fplogin>
-          <loginform v-if="login2" @Submit="checkUser"></loginform>
+          <fplogin v-if="login1"
+                   @click="test()"></fplogin>
+          <loginform v-if="login2"
+                     @Submit="checkUser"></loginform>
         </div>
       </div>
     </div>
@@ -26,22 +31,29 @@
 import ETHINK from '@/assets/logo.png'
 import loginform from '_c/loginform'
 import fplogin from '_c/fplogin'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     loginform,
     fplogin
   },
-  data() {
+  data () {
     return {
       login1: true,
       login2: false,
       ETHINK
     }
   },
+  computed: {
+    ...mapGetters(['device'])
+  },
+  created () {
+  },
+  mounted () {
+  },
   methods: {
     ...mapActions(['saveUser', 'saveUserInfo']),
-    login(type) {
+    login (type) {
       switch (type) {
         case 'fp':
           this.login1 = true;
@@ -55,13 +67,13 @@ export default {
           break;
       }
     },
-    test() {
-      let test = this.$device.android('open').then(res => { }).catch(err => {
+    test () {
+      let test = this.$device.finger('open').catch(err => {
         console.log(err)
       })
-      console.log(test)
+      console.log('test')
     },
-    async checkUser(form) {
+    async checkUser (form) {
       let res = await this.$api.get('/zcy/checkUser', form)
       let check = res.data.check
       if (check) {

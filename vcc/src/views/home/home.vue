@@ -16,10 +16,11 @@
     </div>
     <div class="rightbox">
       <div class="thermometer">
-        <!-- <thermometer></thermometer> -->
+        <thermometer :value="0"
+                     :indoor="20"></thermometer>
       </div>
       <div class="alarminfo card">
-        <alarminfo :alarmlist="alarmlist"></alarminfo>
+        <alarminfo :alarm="alarmcode"></alarminfo>
       </div>
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
@@ -56,17 +57,24 @@ export default {
     thermometer,
     itemCard,
     lackinventory,
-    alarminfo
+    alarminfo,
+
   },
   data () {
     return {
       homecard: homecard,
       lists: [],
       alarmlist: [],
+      alarmcode: 0
     }
   },
   created () {
     this.getHomeData()
+  },
+  computed: {
+    deviceid () {
+      return this.$store.state.deviceid
+    }
   },
   methods: {
     getHomeData () {
@@ -75,25 +83,30 @@ export default {
       this.queryDrawerEmpty()
       this.queryVaccineLowerThreshold()
       this.queryAlarmTemperature()
+      this.queryVaccinationByCustomerCode()
+    },
+    queryVaccinationByCustomerCode () {
+      this.getTotal('customer', '/Vaccine/queryVaccinationByCustomerCode', { device: this.deviceid })
     },
     queryVaccine () {
-      this.getTotal('inoculate', '/Vaccine/queryVaccine')
+      this.getTotal('inoculate', '/Vaccine/queryVaccine', { device: this.deviceid })
     },
     queryAlarmDailyInfo () {
-      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition').then(res => {
+      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition', { device: this.deviceid }).then(res => {
         this.alarmlist = res.rs
       })
     },
     queryAlarmTemperature () {
-      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', 1).then(res => {
+      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', { device: this.deviceid, type: 1 }).then(res => {
         this.alarmlist = res.rs
       })
     },
     queryDrawerEmpty () {
-      this.getTotal('drawer', '/Drawer/queryDrawerEmpty')
+      console.log(this.deviceid)
+      this.getTotal('drawer', '/Drawer/queryDrawerEmpty', { device: this.deviceid })
     },
     async queryVaccineLowerThreshold () {
-      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold').then(res => {
+      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold', { device: this.deviceid }).then(res => {
         this.lists = res.rs
       })
     },

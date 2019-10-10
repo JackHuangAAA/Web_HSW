@@ -1,3 +1,7 @@
+import api from '@/api'
+import store from '@/store'
+import device from '@/api/device.js'
+import { resolve } from 'path'
 /**
  *  dateFmt 用于格式化时间
  *  dateFtt("yyyy-MM-dd hh:mm:ss",Time)
@@ -40,7 +44,8 @@ export const SetCache = (key, value) => {
 }
 export const GetCache = key => {
   let value = sessionStorage.getItem(key)
-  return value
+  if (value) return value
+  else return false
 }
 export const CleanCache = key => {
   sessionStorage.removeItem(key)
@@ -50,14 +55,15 @@ export const SaveStorage = (key, value) => {
   localStorage.setItem(key, value)
 }
 export const GetStorage = key => {
-  let value = localStorage.getItem(key)
-  return value
+  const value = localStorage.getItem(key)
+  if (value) return value
+  else return false
 }
 export const CleanStorage = key => {
   localStorage.removeItem(key)
   return true
 }
-export const Storage = {
+export const Storages = {
   SetCache,
   GetCache,
   CleanCache,
@@ -65,13 +71,20 @@ export const Storage = {
   GetStorage,
   CleanStorage
 }
-
-const alarmType = {
-  1: {
-    info: '温度异常'
-  },
-  2: {
-    info: '库存不足'
+export const getcode = async () => {
+  const deviceCode = GetStorage('deviceCode')
+  api.setHeaders('deviceid', deviceCode)
+  if (deviceCode) return deviceCode
+  else {
+    return await GetDeviceCode()
   }
 }
-export const discernAlarmType = type => {}
+
+const GetDeviceCode = () => {
+  device.getDeviceCode().then(res => {
+    let deviceCode = res.deviceId
+    api.setHeaders('deviceid', deviceCode)
+    SaveStorage('deviceCode', deviceCode)
+    return deviceCode
+  })
+}

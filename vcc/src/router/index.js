@@ -29,11 +29,16 @@ let getRouterConfig = function(path) {
 }
 
 router.beforeEach((to, from, next) => {
+  if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title)
   let menu = getRouterConfig(to.path)
-  console.log(menu)
   if (menu != null) {
+    if (store.state.device === null) {
+      store.dispatch('getDevice')
+    }
     let p = Promise.resolve()
-    if (store.getters.user == null && to.path != '/login') {
+    if (to.path == '/login') {
+      next()
+    } else if (store.getters.user == null) {
       //当前用户信息不存在
       p = api.get('/user/current').then(result => {
         store.dispatch('saveUser', result.data)
@@ -41,6 +46,7 @@ router.beforeEach((to, from, next) => {
       })
     }
     if (menu.access != null) {
+      //如果有权限
       p.then(() => {
         //校验权限
         if (config.env == 'development') {

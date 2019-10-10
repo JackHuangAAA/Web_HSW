@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { Storages } from '@/libs/util.js'
 import userpng from '@/assets/user.png';
 import passpng from '@/assets/pwd.png'
 export default {
@@ -44,8 +45,36 @@ export default {
       pwd: ''
     }
   },
+  watch: {
+    rember (value) {
+      if (!value) {
+        this.CleanUser()
+      }
+    }
+  },
+  mounted () {
+    if (Storages.GetStorage('user') != null) {
+      this.rember = true
+      this.GetUser()
+    }
+  },
   methods: {
+    SaveUser () {
+      Storages.SaveStorage('user', this.user)
+      Storages.SaveStorage('password', this.pwd)
+    },
+    CleanUser () {
+      Storages.CleanStorage('user')
+      Storages.CleanStorage('password')
+    },
+    GetUser () {
+      this.user = Storages.GetStorage('user')
+      this.pwd = Storages.GetStorage('password')
+    },
     handleSubmit () {
+      if (this.rember) {
+        this.SaveUser()
+      }
       let form = {
         code: this.user,
         password: this.pwd

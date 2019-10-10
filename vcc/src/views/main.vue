@@ -16,7 +16,8 @@
         <div class="position">
           <position></position>
         </div>
-        <div class="userinfo">
+        <div class="userinfo"
+             @click="test()">
           <userinfo></userinfo>
         </div>
         <div class="datetime">
@@ -52,13 +53,23 @@ export default {
   data () {
     return {
       menulist: [],
-      menuOpen: false
+      menuOpen: false,
+      socket: '',
     }
   },
   created () {
     this.getmenulist()
   },
+  mounted () {
+    // this.websocket()
+  },
   methods: {
+    test () {
+      console.log('123')
+      storage.CleanStorage('deviceid')
+      storage.CleanStorage('devicecode')
+      this.$router.push('/login')
+    },
     menuItemClick (item) {
       this.menuClose()
     },
@@ -76,6 +87,9 @@ export default {
         return path
       })
       this.menulist = menulist
+    },
+    websocket () {
+      this.socket = io()
     }
   },
 }
@@ -83,10 +97,4 @@ export default {
 
 <style lang="less" scoped>
 @import "~@/style/index.less";
-.menu-shade {
-  z-index: 10;
-  position: fixed;
-  width: 100%;
-  height: 100%;
-}
 </style>

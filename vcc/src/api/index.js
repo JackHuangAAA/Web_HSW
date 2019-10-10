@@ -2,11 +2,10 @@ import axios from 'axios'
 import config from '@/config'
 import router from '@/router'
 import Message from 'iview/src/components/message'
-
+import { mapState } from 'vuex'
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded'
 axios.defaults.withCredentials = true
-axios.defaults.headers.common['deviceid'] = config.deviceid
 axios.defaults.headers.common['type'] = config.type
 const RSP_CODE = {
   NO_LOGIN: '0001',
@@ -37,11 +36,11 @@ const errorHandler = err => {
     console.error(`=> ${err}`)
   }
   Message.error({ content: '请求异常', closable: true, duration: 0 })
+  router.push('/login') //有问题时也跳转到login
 }
 
 export default {
   get: function(url, data) {
-    console.log('in get')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
@@ -56,7 +55,6 @@ export default {
   },
 
   post: function(url, data) {
-    console.log('in post')
     if (config.env == 'development') {
       //   console.log(`=> ${url}`, data || {})
     }
@@ -68,5 +66,10 @@ export default {
         })
         .catch(errorHandler)
     })
+  },
+  setHeaders: function(common, value) {
+    if (value != undefined) {
+      axios.defaults.headers.common[common] = value
+    }
   }
 }

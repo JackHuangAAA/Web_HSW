@@ -31,6 +31,12 @@ module.exports = {
       .use('babel')
       .loader('babel-loader')
   },
+  configureWebpack: {
+    entry: {
+      vendor: ['vue', 'vue-i18n', 'vue-router', 'vuex', 'axios', 'iview']
+    },
+    devtool: true
+  },
   configureWebpack: config => {
     if (isProduction) {
       //解决IE9不能加载4000以上selector问题

@@ -4,19 +4,21 @@
       <img src="~@/assets/icon/alarm-yellow.png">
       <p>设备报警</p>
     </div>
-    <div class="alarminfo-main">
+    <div class="alarminfo-main-null"
+         v-if="isNull">
+      <p>暂无数据</p>
+    </div>
+    <div v-else
+         class="alarminfo-main">
       <div class="alarminfo-main-data">
         <div class="alarminfo-main-data-title">
-          警示:接种柜温度异常
+          警示:{{alarmpart}}
         </div>
         <div class="alarminfo-main-data-memo">
-          接种柜温度过高,请及将温度调整至2-8℃范围内!
+          {{alarmsolution}}
         </div>
       </div>
-      <div class="alarminfo-main-null"
-           v-if="isNull">
-        <p>暂无数据</p>
-      </div>
+
     </div>
 
   </div>
@@ -26,8 +28,8 @@
 export default {
   name: 'alarminfo',
   props: {
-    alarmlist: {
-      type: Array,
+    alarm: {
+      type: Number,
       default () {
         return []
       }
@@ -42,7 +44,13 @@ export default {
   },
   computed: {
     isNull () {
-      return this.alarmlist.length != 0 ? false : true
+      return this.alarm === 0
+    },
+    alarmpart () {
+      return _static.alarminfo[this.alarm].part
+    },
+    alarmsolution () {
+      return _static.alarminfo[this.alarm].solution
     }
   },
   mounted () {
@@ -86,7 +94,7 @@ export default {
   margin: auto;
   font-size: 18px;
   font-weight: 400;
-  color: @gray;
+  color: #7f8589;
 }
 .alarminfo-title {
   padding-top: 20px;

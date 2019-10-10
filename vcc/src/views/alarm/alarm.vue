@@ -17,8 +17,8 @@
 
 <script>
 import alarmcard from "_c/main/alarmcard"
-// import columns from "./data/columns"
-import testdata from "./data/testdata"
+import columns from "./data/columns"
+// import testdata from "./data/testdata"
 export default {
   name: 'alarm',
   components: {
