@@ -36,7 +36,7 @@ const errorHandler = err => {
     console.error(`=> ${err}`)
   }
   Message.error({ content: '请求异常', closable: true, duration: 0 })
-  router.push('/login')
+  router.push('/login') //有问题时也跳转到login
 }
 
 export default {

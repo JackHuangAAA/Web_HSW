@@ -7,7 +7,8 @@
     </div>
     <div class="vTable-l-r">
       <p> 左 </p>
-      <img :src="l2r">
+      <img :src="l2r"
+           style="margin-left:40px;">
       <p style="margin-left:12px;"> 右 </p>
     </div>
     <div class="vTableContent">
@@ -21,16 +22,22 @@
         <Col span="11"
              push="2">
         <p class="vTable-cloumns">
-          抽屉2
+          抽屉二
         </p>
         </Col>
       </Row>
-      <Row :gutter="12">
+      <Row :gutter="12"
+           v-for="lineRow,index of DrawerTree"
+           style="margin:14px">
         <Col span="2"
-             class="vTableContent-index"> 第1行 </Col>
-        <Col span="11">
+             class="vTableContent-index"> 第{{index}}行 </Col>
+        <Col span="11"
+             v-for="item of lineRow">
         <vaccineCard :type='type'
-                     :vacclists='vacclists'></vaccineCard>
+                     :vacclists='vacclists'
+                     :values='item.vaccine'
+                     :id='item._id'
+                     :max='2'></vaccineCard>
         </Col>
       </Row>
     </div>
@@ -57,6 +64,15 @@ export default {
       t2b, l2r,
       vacclists: null,
       drawers: null,
+      max: 2,//指定疫苗最大数
+      // DrawerTree: {//处理数据为树状结构方便遍历抽屉格式
+      //   yNumb: {
+      //     xNumb: {
+      //       vaccine: {}
+      //     }
+      //   }
+      // }
+      DrawerTree: {}
     }
   },
   computed: {
@@ -66,6 +82,8 @@ export default {
     storedrawer () {
       return this.$store.state.drawer
     }
+  },
+  watch: {
   },
   mounted () {
     this.init()
@@ -89,8 +107,17 @@ export default {
       } else {
         this.drawers = this.storedrawer
       }
-      console.log(this.drawers)
+      this.drawerinit(this.drawers.rs)
     },
+    drawerinit (values) {
+      let tree = {}
+      for (let el of values) {
+        if (tree[el.y] === undefined) tree[el.y] = {}
+        if (tree[el.y][el.x] === undefined) tree[el.y][el.x] = []
+        tree[el.y][el.x] = el
+      }
+      this.DrawerTree = tree
+    }
   }
 }
 </script>

@@ -6,13 +6,18 @@
     height: 46px;
   }
 }
+.editfont {
+  font-size: 14px;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: rgba(62, 73, 85, 1) !important;
+}
 .vCard-checkbox {
   position: absolute;
   left: 20px;
   top: 10px;
 }
 .vCard {
-  cursor: pointer;
   height: 100px;
   width: 100%;
   box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.19);
@@ -36,17 +41,22 @@
   flex-direction: row;
 }
 .vCard-edit-d {
-  z-index: 1;
+  color: red;
   position: absolute;
   margin-left: 9px;
   display: flex;
   align-items: center;
-  width: 14px;
-  height: 14px;
-  width: 100%;
+  width: 40px;
+  height: 40px;
   justify-content: center;
-  img {
+  .vCard-edit-img {
     position: relative;
-    left: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    left: 80px;
   }
 }

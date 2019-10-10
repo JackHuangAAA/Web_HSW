@@ -6,6 +6,7 @@
     </div>
     <Row type="flex"
          class="vCard"
+         :class="{'cur-po':NotEdit}"
          align="middle">
       <Col span="12"
            v-if="type != 'edit'">
@@ -20,24 +21,42 @@
         </Row>
       </div>
       </Col>
-      <Col span="12">
+      <!-- edit模块 -->
+      <Col v-if="type == 'edit' && value"
+           :span="wspan"
+           v-for="vc in value">
       <div class="vCard-edit">
-        <p class="vCard-name">狂犬疫苗</p>
+        <p class="vCard-name editfont">{{vc.name}}</p>
+        <div class="vCard-edit-d">
+          <div class="vCard-edit-img"
+               @click="Vaccine('del')"
+               :class="{'cur-po':!NotEdit}">
+            <img :src="delpng">
+          </div>
+        </div>
+      </div>
+      </Col>
+      <Col :span="wspan"
+           v-if="value.length<max && type=='edit'">
+      <div class="vCard-edit editfont">
         <Select v-model="model1"
-                style="width:200px;z-index:10;">
+                size='large'
+                placeholder='请选择疫苗名称'
+                style="width:150px;">
           <Option v-for="item in vacclists"
                   :value="item.code"
                   :key="item.code">{{ item.name }}</Option>
         </Select>
-        <div class="vCard-edit-d"
-             @click="Vaccine('add')">
-          <img :src="addpng">
-        </div>
         <div class="vCard-edit-d">
-          <img :src="delpng">
+          <div class="vCard-edit-img"
+               @click="Vaccine('add')"
+               :class="{'cur-po':!NotEdit}">
+            <img :src="addpng">
+          </div>
         </div>
       </div>
       </Col>
+      <!-- edit模块 -->
     </Row>
     <div>
       <Modal v-model="vCardModal"
@@ -78,22 +97,25 @@ import delpng from '_a/del.png'
 export default {
   name: 'vaccineCard',
   props: {
+    id: {//抽屉ID
+      type: String
+    },
     type: {
       type: String,
       default: 'Router'
     },
-    vacclists: {
+    vacclists: {//疫苗下拉列表
       type: Array,
       default: () => {
         return []
       }
     },
-    x: {
-      type: Number
+    values: {
+      type: Array,
+      default: () => {
+        return []
+      }
     },
-    y: {
-      type: Number
-    }
   },
   data () {
     return {
@@ -104,9 +126,22 @@ export default {
       model1: '',
       handle: ['Router', 'edit', 'add', 'check'],
       count: 0,
+      max: 2,
     }
   },
   computed: {
+    NotEdit () {
+      return this.type != 'edit'
+    },
+    value () {
+      if (this.values) return this.values
+      else return []
+    },
+    wspan () {
+      let length = this.value.length
+      length = Math.max(length, 1)
+      return 24 / length
+    },
     routerto () {
       return this.type === 'Router'
     },
@@ -127,9 +162,9 @@ export default {
   },
   methods: {
     init () {
-
+      // console.log(this.id)
+      // console.log(this.value)
     },
-
     Vaccine (handle) {
     },
     vCardClick () {
