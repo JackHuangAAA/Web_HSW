@@ -40,29 +40,6 @@ module.exports = {
         return await Domain.models.vaccination.create(requestBody);
     },
 
-    
-
-    /**
-     * 修改接种记录
-     * @param requestBody
-     * @returns
-     */
-    modifyVaccination: async function(requestBody){
-         logger.debug(`modifyVaccination param: ${JSON.stringify(requestBody)}`);
-         console.log('OK');
-         return await Domain.models.vaccination.updateOne({_id: requestBody._id}, {
-             $set: {
-                 user: requestBody.user,
-                 device: requestBody.device,
-                 deviceType: requestBody.deviceType,
-                 unitCode: requestBody.unitCode,
-                 unitName: requestBody.unitName,
-                 sort: requestBody.sort,
-                 customer: requestBody.customer
-             }
-         });
-     },
-	 
 	 /**
      * 按条件查询接种记录
      * 按接种序号分组统计客户数量aggregate
