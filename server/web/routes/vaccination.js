@@ -35,23 +35,6 @@ router.post('/saveVaccination',
     })
 );
 
-
-/**
- * @api {POST} /vaccination/modifyVaccination  修改接种记录
- * @apiGroup vaccination
- * @apiVersion 1.0.0
- * @apiDescription 修改接种记录
- * @apiParam {String} [user] 操作医生
- * @apiParam {String} [sort] 排队序号
- * @apiParam {Object} [customer] 顾客
- * @apiSuccess {JSON}  Object  vaccination model 数组
- */
-router.post('/modifyVaccination',
-    Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccination.modifyVaccination(ctx.request.body);
-    })
-);
-
 /**
  * @api {GET} /vaccination/queryVaccinationByCondition  按条件查询接种
  * @apiGroup vaccination
