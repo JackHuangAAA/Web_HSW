@@ -229,7 +229,6 @@ export default {
       this.$refs.settingModal.close();
     }
   },
-
   updated() {
     this.$nextTick(() => {
       if (this.$refs.menuView) {

@@ -4,13 +4,11 @@
 
 <script>
 export default {
-  name: 'fingerprint',
-  data () {
-    return {
-
-    }
+  name: "fingerprint",
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

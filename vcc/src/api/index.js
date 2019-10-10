@@ -24,7 +24,6 @@ const commonResponseHandler = (response, resolve, reject) => {
       closable: true,
       duration: 0
     });
-    router.push('/login');
   } else {
     if (response.data) {
       resolve(response.data);

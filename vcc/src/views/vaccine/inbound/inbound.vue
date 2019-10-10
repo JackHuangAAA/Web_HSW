@@ -28,8 +28,13 @@ export default {
     };
   },
   methods: {
-    submit(total, id, vaccines) {
-      console.log(total, id, vaccines);
+    async submit(total, id, vaccines) {
+      let vaccine = vaccines.map(el => ({
+        ...el,
+        total: total[el.name]
+      }));
+      let res = this.$api.post("/drawer/modifyDrawerById", { id, vaccine });
+      this.$store.dispatch("updateDrawe");
     }
   }
 };

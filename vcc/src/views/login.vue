@@ -66,8 +66,8 @@ export default {
       }
     },
     test() {
-      let deviceid = this.$device.getDeviceCode();
-      console.log(JSON.stringify(deviceid));
+      // let deviceid = this.$device.getDeviceCode();
+      // console.log(JSON.stringify(deviceid));
       let test = this.$device.finger("open").catch(err => {
         console.log(JSON.stringify(err));
       });
