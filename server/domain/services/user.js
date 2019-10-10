@@ -26,10 +26,10 @@ module.exports = {
     },
 
     /**
-  * 按指定条件查询用户信息
-  * @param requestBody
-  * @returns {*|T|Query}
-  */
+     * 按指定条件查询用户信息
+     * @param requestBody
+     * @returns {*|Query|T}
+     */
     queryUserByCondition: function (requestBody) {
         logger.debug(`queryUserByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
@@ -43,11 +43,11 @@ module.exports = {
         return Domain.models.user.find(query);
     },
 
- /**
- *  按用户id更新指纹信息
- * @param requestBody
- * @returns {Promise.<{rs: *, total: (*|number)}>}
- */
+     /**
+     *  按用户id更新指纹信息
+     * @param requestBody
+     * @returns {Promise.<{rs: *, total: (*|number)}>}
+     */
     modifyUserById: async function (requestBody) {
         logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
         return Domain.models.user.update(
