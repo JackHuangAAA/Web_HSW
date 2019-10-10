@@ -18,6 +18,11 @@ export default {
 
     }
   },
+  computed: {
+    deviceid () {
+      return this.$store.state.deviceid
+    }
+  },
   methods: {
     vaccineadd (va, drawerid) {
       this.addvaccine(va, drawerid)
@@ -27,9 +32,17 @@ export default {
       this.delvaccine(va, drawerid)
     },
     async addvaccine (vaccine, id) {
-      // let res = await this.$api.post('/drawer/modifyDrawerById', { id, vaccine })
-      this.checkVaccineOfDrawer(vaccine)
-      this.$store.dispatch('updateDrawe')
+      if (vaccine !== undefined) {
+        vaccine.device = this.deviceid
+        let checked = await this.checkVaccineOfDrawer(vaccine)
+        if (checked) {
+          let res = await this.$api.post('/drawer/modifyDrawerById', { id, vaccine })
+          this.$store.dispatch('updateDrawe')
+        }
+        else {
+          this.$Message.error('请勿重复添加')
+        }
+      }
     },
     async delvaccine (vaccine, id) {
       let res = await this.$api.post('/drawer/modifyDrawerByIdDec', { id, vaccineId: vaccine._id })
@@ -38,9 +51,12 @@ export default {
     async checkVaccineOfDrawer (vaccine) {
       let drawer = this.$store.state.drawer
       let deviceid = this.$store.state.deviceid
-      console.log(deviceid)
       let res = await this.$api.get('/vaccine/queryVaccine', { device: deviceid })
-      console.log(res)
+      let vaccines = res.data.rs
+      let checked = vaccines.every(el => {
+        return el.name != vaccine.name
+      })
+      return checked
     }
   }
 }
