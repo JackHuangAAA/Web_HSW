@@ -80,10 +80,11 @@ export default {
         let data = res.data;
         await this.saveUser(form.code);
         await this.saveUserInfo(data);
-        await this.$api.post("/user/modifyUserByCode", {
+        let user = await this.$api.post("/user/modifyUserByCode", {
           code: data.code,
           name: data.name
         });
+        console.log(user)
         this.$router.push({ name: "home" });
       }
     }
