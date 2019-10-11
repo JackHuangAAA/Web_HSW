@@ -8,6 +8,7 @@ const logger = Libs.logger.getLogger('user')
 const crypto = require('crypto')
 
 module.exports = {
+
   /**
    * 按用户code更新用户信息，不存在时插入，存在时修改用户名
    * @param requestBody

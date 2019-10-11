@@ -11,6 +11,8 @@ const logger = Libs.logger.getLogger('temperature');
  * @apiVersion 1.0.0
  * @apiDescription 查询温度信息
  * @apiParam {String} [deviceId] 设备id
+ * @apiParam {String} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间
  * @apiSuccess {JSON}  Object  temperature model 数组
@@ -29,9 +31,9 @@ router.get('/queryTemperatures',
  * @apiParam {JSON}  Object  temperature model
  * @apiSuccess {JSON}  Object  temperature model
  */
-router.post('/saveTemperature',
+router.post('/saveTemperatures',
     Libs.router( async (ctx, next) => {
-        return await Domain.services.temperature.saveTemperature(ctx.request.body);
+        return await Domain.services.temperature.saveTemperatures(ctx.request.body);
     })
 );
 

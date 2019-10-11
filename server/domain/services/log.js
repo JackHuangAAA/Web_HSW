@@ -29,6 +29,16 @@ module.exports = {
         return { rs: result, total: result.length }
     },
 
+    /**
+     * 保存日志信息
+     * @param requestBody
+     * @returns
+     */
+    saveLog: async function(requestBody){
+        logger.debug(`saveLog param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.log.create(requestBody);
+    },
+
 
 
 };

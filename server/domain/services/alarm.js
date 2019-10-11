@@ -7,10 +7,10 @@ const moment = require('moment');
 module.exports = {
 
     /**
-     * 
-     * 
-     * @param {any} requestBody 
-     * @returns 
+     *
+     *
+     * @param {any} requestBody
+     * @returns
      */
     queryAlarmByByCondition: async function (requestBody) {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
@@ -32,11 +32,11 @@ module.exports = {
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
         logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
+        return { rs: result, total: result.length };
     },
 
 
-     /**
+    /**
      * 保存报警信息
      * @param requestBody
      * @returns {Promise.<requestBody>}
