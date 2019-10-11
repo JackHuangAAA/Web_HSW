@@ -1,0 +1,64 @@
+.menu-shade {
+  z-index: 10;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+.layout {
+  width: 100%;
+  height: 100%;
+  background: @gray;
+  position: relative;
+  overflow-x: hidden;
+  color: @black;
+  min-width: @minhtmlwidth;
+  min-height: @minhtmlheight;
+}
+.header {
+  width: 100%;
+  height: 60px;
+  background: rgba(255, 255, 255, 1);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.main {
+  top: 60px;
+  position: absolute;
+  width: ~'calc(100% - 0px)';
+  height: ~'calc(100% - 118px)';
+  margin: 20px 0px 0px 0px;
+}
+.menu {
+  z-index: 100;
+  transition: height 0.5s;
+  position: absolute;
+  width: 180px;
+  z-index: 200;
+}
+.menufull {
+  width: 100%;
+  height: 100%;
+  background-color: @blue;
+}
+.routerlink {
+  margin-left: 30px+180px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: @black;
+}
+.title p {
+  margin: auto;
+  font-size: 18px;
+  font-weight: bold;
+  color: @black;
+}
+.position {
+  margin: auto;
+  color: @blue;
+}
+.userinfo {
+  margin: auto 26px auto 0px;
+}
