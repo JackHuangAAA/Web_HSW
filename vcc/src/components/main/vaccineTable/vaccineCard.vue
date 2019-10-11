@@ -113,7 +113,7 @@ export default {
     },
     type: {
       type: String,
-      default: "Router"
+      default: "base"
     },
     vacclists: {
       //疫苗下拉列表
@@ -137,7 +137,7 @@ export default {
       vCardModal: false,
       input: {},
       model1: "",
-      handle: ["Router", "edit", "add", "check"],
+      handle: ["base", "edit", "add", "check"],
       count: 0,
       max: 2 //最大显示数量，vcc为2
     };
@@ -166,8 +166,8 @@ export default {
       length = Math.min(length, this.max);
       return 24 / length;
     },
-    routerto() {
-      return this.type === "Router";
+    baseto() {
+      return this.type === "base";
     },
     additem() {
       return this.type === "add";
@@ -214,8 +214,8 @@ export default {
       this.$emit("handleSubmit", this.input, this.id, vcs);
       this.vCardModal = false;
     },
-    Router() {
-      console.log("router");
+    base() {
+      console.log("base");
     },
     edit() {},
     add() {

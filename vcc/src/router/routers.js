@@ -28,7 +28,7 @@ const routers = [
         component: () => import('@/views/vaccine/inventory/inventorys.vue')
       },
       {
-        path: 'Details',
+        path: 'Details/:vaid',
         name: 'inventoryDetails',
         component: () =>
           import('@/views/vaccine/inventory/inventoryDetails.vue')

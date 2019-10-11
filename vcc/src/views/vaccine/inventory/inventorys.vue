@@ -4,7 +4,7 @@
       <p>提示：点击疫苗所在抽屉，查看库存详情</p>
     </div>
     <div class="inventorys-main">
-      <vaccine-table :type="'Router'">
+      <vaccine-table>
       </vaccine-table>
     </div>
   </div>

@@ -45,7 +45,7 @@
       </Row>
     </div>
     <div class="vTableButton"
-         v-if="type!='edit'&&type!='Router'">
+         v-if="type!='edit'&&type!='base'">
       <Button type="primary"
               @click="clickButton()">确定</Button>
     </div>
@@ -64,7 +64,7 @@ export default {
   props: {
     type: {
       type: String,
-      default: "Router"
+      default: "base"
     }
   },
   data() {
