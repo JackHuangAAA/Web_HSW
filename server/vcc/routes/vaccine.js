@@ -60,7 +60,6 @@ router.get('/queryVaccineStorageNum',
         })
       // 查询某设备下所有抽屉信息
         let drawerData = await Domain.services.drawer.queryDrawerByVaccineArr({ device: result.device.device });
-        console.log(drawerData, 'drawerData====================')
         let _drawerData = drawerData.rs.map(ele => {
              delete ele._id;
             ele.type = ctx.request.query.type
@@ -68,7 +67,6 @@ router.get('/queryVaccineStorageNum',
             // ele.user = "5d89b7af3b11e1a1733ef870"
             return ele;
         })
-        console.log(_drawerData, '_drawerData==================')
         // 出入库记录
         await Domain.services.inout.insertManyInout(_drawerData);
         // 汇总出库

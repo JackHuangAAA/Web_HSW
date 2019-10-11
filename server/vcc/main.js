@@ -47,7 +47,7 @@ if (cluster.isMaster) {
     const app = new Koa();
     const koaBody = require('koa-body');
     const router = require('./router');
-    // const homeData = require('./homeData');
+    const homeData = require('./homeData');
     const log4js = require('log4js');
     const filter = require('./filter');
     const koaLogger = require('koa-logger');
