@@ -1,6 +1,6 @@
 <template>
   <div class="fingerprint card">
-    <showTable></showTable>
+    <showTable ></showTable>
   </div>
 </template>
 

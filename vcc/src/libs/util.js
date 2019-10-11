@@ -39,12 +39,13 @@ export const dbDateFmt = datetime => {
 };
 
 export const SetCache = (key, value) => {
+  if (typeof value ==='object') value = JSON.stringify(value)
   sessionStorage.setItem(key, value);
   return value;
 };
 export const GetCache = key => {
   let value = sessionStorage.getItem(key);
-  if (value) return value;
+  if (value) return JSON.parse(value);
   else return false;
 };
 export const CleanCache = key => {
@@ -52,10 +53,14 @@ export const CleanCache = key => {
   return true;
 };
 export const SaveStorage = (key, value) => {
+  console.log('Save----->LS', key, value);
+  if (typeof value ==='object') value = JSON.stringify(value)
   localStorage.setItem(key, value);
+  return value;
 };
 export const GetStorage = key => {
   const value = localStorage.getItem(key);
+  console.log('Get----->LS', key, value);
   if (value) return value;
   else return false;
 };

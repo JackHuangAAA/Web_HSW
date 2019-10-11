@@ -11,7 +11,7 @@ const store = {
     user: null,
     device: null, //当前设备
     deviceid: null,
-    username: '',
+    userinfo: null,
     position: '2号接种台',
     routerTitle: '主页',
     location: '西湖区',
@@ -35,8 +35,8 @@ const store = {
     routerTitle: state => {
       return state.routerTitle;
     },
-    username: state => {
-      return state.username;
+    userinfo: state => {
+      return state.userinfo;
     },
     position: state => {
       return state.position;
@@ -53,8 +53,8 @@ const store = {
       state.deviceid = action._id;
       state.device = action;
     },
-    ['SAVE_USER_INFO']: (state, userinfo) => {
-      state.username = userinfo.name;
+    SaveUserInfo(state, userinfo) {
+      state.userinfo = userinfo;
     },
     ChangeRoute(state, title) {
       state.routerTitle = title;
@@ -75,10 +75,21 @@ const store = {
       commit('SAVE_DEVICE', device);
     },
     saveUserInfo({ commit }, userinfo) {
-      commit('SAVE_USER_INFO', userinfo);
+      Storages.SaveStorage('userinfo',userinfo)
+      commit('SaveUserInfo', userinfo);
     },
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle);
+    },
+    async getUserInfo({ state,commit, getters }) {
+      if (state.userinfo === null) {
+        let userinfo = Storages.GetStorage('userinfo');
+        userinfo = JSON.parse(userinfo)
+        commit('SaveUserInfo',userinfo)
+        return userinfo;
+      } else {
+        return getters.userinfo;
+      }
     },
     async getDrawer({ state, dispatch }) {
       if (state.drawer === null) {

@@ -18,31 +18,27 @@
 </template>
 
 <script>
-import fingerprint from './fingerprint'
-import VaccineSetting from './VaccineSetting'
-import basicSetting from './basicSetting'
+import fingerprint from "./fingerprint";
+import VaccineSetting from "./VaccineSetting";
+import basicSetting from "./basicSetting";
 export default {
-  name: 'setting',
+  name: "setting",
   components: {
     basicSetting,
     VaccineSetting,
     fingerprint
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  mounted () {
-    this.init()
+  mounted() {
+    this.init();
   },
   methods: {
-    async init () {
-
-    },
-    getsetting () { },
+    async init() {},
+    getsetting() {}
   }
-}
+};
 </script>
 
 <style lang="less">

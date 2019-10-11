@@ -79,12 +79,11 @@ export default {
       if (check) {
         let data = res.data;
         await this.saveUser(form.code);
-        await this.saveUserInfo(data);
         let user = await this.$api.post("/user/modifyUserByCode", {
           code: data.code,
           name: data.name
         });
-        console.log(user);
+        await this.saveUserInfo(user.data);
         this.$router.push({ name: "home" });
       }
     }

@@ -5,7 +5,8 @@
         <Col span="8"
              v-for="card in homecard">
         <item-card :title="card.title"
-                   :icon="card.icon" :unit="card.unit">{{card.value}}</item-card>
+                   :icon="card.icon"
+                   :unit="card.unit">{{card.value}}</item-card>
         </Col>
       </Row>
       <Row class="lackinventory card">
@@ -72,6 +73,9 @@ export default {
   computed: {
     deviceid() {
       return this.$store.state.deviceid;
+    },
+    device() {
+      return this.$store.getters.device;
     }
   },
   methods: {
@@ -110,6 +114,7 @@ export default {
     },
     queryDrawerEmpty() {
       console.log(this.deviceid);
+      console.log(this.device);
       this.getTotal("drawer", "/Drawer/queryDrawerEmpty", {
         device: this.deviceid
       });

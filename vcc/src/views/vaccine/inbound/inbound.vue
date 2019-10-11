@@ -29,12 +29,23 @@ export default {
     };
   },
   methods: {
-    async submit(total, id, vaccines) {
+    async submit(total, drawerid, vaccines) {
+      let vaccinesid = [];
+      let totals = [];
       let vaccine = vaccines.map(el => ({
         ...el,
         total: total[el.name]
       }));
-      let res = this.$api.post("/drawer/modifyDrawerById", { id, vaccine });
+      console.log(vaccine);
+      for (let el of vaccine) {
+        vaccinesid.push(el._id);
+        totals.push(el.total);
+      }
+      console.log(vaccinesid, totals);
+      let res = this.$api.post("/vaccine/modifyVaccine", {
+        id: vaccinesid,
+        vaccine: totals
+      });
       this.$store.dispatch("updateDrawe");
     },
     inbound() {

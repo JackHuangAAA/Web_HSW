@@ -17,7 +17,10 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["username"])
+    username(){
+      if(this.$store.getters.userinfo != null) return this.$store.getters.userinfo.username
+      return ''
+    }
   },
   created() {},
   methods: {}
