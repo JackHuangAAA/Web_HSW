@@ -146,5 +146,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/style/main/home.less";
+@import "./home.less";
 </style>

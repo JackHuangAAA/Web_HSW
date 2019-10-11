@@ -31,5 +31,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "~@/style/main/inoculate.less";
+@import "./inoculate.less";
 </style>
