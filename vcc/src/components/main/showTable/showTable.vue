@@ -81,5 +81,5 @@ export default {
 </script>
 
 <style lang="less">
-@import "./showTable.vue";
+@import "./showTable.less";
 </style>

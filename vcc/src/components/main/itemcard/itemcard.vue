@@ -1,7 +1,7 @@
 <template>
   <div class="item-card card">
     <div class="item-number">
-      <slot></slot>
+      <slot></slot><div class="item-card-unit" v-if="unit!==''">/{{unit}}</div>
     </div>
     <div class="item-title">{{title}}</div>
     <div class="item-icon-frame">
@@ -22,6 +22,10 @@ export default {
     icon: {
       type: String,
       default: ""
+    },
+    unit:{
+      type:String,
+      default:""
     }
   },
   data() {

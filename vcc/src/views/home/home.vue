@@ -5,7 +5,7 @@
         <Col span="8"
              v-for="card in homecard">
         <item-card :title="card.title"
-                   :icon="card.icon">{{card.value}}</item-card>
+                   :icon="card.icon" :unit="card.unit">{{card.value}}</item-card>
         </Col>
       </Row>
       <Row class="lackinventory card">
@@ -46,8 +46,8 @@ const changeItem = (key, value, obj) => {
     return el;
   });
 };
-import alarminfo from "./alarminfo";
 import homecard from "./data/homecard";
+import alarminfo from "./alarminfo";
 import thermometer from "./thermometer";
 import itemCard from "_c/main/itemcard";
 import lackinventory from "./lackinventory";
