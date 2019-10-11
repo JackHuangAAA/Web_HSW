@@ -218,8 +218,7 @@ export default {
       this.vCardModal = false;
     },
     check() {
-      console.log("check");
-      this.Selection = !this.Selection;
+      // this.Selection = !this.Selection;
     }
   }
 };

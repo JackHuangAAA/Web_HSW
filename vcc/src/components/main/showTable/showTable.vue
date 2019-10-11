@@ -12,7 +12,8 @@ export default {
   name: "showTable",
   data() {
     return {
-      column,testdata
+      column,
+      testdata
     };
   }
 };
