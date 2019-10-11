@@ -1,11 +1,12 @@
-.ivu-table {
-  border-color: white !important;
+.showTable .ivu-table{
+  font-size: 16px;
+  font-weight:bold;
 }
-.ivu-table td,
-.ivu-table th {
+.showTable .ivu-table td,
+.showTable .ivu-table th {
   border-bottom: 7px solid white !important;
 }
-.ivu-table .table-row {
+.showTable .ivu-table .table-row {
   border: 5px solid white;
   border-collapse: separate;
   border-spacing: 0px 10px;
@@ -13,4 +14,16 @@
     background-color: rgba(236, 240, 248, 1);
     color: #3e4955;
   }
+}
+.showTable .ivu-table-wrapper{
+  border-color: white !important;
+}
+
+.showTable .ivu-table {
+  th{
+    background-color: white;
+  }
+}
+.ivu-table:after,.ivu-table:before {
+  background-color:white;
 }

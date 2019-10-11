@@ -8,8 +8,14 @@
          class="vCard"
          :class="{'cur-po':NotEdit}"
          align="middle">
+      <!-- 无数据显示 -->
+      <Col v-if="isNull && type != 'edit'"
+           span="24">
+      <p class="vCard-name">暂无存放疫苗</p>
+      </Col>
+      <!-- 无数据显示 -->
       <Col :span="span"
-           v-if="type != 'edit' && value"
+           v-else-if="type != 'edit'"
            v-for="vc in value">
       <div>
         <Row>
@@ -23,7 +29,7 @@
       </div>
       </Col>
       <!-- edit模块 -->
-      <Col v-if="type == 'edit' && value"
+      <Col v-else-if="type=='edit'"
            :span="wspan"
            v-for="vc in value">
       <div class="vCard-edit">
@@ -137,11 +143,16 @@ export default {
     };
   },
   computed: {
+    isNull() {
+      let check = false;
+      if (this.values === null || this.values === undefined) check = true;
+      return check;
+    },
     NotEdit() {
       return this.type != "edit";
     },
     value() {
-      if (this.values) return this.values;
+      if (!this.isNull) return this.values;
       else return [];
     },
     wspan() {
