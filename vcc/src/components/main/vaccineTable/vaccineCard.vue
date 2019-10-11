@@ -215,7 +215,7 @@ export default {
       this.vCardModal = false;
     },
     base() {
-      console.log("base");
+      this.$emit("click", this.id, this.value);
     },
     edit() {},
     add() {

@@ -40,6 +40,7 @@
                      :vacclists='vacclists'
                      :values='item.vaccine'
                      :id='item._id'
+                     @click='vCardClick'
                      :max='2'></vaccineCard>
         </Col>
       </Row>
@@ -131,6 +132,9 @@ export default {
     },
     clickButton() {
       this.$emit("click-button");
+    },
+    vCardClick(drawerid, vaccines) {
+      this.$emit("click", drawerid, vaccines);
     }
   }
 };

@@ -4,7 +4,7 @@
       <p>提示：点击疫苗所在抽屉，查看库存详情</p>
     </div>
     <div class="inventorys-main">
-      <vaccine-table>
+      <vaccine-table @click="vClick">
       </vaccine-table>
     </div>
   </div>
@@ -19,6 +19,12 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    vClick(drawerid, vaccines) {
+      console.log(vaccines);
+      let ids = vaccines.map(el => el._id);
+    }
   }
 };
 </script>

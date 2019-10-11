@@ -48,7 +48,10 @@ export default {
     ...mapGetters(["device"])
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.$device.subscribe('SCANNER_RESULT',this.SCANNER())
+    this.$device.subscribe('SOCKET_DATA',this.SOCKET())
+  },
   methods: {
     ...mapActions(["saveUser", "saveUserInfo"]),
     login(type) {
@@ -64,6 +67,12 @@ export default {
         default:
           break;
       }
+    },
+    SOCKET(cb){
+      console.log(cb)
+    },
+    SCANNER(cb){
+      console.log(cb)
     },
     test() {
       // let deviceid = this.$device.getDeviceCode();
