@@ -46,7 +46,6 @@ const changeItem = (key, value, obj) => {
     return el;
   });
 };
-import testli from "./data/testlackitem.js";
 import alarminfo from "./alarminfo";
 import homecard from "./data/homecard";
 import thermometer from "./thermometer";

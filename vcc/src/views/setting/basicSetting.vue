@@ -100,7 +100,6 @@
 </template>
 
 <script>
-import cities from "./cities.js";
 export default {
   name: "basicSetting",
   data() {
