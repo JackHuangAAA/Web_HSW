@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import moment from "moment";
-moment.lang("zh-cn");
+
 export default {
   name: "datetime",
   data() {

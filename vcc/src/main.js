@@ -14,9 +14,13 @@ import 'iview/dist/styles/iview.css';
 import config from '@/config';
 import device from '@/api/device.js';
 import { Storages } from '@/libs/util.js';
+import moment from "moment";
 global._ = lodash;
 global._static = enums;
 global.storage = Storages;
+
+moment.lang("zh-cn");
+global.moment = moment
 
 Vue.use(iView);
 
