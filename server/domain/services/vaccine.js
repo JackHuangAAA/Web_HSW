@@ -71,7 +71,7 @@ module.exports = {
     clearVaacineTotal: async function (requestBody) {
         logger.debug(`clearVaacineTotal param: ${JSON.stringify(requestBody)}`);
         await Domain.models.vaccine.update(
-            {},
+            { device:requestBody.device },
             {
                 $set: { total: 0,  surplus: 0 }
             },

@@ -59,13 +59,13 @@ router.get('/queryVaccineStorageNum',
             return item;
         })
       // 查询某设备下所有抽屉信息
-        let drawerData = await Domain.services.drawer.queryDrawerByCondition({ device: result.device.device });
+        let drawerData = await Domain.services.drawer.queryDrawerByVaccineArr({ device: result.device.device });
         console.log(drawerData, 'drawerData====================')
         let _drawerData = drawerData.rs.map(ele => {
              delete ele._id;
             ele.type = ctx.request.query.type
-            // ele.user =  ctx.currentUser._id
-            ele.user = "5d89b7af3b11e1a1733ef870"
+            ele.user =  ctx.currentUser._id
+            // ele.user = "5d89b7af3b11e1a1733ef870"
             return ele;
         })
         console.log(_drawerData, '_drawerData==================')
@@ -75,12 +75,25 @@ router.get('/queryVaccineStorageNum',
         if (ctx.request.query.type == 2) {
             await Domain.services.summary.saveSummary(_result);
             // 清零疫苗数量
-            await Domain.services.vaccine.clearVaacineTotal();
         }
         return result;
     })
 );
 
+
+/**
+ * @api {POST} /vaccine/modifyVaccine  出库时清零疫苗数量
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 出库时清零疫苗数量
+ * @apiParam {String} device 设备id
+ * @apiSuccess {OBject}  json  操作返回数据
+ */
+router.post('/clearVaacineTotal',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+    })
+);
 
 /**
  * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗数量信息

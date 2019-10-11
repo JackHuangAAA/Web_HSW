@@ -102,6 +102,7 @@ module.exports = {
     queryDrawerByVaccineArr: async function (requestBody) {
         logger.debug(`queryDrawerByVaccineArr param: ${JSON.stringify(requestBody)}`);
         return await Domain.models.drawer.aggregate([
+            {$match: {device: requestBody.device}},
             { "$unwind": "$vaccine" },
             {
                 $lookup:
