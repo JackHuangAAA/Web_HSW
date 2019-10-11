@@ -27,7 +27,7 @@ module.exports = {
             query.push({ "unitCode": requestBody.unitCode });
         }
 
-        let result =  await Domain.models.recipe.aggregate([{"$match": {"$and": query}},
+        let result =  await Domain.models.vaccination.aggregate([{"$match": {"$and": query}},
             {"$group":{_id: '$code',  num_coustomer: { $sum: 1 }}},
         ]);
 

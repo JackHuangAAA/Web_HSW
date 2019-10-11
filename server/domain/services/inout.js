@@ -51,6 +51,16 @@ module.exports = {
     saveInout: async function(requestBody){
         logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
+    },
+
+    /**
+     * 批量保存出入库
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    insertManyInout: async function(requestBody){
+        logger.debug(`insertManyInout param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.inout.insertMany(requestBody);
     }
 
 };

@@ -68,7 +68,7 @@ const deviceFilter = async ctx => {
             device: device._id,
             x: x, //列
             y: y, //行
-            vaccine: null
+            vaccine: []
           }
           darwers.push(temp)
         }

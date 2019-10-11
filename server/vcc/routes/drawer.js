@@ -64,7 +64,20 @@ router.post('/modifyDrawerByIdDec',
     })
 );
 
-
+/**
+ * @api {GET} /drawer/queryDrawerByVaccineArr  将每条疫苗抽屉信息平铺
+ * @apiGroup  Drawer
+ * @apiVersion 1.0.0
+ * @apiDescription 根据抽屉id更新抽屉信息 （区域划分）
+ * @apiParam {String} id 抽屉id
+ * @apiParam {Object} vaccineId 疫苗id
+ * @apiSuccess {Object} data 操作返回数据的
+ */
+router.post('/modifyDrawerByIdDec',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.drawer.modifyDrawerByIdDec(ctx.request.body);
+    })
+);
 
 
 module.exports = router;
