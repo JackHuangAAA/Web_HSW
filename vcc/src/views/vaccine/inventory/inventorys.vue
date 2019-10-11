@@ -22,8 +22,13 @@ export default {
   },
   methods: {
     vClick(drawerid, vaccines) {
-      console.log(vaccines);
       let ids = vaccines.map(el => el._id);
+      this.$router.push({
+        name:'inventoryDetails',
+        params:{
+          id:drawerid
+        }
+      })
     }
   }
 };

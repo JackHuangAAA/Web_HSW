@@ -2,10 +2,10 @@
   <div class="showTable">
     <Table :columns="columns"
            :data="data"
-           :row-class-name='tableclass'>
+           :row-class-name="tableclass"
+           >
       <template slot-scope="{ row, index }"
-                slot="name">
-        <span>{{ row.name }}</span>
+                slot="ac">
       </template>
     </Table>
   </div>
@@ -31,12 +31,15 @@ export default {
   data() {
     return {};
   },
+  computed: {
+  },
   mounted() {
     this.init();
   },
   methods: {
-    init() {
-      console.log(testdata);
+    init() {},
+    tableclass(row, index) {
+      return "table-row";
     }
   }
 };

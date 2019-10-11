@@ -49,7 +49,12 @@ export default {
       this.$store.dispatch("updateDrawe");
     },
     inbound() {
-      console.log("inbound");
+      this.$router.push({
+        name: "complete",
+        params: {
+          type: 1
+        }
+      });
     }
   }
 };

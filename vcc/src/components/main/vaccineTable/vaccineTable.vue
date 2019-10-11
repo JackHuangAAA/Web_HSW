@@ -45,7 +45,7 @@
         </Col>
       </Row>
     </div>
-    <div class="vTableButton"
+    <div class="TableButton"
          v-if="type!='edit'&&type!='base'">
       <Button type="primary"
               @click="clickButton()">确定</Button>

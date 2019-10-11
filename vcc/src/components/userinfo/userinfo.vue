@@ -30,7 +30,6 @@ export default {
   },
   methods: {
     init(){
-      console.log(this.username)
     }
   }
 };

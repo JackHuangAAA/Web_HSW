@@ -28,7 +28,7 @@ const routers = [
         component: () => import('@/views/vaccine/inventory/inventorys.vue')
       },
       {
-        path: 'Details/:vaid',
+        path: 'Details/:id',
         name: 'inventoryDetails',
         component: () =>
           import('@/views/vaccine/inventory/inventoryDetails.vue')
@@ -54,7 +54,7 @@ const routers = [
         component: () => import('@/views/vaccine/outbound/opendrawer.vue')
       },
       {
-        path: 'complete',
+        path: 'complete/:type',
         name: 'complete',
         component: () => import('@/views/vaccine/complete/complete.vue')
       }

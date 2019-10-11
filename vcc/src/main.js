@@ -1,4 +1,4 @@
-// import './polyfill'
+import './polyfill'
 // import '@/theme/index'
 import '@/style/index';
 // import Cookies from 'js-cookie'
@@ -21,8 +21,8 @@ global.storage = Storages;
 Vue.use(iView);
 
 //导入socket.io模块
-import io from 'socket.io-client';
-global.io = io;
+// import io from 'socket.io-client';
+// global.io = io;
 
 let processmod = false;
 if (process.env.NODE_ENV !== 'production') {

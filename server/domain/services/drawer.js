@@ -51,7 +51,7 @@ module.exports = {
             query.push({ "device": requestBody.device });
         }
         if (!_.isEmpty(requestBody.id)) {
-            query.push({ "device": requestBody.id });
+            query.push({ "_id": requestBody.id });
         }
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
