@@ -17,13 +17,22 @@ export default {
     return {};
   },
   computed: {
+    userinfo(){
+      return this.$store.getters.userinfo
+    },
     username(){
-      if(this.$store.getters.userinfo != null) return this.$store.getters.userinfo.username
-      return ''
+      if(this.userinfo != null) return this.userinfo.name
+      else return ''
     }
   },
-  created() {},
-  methods: {}
+  created() {
+    this.init()
+  },
+  methods: {
+    init(){
+      console.log(this.username)
+    }
+  }
 };
 </script>
 

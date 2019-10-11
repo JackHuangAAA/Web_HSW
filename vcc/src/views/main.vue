@@ -65,8 +65,8 @@ export default {
   },
   methods: {
     test() {
-      // storage.CleanStorage("deviceid");
-      // storage.CleanStorage("devicecode");
+      storage.CleanStorage("deviceid");
+      storage.CleanStorage("devicecode");
       this.$router.push("/login");
     },
     menuItemClick(item) {
