@@ -75,17 +75,18 @@ const store = {
       commit('SAVE_DEVICE', device);
     },
     saveUserInfo({ commit }, userinfo) {
-      Storages.SaveStorage('userinfo',userinfo)
+      Storages.SetCache('userinfo',userinfo)
       commit('SaveUserInfo', userinfo);
     },
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle);
     },
-    async getUserInfo({ state,commit, getters }) {
+    async getUserInfo({ state,dispatch, getters }) {
       if (state.userinfo === null) {
-        let userinfo = Storages.GetStorage('userinfo');
+        let userinfo = Storages.GetCache('userinfo');
+        console.log(userinfo)
         userinfo = JSON.parse(userinfo)
-        commit('SaveUserInfo',userinfo)
+        dispatch('SaveUserInfo',userinfo)
         return userinfo;
       } else {
         return getters.userinfo;
