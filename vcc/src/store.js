@@ -84,9 +84,8 @@ const store = {
     async getUserInfo({ state,dispatch, getters }) {
       if (state.userinfo === null) {
         let userinfo = Storages.GetCache('userinfo');
-        console.log(userinfo)
         userinfo = JSON.parse(userinfo)
-        dispatch('SaveUserInfo',userinfo)
+        dispatch('saveUserInfo',userinfo)
         return userinfo;
       } else {
         return getters.userinfo;

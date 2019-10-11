@@ -14,7 +14,7 @@ export const SetCache = (key, value) => {
 };
 export const GetCache = key => {
   let value = sessionStorage.getItem(key);
-  if (value) return JSON.parse(value);
+  if (value) return value;
   else return false;
 };
 export const CleanCache = key => {
