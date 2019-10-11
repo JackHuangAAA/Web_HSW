@@ -84,7 +84,7 @@ export default {
           code: data.code,
           name: data.name
         });
-        console.log(user)
+        console.log(user);
         this.$router.push({ name: "home" });
       }
     }

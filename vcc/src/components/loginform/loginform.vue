@@ -86,17 +86,5 @@ export default {
 </script>
 
 <style lang="less">
-.icon {
-  margin-top: 15px;
-  margin-bottom: 17px;
-}
-.lform .ivu-input {
-  width: 372px;
-  height: 53px;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 6px 0px rgba(107, 197, 159, 0.35);
-  border-radius: 4px;
-  font-size: 18px;
-  color: rgba(79, 95, 111, 1);
-}
+@import "./loginform.less";
 </style>

@@ -20,10 +20,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.routerlinkType {
-  margin: auto;
-  font-size: 18px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
+@import "./routerlink.less";
 </style>

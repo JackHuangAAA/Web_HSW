@@ -91,34 +91,4 @@ export default {
 
 <style lang="less">
 @import "./thermometer.less";
-.header-thermometer {
-  z-index: 1;
-  margin: 18px 10px 0px 24px;
-  display: flex;
-  position: relative;
-}
-.header-thermometer-item {
-  width: 60px;
-  font-size: 48px;
-  text-align: end;
-  color: rgba(235, 235, 236, 1);
-}
-.header-right {
-  position: absolute;
-  right: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    margin-top: 2px;
-  }
-}
-.header-thermometer-icon {
-  font-size: 18px;
-  font-family: Microsoft YaHei;
-  font-weight: 400;
-  color: rgba(235, 235, 236, 1);
-}
 </style>

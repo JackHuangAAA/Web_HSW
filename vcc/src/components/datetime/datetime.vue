@@ -60,9 +60,5 @@ export default {
 </script>
 
 <style lang="less">
-.date {
-  font-size: 14px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
+@import "./datetime.less";
 </style>

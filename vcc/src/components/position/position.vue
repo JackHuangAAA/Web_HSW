@@ -20,10 +20,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.positionType {
-  letter-spacing: 7px;
-  font-size: 20px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
+@import "./position.less";
 </style>

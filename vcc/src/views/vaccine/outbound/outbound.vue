@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     outbound() {
-      console.log("outbound"  );
+      console.log("outbound");
     }
   }
 };
