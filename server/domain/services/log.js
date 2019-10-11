@@ -23,7 +23,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.content)) {
             query.push({ "content": new RegExp(requestBody.content) });
         }
-        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length }

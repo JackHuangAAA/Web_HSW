@@ -28,8 +28,8 @@ router.post('/saveAlarm',
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
  * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足)
- * @apiParam {String} [device] 设备
- * @apiParam {String} [device] 设备
+ * @apiParam {Number} page 当前页码
+ * @apiParam {Number} size 每页数量
  * @apiSuccess {JSON}  Object  inout model 数组
  */
 router.get('/queryAlarm',

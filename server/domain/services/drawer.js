@@ -56,7 +56,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
-        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).sort({ "x": 1, "y": 1 }).populate("vaccine");
 
         return { rs: result, total: result.length }

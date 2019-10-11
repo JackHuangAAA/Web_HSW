@@ -144,7 +144,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({"name": new RegExp(requestBody.name)});
         }
-        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.user.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,

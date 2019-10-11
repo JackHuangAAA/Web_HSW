@@ -83,18 +83,20 @@ module.exports = {
     },
 
     /**
-     * 聚合查询，各单位各设备类型不同状态的设备数量统计(所属单位编号待定)
+     * 聚合查询，各单位单天各设备类型不同状态的设备数量统计(所属单位编号待定)
      * @param requestBody
      * @returns {JSON}  Object  version model数组，不同类型的数量统计
      */
     queryDeviceByAggregate: async function(currentUser,requestBody){
+        let today = moment();
+        let dailyInfo = { "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } };
         logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
-        console.log(currentUser);
         /*
-        if(currentUser.unitCode!=undefined){
+        if(currentUser!=undefined){
+            console.log("OK");
             let $unitCode = currentUser.unitCode;
         }else{
-            let $unitCode = '0000';
+            let $unitCode = '';
         };
         */
         let $unitCode = '0002';
@@ -107,7 +109,8 @@ module.exports = {
         };
 
         let $match={
-            unitCode:$unitCode
+            unitCode:$unitCode,
+            updateDate:dailyInfo
         };
         return await Domain.models.device.aggregate([{$match:$match},{$group:$group}]);
     }

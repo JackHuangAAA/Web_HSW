@@ -8,7 +8,6 @@ module.exports = {
 
     /**
      * 查询今日报警信息
-     * 
      * @param {any} requestBody 
      * @returns 
      */
@@ -25,17 +24,17 @@ module.exports = {
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
         }
-        let result = await Domain.models.alarm.find({ "$and": query });
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        let result = await Domain.models.alarm.find(query);
 
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length }
     },
 
     /**
-     * 按条件查询报警信息（温度/库存、设备类型、单位）
-     * 
+     * 查询报警信息
      * @param {any} requestBody
-     * @returns 
+     * @returns
      */
     queryAlarm: async function (requestBody) {
         logger.debug(`queryAlarm param: ${JSON.stringify(requestBody)}`);
@@ -50,12 +49,16 @@ module.exports = {
             query.push({ "unitCode": requestBody.unitCode });
         }
 
-        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
-        let result = await Domain.models.alarm.find(query);
-        logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
-    },
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
 
+        let result = await Domain.models.alarm.paginate(query, {
+            sort: {"_id": -1},
+            page: requestBody.page,
+            limit: parseInt(requestBody.size)
+        });
+
+        return {rs: result.docs, total: result.total};
+    },
 
      /**
      * 保存报警信息

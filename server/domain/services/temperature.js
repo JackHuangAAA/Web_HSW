@@ -14,8 +14,8 @@ module.exports = {
     queryTemperatures: async function(requestBody){
         logger.debug(`queryTemperatures param: ${JSON.stringify(requestBody)}`);
         let query = [];
-        if (!_.isEmpty(requestBody.deviceId)) {
-            query.push({"deviceId": requestBody.deviceId});
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({"device": requestBody.device});
         }
         if (!_.isEmpty(requestBody.deviceType)) {
             query.push({"deviceType": requestBody.deviceType});
@@ -33,7 +33,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.temperature.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,
