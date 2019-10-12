@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const paginate = require('mongoose-paginate');
 
 /**
- * 日汇总信息（单日入库总数、使用数量、剩余数量）
+ * 日汇总信息（单日出库总数、使用数量、剩余数量）
  */
 const summarySchema = mongoose.Schema({
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备

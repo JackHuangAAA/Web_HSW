@@ -14,9 +14,12 @@ module.exports = {
      */
     queryAlarmByByCondition: async function (requestBody) {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
-        let today = moment();
+        // let today = moment();
+        let today = requestBody.date;
         let query = [];
-        query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        if (!_.isEmpty(requestBody.date)) {
+            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        }
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }

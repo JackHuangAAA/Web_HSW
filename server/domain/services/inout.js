@@ -54,12 +54,12 @@ module.exports = {
     },
 
     /**
-     * 批量保存出入库信息
+     * 批量保存出入库
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveInoutMany: async function (requestBody) {
-        logger.debug(`saveInoutMany param: ${JSON.stringify(requestBody)}`);
+    insertManyInout: async function(requestBody){
+        logger.debug(`insertManyInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.insertMany(requestBody);
     },
 
@@ -93,6 +93,6 @@ module.exports = {
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
 
         return await Domain.models.inout.find(query);
-    },
+    }
 
 };

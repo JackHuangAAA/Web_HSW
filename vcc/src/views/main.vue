@@ -53,8 +53,7 @@ export default {
   data () {
     return {
       menulist: [],
-      menuOpen: false,
-      socket: '',
+      menuOpen: false
     }
   },
   created () {
