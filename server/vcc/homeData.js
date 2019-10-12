@@ -13,7 +13,6 @@ global.Config = require(`${process.cwd()}/config`);
 let map = {
 
 } 
-   logger.info('==================================== ')
 let push = {
     init(io) {
         io.on('connection', (socket) => {
