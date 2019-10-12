@@ -15,43 +15,28 @@
 </template>
 
 <script>
-import lackcard from "_c/main/lackcard"
+import lackcard from "_c/main/lackcard";
 export default {
-  name: 'lackInventory',
+  name: "lackInventory",
   components: {
     lackcard
   },
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  mounted () {
-  },
-  methods: {
-  },
-}
+  mounted() {},
+  methods: {}
+};
 </script>
 
 <style lang="less">
-@import "~@/style/color.less";
-.lack-inventory {
-}
-.lack-inventory-title {
-  margin: 25px 21px;
-  font-size: 16px;
-  font-weight: bold;
-  color: @black;
-}
-.lack-inventory-main {
-  padding: 1px 17px;
-}
+@import "./lackinventory.less";
 </style>

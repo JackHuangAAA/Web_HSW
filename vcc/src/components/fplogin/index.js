@@ -1,2 +1,2 @@
-import fplogin from './fplogin.vue'
-export default fplogin
+import fplogin from './fplogin.vue';
+export default fplogin;

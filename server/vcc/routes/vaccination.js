@@ -36,17 +36,17 @@ router.post('/saveVaccination',
 );
 
 /**
- * @api {GET} /vaccination/queryVaccinationDailyInfo  查询当天该设备接种人详细信息
+ * @api {GET} /vaccination/queryVaccinationByCondition  按条件查询接种
  * @apiGroup vaccination
  * @apiVersion 1.0.0
- * @apiDescription 查询当天该设备接种人详细信息
- * @apiParam {String} deviceid 设备ID
- * @apiParam {Number} today 是否查询当天，是为1，不是不带参数
+ * @apiDescription 按条件查询接种记录
+ * @apiParam {Number} [deviceID] 设备ID   ！！！vaccination_models未找到该字段
+ * @apiParam {String} [code] 接种序号
  * @apiSuccess {JSON}  Object  version model数组
  */
-router.get('/queryVaccinationDailyInfo',
+router.get('/queryVaccinationByCondition',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccination.queryVaccinationDailyInfo(ctx.request.query);
+        return await Domain.services.vaccination.queryVaccinationByCondition(ctx.request.query);
     })
 );
 

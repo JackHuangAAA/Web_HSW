@@ -10,39 +10,31 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  name: 'userinfo',
-  data () {
-    return {
-
-    }
+  name: "userinfo",
+  data() {
+    return {};
   },
   computed: {
-    ...mapGetters(['username'])
+    userinfo(){
+      return this.$store.getters.userinfo
+    },
+    username(){
+      if(this.userinfo != null) return this.userinfo.name
+      else return ''
+    }
   },
-  created () {
+  created() {
+    this.init()
   },
   methods: {
-
-  },
-}
+    init(){
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>
-.userinfoType {
-  display: flex;
-  flex-wrap: nowrap;
-}
-.username {
-  margin: auto auto auto 11px;
-  font-size: 16px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
-.headportait {
-  margin: auto;
-  width: 32px;
-  height: 32px;
-}
+@import "./userinfo.less";
 </style>

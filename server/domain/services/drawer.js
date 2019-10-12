@@ -12,8 +12,8 @@ module.exports = {
      * @returns
      */
     queryDrawerEmpty: async function (requestBody) {
-        logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
-        let query = [{ "vaccine": [] }];
+         logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
+        let query = [];
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
@@ -22,6 +22,9 @@ module.exports = {
         }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).populate("vaccine");
+        result = result.filter(item => {
+            return item.vaccine == null
+        })
         return { rs: result, total: result.length };
     },
 
@@ -67,14 +70,18 @@ module.exports = {
      */
     modifyDrawerById: async function (requestBody) {
         logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
         let vaccineData = await Domain.models.vaccine.create(requestBody.vaccine);
+        let vaccineArr = drawerData.vaccine || [];
+        let vaccineId = vaccineData._id
+        vaccineArr.push(vaccineId)
         await Domain.models.drawer.update(
             { _id: requestBody.id },
             {
-                $push: { vaccine: vaccineData._id }
+                $set: { vaccine: vaccineArr }
             }
         );
-        return { vaccineData: vaccineData }
+        return {vaccineData: vaccineData}
     },
     /**
      *
@@ -84,12 +91,18 @@ module.exports = {
      */
     modifyDrawerByIdDec: async function (requestBody) {
         logger.debug(`modifyDrawerByIdDec param: ${JSON.stringify(requestBody)}`);
-        let vaccineData = await Domain.models.vaccine.findOneAndRemove({ _id: requestBody.vaccineId });
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
+        let vaccineData = await Domain.models.vaccine.findOneAndRemove({_id: requestBody.vaccineId});
+        let vaccineArr = drawerData.vaccine || [];
+        let vaccineId = vaccineData._id
+        vaccineArr = vaccineArr.filter(item=>{
+            return item != vaccineId
+        })
         return Domain.models.drawer.update(
             { _id: requestBody.id },
             {
-                $pull: { vaccine: vaccineData._id }
-            },
+                $set: { vaccine: vaccineArr }
+            }
         );
     },
 
@@ -119,4 +132,5 @@ module.exports = {
             { $project: { inventory_docs: 0 } }
         ])
     }
+
 };

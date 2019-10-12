@@ -4,13 +4,11 @@
 
 <script>
 export default {
-  name: 'opendrawer',
-  data () {
-    return {
-
-    }
+  name: "opendrawer",
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">

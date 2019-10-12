@@ -17,12 +17,8 @@
 </style>
 <script>
 export default {
-  mounted () {
-  },
-  beforeDestroy () {
-
-  },
-  methods: {
-  }
+  mounted() {},
+  beforeDestroy() {},
+  methods: {}
 };
 </script>

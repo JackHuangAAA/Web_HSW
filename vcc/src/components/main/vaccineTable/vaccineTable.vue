@@ -36,37 +36,45 @@
         <vaccineCard :type='type'
                      @vaccine-add='vaccineadd'
                      @vaccine-del='vaccinedel'
+                     @handleSubmit='modelSubmit'
                      :vacclists='vacclists'
                      :values='item.vaccine'
                      :id='item._id'
+                     @click='vCardClick'
                      :max='2'></vaccineCard>
         </Col>
       </Row>
+    </div>
+    <div class="TableButton"
+         v-if="type!='edit'&&type!='base'">
+      <Button type="primary"
+              @click="clickButton()">确定</Button>
     </div>
   </div>
 </template>
 
 <script>
-import vaccineCard from './vaccineCard.vue'
-import t2b from '_a/t-b.png'
-import l2r from '_a/l-r.png'
+import vaccineCard from "./vaccineCard.vue";
+import t2b from "_a/t-b.png";
+import l2r from "_a/l-r.png";
 export default {
-  name: 'vaccineTable',
+  name: "vaccineTable",
   components: {
     vaccineCard
   },
   props: {
     type: {
       type: String,
-      default: 'Router'
+      default: "base"
     }
   },
-  data () {
+  data() {
     return {
-      t2b, l2r,
+      t2b,
+      l2r,
       vacclists: null,
       drawers: null,
-      max: 2,//指定疫苗最大数
+      max: 2, //指定疫苗最大数
       DrawerTree: {
         //处理数据为树状结构方便遍历抽屉格式
         //   yNumb: {
@@ -76,52 +84,60 @@ export default {
         //   }
         // }
       }
-    }
+    };
   },
-  computed: {
-  },
+  computed: {},
   watch: {
-    '$store.state.drawer': function (value) {
-      this.drawerinit(value.rs)
+    "$store.state.drawer": function(value) {
+      this.drawerinit(value.rs);
     }
   },
-  mounted () {
-    this.init()
+  mounted() {
+    this.init();
   },
   methods: {
-    vaccineadd (code, drawerid) {
+    vaccineadd(code, drawerid) {
       let va = this.vacclists.filter(el => {
-        return el.code === code
-      })
-      this.$emit('vaccine-add', va[0], drawerid)
+        return el.code === code;
+      });
+      this.$emit("vaccine-add", va[0], drawerid);
     },
-    vaccinedel (va, drawerid) {
-      this.$emit('vaccine-del', va, drawerid)
+    vaccinedel(va, drawerid) {
+      this.$emit("vaccine-del", va, drawerid);
     },
-    init () {
-      this.getVacc()
-      this.getDrawer()
+    init() {
+      this.getVacc();
+      this.getDrawer();
     },
-    async getVacc () {
-      this.vacclists = await this.$store.dispatch('getVaccineKinds')
+    async getVacc() {
+      this.vacclists = await this.$store.dispatch("getVaccineKinds");
     },
-    async getDrawer () {
-      this.drawers = await this.$store.dispatch('getDrawer')
-      this.drawerinit(this.drawers.rs)
+    async getDrawer() {
+      this.drawers = await this.$store.dispatch("getDrawer");
+      this.drawerinit(this.drawers.rs);
     },
-    drawerinit (values) {
-      let tree = {}
+    drawerinit(values) {
+      let tree = {};
       for (let el of values) {
-        if (tree[el.y] === undefined) tree[el.y] = {}
-        if (tree[el.y][el.x] === undefined) tree[el.y][el.x] = []
-        tree[el.y][el.x] = el
+        if (tree[el.y] === undefined) tree[el.y] = {};
+        if (tree[el.y][el.x] === undefined) tree[el.y][el.x] = [];
+        tree[el.y][el.x] = el;
       }
       this.$nextTick(() => {
-        this.DrawerTree = tree
-      })
+        this.DrawerTree = tree;
+      });
+    },
+    modelSubmit(vaccinetotal, id, vaccines) {
+      this.$emit("submit", vaccinetotal, id, vaccines);
+    },
+    clickButton() {
+      this.$emit("click-button");
+    },
+    vCardClick(drawerid, vaccines) {
+      this.$emit("click", drawerid, vaccines);
     }
   }
-}
+};
 </script>
 
 <style lang="less">

@@ -36,15 +36,15 @@
 </template>
 
 <script>
-import thermometerPNG from '_a/icon/thermometer.png'
-const sliderMinX = 0
-const sliderMaxX = 240
+import thermometerPNG from "_a/icon/thermometer.png";
+const sliderMinX = 0;
+const sliderMaxX = 240;
 
-const coldGradient = { start: '#5564C2', end: '#3A2E8D' }
-const hotGradient = { start: '#F0AE4B', end: '#9B4D1B' }
+const coldGradient = { start: "#5564C2", end: "#3A2E8D" };
+const hotGradient = { start: "#F0AE4B", end: "#9B4D1B" };
 export default {
-  name: 'thermometer',
-  data () {
+  name: "thermometer",
+  data() {
     return {
       thermometerPNG,
       dragging: false,
@@ -55,7 +55,7 @@ export default {
       gradientStart: coldGradient.start,
       gradientEnd: coldGradient.end,
       sideheight: 22
-    }
+    };
   },
   props: {
     value: {
@@ -64,61 +64,31 @@ export default {
     }
   },
   filters: {
-    round (num) {
-      return Math.round(num)
+    round(num) {
+      return Math.round(num);
     }
   },
   methods: {
-    tempElementStyle (tempNumber) {
-      const length = this.temperatureGrades.length
-      const mid = Math.floor(length / 2)
-      const elementY = tempNumber === mid ? -this.sideheight + 2 : 0
-      return `transform: translate3d(0, ${elementY}px, 0)`
+    tempElementStyle(tempNumber) {
+      const length = this.temperatureGrades.length;
+      const mid = Math.floor(length / 2);
+      const elementY = tempNumber === mid ? -this.sideheight + 2 : 0;
+      return `transform: translate3d(0, ${elementY}px, 0)`;
     }
   },
   computed: {
-    currentTemperature () {
-      const tempRangeStart = 10
-      const tempRange = 20 // from 10 - 30
-      return (this.sliderX / sliderMaxX * tempRange) + tempRangeStart
+    currentTemperature() {
+      const tempRangeStart = 10;
+      const tempRange = 20; // from 10 - 30
+      return (this.sliderX / sliderMaxX) * tempRange + tempRangeStart;
     },
-    sliderStyle () {
-      return `transform: translate3d(${this.sliderX}px,0,0)`
-    },
+    sliderStyle() {
+      return `transform: translate3d(${this.sliderX}px,0,0)`;
+    }
   }
-}
+};
 </script>
 
 <style lang="less">
 @import "./thermometer.less";
-.header-thermometer {
-  z-index: 1;
-  margin: 18px 10px 0px 24px;
-  display: flex;
-  position: relative;
-}
-.header-thermometer-item {
-  width: 60px;
-  font-size: 48px;
-  text-align: end;
-  color: rgba(235, 235, 236, 1);
-}
-.header-right {
-  position: absolute;
-  right: 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  p {
-    font-size: 16px;
-    font-weight: 400;
-    margin-top: 2px;
-  }
-}
-.header-thermometer-icon {
-  font-size: 18px;
-  font-family: Microsoft YaHei;
-  font-weight: 400;
-  color: rgba(235, 235, 236, 1);
-}
 </style>

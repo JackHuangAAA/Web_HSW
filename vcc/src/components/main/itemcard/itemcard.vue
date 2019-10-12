@@ -1,7 +1,7 @@
 <template>
   <div class="item-card card">
     <div class="item-number">
-      <slot></slot>
+      <slot></slot><div class="item-card-unit" v-if="unit!==''">/{{unit}}</div>
     </div>
     <div class="item-title">{{title}}</div>
     <div class="item-icon-frame">
@@ -13,67 +13,32 @@
 
 <script>
 export default {
-  name: 'itemCard',
+  name: "itemCard",
   props: {
     title: {
       type: String,
-      default: ''
+      default: ""
     },
     icon: {
       type: String,
-      default: ''
+      default: ""
+    },
+    unit:{
+      type:String,
+      default:""
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   methods: {
-    reicon (icon) {
-      return `/static/img/icon/home/${icon}`
+    reicon(icon) {
+      return `/static/img/icon/home/${icon}`;
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-@import "~@/style/color";
-.item-card {
-  width: 100%;
-  height: 110px;
-
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.item-number {
-  position: absolute;
-  top: 16px;
-  left: 30px;
-  color: @blue;
-  font-size: 36px;
-  font-weight: bold;
-}
-.item-title {
-  position: absolute;
-  left: 27px;
-  bottom: 16px;
-  color: @black;
-  font-size: 18px;
-  font-weight: 400;
-}
-.item-icon-frame {
-  position: absolute;
-  right: 29px;
-  height: 66px;
-  width: 66px;
-  border-radius: 50%;
-  background-color: @gray;
-}
-.item-icon {
-  height: 100%;
-  width: 100%;
-}
+@import "./itemcard.less";
 </style>

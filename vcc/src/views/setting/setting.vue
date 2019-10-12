@@ -7,7 +7,7 @@
         <!-- <basic-setting style="height:100%"></basic-setting> -->
       </TabPane>
       <TabPane label="指纹录入">
-        <!-- <fingerprint></fingerprint> -->
+        <fingerprint></fingerprint>
       </TabPane>
       <TabPane label="疫苗区域划分">
         <vaccine-setting></vaccine-setting>
@@ -18,31 +18,27 @@
 </template>
 
 <script>
-import fingerprint from './fingerprint'
-import VaccineSetting from './VaccineSetting'
-import basicSetting from './basicSetting'
+import fingerprint from "./fingerprint";
+import VaccineSetting from "./VaccineSetting";
+import basicSetting from "./basicSetting";
 export default {
-  name: 'setting',
+  name: "setting",
   components: {
     basicSetting,
     VaccineSetting,
     fingerprint
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  mounted () {
-    this.init()
+  mounted() {
+    this.init();
   },
   methods: {
-    async init () {
-
-    },
-    getsetting () { },
+    async init() {},
+    getsetting() {}
   }
-}
+};
 </script>
 
 <style lang="less">

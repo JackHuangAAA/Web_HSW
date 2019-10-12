@@ -1,2 +1,2 @@
-import thermometer from './thermometer.vue'
-export default thermometer
+import thermometer from './thermometer.vue';
+export default thermometer;

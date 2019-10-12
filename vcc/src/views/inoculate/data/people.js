@@ -4,4 +4,4 @@ export default {
   age: '1',
   vaccination: '脊髓灰质炎疫苗',
   amount: '1'
-}
+};
