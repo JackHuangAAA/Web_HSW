@@ -1,4 +1,4 @@
-import './polyfill'
+import './polyfill';
 // import '@/theme/index'
 import '@/style/index';
 // import Cookies from 'js-cookie'
@@ -14,14 +14,13 @@ import 'iview/dist/styles/iview.css';
 import config from '@/config';
 import device from '@/api/device.js';
 import { Storages } from '@/libs/util.js';
-import moment from "moment";
+import moment from 'moment';
 global._ = lodash;
 global._static = enums;
 global.storage = Storages;
-global.moment = moment
 
-moment.lang("zh-cn");
-global.moment = moment
+moment.locale('zh-cn');
+global.moment = moment;
 
 Vue.use(iView);
 

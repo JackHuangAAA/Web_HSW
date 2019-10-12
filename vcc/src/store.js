@@ -2,7 +2,6 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import {
   queryDeviceByCondition,
-  queryVaccineKinds,
   queryDrawerByCondition
 } from '@/libs/axios.js';
 import { getcode, Storages } from '@/libs/util.js';
@@ -53,9 +52,6 @@ const store = {
       state.deviceid = action._id;
       state.device = action;
     },
-    SaveUserInfo(state, userinfo) {
-      state.userinfo = userinfo;
-    },
     ChangeRoute(state, title) {
       state.routerTitle = title;
     },
@@ -74,22 +70,8 @@ const store = {
     saveDevice({ commit }, device) {
       commit('SAVE_DEVICE', device);
     },
-    saveUserInfo({ commit }, userinfo) {
-      Storages.SetCache('userinfo',userinfo)
-      commit('SaveUserInfo', userinfo);
-    },
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle);
-    },
-    async getUserInfo({ state,dispatch, getters }) {
-      if (state.userinfo === null) {
-        let userinfo = Storages.GetCache('userinfo');
-        userinfo = JSON.parse(userinfo)
-        dispatch('saveUserInfo',userinfo)
-        return userinfo;
-      } else {
-        return getters.userinfo;
-      }
     },
     async getDrawer({ state, dispatch }) {
       if (state.drawer === null) {
@@ -99,15 +81,7 @@ const store = {
         return state.drawer;
       }
     },
-    async getVaccineKinds({ state, dispatch }) {
-      if (state.vacc === null) {
-        let res = await dispatch('updateVaccineKinds');
-        return res.data;
-      } else {
-        return state.vacc;
-      }
-    },
-    async updateDrawe({ state, commit }) {
+    async updateDrawe({ state, commit }) {//用于刷新抽屉信息
       let deviceid = state.deviceid;
       let res = await queryDrawerByCondition(deviceid);
       commit('SaveDrawer', res.data);

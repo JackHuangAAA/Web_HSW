@@ -2,6 +2,7 @@
   <div class="card">
     <vaccine-table @vaccine-add='vaccineadd'
                    @vaccine-del='vaccinedel'
+                   :vacclists='vacclists'
                    type="edit"></vaccine-table>
   </div>
 </template>
@@ -14,14 +15,23 @@ export default {
     vaccineTable
   },
   data() {
-    return {};
+    return {
+      vacclists: []
+    };
   },
   computed: {
     deviceid() {
       return this.$store.state.deviceid;
     }
   },
+  created() {
+    this.getvacclists();
+  },
   methods: {
+    async getvacclists() {
+      let res = await this.$api.get(`/zcy/queryVaccineKinds`);
+      this.vacclists = res.data
+    },
     vaccineadd(va, drawerid) {
       this.addvaccine(va, drawerid);
     },

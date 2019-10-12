@@ -2,6 +2,7 @@
  * Created by Administrator on 2019/10/07 0041.
  */
 const moment = require('moment');
+const mongoose = require('mongoose');
 const logger = Libs.logger.getLogger('vaccination');
 
 module.exports = {
@@ -92,7 +93,7 @@ module.exports = {
          if (!_.isEmpty(requestBody.unitName)) {
              query.push({ "unitName": requestBody.unitName });
          }
-         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
          return await Domain.models.vaccination.find(query);
     },
 
@@ -125,5 +126,4 @@ module.exports = {
                 }
             ]);
     }
-
 };

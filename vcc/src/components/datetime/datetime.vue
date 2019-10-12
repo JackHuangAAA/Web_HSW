@@ -17,7 +17,6 @@ export default {
   },
   methods: {
     dateint() {
-      moment.lang("zh-cn");
       setInterval(() => {
         let nowdate = moment().format("YYYY-MM-DD HH:mm:ss dddd");
         this.nowdate = nowdate;

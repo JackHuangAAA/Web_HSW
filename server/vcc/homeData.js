@@ -72,12 +72,6 @@ async function execute() {
         value.emit( Domain.enum.TIMEDATA, timedData);
         value.emit( 'test2', '再一次');
     });
-
-
-
 }
 
 later.setInterval(execute, later.parse.cron('0/1 * * * * ?'));
-
-
-

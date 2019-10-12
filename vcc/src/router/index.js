@@ -30,10 +30,7 @@ let getRouterConfig = function(path) {
 
 router.beforeEach(async (to, from, next) => {
   if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title);
-  if (store.getters.userinfo === null) {
-    store.dispatch('getUserInfo');
-  }
-  if (store.state.device === null) {
+  if (store.state.device === null) { //获取设备ID信息
     store.dispatch('getDevice');
   }
   let menu = getRouterConfig(to.path);

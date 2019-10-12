@@ -14,6 +14,8 @@ const excluded = [
 
 const bindUserFilter = async (ctx,next) => {
     try {
+        //绕过用户判断进行操作流水保存，正式测试时将该函数放在下方//保存操作记录！！！
+        await operationlogSave(ctx);
         //检查设备是否已经接入平台
         let result = await deviceFilter(ctx);
         if(result){
