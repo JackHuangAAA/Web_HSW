@@ -9,8 +9,8 @@ export default [
   },
   {
     title: '操作',
-    fixed: 'right',
-    width: '200',
+    align:'center',
+    width: '89',
     handle: ['delete']
   }
 ];

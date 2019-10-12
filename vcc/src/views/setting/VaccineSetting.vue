@@ -36,7 +36,6 @@ export default {
       this.addvaccine(va, drawerid);
     },
     vaccinedel(va, drawerid) {
-      console.log(va, drawerid);
       this.delvaccine(va, drawerid);
     },
     async addvaccine(vaccine, id) {

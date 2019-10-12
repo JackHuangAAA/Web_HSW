@@ -11,12 +11,6 @@
 </template>
 
 <script>
-const showfp = (vm, h, currentRow) => {
-  console.log(currentRow)
-  return h(
-    "div"
-  )
-};
 const deleteButton = (vm, h, currentRow) => {
   return h(
     "Button",
@@ -25,11 +19,16 @@ const deleteButton = (vm, h, currentRow) => {
         margin: "0 5px"
       },
       props: {
-        type: "error",
+        type: "Dashed",
         placement: "top"
+      },
+      on: {
+        click: () => {
+          vm.delete(currentRow);
+        }
       }
     },
-    vm.delete(currentRow)
+    '刪除'
   );
 };
 export default {
@@ -49,32 +48,40 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      columnslist: []
+    };
   },
   computed: {},
   mounted() {
     this.init();
   },
   methods: {
-    init() {},
+    init() {
+      this.columnslist = this.tablerender(this.columns);
+      console.log(this.columnslist);
+    },
     tableclass(row, index) {
       return "table-row";
     },
     tablerender(columns) {
-      if (item.handle) {
-        item.render = (h, param) => {
-          let children = [];
-          item.handle.forEach(handle => {
-            if (handle === "fp") {
-              children.push(showfp(this, h, param.row));
-            } else if (handle === "delete") {
-              children.push(deleteButton(this, h, param.row));
-            }
-          });
-          return h("div", children);
-        };
-      }
+      columns.forEach(item => {
+        if (item.handle) {
+          item.render = (h, param) => {
+            let children = [];
+            item.handle.forEach(handle => {
+              if (handle === "delete") {
+                children.push(deleteButton(this, h, param.row));
+              }
+            });
+            return h("div", children);
+          };
+        }
+      });
       return columns;
+    },
+    delete(currentRow) {
+      console.log(currentRow)
     }
   }
 };

@@ -17,15 +17,7 @@ export default {
   data() {
     return {
       columns,
-      data: [],
-      test: [
-        {
-          finger: "finger1"
-        },
-        {
-          finger: "finger2"
-        }
-      ]
+      data: []
     };
   },
   computed: {
@@ -39,7 +31,16 @@ export default {
   },
   methods: {
     init() {
-      console.log(this.user);
+      this.coverfp();
+    },
+    coverfp() {
+      let data = [];
+      for (let f of this.user.finger) {
+        let t = {}
+        t.finger = f
+        data.push(t)
+      }
+      this.data = data
     }
   }
 };

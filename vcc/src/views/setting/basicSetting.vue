@@ -12,23 +12,26 @@
       </Col>
       <Col span="6"
            push="1">
-      <Select :value="device.address.provinceName"
-              :disabled="true">
-        <Option :value="device.address.provinceName">{{device.address.provinceName}}</Option>
+      <Select v-model="province"
+              @on-change="changeProvince()">
+        <Option v-for="d in district"
+                :value="d.name">{{d.name}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select :value="device.address.cityName"
-              :disabled="true">
-        <Option :value="device.address.cityName">{{device.address.cityName}}</Option>
+      <Select v-model="city"
+              @on-change="changeCity()">
+        <Option v-for="city in citys"
+                :value="city.name">{{city.name}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select :value="device.address.countyName"
-              :disabled="true">
-        <Option :value="device.address.countyName">{{device.address.countyName}}</Option>
+      <Select v-model="county"
+              @on-change="changeCounty()">
+        <Option v-for="county in countys"
+                :value="county.name">{{county.name}}</Option>
       </Select>
       </Col>
     </Row>
@@ -43,9 +46,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="device.cabinetNo"
-              :disabled="true">
-        <Option :value="device.cabinetNo">{{device.cabinetNo}}</Option>
+      <Select v-model="cabinetNo">
+        <Option v-for="list in cabinetNoList"
+                :value="list.value">{{list.value}}</Option>
       </Select>
       </Col>
     </Row>
@@ -60,9 +63,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="device.unitName"
-              :disabled="true">
-        <Option :value="device.unitName">{{device.unitName}}</Option>
+      <Select v-model="unit">
+        <Option v-for="u in unitlist"
+                :value="u.code">{{u.name}}</Option>
       </Select>
       </Col>
     </Row>
@@ -89,7 +92,8 @@
     <Row type="flex"
          class="bs-submit"
          justify="center">
-      <Button type="primary">保存</Button>
+      <Button type="primary"
+              @click="submit()">保存</Button>
     </Row>
   </div>
 </template>
@@ -100,7 +104,18 @@ export default {
   name: "basicSetting",
   data() {
     return {
-      alias: ""
+      provinces: [],
+      citys: [],
+      countys: [],
+      alias: "",
+      provinceName: "",
+      cityName: "",
+      countyName: "",
+      district: [],
+      cabinetNo: "",
+      cabinetNoList: "",
+      unit: "",
+      unitList: ""
     };
   },
   computed: {
@@ -109,11 +124,54 @@ export default {
     })
   },
   created() {
+    this.getinit();
+  },
+  mounted() {
     this.init();
   },
   methods: {
     init() {
+      this.provinceName = this.device.address.provinceName;
+      this.cityName = this.device.address.cityName;
+      this.countyName = this.device.address.countyName;
       this.alias = this.device.alias;
+      this.cabinetNo = this.device.cabinetNo;
+    },
+    getinit() {
+      this.queryDistrict();
+      this.queryCabinetNo();
+      this.queryUnit();
+    },
+    async queryUnit() {
+      let res = await this.$api.get("/zcy/queryUnit");
+      this.unitlist = res.data;
+    },
+    async queryDistrict() {
+      let res = await this.$api.get("/zcy/queryDistrict");
+      let district = res.data;
+      this.district.push(district);
+    },
+    async queryCabinetNo() {
+      let res = await this.$api.get("/zcy/queryCabinetNo");
+      this.cabinetNoList = res.data;
+    },
+    changeProvince() {
+      let citys = [];
+      for (let d of this.district) {
+        if (d.name === this.province) citys = d.child;
+      }
+      this.citys = citys;
+    },
+    changeCity() {
+      let countys = [];
+      for (let c of this.citys) {
+        if (c.name === this.city) countys = c.child;
+      }
+      this.countys = countys;
+    },
+    changeCounty() {},
+    submit() {
+      
     }
   }
 };
