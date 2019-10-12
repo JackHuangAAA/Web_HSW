@@ -37,8 +37,6 @@ module.exports = {
     saveLog: async function(requestBody){
         logger.debug(`saveLog param: ${JSON.stringify(requestBody)}`);
         return Domain.models.log.create(requestBody);
-    },
-
-
+    }
 
 };

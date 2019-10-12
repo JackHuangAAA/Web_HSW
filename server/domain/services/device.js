@@ -137,5 +137,5 @@ module.exports = {
 
         return await Domain.models.device.aggregate([{$match:$match},{$group:$group}]);
     }
-}
+};
 

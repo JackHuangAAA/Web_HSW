@@ -89,7 +89,7 @@ router.get('/queryVaccineStorageNum',
  */
 router.post('/clearVacineTotal',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccine.clearVacineTotal(ctx.request.body);
+        return await Domain.services.vaccine.clearVaccineTotal(ctx.request.body);
     })
 );
 
