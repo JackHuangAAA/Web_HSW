@@ -60,7 +60,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["location"]),
+    location(){
+      return this.$store.state.device.address.countyName
+    },
     menustatus() {
       return this.menuOpen === false ? "展开菜单" : "折叠菜单";
     }

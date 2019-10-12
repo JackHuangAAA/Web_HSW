@@ -12,7 +12,10 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["position"])
+    position(){
+      console.log(this.$store.state.device)
+      return this.$store.state.device.alias
+    }
   },
   created() {},
   methods: {}
