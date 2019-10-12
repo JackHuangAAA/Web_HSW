@@ -53,18 +53,61 @@ module.exports = {
    * @returns {Promise.<T|Query|*>}
    */
   queryDeviceByCondition: async function(requestBody) {
-    logger.debug(`queryDeviceByCondition param: ${JSON.stringify(requestBody)}`);
-    let query = []
-    if (!_.isEmpty(requestBody.alias)) {
-      query.push({ alias: requestBody.alias });
+        logger.debug(`queryDeviceByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.alias)) {
+            query.push({"alias": requestBody.alias});
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({"code": requestBody.code});
+        }
+        if (!_.isEmpty(requestBody.cabinetNo)) {
+            query.push({"cabinetNo": requestBody.cabinetNo});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.status)) {
+            query.push({"status": requestBody.status});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
+        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+        return await Domain.models.device.find(query);
+    },
+
+    /**
+     * 聚合查询，各单位单天各设备类型不同状态的设备数量统计(所属单位编号待定)
+     * @param requestBody
+     * @returns {JSON}  Object  version model数组，不同类型的数量统计
+     */
+    queryDeviceByAggregate: async function(currentUser,requestBody){
+        let today = moment();
+        let dailyInfo = { "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } };
+        logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
+        /*
+        if(currentUser!=undefined){
+            console.log("OK");
+            let $unitCode = currentUser.unitCode;
+        }else{
+            let $unitCode = '';
+        };
+        */
+        let $unitCode = '0002';
+        let $group={
+            _id:{
+                "type":"$type",
+                "status":"$status"
+            },
+            count:{$sum:1}
+        };
+
+        let $match={
+            unitCode:$unitCode,
+            updateDate:dailyInfo
+        };
+        return await Domain.models.device.aggregate([{$match:$match},{$group:$group}]);
     }
-    if (!_.isEmpty(requestBody.code)) {
-      query.push({ code: requestBody.code });
-    }
-    if (!_.isEmpty(requestBody.cabinetNo)) {
-      query.push({ cabinetNo: requestBody.cabinetNo });
-    }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
-    return await Domain.models.device.find(query);
-  }
+
 }

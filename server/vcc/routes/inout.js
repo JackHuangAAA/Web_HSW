@@ -19,4 +19,15 @@ router.post('/saveInout',
     })
 );
 
+/**
+ * 批量增加出入库
+ * @param requestBody
+ * @returns {Promise.<requestBody>}
+ */
+router.post('/saveInoutMany',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.inout.saveInoutMany(ctx.request.body);
+    })
+);
+
 module.exports = router;

@@ -54,6 +54,16 @@ module.exports = {
     },
 
     /**
+     * 批量保存出入库信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveInoutMany: async function (requestBody) {
+        logger.debug(`saveInoutMany param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.inout.insertMany(requestBody);
+    },
+
+    /**
      * 查询各单位冷藏柜、接种柜的历史出入库信息
      * @param requestBody
      * @returns {Promise.<{rs: *, total: (*|number)}>}
@@ -80,7 +90,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
 
         return await Domain.models.inout.find(query);
     },
