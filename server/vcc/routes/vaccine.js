@@ -80,7 +80,7 @@ router.get('/queryVaccineStorageNum',
 
 
 /**
- * @api {POST} /vaccine/modifyVaccine  出库时清零疫苗数量
+ * @api {POST} /vaccine/clearVaacineTotal  出库时清零疫苗数量
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 出库时清零疫苗数量
@@ -89,7 +89,7 @@ router.get('/queryVaccineStorageNum',
  */
 router.post('/clearVaacineTotal',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+        return await Domain.services.vaccine.clearVaacineTotal(ctx.request.body);
     })
 );
 

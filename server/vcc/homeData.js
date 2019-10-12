@@ -77,7 +77,7 @@ async function execute() {
 
 }
 
-later.setInterval(execute, later.parse.cron('0/5 * * * * ?'));
+later.setInterval(execute, later.parse.cron('0/1 * * * * ?'));
 
 
 
