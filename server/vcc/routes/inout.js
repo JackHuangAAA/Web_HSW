@@ -24,9 +24,9 @@ router.post('/saveInout',
  * @param requestBody
  * @returns {Promise.<requestBody>}
  */
-router.post('/saveInoutMany',
+router.post('/saveManyInout',
     Libs.router( async (ctx, next) => {
-        return await Domain.services.inout.saveInoutMany(ctx.request.body);
+        return await Domain.services.inout.insertManyInout(ctx.request.body);
     })
 );
 

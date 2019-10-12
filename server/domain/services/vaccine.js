@@ -14,21 +14,11 @@ module.exports = {
      * @returns 
      */
     queryVaccine: async function (requestBody) {
-        // $match ：条件查询
-        // $group ： 分组
-        // _id ： 以_id内的字段进行分组
-        // $sum ： 求和(以pk和pkName组合字段进行分组，算出该组内某一向的总和)
-        // $sort ： 排序 -1 倒叙 1 正序
-        // $limit ： 分页
-        // let query = {}
-        // if (!_.isEmpty(requestBody.device)) {
-        //     query["device"] = requestBody.device;
-        // }
-
+        logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
-            { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }} },
+            { $match: { device: deviceId } },
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { $first: "$name" } } },
             { $project: { _id: 1, name: 1, num_movie: 1 } }
 
         ])
@@ -43,6 +33,7 @@ module.exports = {
      * @returns 
      */
     queryVaccineLowerThreshold: async function (requestBody) {
+        logger.debug(`queryVaccineLowerThreshold param: ${JSON.stringify(requestBody)}`);
         let query = [{ surplus: { $lt: 10 } }]
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
@@ -59,15 +50,33 @@ module.exports = {
      * @returns 
      */
     queryVaccineStorageNum: async function (requestBody) {
+        logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
-            { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }} },
-            { $project: { _id: 1, name: 1, num_movie: 1 } }
+            { $match: { device: deviceId } },
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, updateDate: { "$first": "$updateDate" } } },
+
+            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
 
         ])
         logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
+        return { rs: result, total: result.length, device: requestBody }
+    },
+    /**
+     *  出库后 数量、 剩余数量清零
+     * 
+     * @param {any} requestBody 
+     * @returns 
+     */
+    clearVaacineTotal: async function (requestBody) {
+        logger.debug(`clearVaacineTotal param: ${JSON.stringify(requestBody)}`);
+        await Domain.models.vaccine.update(
+            { device:requestBody.device },
+            {
+                $set: { total: 0,  surplus: 0 }
+            },
+            {multi:true}
+        );
     },
 
     /**
@@ -78,10 +87,16 @@ module.exports = {
      */
     modifyVaccine: async function (requestBody) {
         logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
-        return await Domain.models.vaccine.update(
-            { _id: requestBody.id },
+        await Domain.models.vaccine.update(
+            { _id: requestBody.ids[0] },
             {
-                $set: { total: requestBody.total, updateDate: new Date()}
+                $set: { total: requestBody.totals[0] }
+            }
+        );
+        await Domain.models.vaccine.update(
+            { _id: requestBody.ids[1] },
+            {
+                $set: { total: requestBody.totals[1] }
             }
         );
     },

@@ -8,6 +8,35 @@ const logger = Libs.logger.getLogger('vaccination');
 module.exports = {
 
     /**
+     *
+     *
+     * @param {any} requestBody
+     * @returns
+     */
+    queryVaccinationByCustomerCode: async function (requestBody) {
+        logger.debug(`queryVaccinationByCustomerCode param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        let today = moment();
+        query.push({"createDate": {'$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate()}});
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({"device": requestBody.device});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+
+        let result = await Domain.models.vaccination.aggregate([{"$match": {"$and": query}},
+            {"$group": {_id: '$code', num_coustomer: {$sum: 1}}},
+        ]);
+
+        logger.debug(`result: ${result}`);
+        return {rs: result, total: result.length};
+    },
+
+    /**
      * 查询接种记录
      * @param requestBody
      * @returns
@@ -37,7 +66,6 @@ module.exports = {
      */
     saveVaccination: async function(requestBody){
         logger.debug(`saveVaccination param: ${JSON.stringify(requestBody)}`);
-
         return await Domain.models.vaccination.create(requestBody);
     },
 
@@ -76,8 +104,6 @@ module.exports = {
      */
     queryVaccinationDailyInfo: async function(requestBody){
         logger.debug(`queryVaccinationByCondition param: ${JSON.stringify(requestBody)}`);
-
-
         let query = [];
         if (!_.isEmpty(requestBody.deviceid)) {
             query.push({ "device": mongoose.Types.ObjectId(requestBody.deviceid) });
@@ -87,9 +113,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.today)) {
             query.push({ "createDate": dailyInfo });
         }
-
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
-
         return await Domain.models.vaccination.aggregate([
                 {
                     $match:query
