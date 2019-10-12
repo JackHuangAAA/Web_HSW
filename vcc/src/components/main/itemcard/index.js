@@ -1,2 +1,2 @@
-import itemcard from './itemcard.vue'
-export default itemcard
+import itemcard from './itemcard.vue';
+export default itemcard;

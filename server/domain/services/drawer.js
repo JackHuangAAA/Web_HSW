@@ -6,14 +6,14 @@ const logger = Libs.logger.getLogger('drawer');
 module.exports = {
 
     /**
-     *  查询抽屉里疫苗为空的数据 
-     * 
-     * @param {any} requestBody 
-     * @returns 
+     *  查询抽屉里疫苗为空的数据
+     *
+     * @param {any} requestBody
+     * @returns
      */
     queryDrawerEmpty: async function (requestBody) {
-        logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
-        let query = [{ "vaccine": [] }];
+         logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
+        let query = [];
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
@@ -22,6 +22,9 @@ module.exports = {
         }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).populate("vaccine");
+        result = result.filter(item => {
+            return item.vaccine == null
+        })
         return { rs: result, total: result.length };
     },
 
@@ -37,9 +40,9 @@ module.exports = {
 
     /**
      *   根据条件查询抽屉信息，并按坐标排序
-     * 
-     * @param {any} requestBody 
-     * @returns 
+     *
+     * @param {any} requestBody
+     * @returns
      */
     queryDrawerByCondition: async function (requestBody) {
         logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
@@ -60,45 +63,55 @@ module.exports = {
     },
 
     /**
-  * 
-  * 根据抽屉id更新抽屉信息 增加
-  * @param {any} requestBody 
-  * @returns 
-  */
+     *
+     * 根据抽屉id更新抽屉信息 增加
+     * @param {any} requestBody
+     * @returns
+     */
     modifyDrawerById: async function (requestBody) {
         logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
         let vaccineData = await Domain.models.vaccine.create(requestBody.vaccine);
+        let vaccineArr = drawerData.vaccine || [];
+        let vaccineId = vaccineData._id
+        vaccineArr.push(vaccineId)
         await Domain.models.drawer.update(
             { _id: requestBody.id },
             {
-                $push: { vaccine: vaccineData._id }
+                $set: { vaccine: vaccineArr }
             }
         );
-        return { vaccineData: vaccineData }
+        return {vaccineData: vaccineData}
     },
     /**
-  * 
-  * 根据抽屉id更新抽屉信息 减少
-  * @param {any} requestBody 
-  * @returns 
-  */
+     *
+     * 根据抽屉id更新抽屉信息 减少
+     * @param {any} requestBody
+     * @returns
+     */
     modifyDrawerByIdDec: async function (requestBody) {
         logger.debug(`modifyDrawerByIdDec param: ${JSON.stringify(requestBody)}`);
-        let vaccineData = await Domain.models.vaccine.findOneAndRemove({ _id: requestBody.vaccineId });
+        let drawerData = await Domain.models.drawer.findOne({ _id: requestBody.id });
+        let vaccineData = await Domain.models.vaccine.findOneAndRemove({_id: requestBody.vaccineId});
+        let vaccineArr = drawerData.vaccine || [];
+        let vaccineId = vaccineData._id
+        vaccineArr = vaccineArr.filter(item=>{
+            return item != vaccineId
+        })
         return Domain.models.drawer.update(
             { _id: requestBody.id },
             {
-                $pull: { vaccine: vaccineData._id }
-            },
+                $set: { vaccine: vaccineArr }
+            }
         );
     },
 
     /**
-      * 
-      *按疫苗 分组合计抽屉信息
-      * @param {any} requestBody 
-      * @returns 
-      */
+     *
+     *按疫苗 分组合计抽屉信息
+     * @param {any} requestBody
+     * @returns
+     */
     queryDrawerByVaccineArr: async function (requestBody) {
         logger.debug(`queryDrawerByVaccineArr param: ${JSON.stringify(requestBody)}`);
         return await Domain.models.drawer.aggregate([
@@ -106,17 +119,18 @@ module.exports = {
             { "$unwind": "$vaccine" },
             {
                 $lookup:
-                {
-                    from: "vaccines",
-                    localField: "vaccine",
-                    foreignField: "_id",
-                    as: "inventory_docs"
-                }
+                    {
+                        from: "vaccines",
+                        localField: "vaccine",
+                        foreignField: "_id",
+                        as: "inventory_docs"
+                    }
             },
-                {
-                    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$inventory_docs", 0 ] }, "$$ROOT" ] } }
-               },
-               { $project: { inventory_docs: 0 } }
+            {
+                $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$inventory_docs", 0 ] }, "$$ROOT" ] } }
+            },
+            { $project: { inventory_docs: 0 } }
         ])
-    },
+    }
+
 };

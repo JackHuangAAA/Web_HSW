@@ -1,35 +1,41 @@
-const path = require('path')
-const CompressionWebpackPlugin = require('compression-webpack-plugin')
-const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default
+const path = require('path');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const CSSSplitWebpackPlugin = require('css-split-webpack-plugin').default;
 
-const productionGzipExtensions = ['js', 'css']
-const isProduction = process.env.NODE_ENV === 'production'
+const productionGzipExtensions = ['js', 'css'];
+const isProduction = process.env.NODE_ENV === 'production';
 const resolve = dir => {
-  return path.join(__dirname, dir)
-}
+  return path.join(__dirname, dir);
+};
 
 //静态文件基础路径
-const BASE_URL = process.env.NODE_ENV === 'production' ? './' : '/'
+const BASE_URL = process.env.NODE_ENV === 'production' ? './' : '/';
 
 module.exports = {
   publicPath: BASE_URL,
   lintOnSave: false,
   chainWebpack: config => {
     //热更新
-    config.resolve.symlinks(true)
+    config.resolve.symlinks(true);
     //src别名配置
     config.resolve.alias
       .set('@', resolve('src'))
       .set('_c', resolve('src/components'))
-      .set('_a', resolve('src/assets'))
+      .set('_a', resolve('src/assets'));
     //less解析
-    config.resolve.extensions.add('.less')
+    config.resolve.extensions.add('.less');
     //iview es6编译
     config.module
       .rule('compile')
       .test(/iview.src.*?js$/)
       .use('babel')
-      .loader('babel-loader')
+      .loader('babel-loader');
+  },
+  configureWebpack: {
+    entry: {
+      vendor: ['vue', 'vue-i18n', 'vue-router', 'vuex', 'axios', 'iview']
+    },
+    devtool: true
   },
   configureWebpack: config => {
     if (isProduction) {
@@ -39,7 +45,7 @@ module.exports = {
           size: 4000,
           filename: 'css/[name]-[part].[ext]'
         })
-      )
+      );
       //gzip压缩静态文件
       // config.plugins.push(new CompressionWebpackPlugin({
       //   algorithm: 'gzip',
@@ -75,4 +81,4 @@ module.exports = {
       }
     }
   }
-}
+};

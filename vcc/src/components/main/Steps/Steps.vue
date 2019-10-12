@@ -15,12 +15,12 @@
 
 <script>
 export default {
-  name: 'Steps',
+  name: "Steps",
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     active: {
@@ -28,15 +28,13 @@ export default {
       default: 0
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-  mounted () {
-    console.log(this.active)
+  mounted() {
+    console.log(this.active);
   }
-}
+};
 </script>
 
 <style lang="less">

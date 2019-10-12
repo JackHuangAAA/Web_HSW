@@ -1,11 +1,10 @@
-import packJson from '../../package.json'
+import packJson from '../../package.json';
 
-const config = {
+let config = {
   env: process.env.NODE_ENV,
   appName: '银信博荣智慧疫苗接种柜',
   version: packJson.version,
-  deviceid: 1,
   type: 1
-}
+};
 
-export default config
+export default config;

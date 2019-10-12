@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'inoculateBoxItem',
+  name: "inoculateBoxItem",
   props: {
     ekey: {
       type: String
@@ -34,38 +34,20 @@ export default {
       type: String
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
   computed: {
-    valuefocus () {
-      let tmp = {}
-      let css = 'ibiv-' + this.focus
-      tmp[css] = true
-      return css
+    valuefocus() {
+      let tmp = {};
+      let css = "ibiv-" + this.focus;
+      tmp[css] = true;
+      return css;
     }
-  },
-}
+  }
+};
 </script>
   
 <style lang="less" scoped>
-.inoculate-box-item-title {
-  font-size: 18px;
-  font-weight: bold;
-}
-.inoculate-box-item-value {
-  font-size: 20px;
-  font-weight: bold;
-}
-.inoculate-box-item-focus {
-  color: rgba(42, 122, 255, 1);
-}
-.ibiv-blue {
-  color: #2a7aff !important;
-}
-.ibiv-yellow {
-  color: #ff7800 !important;
-}
+@import "./inoculateboxitem.less";
 </style>

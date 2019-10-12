@@ -13,6 +13,7 @@ global.Config = require(`${process.cwd()}/config`);
 let map = {
 
 } 
+   logger.info('==================================== ')
 let push = {
     init(io) {
         io.on('connection', (socket) => {
@@ -67,7 +68,7 @@ async function execute() {
              drawerEmptyArr: drawerEmptyArr,
              customerNum: customerNum,
          }
-               console.log(JSON.stringify(timedData), 'timedData=============')
+        console.log(JSON.stringify(timedData), 'timedData=============')
         value.emit( Domain.enum.TIMEDATA, timedData);
         value.emit( 'test2', '再一次');
     });

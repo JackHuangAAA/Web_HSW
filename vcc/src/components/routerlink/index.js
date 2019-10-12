@@ -1,2 +1,2 @@
-import routerlink from './routerlink.vue'
-export default routerlink
+import routerlink from './routerlink.vue';
+export default routerlink;

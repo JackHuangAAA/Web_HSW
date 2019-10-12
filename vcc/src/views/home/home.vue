@@ -5,7 +5,8 @@
         <Col span="8"
              v-for="card in homecard">
         <item-card :title="card.title"
-                   :icon="card.icon">{{card.value}}</item-card>
+                   :icon="card.icon"
+                   :unit="card.unit">{{card.value}}</item-card>
         </Col>
       </Row>
       <Row class="lackinventory card">
@@ -16,10 +17,11 @@
     </div>
     <div class="rightbox">
       <div class="thermometer">
-        <!-- <thermometer></thermometer> -->
+        <thermometer :value="0"
+                     :indoor="20"></thermometer>
       </div>
       <div class="alarminfo card">
-        <alarminfo :alarmlist="alarmlist"></alarminfo>
+        <alarminfo :alarm="alarmcode"></alarminfo>
       </div>
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
@@ -38,19 +40,18 @@
 <script>
 const changeItem = (key, value, obj) => {
   let tmp = obj.map(el => {
-    el.name
+    el.name;
     if (el.name === key) {
-      el.value = value
+      el.value = value;
     }
-    return el
-  })
-}
-import testli from './data/testlackitem.js'
-import alarminfo from './alarminfo'
-import homecard from './data/homecard'
-import thermometer from './thermometer'
-import itemCard from '_c/main/itemcard'
-import lackinventory from './lackinventory'
+    return el;
+  });
+};
+import homecard from "./data/homecard";
+import alarminfo from "./alarminfo";
+import thermometer from "./thermometer";
+import itemCard from "_c/main/itemcard";
+import lackinventory from "./lackinventory";
 export default {
   components: {
     thermometer,
@@ -58,69 +59,97 @@ export default {
     lackinventory,
     alarminfo
   },
-  data () {
+  data() {
     return {
       homecard: homecard,
       lists: [],
       alarmlist: [],
+      alarmcode: 0
+    };
+  },
+  created() {
+    this.getHomeData();
+  },
+  computed: {
+    deviceid() {
+      return this.$store.state.deviceid;
+    },
+    device() {
+      return this.$store.getters.device;
     }
   },
-  created () {
-    this.getHomeData()
-  },
   methods: {
-    getHomeData () {
-      this.queryVaccine()
-      this.queryAlarmDailyInfo()
-      this.queryDrawerEmpty()
-      this.queryVaccineLowerThreshold()
-      this.queryAlarmTemperature()
+    getHomeData() {
+      this.queryVaccine();
+      this.queryAlarmDailyInfo();
+      this.queryDrawerEmpty();
+      this.queryVaccineLowerThreshold();
+      this.queryAlarmTemperature();
+      this.queryVaccinationByCustomerCode();
     },
-    queryVaccine () {
-      this.getTotal('inoculate', '/Vaccine/queryVaccine')
+    queryVaccinationByCustomerCode() {
+      this.getTotal("customer", "/Vaccine/queryVaccinationByCustomerCode", {
+        device: this.deviceid
+      });
     },
-    queryAlarmDailyInfo () {
-      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition').then(res => {
-        this.alarmlist = res.rs
-      })
+    queryVaccine() {
+      this.getTotal("inoculate", "/Vaccine/queryVaccine", {
+        device: this.deviceid
+      });
     },
-    queryAlarmTemperature () {
-      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', 1).then(res => {
-        this.alarmlist = res.rs
-      })
+    queryAlarmDailyInfo() {
+      this.getTotal("alarm", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    queryDrawerEmpty () {
-      this.getTotal('drawer', '/Drawer/queryDrawerEmpty')
+    queryAlarmTemperature() {
+      this.getTotal("temperature", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid,
+        type: 1
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    async queryVaccineLowerThreshold () {
-      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold').then(res => {
-        this.lists = res.rs
-      })
+    queryDrawerEmpty() {
+      console.log(this.deviceid);
+      console.log(this.device);
+      this.getTotal("drawer", "/Drawer/queryDrawerEmpty", {
+        device: this.deviceid
+      });
     },
-    getTotal (key, url, params = null) {
+    async queryVaccineLowerThreshold() {
+      await this.getTotal("inventory", "/vaccine/queryVaccineLowerThreshold", {
+        device: this.deviceid
+      }).then(res => {
+        this.lists = res.rs;
+      });
+    },
+    getTotal(key, url, params = null) {
       return new Promise((resolve, reject) => {
         if (params != null) {
           this.$api.get(url, params).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
+            let data = res.data;
+            changeItem(key, data.total, this.homecard);
+            resolve(data);
+          });
         } else {
           this.$api.get(url).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
+            let data = res.data;
+            changeItem(key, data.total, this.homecard);
+            resolve(data);
+          });
         }
-      })
+      });
     },
-    routerto (link) {
-      this.$router.push({ name: link })
-    },
-  },
-}
+    routerto(link) {
+      this.$router.push({ name: link });
+    }
+  }
+};
 </script>
 
 <style lang="less">
-@import "~@/style/main/home.less";
+@import "./home.less";
 </style>

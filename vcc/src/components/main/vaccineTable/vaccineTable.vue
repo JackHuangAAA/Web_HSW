@@ -7,7 +7,8 @@
     </div>
     <div class="vTable-l-r">
       <p> 左 </p>
-      <img :src="l2r">
+      <img :src="l2r"
+           style="margin-left:40px;">
       <p style="margin-left:12px;"> 右 </p>
     </div>
     <div class="vTableContent">
@@ -21,96 +22,124 @@
         <Col span="11"
              push="2">
         <p class="vTable-cloumns">
-          抽屉2
+          抽屉二
         </p>
         </Col>
       </Row>
-      <Row :gutter="12">
+      <Row :gutter="12"
+           v-for="lineRow,index of DrawerTree"
+           style="margin:14px">
         <Col span="2"
-             class="vTableContent-index"> 第一行 </Col>
-        <Col span="11">
-        <vaccineCard :type='type'></vaccineCard>
-        </Col>
-        <Col span="11">
-        <vaccineCard :type='type'></vaccineCard>
+             class="vTableContent-index"> 第{{index}}行 </Col>
+        <Col span="11"
+             v-for="item of lineRow">
+        <vaccineCard :type='type'
+                     @vaccine-add='vaccineadd'
+                     @vaccine-del='vaccinedel'
+                     @handleSubmit='modelSubmit'
+                     :vacclists='vacclists'
+                     :values='item.vaccine'
+                     :id='item._id'
+                     @click='vCardClick'
+                     :max='2'></vaccineCard>
         </Col>
       </Row>
+    </div>
+    <div class="TableButton"
+         v-if="type!='edit'&&type!='base'">
+      <Button type="primary"
+              @click="clickButton()">确定</Button>
     </div>
   </div>
 </template>
 
 <script>
-import vaccineCard from './vaccineCard.vue'
-import t2b from '_a/t-b.png'
-import l2r from '_a/l-r.png'
+import vaccineCard from "./vaccineCard.vue";
+import t2b from "_a/t-b.png";
+import l2r from "_a/l-r.png";
 export default {
-  name: 'vaccineTable',
+  name: "vaccineTable",
   components: {
     vaccineCard
   },
   props: {
     type: {
       type: String,
-      default: 'Router'
+      default: "base"
     }
   },
-  data () {
+  data() {
     return {
-      t2b, l2r
+      t2b,
+      l2r,
+      vacclists: null,
+      drawers: null,
+      max: 2, //指定疫苗最大数
+      DrawerTree: {
+        //处理数据为树状结构方便遍历抽屉格式
+        //   yNumb: {
+        //     xNumb: {
+        //       vaccine: {}
+        //     }
+        //   }
+        // }
+      }
+    };
+  },
+  computed: {},
+  watch: {
+    "$store.state.drawer": function(value) {
+      this.drawerinit(value.rs);
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    vaccineadd(code, drawerid) {
+      let va = this.vacclists.filter(el => {
+        return el.code === code;
+      });
+      this.$emit("vaccine-add", va[0], drawerid);
+    },
+    vaccinedel(va, drawerid) {
+      this.$emit("vaccine-del", va, drawerid);
+    },
+    init() {
+      this.getVacc();
+      this.getDrawer();
+    },
+    async getVacc() {
+      this.vacclists = await this.$store.dispatch("getVaccineKinds");
+    },
+    async getDrawer() {
+      this.drawers = await this.$store.dispatch("getDrawer");
+      this.drawerinit(this.drawers.rs);
+    },
+    drawerinit(values) {
+      let tree = {};
+      for (let el of values) {
+        if (tree[el.y] === undefined) tree[el.y] = {};
+        if (tree[el.y][el.x] === undefined) tree[el.y][el.x] = [];
+        tree[el.y][el.x] = el;
+      }
+      this.$nextTick(() => {
+        this.DrawerTree = tree;
+      });
+    },
+    modelSubmit(vaccinetotal, id, vaccines) {
+      this.$emit("submit", vaccinetotal, id, vaccines);
+    },
+    clickButton() {
+      this.$emit("click-button");
+    },
+    vCardClick(drawerid, vaccines) {
+      this.$emit("click", drawerid, vaccines);
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-.vTableContent-index {
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: 14px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-  color: rgba(62, 73, 85, 1);
-}
-.vTable {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.vTable-t-b,
-.vTable-l-r {
-  position: absolute;
-  p {
-    font-size: 16px;
-    font-family: Microsoft YaHei;
-    font-weight: bold;
-    color: rgba(62, 73, 85, 1);
-  }
-}
-.vTable-t-b {
-  display: flex;
-  flex-direction: column;
-  left: 108px;
-}
-.vTable-l-r {
-  display: flex;
-  flex-direction: row;
-  top: 88px;
-}
-.vTableContent {
-  padding: 100px 150px;
-  width: 100%;
-  height: 100%;
-}
-.vTable-cloumns {
-  margin-top: -20px;
-  margin-bottom: 10px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  color: rgba(62, 73, 85, 1);
-}
+@import "./vaccineTable.less";
 </style>

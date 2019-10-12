@@ -8,28 +8,28 @@
 </template>
 
 <script>
-import vaccineColumns from './data/vaccine-columns.js'
-import peopleColumns from './data/people-columns.js'
-import people from './data/people.js'
-import vaccine from './data/vaccine.js'
-import inoculateBox from './inoculateBox'
-import { IncomingMessage } from 'http'
+import vaccineColumns from "./data/vaccine-columns.js";
+import peopleColumns from "./data/people-columns.js";
+import people from "./data/people.js";
+import vaccine from "./data/vaccine.js";
+import inoculateBox from "./inoculateBox";
+import { IncomingMessage } from "http";
 export default {
-  name: 'inoculate',
+  name: "inoculate",
   components: {
     inoculateBox
   },
-  data () {
+  data() {
     return {
       peopleColumns: peopleColumns,
       people: people,
       vaccineColumns: vaccineColumns,
       vaccine: vaccine
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="less">
-@import "~@/style/main/inoculate.less";
+@import "./inoculate.less";
 </style>

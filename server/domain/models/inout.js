@@ -14,12 +14,12 @@ const inoutSchema = mongoose.Schema({
     x: Number,          //横坐标
     y: Number,          //纵坐标
     supervisionCode: String,//药品监管码
-    code: String,//疫苗编号
-    name: String,//疫苗名称
+    vaccineCode: String,//疫苗编号
+    vaccineName: String,//疫苗名称
     total: Number,      //数量(入库总数)
     surplus: Number,    //剩余数量
     use: Number,        //使用数量(use=total-surplus)
-    updateDate: {type: Date, default: Date.now}  //更新时间
+    createDate: {type: Date, default: Date.now}  //更新时间
 }, {autoIndex: false});
 inoutSchema.plugin(paginate);
 module.exports = mongoose.model('inout', inoutSchema);

@@ -1,20 +1,21 @@
 /**
  * Created by Administrator on 2019/9/24.
  */
-const FlakeId = require('flake-idgen')
-const generator = new FlakeId({ worker: process.env.NODE_APP_INSTANCE || 0 })
-const moment = require('moment')
-const logger = Libs.logger.getLogger('user')
-const crypto = require('crypto')
+const FlakeId = require('flake-idgen');
+const generator = new FlakeId({ worker: process.env.NODE_APP_INSTANCE || 0 });
+const moment = require('moment');
+const logger = Libs.logger.getLogger('user');
+const crypto = require('crypto');
 
 module.exports = {
+
   /**
    * 按用户code更新用户信息，不存在时插入，存在时修改用户名
    * @param requestBody
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   modifyUserByCode: async function(requestBody) {
-    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     let user = await Domain.models.user.update(
       { code: requestBody.code },
       {
@@ -25,13 +26,13 @@ module.exports = {
         }
       },
       { upsert: true, new: true }
-    )
+    );
     let token = generator
       .next()
       .toString('hex')
-      .toUpperCase()
-    user = await this.updateUserToken(requestBody.code, token)
-    return user
+      .toUpperCase();
+    user = await this.updateUserToken(requestBody.code, token);
+    return user;
   },
 
   /**
@@ -40,8 +41,8 @@ module.exports = {
    * @returns {*|T|Query}
    */
   queryUserByCondition: function(requestBody) {
-    logger.debug(`queryUserByCondition param: ${JSON.stringify(requestBody)}`)
-    let query = []
+    logger.debug(`queryUserByCondition param: ${JSON.stringify(requestBody)}`);
+    let query = [];
     if (!_.isEmpty(requestBody.code)) {
       query.push({ code: requestBody.code })
     }
@@ -49,7 +50,7 @@ module.exports = {
       query.push({ name: requestBody.name })
     }
     query =
-      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {}
+      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
     return Domain.models.user.find(query)
   },
 
@@ -59,7 +60,7 @@ module.exports = {
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   modifyUserById: async function(requestBody) {
-    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.update(
       { _id: requestBody.id },
       {
@@ -75,12 +76,12 @@ module.exports = {
    * @returns {Promise.<{_id, code, name, password, role: *, phone: (*|string|Array)}>}
    */
   checkToken: async function(token) {
-    logger.debug(`checkToken param: ${token}`)
+    logger.debug(`checkToken param: ${token}`);
     let user = await Domain.models.user.findOne({ token: token }, null, {
       lean: true
-    })
+    });
     if (user != null) {
-      await this.refreshLastLogin(user.code)
+      await this.refreshLastLogin(user.code);
       return {
         _id: user._id,
         code: user.code,
@@ -88,7 +89,7 @@ module.exports = {
         finger: user.finger
       }
     } else {
-      throw Libs.error('0001', '无效token')
+      throw Libs.error('0001', '无效token');
     }
   },
 
@@ -133,7 +134,7 @@ module.exports = {
    * @returns {*}
    */
   updateUserToken: function(code, token) {
-    logger.debug(`updateUserToken param code: ${code}, token: ${token}`)
+    logger.debug(`updateUserToken param code: ${code}, token: ${token}`);
     return Domain.models.user.findOneAndUpdate(
       { code: code },
       { $set: { token: token, lastLogin: new Date() } },
@@ -185,7 +186,7 @@ module.exports = {
    * @returns {Promise.<requestBody>}
    */
   saveUser: async function(requestBody) {
-    logger.debug(`saveUser param: ${json.stringify(requestBody)}`)
+    logger.debug(`saveUser param: ${json.stringify(requestBody)}`);
     return Domain.models.user.create(requestBody)
   },
 
@@ -195,7 +196,7 @@ module.exports = {
    * @returns {Promise.<*>}
    */
   modifyUser: async function(requestBody) {
-    logger.debug(`modifyUser param: ${json.stringify(requestBody)}`)
+    logger.debug(`modifyUser param: ${json.stringify(requestBody)}`);
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
@@ -210,7 +211,7 @@ module.exports = {
    * @returns {*}
    */
   removeUserById: function(requestBody) {
-    logger.debug(`removeUserById param: ${json.stringify(requestBody)}`)
+    logger.debug(`removeUserById param: ${json.stringify(requestBody)}`);
     return Domain.models.user.findOneAndRemove({ _id: requestBody.id })
   }
 }

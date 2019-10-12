@@ -5,30 +5,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  name: 'routerlink',
-  data () {
-    return {
-
-    }
+  name: "routerlink",
+  data() {
+    return {};
   },
   computed: {
-    ...mapGetters(['routerTitle'])
+    ...mapGetters(["routerTitle"])
   },
-  created () {
-  },
-  methods: {
-
-  },
-}
+  created() {},
+  methods: {}
+};
 </script>
 
 <style lang="less" scoped>
-.routerlinkType {
-  margin: auto;
-  font-size: 18px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
+@import "./routerlink.less";
 </style>

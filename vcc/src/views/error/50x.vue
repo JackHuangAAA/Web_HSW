@@ -35,20 +35,20 @@
 </style>
 <script>
 export default {
-  data () {
+  data() {
     return {
-      message: null,
-    }
+      message: null
+    };
   },
   computed: {
-    h () {
-      return document.documentElement.clientHeight - 106 + 'px';
+    h() {
+      return document.documentElement.clientHeight - 106 + "px";
     }
   },
-  mounted () {
+  mounted() {
     if (this.$route.query) {
       this.message = this.$route.query.message;
     }
   }
-}
+};
 </script>

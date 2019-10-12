@@ -13,10 +13,10 @@ async function housekeeping () {
     let exp = /^(\d{4})-(\d{2})$/;
     try{
         logger.info('start clean log files!');
-        let d = moment().subtract(90, 'days').format('YYYYMM');
-        let directories = fs.readdirSync('log');
+        let d = moment().subtract(90, 'days').format('YYYYMM');//获取90天前的日期
+        let directories = fs.readdirSync('log');//返回一个包含“指定目录下所有文件名称”的数组对象。
         for (let dir of directories) {
-            let fname = path.basename(dir);
+            let fname = path.basename(dir);  //提取出用 ‘/' 隔开的path的最后一部分,可添加过滤参数
             if (!exp.test(fname)) continue;
             let f = moment(fname).format('YYYYMM');
             if (f < d) {
@@ -42,9 +42,13 @@ async function housekeeping () {
         //await Domain.services.execution.saveExecution({name:'logsManage', time:time, status:status, reason:msg});
     }
     logger.info('end clean log files,use time:'+time);
+    //console.log("clean over");
 }
-
-later.setInterval(housekeeping,later.parse.cron('0 0 * * *'));
+let basic = {h:[0],m:[0]};
+let composite=[basic];
+let sched = { schedules:composite };
+var t=later.setInterval(housekeeping,sched);
+//later.setInterval(housekeeping,later.parse.cron('0 0 * * *'));
 //later.setInterval(housekeeping, later.parse.recur().every(24).hour());
 
 
