@@ -6,20 +6,10 @@ const logger = Libs.logger.getLogger('drawer');
 module.exports = {
 
     /**
-     * 增加抽屉信息
-     * @param requestBody
-     * @returns {Promise.<requestBody>}
-     */
-    saveDrawer: async function(requestBody) {
-      logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
-      return Domain.models.drawer.insertMany(requestBody);
-    },
-
-    /**
-     *  查询抽屉里疫苗为空的数据 
-     * 
-     * @param {any} requestBody 
-     * @returns 
+     *  查询抽屉里疫苗为空的数据
+     *
+     * @param {any} requestBody
+     * @returns
      */
     queryDrawerEmpty: async function (requestBody) {
         logger.debug(`queryDrawerEmpty param: ${JSON.stringify(requestBody)}`);
@@ -35,29 +25,40 @@ module.exports = {
         return { rs: result, total: result.length };
     },
 
-  /**
-   *   根据条件查询抽屉信息，并按坐标排序
-   *
-   * @param {any} requestBody
-   * @returns
-   */
-  queryDrawerByCondition: async function(requestBody) {
-    logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
-    let query = []
-    if (!_.isEmpty(requestBody.device)) {
-      query.push({ device: requestBody.device });
-    }
-    if (!_.isEmpty(requestBody.id)) {
-      query.push({ device: requestBody.id });
-    }
-    if (!_.isEmpty(requestBody.unitCode)) {
-      query.push({ unitCode: requestBody.unitCode });
-    }
-    query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
-    let result = await Domain.models.drawer.find(query).sort({ x: 1, y: 1 }).populate('vaccine');
+    /**
+     * 增加抽屉信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveDrawer: async function (requestBody) {
+        logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.drawer.insertMany(requestBody);
+    },
 
-    return { rs: result, total: result.length };
-  },
+    /**
+     *   根据条件查询抽屉信息，并按坐标排序
+     *
+     * @param {any} requestBody
+     * @returns
+     */
+    queryDrawerByCondition: async function (requestBody) {
+        logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.id)) {
+            query.push({ "_id": requestBody.id });
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
+        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        let result = await Domain.models.drawer.find(query).sort({ "x": 1, "y": 1 }).populate("vaccine");
+
+        return { rs: result, total: result.length }
+    },
+
     /**
      *
      * 根据抽屉id更新抽屉信息 增加
@@ -75,13 +76,12 @@ module.exports = {
         );
         return { vaccineData: vaccineData }
     },
-
-  /**
-   *
-   * 根据抽屉id更新抽屉信息 减少
-   * @param {any} requestBody
-   * @returns
-   */
+    /**
+     *
+     * 根据抽屉id更新抽屉信息 减少
+     * @param {any} requestBody
+     * @returns
+     */
     modifyDrawerByIdDec: async function (requestBody) {
         logger.debug(`modifyDrawerByIdDec param: ${JSON.stringify(requestBody)}`);
         let vaccineData = await Domain.models.vaccine.findOneAndRemove({ _id: requestBody.vaccineId });
@@ -106,18 +106,17 @@ module.exports = {
             { "$unwind": "$vaccine" },
             {
                 $lookup:
-                {
-                    from: "vaccines",
-                    localField: "vaccine",
-                    foreignField: "_id",
-                    as: "inventory_docs"
-                }
+                    {
+                        from: "vaccines",
+                        localField: "vaccine",
+                        foreignField: "_id",
+                        as: "inventory_docs"
+                    }
             },
-                {
-                    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$inventory_docs", 0 ] }, "$$ROOT" ] } }
-               },
-               { $project: { inventory_docs: 0 } }
+            {
+                $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$inventory_docs", 0 ] }, "$$ROOT" ] } }
+            },
+            { $project: { inventory_docs: 0 } }
         ])
     }
 };
-
