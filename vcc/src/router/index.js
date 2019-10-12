@@ -31,10 +31,10 @@ let getRouterConfig = function(path) {
 router.beforeEach(async (to, from, next) => {
   if (to.meta.title != null) store.dispatch('ChangeRoute', to.meta.title);
   if (store.getters.userinfo === null) {
-   await store.dispatch('getUserInfo');
+    store.dispatch('getUserInfo');
   }
   if (store.state.device === null) {
-   await store.dispatch('getDevice');
+    store.dispatch('getDevice');
   }
   let menu = getRouterConfig(to.path);
   if (menu != null) {
