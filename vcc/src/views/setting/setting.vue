@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import fingerprint from "./fingerprint";
 import VaccineSetting from "./VaccineSetting";
 import basicSetting from "./basicSetting";

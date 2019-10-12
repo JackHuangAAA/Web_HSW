@@ -14,7 +14,7 @@ export default {
   computed: {
     position(){
       console.log(this.$store.state.device)
-      return this.$store.state.device.alias
+      return this.$store.state.device.cabinetNo
     }
   },
   created() {},

@@ -12,20 +12,23 @@
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="device.provinceName">
-        <Option :value="device.provinceName"></Option>
+      <Select :value="device.address.provinceName"
+              :disabled="true">
+        <Option :value="device.address.provinceName">{{device.address.provinceName}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="device.cityName">
-        <Option :value="device.cityName"></Option>
+      <Select :value="device.address.cityName"
+              :disabled="true">
+        <Option :value="device.address.cityName">{{device.address.cityName}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="device.countyName">
-        <Option :value="device.countyName"></Option>
+      <Select :value="device.address.countyName"
+              :disabled="true">
+        <Option :value="device.address.countyName">{{device.address.countyName}}</Option>
       </Select>
       </Col>
     </Row>
@@ -40,8 +43,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="device.alias">
-        <Option :value="device.alias"></Option>
+      <Select v-model="device.cabinetNo"
+              :disabled="true">
+        <Option :value="device.cabinetNo">{{device.cabinetNo}}</Option>
       </Select>
       </Col>
     </Row>
@@ -56,8 +60,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="device.unitName">
-        <Option :value="device.unitName"></Option>
+      <Select v-model="device.unitName"
+              :disabled="true">
+        <Option :value="device.unitName">{{device.unitName}}</Option>
       </Select>
       </Col>
     </Row>
@@ -72,9 +77,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <!-- <Input v-model="value1"
+      <Input v-model="alias"
              size="large"
-             placeholder="设备编号" /> -->
+             placeholder="设备编号" />
       </Col>
     </Row>
     <Row type="flex"
@@ -90,15 +95,25 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "basicSetting",
   data() {
-    return {};
+    return {
+      alias: ""
+    };
   },
   computed: {
-    device() {
-      console.log(this.$store.state.device);
-      return this.$store.state.device;
+    ...mapGetters({
+      device: "device"
+    })
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.alias = this.device.alias;
     }
   }
 };

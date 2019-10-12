@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import alarmcard from "_c/main/alarmcard";
 import columns from "./data/columns";
 export default {
@@ -29,19 +30,21 @@ export default {
       lists: []
     };
   },
-  computed: {
-    deviceid() {
-      return this.$store.state.device._id;
-    }
-  },
   created() {
     this.getAlarms();
   },
+  computed: {
+    ...mapGetters({
+      device: "device"
+    })
+  },
   methods: {
     getAlarms() {
-      console.log(this.$store.state.device);
       this.$api
-        .get("alarm/queryAlarmByByCondition", { device: this.deviceid })
+        .get("alarm/queryAlarmByByCondition", {
+          device: this.device._id,
+          date: "now"
+        })
         .then(res => {
           this.$nextTick(() => {
             this.lists = res.data.rs;
