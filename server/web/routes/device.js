@@ -73,10 +73,12 @@ router.get('/queryDeviceByCondition',
 );
 
 /**
- * @api {GET} /device/queryDeviceByCondition  疫苗柜库存查询
+ * @api {GET} /device/queryDeviceStock  疫苗柜库存查询
  * @apiGroup device
  * @apiVersion 1.0.0
  * @apiDescription 疫苗柜库存查询
+ * @apiParam {Number} page 第几页
+ * @apiParam {Number} size 每页显示数目
  * @apiParam {Number} [type] 设备类型：1接种柜/2冷藏柜
  * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {JSON}  Object  version model数组
@@ -84,6 +86,22 @@ router.get('/queryDeviceByCondition',
 router.get('/queryDeviceStock',
     Libs.router(async (ctx, next) => {
         return await Domain.services.device.queryDeviceStock(ctx.request.query);
+    })
+);
+
+/**
+ * @api {GET} /device/queryDeviceByVaccineStock  查询疫苗柜内疫苗详细库存
+ * @apiGroup device
+ * @apiVersion 1.0.0
+ * @apiDescription 查询疫苗柜内疫苗详细库存
+ * @apiParam {Number} page 第几页
+ * @apiParam {Number} size 每页显示数目
+ * @apiParam {Number} deviceId 设备ID
+ * @apiSuccess {JSON}  Object  version model数组
+ */
+router.get('/queryDeviceByVaccineStock',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.device.queryDeviceByVaccineStock(ctx.request.query);
     })
 );
 
