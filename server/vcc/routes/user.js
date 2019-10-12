@@ -18,7 +18,6 @@ router.post(
   '/modifyUserByCode',
   Libs.router(async (ctx, next) => {
     let user = await Domain.services.user.modifyUserByCode(ctx.request.body)
-    console.log('999------------%j', user)
     ctx.cookies.set('token', user.token);
     return user;
   })
