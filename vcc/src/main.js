@@ -20,6 +20,9 @@ global._static = enums;
 global.storage = Storages;
 global.moment = moment
 
+moment.lang("zh-cn");
+global.moment = moment
+
 Vue.use(iView);
 
 //导入socket.io模块
