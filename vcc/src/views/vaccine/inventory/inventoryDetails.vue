@@ -41,8 +41,14 @@ export default {
   mounted() {
     this.init();
   },
+  watch:{
+    id(value){
+      this.init()
+    }
+  },
   methods: {
     init() {
+      this.data = []
       this.queryDrawerByCondition();
     },
     async queryDrawerByCondition() {
