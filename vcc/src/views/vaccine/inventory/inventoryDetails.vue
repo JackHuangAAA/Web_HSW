@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import columns from "./data/columns";
+import columns from "./data/testdata";
 import showTable from "_c/main/showTable";
 export default {
   name: "inventoryDetails",

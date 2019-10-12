@@ -68,16 +68,10 @@ async function execute() {
              drawerEmptyArr: drawerEmptyArr,
              customerNum: customerNum,
          }
-               console.log(JSON.stringify(timedData), 'timedData=============')
+        console.log(JSON.stringify(timedData), 'timedData=============')
         value.emit( Domain.enum.TIMEDATA, timedData);
         value.emit( 'test2', '再一次');
     });
-
-
-
 }
 
-later.setInterval(execute, later.parse.cron('0/5 * * * * ?'));
-
-
-
+later.setInterval(execute, later.parse.cron('0/1 * * * * ?'));

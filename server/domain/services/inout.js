@@ -54,7 +54,7 @@ module.exports = {
     },
 
     /**
-     * 批量保存出入库
+     * 批量保存出入库信息
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
@@ -91,7 +91,6 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
-
         return await Domain.models.inout.find(query);
     }
 
