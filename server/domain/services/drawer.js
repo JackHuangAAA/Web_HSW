@@ -44,11 +44,11 @@ module.exports = {
     queryDrawerByCondition: async function (requestBody) {
         logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
+        if (!_.isEmpty(requestBody.id)) {
+            query.push({ "_id": requestBody.id });
+        }
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
-        }
-        if (!_.isEmpty(requestBody.id)) {
-            query.push({ "device": requestBody.id });
         }
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });

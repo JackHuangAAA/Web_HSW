@@ -24,6 +24,8 @@ let push = {
                 map[_msg.deviceId] = socket;
                 logger.info("receive register data: " + msg);
             });
+
+            socket.emit("test", '收到了吗')
         });
         //断开连接
         io.on('disconnect', function (reason) {
@@ -43,17 +45,22 @@ async function execute() {
         // 报警信息 （温度报警次数、报警次数、报警信息）
 
         let deviceData = await Domain.services.device.queryDeviceByCondition({ code: key });
-        let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: deviceData._id });
+        console.log(deviceData, 'deviceData')
+        let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: deviceData[0]._id });
+         console.log(alarmData, '================================alarmData')
         // 疫苗种类
-        let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: deviceData._id });
+        let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: deviceData[0]._id });
+         console.log(vaccineNum, '======================================vaccineNum')
         
         // 缺少库存
-         let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: deviceData._id });
+         let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: deviceData[0]._id});
+           console.log(vaccineLowerThreshold, '==================================vaccineLowerThreshold')
         // 空余药柜
-         let drawerEmptyArr = await Domain.services.drawer.queryDrawerEmpty({ device: deviceData._id });
+         let drawerEmptyArr = await Domain.services.drawer.queryDrawerEmpty({ device: deviceData[0]._id });
+           console.log(drawerEmptyArr, '===========================================drawerEmptyArr')
          
         // 接种顾客
-         let customerNum = await Domain.services.vaccination.queryVaccinationByCustomerCode({ device: deviceData._id });
+         let customerNum = await Domain.services.vaccination.queryVaccinationByCustomerCode({ device: deviceData[0]._id});
          let timedData = {
              alarmData: alarmData,
              vaccineNum: vaccineNum,
@@ -61,14 +68,16 @@ async function execute() {
              drawerEmptyArr: drawerEmptyArr,
              customerNum: customerNum,
          }
+               console.log(JSON.stringify(timedData), 'timedData=============')
         value.emit( Domain.enum.TIMEDATA, timedData);
+        value.emit( 'test2', '再一次');
     });
 
 
 
 }
 
-later.setInterval(execute, later.parse.cron('10 * * * * ?'));
+later.setInterval(execute, later.parse.cron('0/5 * * * * ?'));
 
 
 

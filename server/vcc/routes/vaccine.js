@@ -98,7 +98,7 @@ router.post('/clearVaacineTotal',
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 更新抽屉内疫苗数量信息
- * @apiParam {String} id 疫苗ids
+ * @apiParam {Array} ids 疫苗ids
  * @apiParam {Array} totals 入库后抽屉内疫苗数量数组
  * @apiSuccess {OBject}  json  操作返回数据
  */
