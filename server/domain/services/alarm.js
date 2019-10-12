@@ -16,7 +16,7 @@ module.exports = {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
          if (!_.isEmpty(requestBody.date)) {
-            let today = requestBody.date;
+           let today = moment();
            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         }
         if (!_.isEmpty(requestBody.device)) {
