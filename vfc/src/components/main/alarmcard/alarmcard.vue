@@ -4,27 +4,27 @@
          class="alarm-card">
       <Col v-for="column in columns"
            :span="column.width">
-      <div v-if="column.key==='ID'"
-           class="alarm-card-index">
-        <p>{{el['id']}}</p>
-      </div>
-      <div v-else>
-        <div class="ivt">
-          <p>{{column.title}}</p>
+        <div v-if="column.key==='ID'"
+            class="alarm-card-index">
+          <p>{{el['id']}}</p>
         </div>
-        <div v-if="column.static"
-             class="ivh">
-          <p>{{content(el[column.key],column.map)}}</p>
+        <div v-else>
+          <div class="ivt">
+            <p>{{column.title}}</p>
+          </div>
+          <div v-if="column.static"
+              class="ivh">
+            <p>{{content(el[column.key],column.map)}}</p>
+          </div>
+          <div v-else-if="column.type==='datetime'"
+              class="ivh">
+            <p>{{datetime(el[column.key])}}</p>
+          </div>
+          <div v-else
+              class="ivh">
+            <p>{{el[column.key]}}</p>
+          </div>
         </div>
-        <div v-else-if="column.type==='datetime'"
-             class="ivh">
-          <p>{{datetime(el[column.key])}}</p>
-        </div>
-        <div v-else
-             class="ivh">
-          <p>{{el[column.key]}}</p>
-        </div>
-      </div>
       </Col>
     </Row>
   </div>
@@ -89,7 +89,7 @@ export default {
 }
 .alarm-card {
   width: 100%;
-  height: 100px;
+  height: 200px;
   margin: 8px 0px;
   background-color: @gray;
 }
@@ -101,10 +101,10 @@ export default {
 }
 .alarm-card-index {
   width: 24px;
-  height: 100px;
-  background-color: #b1d9ff;
+  height: 200px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #b1d9ff;
 }
 </style>

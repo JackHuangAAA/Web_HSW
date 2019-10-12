@@ -79,7 +79,7 @@ export default {
         code: this.user,
         password: this.pwd
       }
-      // this.$emit('Submit', form)
+      this.$emit('Submit', form)
     }
   }
 }

@@ -1,16 +1,16 @@
 <template>
     <div>
         <div>
-            <nav-header
+            <nav-header :lists="indexlist"
                 :active="1" :comeback="1">
                 <div class="complete-navtitle">
                     <img :src="complete"/>
-                    <div>疫苗入库完成</div>
+                    <div>疫苗出库完成</div>
                 </div>
             </nav-header>
         </div>
         <div class="card">
-            <scan-table order="1"></scan-table>
+            <scan-table order="2"></scan-table>
         </div>
         <Row>
             <datetime>
@@ -29,7 +29,7 @@ import scan from '_a/scan.png';
 import complete from '_a/complete.png';
 import moment from 'moment'
 export default {
-    name:'complete',
+    name:'outcomplete',
     data(){
         return{
             scan,

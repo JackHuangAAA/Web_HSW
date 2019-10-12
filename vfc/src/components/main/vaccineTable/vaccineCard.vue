@@ -1,28 +1,33 @@
 <template>
-  <div @click="vCardClick()">
-    <div class="vCard-checkbox"
-         v-if="checked">
-      <Checkbox v-model="Selection"></Checkbox>
-    </div>
+  <div>
     <Row type="flex"
-         class="vCard"
          :class="{'cur-po':NotEdit}"
          align="middle">
-      <Col span="12"
-           v-if="type != 'edit'">
-      <div>
-        <Row>
-          <p class="vCard-name">狂犬疫苗</p>
-        </Row>
-        <Row>
-          <p class="vCard-count">
-            100支
-          </p>
-        </Row>
-      </div>
+      <Col span="12" class="vCard-pd">
+        <div class="vCard">
+          <div class="vCard-checkbox">
+            <Checkbox label="狂犬疫苗"></Checkbox>
+            <label></label>
+          </div>
+          <div>
+              <p class="vCard-name">狂犬疫苗</p>
+          </div>
+        </div>
       </Col>
+      <Col span="12" class="vCard-pd">
+        <div class="vCard">
+          <div class="vCard-checkbox">
+            <Checkbox label="狂犬疫苗"></Checkbox>
+            <label></label>
+          </div>
+          <div>
+              <p class="vCard-name">狂犬疫苗</p>
+          </div>
+        </div>
+      </Col>
+      
       <!-- edit模块 -->
-      <Col v-if="type == 'edit' && value"
+      <!-- <Col v-if="type == 'edit' && value"
            :span="wspan"
            v-for="vc in value">
       <div class="vCard-edit">
@@ -55,10 +60,10 @@
           </div>
         </div>
       </div>
-      </Col>
+      </Col> -->
       <!-- edit模块 -->
     </Row>
-    <div>
+    <!-- <div>
       <Modal v-model="vCardModal"
              width="548"
              :styles="{top: '30%'}">
@@ -87,7 +92,7 @@
                   @click="handleSubmit()">确定</Button>
         </div>
       </Modal>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -120,7 +125,7 @@ export default {
   data () {
     return {
       addpng, delpng,
-      Selection: false,
+      Selection: [],
       vCardModal: false,
       input: '',
       model1: '',

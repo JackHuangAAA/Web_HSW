@@ -2,7 +2,7 @@
   <div class="inbound">
     <div class="bound-header">
       <nav-header :lists="indexlist"
-                  :active="1">请选择疫苗入库的抽屉</nav-header>
+                  :active="1" :comeback="0">请将入库疫苗扫码</nav-header>
     </div>
     <div class="bound-content card">
       <vaccine-table>
@@ -25,7 +25,10 @@ export default {
     return {
       indexlist
     }
-  }
+  },
+  methods:{
+    
+  },
 }
 </script>
 

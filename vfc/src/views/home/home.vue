@@ -28,6 +28,9 @@
           <img src="~@/assets/vaccine-out.png">
         </div>
       </div>
+      <div class="datetime">
+        <datetime></datetime>
+      </div>
     </div>
   </div>
 </template>
@@ -47,12 +50,13 @@ import homecard from './data/homecard'
 import thermometer from './thermometer'
 import itemCard from '_c/main/itemcard'
 import lackinventory from './lackinventory'
+import datetime from '_c/datetime'
 export default {
   components: {
     thermometer,
     itemCard,
     lackinventory,
-
+    datetime,
   },
   data () {
     return {

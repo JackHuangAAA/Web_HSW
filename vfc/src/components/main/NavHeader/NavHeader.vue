@@ -1,6 +1,7 @@
 <template>
   <div class="nav-header">
     <div class="nav-back"
+        v-show="comeback==0"
          @click="goback()">
       <img :src="back">
     </div>
@@ -32,6 +33,10 @@ export default {
     active: {
       type: Number,
       default: 0
+    },
+    comeback:{
+      type:Number,
+      default:0
     }
   },
   data () {
@@ -58,7 +63,8 @@ export default {
 }
 .nav-back {
   position: absolute;
-  left: 0px;
+  left: 15px;
+  top: -12px;
   cursor: pointer;
 }
 .nav-slot {

@@ -28,10 +28,9 @@ const routers = [
         component: () => import('@/views/vaccine/inventory/inventorys.vue')
       },
       {
-        path: 'Details',
-        name: 'inventoryDetails',
-        component: () =>
-          import('@/views/vaccine/inventory/inventoryDetails.vue')
+        path:'scanList',
+        name:'scanList',
+        component:()=>import('@/views/vaccine/scanList/scanList.vue')
       },
       {
         path: 'inbound',
@@ -39,24 +38,19 @@ const routers = [
         component: () => import('@/views/vaccine/inbound/inbound.vue')
       },
       {
-        path: 'checkin',
-        name: 'checkin',
-        component: () => import('@/views/vaccine/inbound/checkin.vue')
-      },
-      {
         path: 'outbound',
         name: 'outbound',
         component: () => import('@/views/vaccine/outbound/outbound.vue')
       },
       {
-        path: 'opendrawer',
-        name: 'opendrawer',
-        component: () => import('@/views/vaccine/outbound/opendrawer.vue')
-      },
-      {
         path: 'complete',
         name: 'complete',
         component: () => import('@/views/vaccine/complete/complete.vue')
+      },
+      {
+        path: 'outcomplete',
+        name: 'outcomplete',
+        component: () => import('@/views/vaccine/outcomplete/outcomplete.vue')
       }
     ]
   },

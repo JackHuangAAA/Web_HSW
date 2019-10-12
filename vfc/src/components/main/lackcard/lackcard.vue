@@ -1,7 +1,7 @@
 <template>
-  <div class="lack-card" :class="reBg(state)">
+  <div class="lack-card" :class="reBg(type)">
     <div class="lack-card-title lack-card-item">
-      <div class="lack-card-column" :class="reColor(state)">
+      <div class="lack-card-column" :class="reColor(type)">
         <div>title</div>
         <div>number{{unit}}</div>
       </div>
@@ -31,9 +31,9 @@ export default {
       type: String,
       default: '支'
     },
-    state:{
+    type:{
       type:Number,
-      default:''
+      default:1
     }
   },
   data () {

@@ -18,7 +18,6 @@
       <p class="header-thermometer-icon">℃</p>
       <div class="header-right">
         <p>正常</p>
-        <p>室温：26℃</p>
       </div>
     </div>
     <div class="slider-contont"
@@ -51,10 +50,11 @@ export default {
       initialMouseX: 0,
       sliderX: 0,
       initialSliderX: 0,
-      temperatureGrades: [-3, -2, -1, 0, 1, 2, 3],
+      temperatureGrades: [],
       gradientStart: coldGradient.start,
       gradientEnd: coldGradient.end,
-      sideheight: 22
+      sideheight: 22,
+      temperature:0
     }
   },
   props: {
@@ -68,13 +68,22 @@ export default {
       return Math.round(num)
     }
   },
+  created(){
+    this.getTemperature()
+  },
   methods: {
     tempElementStyle (tempNumber) {
       const length = this.temperatureGrades.length
       const mid = Math.floor(length / 2)
       const elementY = tempNumber === mid ? -this.sideheight + 2 : 0
       return `transform: translate3d(0, ${elementY}px, 0)`
-    }
+    },
+    getTemperature(){
+      let t=this.temperature-3;
+      for(let i=t;i<t+7;i++){
+        this.temperatureGrades.push(i)
+      }
+    },
   },
   computed: {
     currentTemperature () {
@@ -106,12 +115,12 @@ export default {
 }
 .header-right {
   position: absolute;
-  right: 14px;
+  right: 24px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   p {
-    font-size: 16px;
+    font-size: 28px;
     font-weight: 400;
     margin-top: 2px;
   }

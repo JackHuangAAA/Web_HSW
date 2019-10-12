@@ -22,7 +22,7 @@
       <Col v-for="el in lists"
            span="12">
       <lackcard :title="el.name"
-                :value="el.surplus" :state="el"></lackcard>
+                :value="el.surplus" :type="el"></lackcard>
       </Col>
     </Row>
   </div>
