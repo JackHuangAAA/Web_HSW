@@ -29,6 +29,8 @@ router.post('/saveInouts',
  * @apiParam {String} [name] 疫苗名称
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间
+ * @apiParam {String} size 每页显示数目
+ * @apiParam {String} page 第几页
  * @apiSuccess {JSON}  Object  inout model 数组
  */
 router.get('/queryInouts',

@@ -91,8 +91,6 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
-
         return await Domain.models.inout.find(query);
     }
-
 };
