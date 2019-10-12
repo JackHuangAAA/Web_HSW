@@ -14,9 +14,14 @@ import 'iview/dist/styles/iview.css';
 import config from '@/config';
 import device from '@/api/device.js';
 import { Storages } from '@/libs/util.js';
+import moment from "moment";
 global._ = lodash;
 global._static = enums;
 global.storage = Storages;
+global.moment = moment
+
+moment.lang("zh-cn");
+global.moment = moment
 
 Vue.use(iView);
 
@@ -34,6 +39,12 @@ Vue.config.productionTip = processmod;
 Vue.prototype.$api = api;
 Vue.prototype.$config = config;
 Vue.prototype.$device = device;
+global.__app = new Vue({
+  el: '#app',
+  router,
+  store,
+  render: h => h(App)
+});
 if (config.env == 'development') {
   global.__app = new Vue({
     el: '#app',

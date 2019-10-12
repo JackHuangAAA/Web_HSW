@@ -8,21 +8,45 @@
          @click="gobackhome()">
       <img :src="gohome">
     </div>
+    <div class="complete-info">
+      <Row>
+        <Col span="4">
+        {{title}}支数:
+        </Col>
+        <Col span="4">
+        取出人员:{{username}}
+        </Col>
+        <Col span="4">
+        取出时间:{{time}}
+        </Col>
+      </Row>
+    </div>
   </div>
 </template>
 
 <script>
 import gohome from "_a/gohome.png";
 import succeed from "_a/succeed.png";
+import moment from "moment";
 export default {
   name: "complete",
   data() {
     return {
       succeed,
-      gohome
+      gohome,
+      nowtime: moment()
     };
   },
   computed: {
+    time() {
+      let a = moment().format("YYYY-MM-DD HH:mm:ss");
+      console.log(a);
+      return a;
+    },
+    username() {
+      if (this.userinfo != null) return this.userinfo.name;
+      else return "";
+    },
     type() {
       return this.$route.params.type;
     },
@@ -30,9 +54,7 @@ export default {
       return this.type === "1" ? "入库" : "出库";
     }
   },
-  created:{
-    
-  },
+  created: {},
   methods: {
     gobackhome() {
       this.$router.push({ name: "home" });

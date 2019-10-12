@@ -3,8 +3,7 @@
 </template>
 
 <script>
-import moment from "moment";
-moment.lang("zh-cn");
+
 export default {
   name: "datetime",
   data() {
@@ -18,6 +17,7 @@ export default {
   },
   methods: {
     dateint() {
+      moment.lang("zh-cn");
       setInterval(() => {
         let nowdate = moment().format("YYYY-MM-DD HH:mm:ss dddd");
         this.nowdate = nowdate;
