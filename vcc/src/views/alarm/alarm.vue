@@ -18,7 +18,6 @@
 <script>
 import alarmcard from "_c/main/alarmcard";
 import columns from "./data/columns";
-// import testdata from "./data/testdata"
 export default {
   name: "alarm",
   components: {
@@ -30,14 +29,24 @@ export default {
       lists: []
     };
   },
+  computed: {
+    deviceid() {
+      return this.$store.state.device._id;
+    }
+  },
   created() {
     this.getAlarms();
   },
   methods: {
     getAlarms() {
-      this.$api.get("alarm/queryAlarmByByCondition").then(res => {
-        this.lists = res.data.rs;
-      });
+      console.log(this.$store.state.device);
+      this.$api
+        .get("alarm/queryAlarmByByCondition", { device: this.deviceid })
+        .then(res => {
+          this.$nextTick(() => {
+            this.lists = res.data.rs;
+          });
+        });
     }
   }
 };

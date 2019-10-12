@@ -64,53 +64,60 @@
                   class="inculate-box-spin-icon-load"></Icon>
           </Spin>
         </div>
-        <div class="inculate-box-checkedinfo">疫苗接种信息</div>
+        <div class="inculate-box-checkedinfo">疫苗接种信息匹配中</div>
       </div>
     </Row>
   </div>
 </template>
 
 <script>
-import inoculateboxitem from './inoculateboxitem.vue'
+import inoculateboxitem from "./inoculateboxitem.vue";
 export default {
-  name: 'inoculate-Box',
+  name: "inoculate-Box",
   components: {
     inoculateboxitem
   },
   props: {
+    type: {
+      tyep: Number,
+      default: 0
+    },
     peopleColumns: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     people: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
     },
     vaccineColumns: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     vaccine: {
       type: Object,
-      default () {
-        return {}
+      default() {
+        return {};
       }
     }
   },
-  data () {
-    return {
-
+  data() {
+    return {};
+  },
+  computed: {
+    typeinfo() {
+      let type = this.type;
+      let str = '匹配中'
     }
   },
-  mounted () {
-  },
-}
+  mounted() {}
+};
 </script>
 
 <style lang="less">

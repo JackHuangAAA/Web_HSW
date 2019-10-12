@@ -12,26 +12,20 @@
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="device.provinceName">
+        <Option :value="device.provinceName"></Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="device.cityName">
+        <Option :value="device.cityName"></Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="device.countyName">
+        <Option :value="device.countyName"></Option>
       </Select>
       </Col>
     </Row>
@@ -46,10 +40,8 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="device.alias">
+        <Option :value="device.alias"></Option>
       </Select>
       </Col>
     </Row>
@@ -64,10 +56,8 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="device.unitName">
+        <Option :value="device.unitName"></Option>
       </Select>
       </Col>
     </Row>
@@ -82,9 +72,9 @@
       </Col>
       <Col span="18"
            push="1">
-      <Input v-model="value1"
+      <!-- <Input v-model="value1"
              size="large"
-             placeholder="设备编号" />
+             placeholder="设备编号" /> -->
       </Col>
     </Row>
     <Row type="flex"
@@ -104,6 +94,12 @@ export default {
   name: "basicSetting",
   data() {
     return {};
+  },
+  computed: {
+    device() {
+      console.log(this.$store.state.device);
+      return this.$store.state.device;
+    }
   }
 };
 </script>

@@ -114,7 +114,7 @@ export default {
       this.getDrawer();
     },
     async getDrawer() {
-      this.drawers = await this.$store.dispatch("getDrawer");
+      this.drawers = await this.$store.dispatch("updateDrawe");
       this.drawerinit(this.drawers.rs);
     },
     drawerinit(values) {

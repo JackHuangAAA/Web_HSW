@@ -55,14 +55,6 @@ const store = {
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle);
     },
-    async getDrawer({ state, dispatch }) {
-      if (state.drawer === null) {
-        let res = await dispatch('updateDrawe');
-        return res.data;
-      } else {
-        return state.drawer;
-      }
-    },
     async updateDrawe({ state, commit }) {
       //用于刷新抽屉信息
       let deviceid = state.deviceid;
