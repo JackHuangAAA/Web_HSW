@@ -62,24 +62,22 @@ module.exports = {
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length, device: requestBody }
     },
-
     /**
- *  出库后 数量、 剩余数量清零
- * 
- * @param {any} requestBody 
- * @returns 
- */
-    clearVacineTotal: async function (requestBody) {
-        logger.debug(`clearVacineTotal param: ${JSON.stringify(requestBody)}`);
+     *  出库后 数量、 剩余数量清零
+     * 
+     * @param {any} requestBody 
+     * @returns 
+     */
+    clearVaacineTotal: async function (requestBody) {
+        logger.debug(`clearVaacineTotal param: ${JSON.stringify(requestBody)}`);
         await Domain.models.vaccine.update(
-            {},
+            { device:requestBody.device },
             {
-                $set: { total: 0, surplus: 0 }
+                $set: { total: 0,  surplus: 0 }
             },
-            { multi: true }
+            {multi:true}
         );
     },
-
 
     /**
      *  更新抽屉内疫苗数量信息
@@ -89,10 +87,16 @@ module.exports = {
      */
     modifyVaccine: async function (requestBody) {
         logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
-        return await Domain.models.vaccine.update(
-            { _id: requestBody.id },
+        await Domain.models.vaccine.update(
+            { _id: requestBody.ids[0] },
             {
-                $set: { vaccine: requestBody.vaccine, updateDate: new Date() }
+                $set: { total: requestBody.totals[0] }
+            }
+        );
+        await Domain.models.vaccine.update(
+            { _id: requestBody.ids[1] },
+            {
+                $set: { total: requestBody.totals[1] }
             }
         );
     },

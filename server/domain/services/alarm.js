@@ -14,10 +14,9 @@ module.exports = {
      */
     queryAlarmByByCondition: async function (requestBody) {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
-     
         let query = [];
-        let today = requestBody.date;
-         if (!_.isEmpty(requestBody.createDate)) {
+         if (!_.isEmpty(requestBody.date)) {
+            let today = requestBody.date;
            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         }
         if (!_.isEmpty(requestBody.device)) {
@@ -25,6 +24,12 @@ module.exports = {
         }
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({ "deviceType": requestBody.deviceType });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
