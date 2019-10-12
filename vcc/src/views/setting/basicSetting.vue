@@ -13,15 +13,17 @@
       <Col span="6"
            push="1">
       <Select v-model="province"
-              @on-change="changeProvince()">
-        <Option v-for="d in district"
+              :label-in-value="true"
+              @on-change="changeProvince">
+        <Option v-for="d in district" 
                 :value="d.name">{{d.name}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
       <Select v-model="city"
-              @on-change="changeCity()">
+              :label-in-value="true"
+              @on-change="changeCity">
         <Option v-for="city in citys"
                 :value="city.name">{{city.name}}</Option>
       </Select>
@@ -29,7 +31,8 @@
       <Col span="6"
            push="1">
       <Select v-model="county"
-              @on-change="changeCounty()">
+              :label-in-value="true"
+              @on-change="changeCounty">
         <Option v-for="county in countys"
                 :value="county.name">{{county.name}}</Option>
       </Select>
@@ -46,7 +49,8 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="cabinetNo">
+      <Select v-model="cabinetNo"
+              :label-in-value="true">
         <Option v-for="list in cabinetNoList"
                 :value="list.value">{{list.value}}</Option>
       </Select>
@@ -63,7 +67,8 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="unit">
+      <Select v-model="unit"
+              :label-in-value="true">
         <Option v-for="u in unitlist"
                 :value="u.code">{{u.name}}</Option>
       </Select>
@@ -131,16 +136,16 @@ export default {
   },
   methods: {
     init() {
-      this.provinceName = this.device.address.provinceName;
-      this.cityName = this.device.address.cityName;
-      this.countyName = this.device.address.countyName;
-      this.alias = this.device.alias;
-      this.cabinetNo = this.device.cabinetNo;
+      // this.provinceName = this.device.address.provinceName;
+      // this.cityName = this.device.address.cityName;
+      // this.countyName = this.device.address.countyName;
+      // this.alias = this.device.alias;
+      // this.cabinetNo = this.device.cabinetNo;
     },
-    getinit() {
-      this.queryDistrict();
-      this.queryCabinetNo();
-      this.queryUnit();
+    async getinit() {
+      await this.queryDistrict();
+      await this.queryCabinetNo();
+      await this.queryUnit();
     },
     async queryUnit() {
       let res = await this.$api.get("/zcy/queryUnit");
@@ -158,21 +163,19 @@ export default {
     changeProvince() {
       let citys = [];
       for (let d of this.district) {
-        if (d.name === this.province) citys = d.child;
+        if (d.name === this.provinceName) citys = d.child;
       }
       this.citys = citys;
     },
     changeCity() {
       let countys = [];
       for (let c of this.citys) {
-        if (c.name === this.city) countys = c.child;
+        if (c.name === this.cityName) countys = c.child;
       }
       this.countys = countys;
     },
     changeCounty() {},
-    submit() {
-      
-    }
+    submit() {}
   }
 };
 </script>

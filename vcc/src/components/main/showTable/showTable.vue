@@ -1,7 +1,7 @@
 <template>
   <div class="showTable">
     <Table :columns="columns"
-           :data="data"
+           :data="data" 
            :row-class-name="tableclass">
       <template slot-scope="{ row, index }"
                 slot="ac">
