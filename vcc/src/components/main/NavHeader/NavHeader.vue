@@ -15,18 +15,18 @@
 </template>
 
 <script>
-import Steps from '_c/main/Steps'
-import back from '_a/back.png'
+import Steps from "_c/main/Steps";
+import back from "_a/back.png";
 export default {
-  name: 'NavHeader',
+  name: "NavHeader",
   components: {
     Steps
   },
   props: {
     lists: {
       type: Array,
-      default () {
-        return []
+      default() {
+        return [];
       }
     },
     active: {
@@ -34,41 +34,19 @@ export default {
       default: 0
     }
   },
-  data () {
+  data() {
     return {
       back
-    }
+    };
   },
   methods: {
-    goback () {
-      this.$router.go(-1)
+    goback() {
+      this.$router.go(-1);
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-.nav-header {
-  justify-content: center;
-  margin-top: -10px;
-  display: flex;
-  height: 70px;
-  width: 100%;
-  padding: 5px;
-}
-.nav-back {
-  position: absolute;
-  left: 0px;
-  cursor: pointer;
-}
-.nav-slot {
-  margin: auto;
-  font-size: 30px;
-  font-weight: 400;
-  color: rgba(62, 73, 85, 1);
-}
-.nav-steps {
-  position: absolute;
-  right: 0px;
-}
+@import "./NavHeader.less";
 </style>

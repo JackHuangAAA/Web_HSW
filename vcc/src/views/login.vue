@@ -28,38 +28,39 @@
 </template>
 
 <script>
-import ETHINK from '@/assets/logo.png'
-import loginform from '_c/loginform'
-import fplogin from '_c/fplogin'
-import { mapGetters, mapActions } from 'vuex'
+import ETHINK from "@/assets/logo.png";
+import loginform from "_c/loginform";
+import fplogin from "_c/fplogin";
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     loginform,
     fplogin
   },
-  data () {
+  data() {
     return {
       login1: true,
       login2: false,
       ETHINK
-    }
+    };
   },
   computed: {
-    ...mapGetters(['device'])
+    ...mapGetters(["device"])
   },
-  created () {
-  },
-  mounted () {
+  created() {},
+  mounted() {
+    this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
+    this.$device.subscribe("SOCKET_DATA", this.SOCKET());
   },
   methods: {
-    ...mapActions(['saveUser', 'saveUserInfo']),
-    login (type) {
+    ...mapActions(["saveUser"]),
+    login(type) {
       switch (type) {
-        case 'fp':
+        case "fp":
           this.login1 = true;
           this.login2 = false;
           break;
-        case 'up':
+        case "up":
           this.login1 = false;
           this.login2 = true;
           break;
@@ -67,25 +68,36 @@ export default {
           break;
       }
     },
-    test () {
-      let test = this.$device.finger('open').catch(err => {
-        console.log(err)
-      })
-      console.log('test')
+    SOCKET(cb) {
+      console.log(cb);
     },
-    async checkUser (form) {
-      let res = await this.$api.get('/zcy/checkUser', form)
-      let check = res.data.check
+    SCANNER(cb) {
+      console.log(cb);
+    },
+    test() {
+      // let deviceid = this.$device.getDeviceCode();
+      // console.log(JSON.stringify(deviceid));
+      let test = this.$device.finger("open").catch(err => {
+        console.log(JSON.stringify(err));
+      });
+      console.log("test");
+    },
+    async checkUser(form) {
+      let res = await this.$api.get("/zcy/checkUser", form);
+      let check = res.data.check;
       if (check) {
-        let data = res.data
-        await this.saveUser(form.code)
-        await this.saveUserInfo(data)
-        await this.$api.post('/user/modifyUserByCode', { code: data.code, name: data.name })
-        this.$router.push({ name: 'home' })
+        let data = res.data;
+        let user = await this.$api.post("/user/modifyUserByCode", {
+          code: data.code,
+          name: data.name
+        });
+        await this.saveUser(user.data);
+        console.log(user.data);
+        this.$router.push({ name: "home" });
       }
     }
   }
-}
+};
 </script>
 
 <style lang="less">

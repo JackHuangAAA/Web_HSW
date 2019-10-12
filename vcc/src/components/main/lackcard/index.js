@@ -1,2 +1,2 @@
-import lackcard from './lackcard.vue'
-export default lackcard
+import lackcard from './lackcard.vue';
+export default lackcard;

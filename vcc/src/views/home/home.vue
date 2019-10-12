@@ -5,7 +5,8 @@
         <Col span="8"
              v-for="card in homecard">
         <item-card :title="card.title"
-                   :icon="card.icon">{{card.value}}</item-card>
+                   :icon="card.icon"
+                   :unit="card.unit">{{card.value}}</item-card>
         </Col>
       </Row>
       <Row class="lackinventory card">
@@ -39,101 +40,107 @@
 <script>
 const changeItem = (key, value, obj) => {
   let tmp = obj.map(el => {
-    el.name
+    el.name;
     if (el.name === key) {
-      el.value = value
+      el.value = value;
     }
-    return el
-  })
-}
-import testli from './data/testlackitem.js'
-import alarminfo from './alarminfo'
-import homecard from './data/homecard'
-import thermometer from './thermometer'
-import itemCard from '_c/main/itemcard'
-import lackinventory from './lackinventory'
+    return el;
+  });
+};
+import homecard from "./data/homecard";
+import alarminfo from "./alarminfo";
+import thermometer from "./thermometer";
+import itemCard from "_c/main/itemcard";
+import lackinventory from "./lackinventory";
 export default {
   components: {
     thermometer,
     itemCard,
     lackinventory,
-    alarminfo,
-
+    alarminfo
   },
-  data () {
+  data() {
     return {
       homecard: homecard,
       lists: [],
       alarmlist: [],
       alarmcode: 0
-    }
+    };
   },
-  created () {
-    this.getHomeData()
+  created() {
+    this.getHomeData();
   },
   computed: {
-    deviceid () {
-      return this.$store.state.deviceid
+    deviceid() {
+      return this.$store.state.deviceid;
+    },
+    device() {
+      return this.$store.getters.device;
     }
   },
   methods: {
-    getHomeData () {
-      this.queryVaccine()
-      this.queryAlarmDailyInfo()
-      this.queryDrawerEmpty()
-      this.queryVaccineLowerThreshold()
-      this.queryAlarmTemperature()
-      this.queryVaccinationByCustomerCode()
+    getHomeData() {
+      // this.queryVaccine();//查询疫苗种类
+      // this.queryAlarmDailyInfo();//查询告警次数
+      // this.queryDrawerEmpty();//查询空药柜
+      // this.queryVaccineLowerThreshold();//查询库存
+      this.queryAlarmTemperature();//查询温度告警
+      this.queryVaccinationByCondition();//查询接种人数
     },
-    queryVaccinationByCustomerCode () {
-      this.getTotal('customer', '/Vaccine/queryVaccinationByCustomerCode', { device: this.deviceid })
+    queryVaccinationByCondition() {
+      this.getTotal("customer", "/vaccination/queryVaccinationByCondition", {
+        device: this.deviceid
+      });
     },
-    queryVaccine () {
-      this.getTotal('inoculate', '/Vaccine/queryVaccine', { device: this.deviceid })
+    queryVaccine() {
+      this.getTotal("inoculate", "/Vaccine/queryVaccine", {
+        device: this.deviceid
+      });
     },
-    queryAlarmDailyInfo () {
-      this.getTotal('alarm', '/Alarm/queryAlarmByByCondition', { device: this.deviceid }).then(res => {
-        this.alarmlist = res.rs
-      })
+    queryAlarmDailyInfo() {
+      this.getTotal("alarm", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    queryAlarmTemperature () {
-      this.getTotal('temperature', '/Alarm/queryAlarmByByCondition', { device: this.deviceid, type: 1 }).then(res => {
-        this.alarmlist = res.rs
-      })
+    queryAlarmTemperature() {
+      this.getTotal("temperature", "/Alarm/queryAlarmByByCondition", {
+        device: this.deviceid,
+        type: 1
+      }).then(res => {
+        this.alarmlist = res.rs;
+      });
     },
-    queryDrawerEmpty () {
-      console.log(this.deviceid)
-      this.getTotal('drawer', '/Drawer/queryDrawerEmpty', { device: this.deviceid })
+    queryDrawerEmpty() {
+      this.getTotal("drawer", "/Drawer/queryDrawerEmpty", {
+        device: this.deviceid
+      });
     },
-    async queryVaccineLowerThreshold () {
-      await this.getTotal('inventory', '/vaccine/queryVaccineLowerThreshold', { device: this.deviceid }).then(res => {
-        this.lists = res.rs
-      })
+    async queryVaccineLowerThreshold() {
+      await this.getTotal("inventory", "/vaccine/queryVaccineLowerThreshold", {
+        device: this.deviceid
+      }).then(res => {
+        this.lists = res.rs;
+      });
     },
-    getTotal (key, url, params = null) {
+    getTotal(key, url, params = null) {
       return new Promise((resolve, reject) => {
-        if (params != null) {
           this.$api.get(url, params).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
-        } else {
-          this.$api.get(url).then(res => {
-            let data = res.data
-            changeItem(key, data.total, this.homecard)
-            resolve(data)
-          })
-        }
-      })
+            let data = res.data;
+            let total = data.total || data.length
+            changeItem(key, total, this.homecard);
+            resolve(data);
+          });
+      });
     },
-    routerto (link) {
-      this.$router.push({ name: link })
-    },
-  },
-}
+    routerto(link) {
+      this.$router.push({ name: link });
+    }
+  }
+};
 </script>
 
 <style lang="less">
-@import "~@/style/main/home.less";
+@import "./home.less";
 </style>

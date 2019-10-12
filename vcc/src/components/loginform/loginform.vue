@@ -30,73 +30,61 @@
 </template>
 
 <script>
-import { Storages } from '@/libs/util.js'
-import userpng from '@/assets/user.png';
-import passpng from '@/assets/pwd.png'
+import { Storages } from "@/libs/util.js";
+import userpng from "@/assets/user.png";
+import passpng from "@/assets/pwd.png";
 export default {
-  name: 'loginform',
-  data () {
+  name: "loginform",
+  data() {
     return {
       userpng,
       passpng,
-      value: '',
+      value: "",
       rember: false,
-      user: '',
-      pwd: ''
-    }
+      user: "",
+      pwd: ""
+    };
   },
   watch: {
-    rember (value) {
+    rember(value) {
       if (!value) {
-        this.CleanUser()
+        this.CleanUser();
       }
     }
   },
-  mounted () {
-    if (Storages.GetStorage('user') != null) {
-      this.rember = true
-      this.GetUser()
+  mounted() {
+    if (Storages.GetStorage("user") != null) {
+      this.rember = true;
+      this.GetUser();
     }
   },
   methods: {
-    SaveUser () {
-      Storages.SaveStorage('user', this.user)
-      Storages.SaveStorage('password', this.pwd)
+    SaveUser() {
+      Storages.SaveStorage("user", this.user);
+      Storages.SaveStorage("password", this.pwd);
     },
-    CleanUser () {
-      Storages.CleanStorage('user')
-      Storages.CleanStorage('password')
+    CleanUser() {
+      Storages.CleanStorage("user");
+      Storages.CleanStorage("password");
     },
-    GetUser () {
-      this.user = Storages.GetStorage('user')
-      this.pwd = Storages.GetStorage('password')
+    GetUser() {
+      this.user = Storages.GetStorage("user");
+      this.pwd = Storages.GetStorage("password");
     },
-    handleSubmit () {
+    handleSubmit() {
       if (this.rember) {
-        this.SaveUser()
+        this.SaveUser();
       }
       let form = {
         code: this.user,
         password: this.pwd
-      }
-      this.$emit('Submit', form)
+      };
+      this.$emit("Submit", form);
     }
   }
-}
+};
 </script>
 
 <style lang="less">
-.icon {
-  margin-top: 15px;
-  margin-bottom: 17px;
-}
-.lform .ivu-input {
-  width: 372px;
-  height: 53px;
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0px 2px 6px 0px rgba(107, 197, 159, 0.35);
-  border-radius: 4px;
-  font-size: 18px;
-  color: rgba(79, 95, 111, 1);
-}
+@import "./loginform.less";
 </style>

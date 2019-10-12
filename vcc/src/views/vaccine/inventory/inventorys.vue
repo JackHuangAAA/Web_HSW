@@ -4,25 +4,34 @@
       <p>提示：点击疫苗所在抽屉，查看库存详情</p>
     </div>
     <div class="inventorys-main">
-      <vaccine-table :type="'Router'">
+      <vaccine-table @click="vClick">
       </vaccine-table>
     </div>
   </div>
 </template>
 
 <script>
-import vaccineTable from '_c/main/vaccineTable'
+import vaccineTable from "_c/main/vaccineTable";
 export default {
-  name: 'inventorys',
+  name: "inventorys",
   components: {
     vaccineTable
   },
-  data () {
-    return {
-
+  data() {
+    return {};
+  },
+  methods: {
+    vClick(drawerid, vaccines) {
+      let ids = vaccines.map(el => el._id);
+      this.$router.push({
+        name:'inventoryDetails',
+        params:{
+          id:drawerid
+        }
+      })
     }
   }
-}
+};
 </script>
 
 <style lang="less">

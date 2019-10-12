@@ -28,7 +28,7 @@ module.exports = {
     if (!_.isEmpty(requestBody.cabinetNo)) {
       query.push({ cabinetNo: requestBody.cabinetNo });
     }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+    query = query.length > 1 ? { $and: query } : query.length == 1 ? query[0] : {};
     let result = await Domain.models.device.paginate(query, {
       sort: { _id: -1 },
       page: requestBody.page,
@@ -53,18 +53,89 @@ module.exports = {
    * @returns {Promise.<T|Query|*>}
    */
   queryDeviceByCondition: async function(requestBody) {
-    logger.debug(`queryDeviceByCondition param: ${JSON.stringify(requestBody)}`);
-    let query = []
-    if (!_.isEmpty(requestBody.alias)) {
-      query.push({ alias: requestBody.alias });
+        logger.debug(`queryDeviceByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.alias)) {
+            query.push({"alias": requestBody.alias});
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({"code": requestBody.code});
+        }
+        if (!_.isEmpty(requestBody.cabinetNo)) {
+            query.push({"cabinetNo": requestBody.cabinetNo});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.status)) {
+            query.push({"status": requestBody.status});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        return await Domain.models.device.find(query);
+    },
+
+    /**
+     * 聚合查询，各单位单天各设备类型不同状态的设备数量统计(所属单位编号待定)
+     * @param requestBody
+     * @returns {JSON}  Object  version model数组，不同类型的数量统计
+     */
+    queryDeviceByAggregate: async function(currentUser,requestBody){
+        logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
+        let today = moment();
+        let query = [];
+        let dailyInfo = { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate()  };
+        query.push({ "createDate": dailyInfo });
+        //0查询总体设备状态统计；1查询各单位设备状态统计
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        if(requestBody.flag=="1"){
+
+            return await Domain.models.device.aggregate([{$match:query},{$group:{
+                    _id:{
+                        "type":"$type",
+                        "status":"$status",
+                        "unitCode":"$unitCode"
+                    },
+                    count:{$sum:1}
+                }}]);
+
+        }else{
+            return await Domain.models.device.aggregate([{$match:query},{$group:{
+                    _id:{
+                        "type":"$type",
+                        "status":"$status"
+                    },
+                    count:{$sum:1}
+                }}]);
+        }
+    },
+
+    /**
+     * 疫苗柜库存查询
+     * @param requestBody
+     * @returns
+     */
+    queryDeviceStock: async function(requestBody){
+        logger.debug(`queryDeviceStock param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        //查询疫苗不足的设备信息
+        let result = await Domain.models.vaccine.find({total:0},{device:1,_id:0});
+        let deviceId_array = [];
+        for (let index in result){
+            deviceId_array.push(result[index].device);
+        };
+
+        return await Domain.models.device.aggregate([{$match:$match},{$group:$group}]);
     }
-    if (!_.isEmpty(requestBody.code)) {
-      query.push({ code: requestBody.code });
-    }
-    if (!_.isEmpty(requestBody.cabinetNo)) {
-      query.push({ cabinetNo: requestBody.cabinetNo });
-    }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
-    return await Domain.models.device.find(query);
-  }
-}
+};
+

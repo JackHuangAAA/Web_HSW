@@ -5,30 +5,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 export default {
-  name: 'position',
-  data () {
-    return {
-
-    }
+  name: "position",
+  data() {
+    return {};
   },
   computed: {
-    ...mapGetters(['position'])
+    ...mapGetters(["position"])
   },
-  created () {
-  },
-  methods: {
-
-  },
-}
+  created() {},
+  methods: {}
+};
 </script>
 
 <style lang="less" scoped>
-.positionType {
-  letter-spacing: 7px;
-  font-size: 20px;
-  font-family: Microsoft YaHei;
-  font-weight: bold;
-}
+@import "./position.less";
 </style>

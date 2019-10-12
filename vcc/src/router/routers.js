@@ -1,5 +1,5 @@
-import Main from '@/views/main.vue'
-import vcc from './vcc'
+import Main from '@/views/main.vue';
+import vcc from './vcc';
 const routers = [
   {
     path: '/',
@@ -28,7 +28,7 @@ const routers = [
         component: () => import('@/views/vaccine/inventory/inventorys.vue')
       },
       {
-        path: 'Details',
+        path: 'Details/:id',
         name: 'inventoryDetails',
         component: () =>
           import('@/views/vaccine/inventory/inventoryDetails.vue')
@@ -54,7 +54,7 @@ const routers = [
         component: () => import('@/views/vaccine/outbound/opendrawer.vue')
       },
       {
-        path: 'complete',
+        path: 'complete/:type',
         name: 'complete',
         component: () => import('@/views/vaccine/complete/complete.vue')
       }
@@ -75,6 +75,6 @@ const routers = [
     final: true,
     component: () => import('@/views/error/404.vue')
   }
-]
+];
 
-export default routers
+export default routers;

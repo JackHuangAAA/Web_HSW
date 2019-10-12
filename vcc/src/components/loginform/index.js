@@ -1,2 +1,2 @@
-import loginform from './loginform.vue'
-export default loginform
+import loginform from './loginform.vue';
+export default loginform;
