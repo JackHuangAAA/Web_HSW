@@ -13,6 +13,8 @@ const logger = Libs.logger.getLogger('temperature');
  * @apiParam {String} [device] 设备id
  * @apiParam {String} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} page 第几页
+ * @apiParam {String} size 每页显示数目
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间
  * @apiSuccess {JSON}  Object  temperature model 数组
