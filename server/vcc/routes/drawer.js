@@ -80,9 +80,9 @@ router.post(
  * @apiSuccess {Object} data 操作返回数据的
  */
 router.post('/queryDrawerByVaccineArr',
-    Libs.router(async (ctx, next) => {
-        return await Domain.services.drawer.queryDrawerByVaccineArr(ctx.request.body);
-    })
+  Libs.router(async (ctx, next) => {
+    return await Domain.services.drawer.queryDrawerByVaccineArr(ctx.request.body);
+  })
 );
 
 module.exports = router;
