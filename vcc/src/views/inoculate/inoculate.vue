@@ -26,6 +26,22 @@ export default {
       vaccineColumns: vaccineColumns,
       vaccine: vaccine
     };
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    init() {
+      this.getpeople();
+    },
+    async getpeople() {
+      let res = await this.$api.post("/zcy/reciveVaccination");
+      let people = res.data;
+      console.log(people);
+      this.$nextTick(() => {
+        this.people = people;
+      });
+    }
   }
 };
 </script>

@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     userinfo(){
-      return this.$store.getters.userinfo
+      return this.$store.getters.user
     },
     username(){
       if(this.userinfo != null) return this.userinfo.name

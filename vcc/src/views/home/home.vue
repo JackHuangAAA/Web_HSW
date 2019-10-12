@@ -80,15 +80,15 @@ export default {
   },
   methods: {
     getHomeData() {
-      this.queryVaccine();
-      this.queryAlarmDailyInfo();
-      this.queryDrawerEmpty();
-      this.queryVaccineLowerThreshold();
-      this.queryAlarmTemperature();
-      this.queryVaccinationByCustomerCode();
+      // this.queryVaccine();//查询疫苗种类
+      // this.queryAlarmDailyInfo();//查询告警次数
+      // this.queryDrawerEmpty();//查询空药柜
+      // this.queryVaccineLowerThreshold();//查询库存
+      this.queryAlarmTemperature();//查询温度告警
+      this.queryVaccinationByCondition();//查询接种人数
     },
-    queryVaccinationByCustomerCode() {
-      this.getTotal("customer", "/Vaccine/queryVaccinationByCustomerCode", {
+    queryVaccinationByCondition() {
+      this.getTotal("customer", "/vaccination/queryVaccinationByCondition", {
         device: this.deviceid
       });
     },
@@ -113,8 +113,6 @@ export default {
       });
     },
     queryDrawerEmpty() {
-      console.log(this.deviceid);
-      console.log(this.device);
       this.getTotal("drawer", "/Drawer/queryDrawerEmpty", {
         device: this.deviceid
       });
@@ -128,19 +126,12 @@ export default {
     },
     getTotal(key, url, params = null) {
       return new Promise((resolve, reject) => {
-        if (params != null) {
           this.$api.get(url, params).then(res => {
             let data = res.data;
-            changeItem(key, data.total, this.homecard);
+            let total = data.total || data.length
+            changeItem(key, total, this.homecard);
             resolve(data);
           });
-        } else {
-          this.$api.get(url).then(res => {
-            let data = res.data;
-            changeItem(key, data.total, this.homecard);
-            resolve(data);
-          });
-        }
       });
     },
     routerto(link) {

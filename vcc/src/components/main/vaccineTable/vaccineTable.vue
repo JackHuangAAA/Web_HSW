@@ -66,13 +66,18 @@ export default {
     type: {
       type: String,
       default: "base"
+    },
+    vacclists: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
     return {
       t2b,
       l2r,
-      vacclists: null,
       drawers: null,
       max: 2, //指定疫苗最大数
       DrawerTree: {
@@ -106,11 +111,7 @@ export default {
       this.$emit("vaccine-del", va, drawerid);
     },
     init() {
-      this.getVacc();
       this.getDrawer();
-    },
-    async getVacc() {
-      this.vacclists = await this.$store.dispatch("getVaccineKinds");
     },
     async getDrawer() {
       this.drawers = await this.$store.dispatch("getDrawer");

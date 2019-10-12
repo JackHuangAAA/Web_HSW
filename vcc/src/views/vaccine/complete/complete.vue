@@ -60,7 +60,9 @@ export default {
       return this.type === "1" ? "入库" : "出库";
     }
   },
-  created: {},
+  created: {
+    
+  },
   methods: {
     gobackhome() {
       this.$router.push({ name: "home" });

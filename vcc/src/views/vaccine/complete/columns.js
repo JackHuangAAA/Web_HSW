@@ -6,6 +6,10 @@ export default [
   },
   {
     title:'疫苗名称',
-    key:''
-  }
+    key:'name'
+  },
+  {
+    title:'数量',
+    key:'number'
+  },
 ]

@@ -49,11 +49,11 @@ export default {
   },
   created() {},
   mounted() {
-    this.$device.subscribe('SCANNER_RESULT',this.SCANNER())
-    this.$device.subscribe('SOCKET_DATA',this.SOCKET())
+    this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
+    this.$device.subscribe("SOCKET_DATA", this.SOCKET());
   },
   methods: {
-    ...mapActions(["saveUser", "saveUserInfo"]),
+    ...mapActions(["saveUser"]),
     login(type) {
       switch (type) {
         case "fp":
@@ -68,11 +68,11 @@ export default {
           break;
       }
     },
-    SOCKET(cb){
-      console.log(cb)
+    SOCKET(cb) {
+      console.log(cb);
     },
-    SCANNER(cb){
-      console.log(cb)
+    SCANNER(cb) {
+      console.log(cb);
     },
     test() {
       // let deviceid = this.$device.getDeviceCode();
@@ -87,12 +87,12 @@ export default {
       let check = res.data.check;
       if (check) {
         let data = res.data;
-        await this.saveUser(form.code);
         let user = await this.$api.post("/user/modifyUserByCode", {
           code: data.code,
           name: data.name
         });
-        await this.saveUserInfo(user.data);
+        await this.saveUser(user.data);
+        console.log(user.data);
         this.$router.push({ name: "home" });
       }
     }
