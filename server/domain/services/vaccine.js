@@ -17,8 +17,8 @@ module.exports = {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
-            { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 },name: { $first: "$name"}} },
+            { $match: { device: deviceId } },
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { $first: "$name" } } },
             { $project: { _id: 1, name: 1, num_movie: 1 } }
 
         ])
@@ -53,15 +53,33 @@ module.exports = {
         logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
-            { $match: {device: deviceId} },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }, name:{"$first":"$name"},code:{"$first":"$code"},total:{"$sum":"$total"},surplus:{"$sum":"$surplus"},updateDate:{"$first":"$updateDate"} }},
-          
-            { $project: { _id: 1, num_movie: 1,name: 1,code: 1,total: 1, surplus: 1, updateDate: 1, use:{"$subtract": ["$total", "$surplus"]} } }
+            { $match: { device: deviceId } },
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, updateDate: { "$first": "$updateDate" } } },
+
+            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
 
         ])
         logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length, device: requestBody}
+        return { rs: result, total: result.length, device: requestBody }
     },
+
+    /**
+ *  出库后 数量、 剩余数量清零
+ * 
+ * @param {any} requestBody 
+ * @returns 
+ */
+    clearVacineTotal: async function (requestBody) {
+        logger.debug(`clearVacineTotal param: ${JSON.stringify(requestBody)}`);
+        await Domain.models.vaccine.update(
+            {},
+            {
+                $set: { total: 0, surplus: 0 }
+            },
+            { multi: true }
+        );
+    },
+
 
     /**
      *  更新抽屉内疫苗数量信息
@@ -74,7 +92,7 @@ module.exports = {
         return await Domain.models.vaccine.update(
             { _id: requestBody.id },
             {
-                $set: { vaccine: requestBody.vaccine, updateDate: new Date()}
+                $set: { vaccine: requestBody.vaccine, updateDate: new Date() }
             }
         );
     },
