@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import columns from "./data/columns.js";
 import showTable from "_c/main/showTable";
 export default {
@@ -15,8 +16,31 @@ export default {
   },
   data() {
     return {
-      data: []
+      columns,
+      data: [],
+      test: [
+        {
+          finger: "finger1"
+        },
+        {
+          finger: "finger2"
+        }
+      ]
     };
+  },
+  computed: {
+    ...mapGetters({
+      user: "user",
+      device: "device"
+    })
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    init() {
+      console.log(this.user);
+    }
   }
 };
 </script>

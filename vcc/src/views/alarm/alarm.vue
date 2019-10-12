@@ -50,7 +50,8 @@ export default {
             this.lists = res.data.rs;
           });
         });
-    }
+    },
+
   }
 };
 </script>
