@@ -1,13 +1,17 @@
 package com.ethink.vcd.finger;
-
 import android.content.Context;
 import android.os.SystemClock;
+
+import com.blankj.utilcode.util.StringUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Locale;
 
 public class FingerCommon {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final int GD_RECORD_SIZE = 498;
     public static final int GD_MAX_RECORD_COUNT = 2000;
     public static final int ID_NOTE_SIZE = 64;
@@ -88,45 +92,34 @@ public class FingerCommon {
     public byte m_byDstDeviceID = 1;
     public byte[] m_abyPacket = new byte[65536];
     public byte[] m_abyPacket2 = new byte[65536];
-    private static final int VID = 8201;
-    private static final int PID = 30264;
-    private UsbFingerController m_usbBase;
+    private SerialPortController controller;
 
-    public FingerCommon(Context context, IUsbConnState usbConnState) {
-        this.m_usbBase = new UsbFingerController(context, usbConnState, 8201, 30264);
+    public FingerCommon(Context context,String path, int baudRate ) {
+        this.controller = new SerialPortController(context,path,baudRate);
     }
 
-    public boolean IsInit() {
-        return this.m_usbBase.IsInit();
-    }
 
-    public boolean OpenComm() {
-        this.m_usbBase.init();
-        return true;
-    }
-
-    public boolean CloseComm() {
-        this.m_usbBase.uninit();
-        return true;
+    public void CloseComm(){
+        controller.close();
     }
 
     public int Run_TestConnection() {
         this.InitCmdPacket((short)1, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.USB_SendPacket((short)1);
+        boolean w_bRet = this.SendPacket((short)1);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public    int Run_SetParam(int p_nParamIndex, int p_nParamValue) {
         byte[] w_abyData = new byte[]{(byte)p_nParamIndex, (byte)(p_nParamValue & 255), (byte)((p_nParamValue & '\uff00') >> 8), (byte)((p_nParamValue & 16711680) >> 16), (byte)((p_nParamValue & -16777216) >> 24)};
         this.InitCmdPacket((short)2, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 5);
-        boolean w_bRet = this.USB_SendPacket((short)2);
+        boolean w_bRet = this.SendPacket((short)2);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public  int Run_GetParam(int p_nParamIndex, int[] p_pnParamValue) {
         byte[] w_abyData = new byte[]{(byte)p_nParamIndex};
         this.InitCmdPacket((short)3, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
-        boolean w_bRet = this.USB_SendPacket((short)3);
+        boolean w_bRet = this.SendPacket((short)3);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -139,14 +132,14 @@ public class FingerCommon {
 
     public  int Run_GetDeviceInfo(String[] p_szDevInfo) {
         this.InitCmdPacket((short)4, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.USB_SendPacket((short)4);
+        boolean w_bRet = this.SendPacket((short)4);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
             int w_nDevInfoLen = this.MAKEWORD(this.m_abyPacket[10], this.m_abyPacket[11]);
-            w_bRet = this.USB_ReceiveDataPacket((short)4);
+            w_bRet = this.ReceiveDataPacket((short)4);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
@@ -169,7 +162,7 @@ public class FingerCommon {
         w_abyData2[0] = this.LOBYTE((short)66);
         w_abyData2[1] = this.HIBYTE((short)66);
         this.InitCmdPacket((short)6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.USB_SendPacket((short)6);
+        w_bRet = this.SendPacket((short)6);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -180,7 +173,7 @@ public class FingerCommon {
             w_abyData[1] = this.HIBYTE((short)p_nTmplNo);
             System.arraycopy(w_abyNoteBuf, 0, w_abyData, 2, w_abyNoteBuf.length);
             this.InitCmdDataPacket((short)6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 66);
-            w_bRet = this.USB_SendDataPacket((short)6);
+            w_bRet = this.SendDataPacket((short)6);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
@@ -189,13 +182,13 @@ public class FingerCommon {
         boolean w_bRet = false;
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo)};
         this.InitCmdPacket((short)7, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        w_bRet = this.USB_SendPacket((short)7);
+        w_bRet = this.SendPacket((short)7);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.USB_ReceiveDataPacket((short)7);
+            w_bRet = this.ReceiveDataPacket((short)7);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
@@ -220,14 +213,14 @@ public class FingerCommon {
         w_abyData2[0] = this.LOBYTE((short)16);
         w_abyData2[1] = this.HIBYTE((short)16);
         this.InitCmdPacket((short)8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.USB_SendPacket((short)8);
+        w_bRet = this.SendPacket((short)8);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
             this.InitCmdDataPacket((short)8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyModuleSN, 16);
-            w_bRet = this.USB_SendDataPacket((short)8);
+            w_bRet = this.SendDataPacket((short)8);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
@@ -235,13 +228,13 @@ public class FingerCommon {
     public int Run_GetModuleSN(String[] p_pstrModuleSN) {
         boolean w_bRet = false;
         this.InitCmdPacket((short)9, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        w_bRet = this.USB_SendPacket((short)9);
+        w_bRet = this.SendPacket((short)9);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.USB_ReceiveDataPacket((short)9);
+            w_bRet = this.ReceiveDataPacket((short)9);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
@@ -258,13 +251,13 @@ public class FingerCommon {
 
     public  int Run_GetImage() {
         this.InitCmdPacket((short)32, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.USB_SendPacket((short)32);
+        boolean w_bRet = this.SendPacket((short)32);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public   int Run_FingerDetect(int[] p_pnDetectResult) {
         this.InitCmdPacket((short)33, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.USB_SendPacket((short)33);
+        boolean w_bRet = this.SendPacket((short)33);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -278,7 +271,7 @@ public class FingerCommon {
     public  int Run_UpImage(int p_nType, byte[] p_pFpData, int[] p_pnImgWidth, int[] p_pnImgHeight) {
         byte[] w_abyData = new byte[]{(byte)p_nType};
         this.InitCmdPacket((short)34, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
-        boolean w_bRet = this.USB_SendPacket((short)34);
+        boolean w_bRet = this.SendPacket((short)34);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -286,7 +279,7 @@ public class FingerCommon {
         } else {
             int w = this.MAKEWORD(this.m_abyPacket[10], this.m_abyPacket[11]);
             int h = this.MAKEWORD(this.m_abyPacket[12], this.m_abyPacket[13]);
-            w_bRet = this.USB_ReceiveImage(p_pFpData, w * h);
+            w_bRet = this.ReceiveImage(p_pFpData, w * h);
             if (!w_bRet) {
                 return 2;
             } else {
@@ -304,14 +297,14 @@ public class FingerCommon {
     public  int Run_SLEDControl(int p_nState) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nState), this.HIBYTE((short)p_nState)};
         this.InitCmdPacket((short)36, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.USB_SendPacket((short)36);
+        boolean w_bRet = this.SendPacket((short)36);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public int Run_StoreChar(int p_nTmplNo, int p_nRamBufferID, int[] p_pnDupTmplNo) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
         this.InitCmdPacket((short)64, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)64);
+        boolean w_bRet = this.SendPacket((short)64);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -328,7 +321,7 @@ public class FingerCommon {
     public  int Run_LoadChar(int p_nTmplNo, int p_nRamBufferID) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
         this.InitCmdPacket((short)65, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)65);
+        boolean w_bRet = this.SendPacket((short)65);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
@@ -336,13 +329,13 @@ public class FingerCommon {
         boolean w_bRet = false;
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
         this.InitCmdPacket((short)66, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        w_bRet = this.USB_SendPacket((short)66);
+        w_bRet = this.SendPacket((short)66);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.USB_ReceiveDataPacket((short)66);
+            w_bRet = this.ReceiveDataPacket((short)66);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
@@ -359,7 +352,7 @@ public class FingerCommon {
         byte[] w_abyData = new byte[500];
         byte[] w_abyData2 = new byte[]{this.LOBYTE((short)500), this.HIBYTE((short)500)};
         this.InitCmdPacket((short)67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.USB_SendPacket((short)67);
+        w_bRet = this.SendPacket((short)67);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -369,7 +362,7 @@ public class FingerCommon {
             w_abyData[1] = this.HIBYTE((short)p_nRamBufferID);
             System.arraycopy(p_pbyTemplate, 0, w_abyData, 2, 498);
             this.InitCmdDataPacket((short)67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 500);
-            w_bRet = this.USB_SendDataPacket((short)67);
+            w_bRet = this.SendDataPacket((short)67);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
@@ -377,14 +370,14 @@ public class FingerCommon {
     public int Run_DelChar(int p_nSTmplNo, int p_nETmplNo) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
         this.InitCmdPacket((short)68, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)68);
+        boolean w_bRet = this.SendPacket((short)68);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public int Run_GetEmptyID(int p_nSTmplNo, int p_nETmplNo, int[] p_pnEmptyID) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
         this.InitCmdPacket((short)69, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)69);
+        boolean w_bRet = this.SendPacket((short)69);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -398,7 +391,7 @@ public class FingerCommon {
    public int Run_GetStatus(int p_nTmplNo, int[] p_pnStatus) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo)};
         this.InitCmdPacket((short)70, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.USB_SendPacket((short)70);
+        boolean w_bRet = this.SendPacket((short)70);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -412,7 +405,7 @@ public class FingerCommon {
     public  int Run_GetBrokenID(int p_nSTmplNo, int p_nETmplNo, int[] p_pnCount, int[] p_pnFirstID) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
         this.InitCmdPacket((short)71, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)71);
+        boolean w_bRet = this.SendPacket((short)71);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -427,7 +420,7 @@ public class FingerCommon {
     public  int Run_GetEnrollCount(int p_nSTmplNo, int p_nETmplNo, int[] p_pnEnrollCount) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
         this.InitCmdPacket((short)72, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)72);
+        boolean w_bRet = this.SendPacket((short)72);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -441,28 +434,28 @@ public class FingerCommon {
     public int Run_Generate(int p_nRamBufferID) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
         this.InitCmdPacket((short)96, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.USB_SendPacket((short)96);
+        boolean w_bRet = this.SendPacket((short)96);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public  int Run_Merge(int p_nRamBufferID, int p_nMergeCount) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID), (byte)p_nMergeCount};
         this.InitCmdPacket((short)97, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 3);
-        boolean w_bRet = this.USB_SendPacket((short)97);
+        boolean w_bRet = this.SendPacket((short)97);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public   int Run_Match(int p_nRamBufferID0, int p_nRamBufferID1) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID0), this.HIBYTE((short)p_nRamBufferID0), this.LOBYTE((short)p_nRamBufferID1), this.HIBYTE((short)p_nRamBufferID1)};
         this.InitCmdPacket((short)98, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)98);
+        boolean w_bRet = this.SendPacket((short)98);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public  int Run_Search(int p_nRamBufferID, int p_nStartID, int p_nSearchCount, int[] p_pnTmplNo, int[] p_pnLearnResult) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID), this.LOBYTE((short)p_nStartID), this.HIBYTE((short)p_nStartID), this.LOBYTE((short)p_nSearchCount), this.HIBYTE((short)p_nSearchCount)};
         this.InitCmdPacket((short)99, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 6);
-        boolean w_bRet = this.USB_SendPacket((short)99);
+        boolean w_bRet = this.SendPacket((short)99);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -477,7 +470,7 @@ public class FingerCommon {
     public  int Run_Verify(int p_nTmplNo, int p_nRamBufferID, int[] p_pnLearnResult) {
         byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
         this.InitCmdPacket((short)100, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.USB_SendPacket((short)100);
+        boolean w_bRet = this.SendPacket((short)100);
         if (!w_bRet) {
             return 2;
         } else {
@@ -511,7 +504,7 @@ public class FingerCommon {
         pPCCmd[0] = -17;
         pPCCmd[1] = 1;
         int nDataLen = pPCCmd[5] << 8 & '\uff00' | pPCCmd[4] & 255;
-        return this.m_usbBase.UsbSCSIWrite(pPCCmd, 6, pData, nDataLen, 5000);
+        return this.controller.Write(pData, nDataLen);
     }
 
     private boolean RecvPackage(byte[] pData, int[] pLevRen) {
@@ -523,14 +516,14 @@ public class FingerCommon {
         w_abyPCCmd[3] = 0;
         w_abyPCCmd[4] = 0;
         w_abyPCCmd[5] = 0;
-        boolean w_bRet = this.m_usbBase.UsbSCSIRead(w_abyPCCmd, 6, w_abyRespond, 4, 5000);
+        boolean w_bRet = this.controller.Read(w_abyRespond, 4);
         if (!w_bRet) {
             return false;
         } else {
             int w_nLen = w_abyRespond[3] << 8 & '\uff00' | w_abyRespond[2] & 255;
             if (w_nLen > 0) {
                 w_abyPCCmd[1] = 3;
-                w_bRet = this.m_usbBase.UsbSCSIRead(w_abyPCCmd, 6, pData, w_nLen, 5000);
+                w_bRet = this.controller.Read(pData, w_nLen);
                 if (!w_bRet) {
                     return false;
                 }
@@ -612,17 +605,17 @@ public class FingerCommon {
         }
     }
 
-    private boolean USB_SendPacket(short wCMD) {
+    private boolean SendPacket(short wCMD) {
         byte[] btCDB = new byte[8];
         Arrays.fill(btCDB, (byte)0);
         btCDB[0] = -17;
         btCDB[1] = 17;
         btCDB[4] = (byte)this.m_nPacketSize;
-        boolean w_bRet = this.m_usbBase.UsbSCSIWrite(btCDB, 8, this.m_abyPacket, this.m_nPacketSize, 5000);
-        return !w_bRet ? false : this.USB_ReceiveAck(wCMD);
+        boolean w_bRet = this.controller.Write(this.m_abyPacket, this.m_nPacketSize);
+        return !w_bRet ? false : this.ReceiveAck(wCMD);
     }
 
-    private boolean USB_ReceiveAck(short wCMD) {
+    private boolean ReceiveAck(short wCMD) {
         byte[] btCDB = new byte[8];
         byte[] w_abyWaitPacket = new byte[26];
         Arrays.fill(btCDB, (byte)0);
@@ -635,7 +628,7 @@ public class FingerCommon {
             btCDB[0] = -17;
             btCDB[1] = 18;
             w_nLen = 26;
-            if (!this.m_usbBase.UsbSCSIRead(btCDB, 8, this.m_abyPacket, w_nLen, 5000)) {
+            if (!this.controller.Read(this.m_abyPacket, w_nLen)) {
                 return false;
             }
 
@@ -651,7 +644,7 @@ public class FingerCommon {
         }
     }
 
-    boolean USB_ReceiveDataAck(short wCMD) {
+    boolean ReceiveDataAck(short wCMD) {
         byte[] btCDB = new byte[8];
         byte[] w_WaitPacket = new byte[10];
         this.memset(btCDB, (byte)0, 8);
@@ -661,7 +654,7 @@ public class FingerCommon {
             btCDB[0] = -17;
             btCDB[1] = 21;
             int w_nLen = 8;
-            if (!this.m_usbBase.UsbSCSIRead(btCDB, 8, this.m_abyPacket, w_nLen, 5000)) {
+            if (!this.controller.Read(this.m_abyPacket, w_nLen)) {
                 return false;
             }
 
@@ -669,7 +662,7 @@ public class FingerCommon {
         } while(this.memcmp(this.m_abyPacket, w_WaitPacket, 8));
 
         int w_nLen = (short)(this.m_abyPacket[7] << 8 & '\uff00' | this.m_abyPacket[6] & 255) + 2;
-        if (!this.USB_ReceiveRawData(this.m_abyPacket2, w_nLen)) {
+        if (!this.ReceiveRawData(this.m_abyPacket2, w_nLen)) {
             return false;
         } else {
             System.arraycopy(this.m_abyPacket2, 0, this.m_abyPacket, 8, w_nLen);
@@ -682,57 +675,55 @@ public class FingerCommon {
         }
     }
 
-    boolean USB_SendDataPacket(short wCMD) {
+    boolean SendDataPacket(short wCMD) {
         byte[] btCDB = new byte[8];
         this.memset(btCDB, (byte)0, 8);
         btCDB[0] = -17;
         btCDB[1] = 19;
         btCDB[4] = (byte)(this.m_nPacketSize & 255);
         btCDB[5] = (byte)(this.m_nPacketSize >> 8 & 255);
-        return !this.m_usbBase.UsbSCSIWrite(btCDB, 8, this.m_abyPacket, this.m_nPacketSize, 5000) ? false : this.USB_ReceiveDataAck(wCMD);
+        return !this.controller.Write(this.m_abyPacket, this.m_nPacketSize) ? false : this.ReceiveDataAck(wCMD);
     }
 
-    boolean USB_ReceiveDataPacket(short wCMD) {
-        return this.USB_ReceiveDataAck(wCMD);
+    boolean ReceiveDataPacket(short wCMD) {
+        return this.ReceiveDataAck(wCMD);
     }
 
-    boolean USB_ReceiveRawData(byte[] pBuffer, int nDataLen) {
+    boolean ReceiveRawData(byte[] pBuffer, int nDataLen) {
         byte[] btCDB = new byte[8];
         this.memset(btCDB, (byte)0, 8);
         btCDB[0] = -17;
         btCDB[1] = 20;
-        return this.m_usbBase.UsbSCSIRead(btCDB, 8, pBuffer, nDataLen, 5000);
+        return this.controller.Read(pBuffer, nDataLen);
     }
 
-    boolean USB_ReceiveImage(byte[] p_pBuffer, int nDataLen) {
-        byte[] btCDB = new byte[8];
-        byte[] w_WaitPacket = new byte[8];
-        this.memset(btCDB, (byte)0, 8);
-        this.memset(w_WaitPacket, (byte)-81, 8);
-        if (nDataLen < 65536) {
-            btCDB[0] = -17;
-            btCDB[1] = 22;
-            if (!this.m_usbBase.UsbSCSIRead(btCDB, 8, p_pBuffer, nDataLen, 5000)) {
-                return false;
-            }
-        } else if (nDataLen == 73728) {
-            btCDB[0] = -17;
-            btCDB[1] = 22;
-            btCDB[2] = 0;
-            if (!this.m_usbBase.UsbSCSIRead(btCDB, 8, p_pBuffer, nDataLen / 2, 5000)) {
-                return false;
-            }
-
-            btCDB[0] = -17;
-            btCDB[1] = 22;
-            btCDB[2] = 1;
-            if (!this.m_usbBase.UsbSCSIRead(btCDB, 8, this.m_abyPacket2, nDataLen / 2, 5000)) {
-                return false;
-            }
-
-            System.arraycopy(this.m_abyPacket2, 0, p_pBuffer, nDataLen / 2, nDataLen / 2);
+    boolean ReceiveImage(byte[] p_pBuffer, int nDataLen) {
+        byte[] header = new byte[10];
+        if (!this.controller.Read(header,10)){
+            return false;
         }
+        int dataLen =  0x000ffff & (int)this.MAKEWORD(header[7],header[6]);
 
+        if (!this.controller.Read(p_pBuffer, dataLen - 2)) {
+            return false;
+        }
+        if (!this.controller.Read(header, 2)) {
+            return false;
+        }
+//        if (nDataLen < 65536) {
+//            if (!this.controller.Read(p_pBuffer, dataLen)) {
+//                return false;
+//            }
+//        } else if (nDataLen == 73728) {
+//            if (!this.controller.Read(p_pBuffer, nDataLen / 2)) {
+//                return false;
+//            }
+//            if (!this.controller.Read(this.m_abyPacket2, nDataLen / 2)) {
+//                return false;
+//            }
+//
+//            System.arraycopy(this.m_abyPacket2, 0, p_pBuffer, nDataLen / 2, nDataLen / 2);
+//        }
         return true;
     }
 
@@ -767,6 +758,7 @@ public class FingerCommon {
         return (byte)(s >> 8 & 255);
     }
 
+    //数组转字符串
     private final static char[] mChars = "0123456789ABCDEF".toCharArray();
     public     String byte2HexStr(byte[] b, int iLen) {
         StringBuilder sb = new StringBuilder();
@@ -777,5 +769,49 @@ public class FingerCommon {
         }
         return sb.toString().trim().toUpperCase(Locale.US);
     }
+    //字符串转数组
+    /**
+     * 16进制的字符串表示转成字节数组
+     *
+     * @param hexString
+     *            16进制格式的字符串
+     * @return 转换后的字节数组
+     **/
+    public   byte[] toByteArray(String hexString) {
+        if (StringUtils.isEmpty(hexString))
+            throw new IllegalArgumentException("this hexString must not be empty");
+
+        hexString = hexString.toLowerCase();
+        final byte[] byteArray = new byte[hexString.length() / 2];
+        int k = 0;
+        for (int i = 0; i < byteArray.length; i++) {//因为是16进制，最多只会占用4位，转换成字节需要两个16进制的字符，高位在先
+            byte high = (byte) (Character.digit(hexString.charAt(k), 16) & 0xff);
+            byte low = (byte) (Character.digit(hexString.charAt(k + 1), 16) & 0xff);
+            byteArray[i] = (byte) (high << 4 | low);
+            k += 2;
+        }
+        return byteArray;
+    }
+
+    /**
+     * 字节数组转成16进制表示格式的字符串
+     *
+     * @param byteArray
+     *            需要转换的字节数组
+     * @return 16进制表示格式的字符串
+     **/
+    public static String toHexString(byte[] byteArray) {
+        if (byteArray == null || byteArray.length < 1)
+            throw new IllegalArgumentException("this byteArray must not be null or empty");
+
+        final StringBuilder hexString = new StringBuilder();
+        for (int i = 0; i < byteArray.length; i++) {
+            if ((byteArray[i] & 0xff) < 0x10)//0~F前面不零
+                hexString.append("0");
+            hexString.append(Integer.toHexString(0xFF & byteArray[i]));
+        }
+        return hexString.toString().toLowerCase();
+    }
+
 
 }

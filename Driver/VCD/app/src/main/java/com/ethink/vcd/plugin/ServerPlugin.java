@@ -2,19 +2,24 @@ package com.ethink.vcd.plugin;
 
 import android.content.Context;
 
+import com.blankj.utilcode.util.PhoneUtils;
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
-import com.ethink.vcd.service.api.Api;
+import com.ethink.vcd.Const;
+import com.ethink.vcd.service.HttpUtils;
 import com.ethink.vcd.service.api.NetWorkUtils;
 import com.ethink.vcd.service.api.RxManager;
-import com.ethink.vcd.service.api.RxSchedulers;
-import com.ethink.vcd.service.api.RxSubscriber;
+import com.ethink.vcd.utils.ResponseUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.functions.Action1;
 
 /**
@@ -41,13 +46,16 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
             case "Get":
                 String url = pluginMessage.getString("path");
                 //调用请求并返回response
-                pluginMessage = NetWorkUtils.get(url, context, rxManager, pluginMessage);
+                pluginMessage = NetWorkUtils.get(url, context, pluginMessage);
                 break;
             case "Post":
                 String path = pluginMessage.getString("path");
                 String data = pluginMessage.getString("data");
 //                //调用请求并返回response
-                pluginMessage = NetWorkUtils.post(path, data, context, rxManager, pluginMessage);
+                pluginMessage = NetWorkUtils.post(path, data, context, pluginMessage);
+                break;
+            case "GetDeviceId":
+                ResponseUtil.success(pluginMessage,"成功",ResponseUtil.data("res", PhoneUtils.getSerial()));
                 break;
         }
         return pluginMessage;
@@ -61,37 +69,31 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            try {
                 logger.info("发送请求");
-                Thread.sleep(10000);
-                Api.getDefault(context).get("application/json", "device").compose(RxSchedulers.<String>io_main()).subscribe(new RxSubscriber<String>(context) {
-                    @Override
-                    protected void _onNext(String uid) {
-                        logger.info("_onNext");
-                        EventMessage eventMessage = new EventMessage("SERVER_CONNECT");
-                        eventMessage.setString("ip", "192.168.0.129");
-                        eventMessage.setString("port", "8080");
-                        eventMessage.setString("type", "1");
-                        pluginManager.post(eventMessage);
-                    }
-
-                    @Override
-                    protected void _onError(String message) {
-                        logger.info("OnFunction  网络请求出错" + message);
-                        EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
-                        eventMessage.setString("ip", "192.168.0.129");
-                        eventMessage.setString("port", "8080");
-                        eventMessage.setString("type", "1");
-                        eventMessage.setString("error", message);
-                        pluginManager.post(eventMessage);
-
-                    }
-                });
-            }catch (InterruptedException e) {
-                break;
-            } catch (Exception e) {
-                logger.info("OnFunction  网络请求出错" + e.toString());
-                EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
+                try {
+                    Thread.sleep(10000);
+                Request request = new Request.Builder().url(Const.getUrl("vcc/device")).build();
+                Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
+                String msg=response.message();
+                if (response.isSuccessful()) {
+                    EventMessage eventMessage = new EventMessage("SERVER_CONNECT");
+                    eventMessage.setString("ip", "192.168.0.129");
+                    eventMessage.setString("port", "8080");
+                    eventMessage.setString("type", "1");
+                    pluginManager.post(eventMessage);
+                }
+                else {
+                    EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
+                    eventMessage.setString("ip", "192.168.0.129");
+                    eventMessage.setString("port", "8080");
+                    eventMessage.setString("type", "1");
+                    eventMessage.setString("error", msg);
+                    pluginManager.post(eventMessage);
+                  //  throw new Exception("网络请求失败 HTTP ERROR:" + msg);
+                }
+                } catch (InterruptedException | IOException e) {
+                    e.printStackTrace();
+                    EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
                 eventMessage.setString("ip", "192.168.0.129");
                 eventMessage.setString("port", "8080");
                 eventMessage.setString("type", "1");
@@ -99,7 +101,45 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
                 if (pluginManager != null) {
                     pluginManager.post(eventMessage);
                 }
-            }
+
+                }
+
+//                Api.getDefault(context).get("application/json", "device").compose(RxSchedulers.<String>io_main()).subscribe(new RxSubscriber<String>(context) {
+//                    @Override
+//                    protected void _onNext(String uid) {
+//                        logger.info("_onNext");
+//                        EventMessage eventMessage = new EventMessage("SERVER_CONNECT");
+//                        eventMessage.setString("ip", "192.168.0.129");
+//                        eventMessage.setString("port", "8080");
+//                        eventMessage.setString("type", "1");
+//                        pluginManager.post(eventMessage);
+//                    }
+//
+//                    @Override
+//                    protected void _onError(String message) {
+//                        logger.info("OnFunction  网络请求出错" + message);
+//                        EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
+//                        eventMessage.setString("ip", "192.168.0.129");
+//                        eventMessage.setString("port", "8080");
+//                        eventMessage.setString("type", "1");
+//                        eventMessage.setString("error", message);
+//                        pluginManager.post(eventMessage);
+//
+//                    }
+//                });
+//            }catch (InterruptedException e) {
+//                break;
+//            } catch (Exception e) {
+//                logger.info("OnFunction  网络请求出错" + e.toString());
+//                EventMessage eventMessage = new EventMessage("SERVER_DISCONNECT");
+//                eventMessage.setString("ip", "192.168.0.129");
+//                eventMessage.setString("port", "8080");
+//                eventMessage.setString("type", "1");
+//                eventMessage.setString("error", e.toString());
+//                if (pluginManager != null) {
+//                    pluginManager.post(eventMessage);
+//                }
+//            }
         }
     }
 
@@ -108,6 +148,7 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
         logger.info("FunctionTest");
         registerFunction("Get", this);
         registerFunction("Post", this);
+        registerFunction("GetDeviceId",this);
         declareEvent("Test");
 
         //服务链接检测线程

@@ -38,28 +38,27 @@
                 android:background="#ffffff"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-
             <EditText
-                android:id="@+id/et_redisip"
+                android:id="@+id/et_socket"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:inputType="text"
                 android:layout_marginTop="20dp"
                 android:focusable="true"
-                android:hint="请输入主推服务IP"
+                android:hint="请舒服socket.io地址"
                 android:background="#ffffff"
                 android:textSize="15sp"
                 android:textStyle="bold" />
             <EditText
-                android:id="@+id/et_redisport"
+                android:id="@+id/et_serial"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:inputType="text"
                 android:layout_marginTop="20dp"
                 android:focusable="true"
-                android:hint="请输入主推服务端口"
+                android:hint="请输入设备序列号"
                 android:background="#ffffff"
                 android:textSize="15sp"
                 android:textStyle="bold" />

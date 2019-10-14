@@ -8,6 +8,9 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.vcd.Const;
+import com.ethink.vcd.service.HttpUtils;
+import com.yanzhenjie.andserver.util.StringUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +19,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.MediaType;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * des:网络管理工具
@@ -76,93 +81,49 @@ public class NetWorkUtils {
         }
         return false;
     }
-
-    public static PluginMessage get(final String path, Context context, final RxManager rx, final PluginMessage pluginMessage) {
+    public static PluginMessage get(final String path, Context context, PluginMessage pluginMessage) {
         try {
-            //  if (path.startsWith("/",0))
-            String pathsub = path.substring(1, path.length());
-            synchronized (pluginMessage) {
-                logger.info("OnFunction  网络请求加载的地址" + path);
-                Api.getDefault(context).get("application/json", pathsub).compose(RxSchedulers.<String>io_main()).subscribe(new RxSubscriber<String>(context) {
-                    @Override
-                    protected void _onNext(String uid) {
-                        logger.info("OnFunction  返回");
-                        if (!uid.isEmpty()) {
-                            pluginMessage.changeToResponse();
-                            pluginMessage.setString("rsp", uid);
-                            // 发送 String 类型事件
-                            logger.info("OnFunctionget 发送" + uid);
-                            synchronized (pluginMessage) {
-                                pluginMessage.notifyAll();
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    protected void _onError(String message) {
-                        logger.info("OnFunction  网络请求出错" + message);
-                    }
-                });
-                pluginMessage.wait();
-                logger.info("OnFunctionget 发送 return 之前" );
-                return pluginMessage;
+            logger.info("请求地址："+path);
+            pluginMessage.changeToResponse();
+            Request request = new Request.Builder().url(Const.getUrl(path)).build();
+            Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
+            if (response.isSuccessful()) {
+                String body = response.body().string();
+                if (!StringUtils.isEmpty(body)) {
+                    pluginMessage.setString("rsp", body);
+                }
+            } else {
+                logger.info("OnFunction  网络请求出错" + response.message());
             }
-
+            return pluginMessage;
         } catch (Exception e) {
-            logger.error("OnFunction  网络请求出错"+e.toString());
+            logger.error("OnFunction  网络请求出错" + e.toString());
         }
-        try {
-            pluginMessage.wait();
-        }catch (Exception e){
-
-        }
-        logger.info("OnFunctionget 发送 return null" );
         return null;
     }
 
     /**
      * post请求
      */
-    public static PluginMessage post(String path, String data, Context context, final RxManager rx, final PluginMessage pluginMessage) {
+    public static PluginMessage post(String path, String data, Context context, PluginMessage pluginMessage) {
         try {
-            logger.info("OnFunction  网络请求加载的地址" + path);
-            synchronized (pluginMessage) {
-                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                        data.toString());
-                Api.getDefault(context).post("application/json", path, requestBody).compose(RxSchedulers.<String>io_main()).subscribe(new RxSubscriber<String>(context) {
-                    @Override
-                    protected void _onNext(String uid) {
-                        logger.info("进入方法static post" + uid);
-                        if (!uid.isEmpty()) {
-                            pluginMessage.changeToResponse();
-                            pluginMessage.setString("rsp", uid);
-                            // 发送 String 类型事件
-                            logger.info("OnFunctionpost 发送" + uid);
-                            synchronized (pluginMessage) {
-                                pluginMessage.notifyAll();
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void _onError(String message) {
-                    }
-                });
-                pluginMessage.wait();
-                logger.info("OnFunctionpost 发送 return 之前" );
-                return pluginMessage;
+            logger.info("  网络请求加载的地址" + path);
+            pluginMessage.changeToResponse();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.toString());
+            Request request = new Request.Builder().post(requestBody).url(Const.getUrl(path)).build();
+            Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
+            if (response.isSuccessful()) {
+                String body = response.body().string();
+                if (!StringUtils.isEmpty(body)) {
+                    pluginMessage.setString("rsp", body);
+                }
+            } else {
+                logger.info("OnFunction  网络请求出错" + response.message());
             }
-        } catch(Exception e){
-
+            return pluginMessage;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        try {
-            pluginMessage.wait();
-        }catch (Exception e){
-
-        }
-        logger.info("OnFunctionpost 发送 return null" );
         return null;
     }
 
