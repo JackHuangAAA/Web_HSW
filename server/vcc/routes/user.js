@@ -126,4 +126,16 @@ router.post(
   })
 )
 
+/**
+ * 修改指纹信息
+ * @apiParam {String} id 用户id
+ * @apiParam {String} code_delete 要删除的指纹代码
+ * @apiParam {String} code_new 新指纹代码
+ */
+router.post(
+    '/modifyFinger',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.user.modifyFinger(ctx.request.body)
+    })
+)
 module.exports = router

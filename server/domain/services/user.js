@@ -161,7 +161,7 @@ module.exports = {
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
     queryUsers: async function(requestBody){
-        logger.debug(`queryUsers param: ${json.stringify(requestBody)}`);
+        logger.debug(`queryUsers param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": new RegExp(requestBody.code)});
@@ -185,7 +185,7 @@ module.exports = {
    * @returns {Promise.<requestBody>}
    */
   saveUser: async function(requestBody) {
-    logger.debug(`saveUser param: ${json.stringify(requestBody)}`);
+    logger.debug(`saveUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.create(requestBody)
   },
 
@@ -195,7 +195,7 @@ module.exports = {
    * @returns {Promise.<*>}
    */
   modifyUser: async function(requestBody) {
-    logger.debug(`modifyUser param: ${json.stringify(requestBody)}`);
+    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
@@ -210,7 +210,33 @@ module.exports = {
    * @returns {*}
    */
   removeUserById: function(requestBody) {
-    logger.debug(`removeUserById param: ${json.stringify(requestBody)}`);
+    logger.debug(`removeUserById param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.findOneAndRemove({ _id: requestBody.id })
-  }
+  },
+
+    /**
+     * 修改指纹信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    modifyFinger: async function(requestBody) {
+        logger.debug(`modifyFinger param: ${JSON.stringify(requestBody)}`);
+        await Domain.models.user.updateOne(
+            { _id: requestBody.id },
+            {
+                $pull:{
+                  "finger":requestBody.code_delete
+                }
+            }
+        );
+        return await Domain.models.user.updateOne(
+            { _id: requestBody.id },
+            {
+                $push:{
+                    "finger":requestBody.code_new
+                }
+            }
+        );
+
+    },
 }
