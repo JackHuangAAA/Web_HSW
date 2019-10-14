@@ -6,18 +6,6 @@ const logger = Libs.logger.getLogger('cache');
 const moment = require('moment');
 
 module.exports = {
-    /** 
-     *缓存设备状态
-     * @param devId
-     * @returns {Promise.<*>}
-     */
-    getDeviceStatus: async function (devId) {
-        if(await Domain.redis.client.existsAsync(devId) == 1 ){
-            return await Domain.redis.client.getAsync(devId);
-        }else{
-            return Domain.redis.client.setAsync(devId, devId);//保存成功，返回OK
-        }
-    },
 
     /**
      * 缓存string
@@ -127,26 +115,6 @@ module.exports = {
             Domain.redis.client.setAsync(param.ckey, JSON.stringify(param));
         })
         logger.info('config parament cache to redis success!');
-    },
-
-    /**
-     *初始化所有中药到缓存
-     * @param devId
-     * @returns {Promise.<*>}
-     */
-    initMedDic: async function () {
-        let granules = await Domain.services.granule.queryAllGranules();
-        return Domain.redis.client.setAsync(Domain.enum.REDIS_KEY.equivalent.medDic, JSON.stringify(granules));
-    },
-
-    /**
-     *初始化所有颗粒当量到缓存
-     * @param devId
-     * @returns {Promise.<*>}
-     */
-    initEquivalent: async function () {
-        let equivalents = await Domain.services.equivalent.getEquivalents();
-        return Domain.redis.client.setAsync(Domain.enum.REDIS_KEY.equivalent, JSON.stringify(equivalents));
     }
 
 }
