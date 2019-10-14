@@ -12,8 +12,7 @@ global.Config = require(`${process.cwd()}/config`);
 // deviceId和socket实例一一对应
 let map = {
 
-} 
-   logger.info('==================================== ')
+}
 let push = {
     init(io) {
         io.on('connection', (socket) => {
@@ -41,24 +40,17 @@ http.listen(9996 || 8080, '0.0.0.0');
 
 async function execute() {
     _.mapKeys(map, async function (value, key) {
-         logger.info(key, '===============deviceid=========')
         // 报警信息 （温度报警次数、报警次数、报警信息）
 
         let deviceData = await Domain.services.device.queryDeviceByCondition({ code: key });
         console.log(deviceData, 'deviceData')
         let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: deviceData[0]._id });
-         console.log(alarmData, '================================alarmData')
         // 疫苗种类
         let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: deviceData[0]._id });
-         console.log(vaccineNum, '======================================vaccineNum')
-        
         // 缺少库存
          let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: deviceData[0]._id});
-           console.log(vaccineLowerThreshold, '==================================vaccineLowerThreshold')
         // 空余药柜
          let drawerEmptyArr = await Domain.services.drawer.queryDrawerEmpty({ device: deviceData[0]._id });
-           console.log(drawerEmptyArr, '===========================================drawerEmptyArr')
-         
         // 接种顾客
          let customerNum = await Domain.services.vaccination.queryVaccinationByCustomerCode({ device: deviceData[0]._id});
          let timedData = {
@@ -67,8 +59,7 @@ async function execute() {
              vaccineLowerThreshold: vaccineLowerThreshold,
              drawerEmptyArr: drawerEmptyArr,
              customerNum: customerNum,
-         }
-        console.log(JSON.stringify(timedData), 'timedData=============')
+         };
         value.emit( Domain.enum.TIMEDATA, timedData);
         value.emit( 'test2', '再一次');
     });

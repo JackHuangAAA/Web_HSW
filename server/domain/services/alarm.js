@@ -15,7 +15,7 @@ module.exports = {
     queryAlarmByByCondition: async function (requestBody) {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
-         if (!_.isEmpty(requestBody.date)) {
+         if (!_.isEmpty(requestBody.ifToday)) {
            let today = moment();
            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         }
