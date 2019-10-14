@@ -33,6 +33,7 @@
                 <category android:name="com.ethink.category.launcher" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.FingerActivity"/>
         <service android:name=".server.VCDService"/>
     </application>
 

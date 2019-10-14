@@ -186,7 +186,7 @@ module.exports = {
    * @returns {Promise.<requestBody>}
    */
   saveUser: async function(requestBody) {
-    logger.debug(`saveUser param: ${json.stringify(requestBody)}`);
+    logger.debug(`saveUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.create(requestBody)
   },
 
@@ -196,7 +196,7 @@ module.exports = {
    * @returns {Promise.<*>}
    */
   modifyUser: async function(requestBody) {
-    logger.debug(`modifyUser param: ${json.stringify(requestBody)}`);
+    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
@@ -211,7 +211,42 @@ module.exports = {
    * @returns {*}
    */
   removeUserById: function(requestBody) {
-    logger.debug(`removeUserById param: ${json.stringify(requestBody)}`);
+    logger.debug(`removeUserById param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.findOneAndRemove({ _id: requestBody.id })
-  }
+  },
+
+    /**
+     * 删除指纹信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    deleteFinger: async function(requestBody) {
+        logger.debug(`deleteFinger param: ${JSON.stringify(requestBody)}`);
+        return await Domain.models.user.updateOne(
+            { _id: requestBody.id },
+            {
+                $pull:{
+                  "finger":requestBody.code_delete
+                }
+            }
+        );
+    },
+
+    /**
+     * 保存指纹信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    saveFinger: async function(requestBody) {
+        logger.debug(`saveFinger param: ${JSON.stringify(requestBody)}`);
+        return await Domain.models.user.updateOne(
+            { _id: requestBody.id },
+            {
+                $push:{
+                    "finger":requestBody.code_new
+                }
+            }
+        );
+
+    }
 }

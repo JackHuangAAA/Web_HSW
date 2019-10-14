@@ -1,27 +1,22 @@
-import Main from '@/views/main.vue';
 export default [
   {
     path: '/home',
-    name: 'home',
     meta: {
       title: '首页',
       icon: 'home'
     },
-    component: () => import('@/views/home/home.vue')
+    component: () => import('@/views/home.vue')
   },
   {
-    path: '/inoculate',
-    name: 'inoculate',
+    path: '/vaccination',
     meta: {
       title: '接种',
       icon: 'inoculate'
     },
-    component: () => import('@/views/inoculate/inoculate.vue')
+    component: () => import('@/views/vaccination/vaccination.vue')
   },
   {
     path: '/inventory',
-    name: 'inventory',
-    redirect: '/vaccine/inventorys',
     meta: {
       title: '库存',
       icon: 'inventory',
@@ -30,7 +25,6 @@ export default [
   },
   {
     path: '/alarm',
-    name: 'alarm',
     meta: {
       title: '报警',
       icon: 'alarm'
@@ -39,7 +33,6 @@ export default [
   },
   {
     path: '/setting',
-    name: 'setting',
     meta: {
       title: '设置',
       icon: 'setting'

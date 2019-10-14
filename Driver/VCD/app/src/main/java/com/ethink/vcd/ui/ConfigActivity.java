@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.ethink.vcd.Const;
 import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
@@ -38,39 +40,35 @@ public class ConfigActivity extends AppCompatActivity {
     @BindView(R.id.et_url)
     EditText etUrl;
 
-    @BindView(R.id.et_redisip)
-    EditText et_redisip;
+    @BindView(R.id.et_serial)
+    EditText etSerial;
 
-    @BindView(R.id.et_redisport)
-    EditText et_redisport;
+    @BindView(R.id.et_socket)
+    EditText edSocket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
         ButterKnife.bind(this);
         String url = SPUtils.getSharedStringData(this, Const.CONFIG_URL);
-        String redisIp = SPUtils.getSharedStringData(this, Const.REDIS_IP);
-        int redisPort = SPUtils.getSharedIntData(this, Const.REDIS_PORT);
-        //配置页面是否为空，空设置默认地址
-        if(url.isEmpty()) {
-            etUrl.setText("http://192.168.0.96:9998/");
+        String socketUrl = SPUtils.getSharedStringData(this, Const.SOCKET_IO_URL);
+        String serial= PhoneUtils.getSerial();
+        //自动上报的地址
+        if (url.isEmpty()) {
+            etUrl.setText("http://192.168.0.124:8080");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
 
-        }else{
+        } else {
             etUrl.setText(url);
         }
-        if(redisIp.isEmpty()) {
-            et_redisip.setText("ads.ethinkbank.com");
-
-        }else{
-            et_redisip.setText(redisIp);
+        if(!StringUtils.isEmpty(serial)){
+            etSerial.setText(serial);
         }
-
-        if(redisPort==0) {
-            et_redisport.setText("8081");
-
-        }else{
-            et_redisport.setText(redisPort+"");
+        if (socketUrl.isEmpty()) {
+            edSocket.setText("http://192.168.0.153:9996");
+        } else {
+            edSocket.setText(socketUrl);
         }
 
         if (isVersionM()) {
@@ -78,9 +76,11 @@ public class ConfigActivity extends AppCompatActivity {
         }
 
     }
+
     private boolean isVersionM() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
+
     private void checkAndRequestPermissions() {
         mMissPermissions.clear();
         for (String permission : REQUIRED_PERMISSION_LIST) {
@@ -109,12 +109,9 @@ public class ConfigActivity extends AppCompatActivity {
         }
 
         if (!mMissPermissions.isEmpty()) {
-            Toast.makeText(this, "get permissions failed,exiting...",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "get permissions failed,exiting...", Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
 
 
     @Override
@@ -124,33 +121,35 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.bt_ok)
-    public void onBtnOkClick(){
+    public void onBtnOkClick() {
         String url = etUrl.getText().toString();
-       // String redisIp = et_redisip.getText().toString();
-        String redisPort= et_redisport.getText().toString();
-
-
-        if (!url.isEmpty()){
-            SPUtils.setSharedStringData(getApplication(),Const.CONFIG_URL,url);
-        }else {
-            Toast.makeText(this,"请输入服务地址",Toast.LENGTH_LONG).show();
+        String socketUrl = edSocket.getText().toString();
+        String serial=etSerial.getText().toString();
+        if (!url.isEmpty()) {
+            SPUtils.setSharedStringData(getApplication(), Const.CONFIG_URL, url);
+        } else {
+            Toast.makeText(this, "请输入服务地址", Toast.LENGTH_LONG).show();
             return;
         }
-//        if (!redisIp.isEmpty()){
-//            SPUtils.setSharedStringData(get-Application(),Const.REDIS_IP,redisIp);
-//        }else {
-//            Toast.makeText(this,"请输入推送IP",Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        if (!redisPort.isEmpty()){
-//            SPUtils.setSharedIntData(getApplication(),Const.REDIS_PORT,Integer.parseInt(redisPort));
-//        }else {
-//            Toast.makeText(this,"请输入推送端口",Toast.LENGTH_LONG).show();
-//            return;
-//        }
-        Toast.makeText(this,"配置地址已经生效",Toast.LENGTH_LONG).show();
-
+        if (!StringUtils.isEmpty(socketUrl)) {
+            SPUtils.setSharedStringData(getApplication(), Const.SOCKET_IO_URL, socketUrl);
+        } else {
+            Toast.makeText(this, "请输入socket.io地址", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!StringUtils.isEmpty(serial)){
+            SPUtils.setSharedStringData(getApplication(), Const.SERIAL_NO, serial);
+        }else{
+            Toast.makeText(this, "请输入设备序列号", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
         Intent startIntent = new Intent(this, VCDService.class);
         startService(startIntent);
+
+        Intent finger = new Intent(this, FingerActivity.class);
+        startActivity(finger);
+
+        finish();
     }
 }
