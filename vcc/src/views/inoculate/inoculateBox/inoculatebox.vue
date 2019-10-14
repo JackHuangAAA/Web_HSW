@@ -58,19 +58,25 @@
     <Row>
       <div class="inculate-box-button">
         <div class="inculate-box-icon">
-          <Spin>
+          <Spin v-if="type==0">
             <Icon type="ios-loading"
                   size=50
                   class="inculate-box-spin-icon-load"></Icon>
           </Spin>
+          <img v-if="type==1"
+               :src="succeed">
+          <img v-if="type==2"
+               :src="error">
         </div>
-        <div class="inculate-box-checkedinfo">疫苗接种信息匹配中</div>
+        <div class="inculate-box-checkedinfo">疫苗接种信息{{typeinfo}}</div>
       </div>
     </Row>
   </div>
 </template>
 
 <script>
+import succeed from "_a/succeed.png";
+import error from "_a/error.png";
 import inoculateboxitem from "./inoculateboxitem.vue";
 export default {
   name: "inoculate-Box",
@@ -108,12 +114,22 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      succeed,
+      error
+    };
   },
   computed: {
     typeinfo() {
       let type = this.type;
-      let str = '匹配中'
+      let str = "匹配中";
+      if (this.type == 1) {
+        str = "匹配成功";
+      }
+      if (this.type == 2) {
+        str = "匹配失败";
+      }
+      return str;
     }
   },
   mounted() {}

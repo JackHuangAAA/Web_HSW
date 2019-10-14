@@ -58,7 +58,9 @@ export default {
           type = 1;
         }
       }
-      this.type = type;
+      this.$nextTick(()=>{
+        this.type = type;
+      })
     }
   }
 };
