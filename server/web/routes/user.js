@@ -16,7 +16,6 @@ router.get('/current',
 
 /**
  * 登陆
- * @api {POST} /device/queryDevices  查询设备信息
  */
 router.post('/login',
     Libs.router( async (ctx, next) => {

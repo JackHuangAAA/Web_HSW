@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'lackCard',
+  name: "lackCard",
   props: {
     title: {
       type: String,
@@ -19,42 +19,15 @@ export default {
     },
     unit: {
       type: String,
-      default: '支'
+      default: "支"
     }
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">
-@import "~@/style/color.less";
-.lack-card {
-  width: 100%;
-  height: 82px;
-  background-color: @gray;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.lack-card-title {
-  position: absolute;
-  left: 25px;
-  margin: auto 0px;
-}
-.lack-card-count {
-  position: absolute;
-  right: 18px;
-  margin: auto 0px;
-}
-
-.lack-card-item {
-  font-size: 18px;
-  font-weight: 400;
-  color: @black;
-}
+@import "./lackcard.less";
 </style>

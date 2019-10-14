@@ -6,16 +6,6 @@ const logger = Libs.logger.getLogger('drawer');
 module.exports = {
 
     /**
-     * 增加抽屉信息
-     * @param requestBody
-     * @returns {Promise.<requestBody>}
-     */
-    saveDrawer: async function(requestBody) {
-      logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
-      return Domain.models.drawer.insertMany(requestBody);
-    },
-
-    /**
      *  查询抽屉里疫苗为空的数据 
      * 
      * @param {any} requestBody 
@@ -35,35 +25,46 @@ module.exports = {
         return { rs: result, total: result.length };
     },
 
-  /**
-   *   根据条件查询抽屉信息，并按坐标排序
-   *
-   * @param {any} requestBody
-   * @returns
-   */
-  queryDrawerByCondition: async function(requestBody) {
-    logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
-    let query = []
-    if (!_.isEmpty(requestBody.device)) {
-      query.push({ device: requestBody.device });
-    }
-    if (!_.isEmpty(requestBody.id)) {
-      query.push({ device: requestBody.id });
-    }
-    if (!_.isEmpty(requestBody.unitCode)) {
-      query.push({ unitCode: requestBody.unitCode });
-    }
-    query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
-    let result = await Domain.models.drawer.find(query).sort({ x: 1, y: 1 }).populate('vaccine');
-
-    return { rs: result, total: result.length };
-  },
     /**
-     *
-     * 根据抽屉id更新抽屉信息 增加
-     * @param {any} requestBody
-     * @returns
+     * 增加抽屉信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
      */
+    saveDrawer: async function (requestBody) {
+        logger.debug(`saveDrawer param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.drawer.insertMany(requestBody);
+    },
+
+    /**
+     *   根据条件查询抽屉信息，并按坐标排序
+     * 
+     * @param {any} requestBody 
+     * @returns 
+     */
+    queryDrawerByCondition: async function (requestBody) {
+        logger.debug(`queryDrawerByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.id)) {
+            query.push({ "_id": requestBody.id });
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
+        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        let result = await Domain.models.drawer.find(query).sort({ "x": 1, "y": 1 }).populate("vaccine");
+
+        return { rs: result, total: result.length }
+    },
+
+    /**
+  * 
+  * 根据抽屉id更新抽屉信息 增加
+  * @param {any} requestBody 
+  * @returns 
+  */
     modifyDrawerById: async function (requestBody) {
         logger.debug(`modifyDrawerById param: ${JSON.stringify(requestBody)}`);
         let vaccineData = await Domain.models.vaccine.create(requestBody.vaccine);
@@ -75,13 +76,12 @@ module.exports = {
         );
         return { vaccineData: vaccineData }
     },
-
-  /**
-   *
-   * 根据抽屉id更新抽屉信息 减少
-   * @param {any} requestBody
-   * @returns
-   */
+    /**
+  * 
+  * 根据抽屉id更新抽屉信息 减少
+  * @param {any} requestBody 
+  * @returns 
+  */
     modifyDrawerByIdDec: async function (requestBody) {
         logger.debug(`modifyDrawerByIdDec param: ${JSON.stringify(requestBody)}`);
         let vaccineData = await Domain.models.vaccine.findOneAndRemove({ _id: requestBody.vaccineId });
@@ -94,11 +94,11 @@ module.exports = {
     },
 
     /**
-     *
-     *按疫苗 分组合计抽屉信息
-     * @param {any} requestBody
-     * @returns
-     */
+      * 
+      *按疫苗 分组合计抽屉信息
+      * @param {any} requestBody 
+      * @returns 
+      */
     queryDrawerByVaccineArr: async function (requestBody) {
         logger.debug(`queryDrawerByVaccineArr param: ${JSON.stringify(requestBody)}`);
         return await Domain.models.drawer.aggregate([
@@ -118,6 +118,5 @@ module.exports = {
                },
                { $project: { inventory_docs: 0 } }
         ])
-    }
+    },
 };
-

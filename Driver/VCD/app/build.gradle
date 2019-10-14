@@ -46,7 +46,7 @@ dependencies {
 //-----------------------------------
     implementation 'com.ethink.plugin:plugin:1.0.6'
     implementation 'com.ethink.tools:tools:1.0.4'
-    implementation 'io.reactivex:rxandroid:1.0.1'
+   // implementation 'io.reactivex:rxandroid:1.0.1'
     //retrofit和rxjava和okhttp
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
@@ -60,5 +60,10 @@ dependencies {
     implementation 'com.blankj:utilcodex:1.25.8'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.github.jiangdongguo:AndroidUSBCamera:2.3.1'
+    implementation ('io.socket:socket.io-client:1.0.0') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
+  //  implementation 'com.orhanobut:logger:2.2.0'
 
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="basicSetting card">
+  <div class="basicSetting bsmain card">
     <Row class="bs-row"
          type="flex"
          :gutter="8"
@@ -100,15 +100,12 @@
 </template>
 
 <script>
-import cities from "./cities.js"
 export default {
-  name: 'basicSetting',
-  data () {
-    return {
-
-    }
+  name: "basicSetting",
+  data() {
+    return {};
   }
-}
+};
 </script>
 
 <style lang="less">
@@ -120,10 +117,6 @@ export default {
   }
 }
 .basicSetting {
-  height: 100%;
-  max-height: "~calc('100% - 80px')";
-  width: 100%;
-  padding: 5% 25%;
 }
 .bs-row {
   height: 50px;

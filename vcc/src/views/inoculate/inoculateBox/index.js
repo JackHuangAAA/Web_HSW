@@ -1,2 +1,2 @@
-import inoculateBox from './inoculatebox.vue'
-export default inoculateBox
+import inoculateBox from './inoculatebox.vue';
+export default inoculateBox;

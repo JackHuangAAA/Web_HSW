@@ -1,2 +1,2 @@
-import alarminfo from './alarminfo.vue'
-export default alarminfo
+import alarminfo from './alarminfo.vue';
+export default alarminfo;

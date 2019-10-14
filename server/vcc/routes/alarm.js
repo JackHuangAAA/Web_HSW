@@ -11,7 +11,7 @@ const logger = Libs.logger.getLogger('alarm');
  * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足,不传查询全部)
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
- * @apiParam {Date} [date] 当日时间
+ * @apiParam {Date} [ifToday] 是否当日 当日：today；非当日：不使用改参数
  * @apiSuccess {Array}  rs  当天报警次数信息数组
  * @apiSuccess {Number}  total 当天报警次数
  */

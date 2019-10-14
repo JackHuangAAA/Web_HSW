@@ -79,10 +79,10 @@ router.post(
  * @apiParam {Object} vaccineId 疫苗id
  * @apiSuccess {Object} data 操作返回数据的
  */
-router.post('/modifyDrawerByIdDec',
-    Libs.router(async (ctx, next) => {
-        return await Domain.services.drawer.modifyDrawerByIdDec(ctx.request.body);
-    })
+router.post('/queryDrawerByVaccineArr',
+  Libs.router(async (ctx, next) => {
+    return await Domain.services.drawer.queryDrawerByVaccineArr(ctx.request.body);
+  })
 );
 
 module.exports = router;

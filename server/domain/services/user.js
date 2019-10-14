@@ -155,29 +155,30 @@ module.exports = {
     )
   },
 
-    /**
-     * 查询用户信息
-     * @param requestBody
-     * @returns {Promise.<{rs: *, total: (*|number)}>}
-     */
-    queryUsers: async function(requestBody){
-        logger.debug(`queryUsers param: ${JSON.stringify(requestBody)}`);
-        let query = [];
-        if (!_.isEmpty(requestBody.code)) {
-            query.push({"code": new RegExp(requestBody.code)});
-        }
-        if (!_.isEmpty(requestBody.name)) {
-            query.push({"name": new RegExp(requestBody.name)});
-        }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
-        let result = await Domain.models.user.paginate(query, {
-            sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size),
-            lean:true
-        });
-        return {rs: result.docs, total: result.total};
-    },
+  /**
+   * 查询用户信息
+   * @param requestBody
+   * @returns {Promise.<{rs: *, total: (*|number)}>}
+   */
+  queryUsers: async function(requestBody) {
+    logger.debug(`queryUsers param: ${json.stringify(requestBody)}`)
+    let query = []
+    if (!_.isEmpty(requestBody.code)) {
+      query.push({ code: new RegExp(requestBody.code) })
+    }
+    if (!_.isEmpty(requestBody.name)) {
+      query.push({ name: new RegExp(requestBody.name) })
+    }
+    query =
+      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {}
+    let result = await Domain.models.user.paginate(query, {
+      sort: { _id: -1 },
+      page: requestBody.page,
+      limit: parseInt(requestBody.size),
+      lean: true
+    })
+    return { rs: result.docs, total: result.total }
+  },
 
   /**
    * 保存用户信息
@@ -215,13 +216,13 @@ module.exports = {
   },
 
     /**
-     * 修改指纹信息
+     * 删除指纹信息
      * @param requestBody
      * @returns {Promise.<*>}
      */
-    modifyFinger: async function(requestBody) {
-        logger.debug(`modifyFinger param: ${JSON.stringify(requestBody)}`);
-        await Domain.models.user.updateOne(
+    deleteFinger: async function(requestBody) {
+        logger.debug(`deleteFinger param: ${JSON.stringify(requestBody)}`);
+        return await Domain.models.user.updateOne(
             { _id: requestBody.id },
             {
                 $pull:{
@@ -229,6 +230,15 @@ module.exports = {
                 }
             }
         );
+    },
+
+    /**
+     * 保存指纹信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    saveFinger: async function(requestBody) {
+        logger.debug(`saveFinger param: ${JSON.stringify(requestBody)}`);
         return await Domain.models.user.updateOne(
             { _id: requestBody.id },
             {
@@ -238,5 +248,5 @@ module.exports = {
             }
         );
 
-    },
+    }
 }

@@ -22,4 +22,4 @@ export default [
     title: '解决情况',
     width: 8
   }
-]
+];

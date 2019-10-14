@@ -35,14 +35,14 @@
 </template>
 
 <script>
-import datetime from '_c/datetime'
-import userinfo from '_c/userinfo'
-import position from '_c/position'
-import routerlink from '_c/routerlink'
-import menuList from '_c/menulist'
-import vcc from '@/router/vcc'
+import datetime from "_c/datetime";
+import userinfo from "_c/userinfo";
+import position from "_c/position";
+import routerlink from "_c/routerlink";
+import menuList from "_c/menulist";
+import vcc from "@/router/vcc";
 export default {
-  name: 'Main',
+  name: "Main",
   components: {
     datetime,
     userinfo,
@@ -50,48 +50,48 @@ export default {
     routerlink,
     menuList
   },
-  data () {
+  data() {
     return {
       menulist: [],
-      menuOpen: false
-    }
+      menuOpen: false,
+      socket: ""
+    };
   },
-  created () {
-    this.getmenulist()
+  created() {
+    this.getmenulist();
   },
-  mounted () {
+  mounted() {
     // this.websocket()
   },
   methods: {
-    test () {
-      console.log('123')
-      storage.CleanStorage('deviceid')
-      storage.CleanStorage('devicecode')
-      this.$router.push('/login')
+    test() {
+      // storage.CleanStorage("deviceid");
+      // storage.CleanStorage("devicecode");
+      this.$router.push("/login");
     },
-    menuItemClick (item) {
-      this.menuClose()
+    menuItemClick(item) {
+      this.menuClose();
     },
-    menuClick () {
+    menuClick() {
       this.$nextTick(() => {
-        this.menuOpen = !this.menuOpen
-      })
+        this.menuOpen = !this.menuOpen;
+      });
     },
-    menuClose () {
-      this.menuOpen = false
+    menuClose() {
+      this.menuOpen = false;
     },
-    getmenulist () {
+    getmenulist() {
       let menulist = vcc.map(el => {
-        let path = { path: el.path, name: el.name, ...el.meta }
-        return path
-      })
-      this.menulist = menulist
+        let path = { path: el.path, name: el.name, ...el.meta };
+        return path;
+      });
+      this.menulist = menulist;
     },
-    websocket () {
-      this.socket = io()
+    websocket() {
+      this.socket = io();
     }
-  },
-}
+  }
+};
 </script>
 
 <style lang="less" scoped>

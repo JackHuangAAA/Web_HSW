@@ -1,4 +1,4 @@
-import Main from '@/views/main.vue'
+import Main from '@/views/main.vue';
 export default [
   {
     path: '/home',
@@ -46,4 +46,4 @@ export default [
     },
     component: () => import('@/views/setting/setting.vue')
   }
-]
+];

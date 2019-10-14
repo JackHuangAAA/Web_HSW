@@ -14,9 +14,9 @@
             <Col span="12"
                  v-for="column in peopleColumns"
                  v-if="column.hide!=true">
-            <div v-if="column.key=='id'"
+            <div v-if="column.key=='code'"
                  class="inoculate-box-peopleinfo">
-              <div class="inoculate-box-id">{{people['id']}}</div>
+              <div class="inoculate-box-id">{{people['code']}}</div>
               <div class="inoculate-box-name">{{people['name']}}</div>
             </div>
             <div class="inculate-box-item"

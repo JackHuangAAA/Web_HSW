@@ -1,12 +1,8 @@
-import axios from '@/api'
+import axios from '@/api';
 export const queryDeviceByCondition = async deviceId => {
-  return await axios.get(`/device/queryDeviceByCondition`, deviceId)
-}
-
-export const queryVaccineKinds = async () => {
-  return await axios.get(`/zcy/queryVaccineKinds`)
-}
+  return await axios.get(`/device/queryDeviceByCondition`, { code: deviceId });
+};
 
 export const queryDrawerByCondition = async device => {
-  return await axios.get(`/drawer/queryDrawerByCondition`, { device: device })
-}
+  return await axios.get(`/drawer/queryDrawerByCondition`, { device: device });
+};

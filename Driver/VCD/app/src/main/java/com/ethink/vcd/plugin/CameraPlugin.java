@@ -7,7 +7,9 @@ import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.PluginMessage;
 import com.ethink.vcd.ui.CameraActivity;
-
+/****
+ * 人脸识别模块
+ * **/
 public class CameraPlugin extends BasePlugin implements FunctionHandler {
     private Context context;
 

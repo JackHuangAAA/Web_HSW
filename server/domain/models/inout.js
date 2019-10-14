@@ -19,7 +19,7 @@ const inoutSchema = mongoose.Schema({
     total: Number,      //数量(入库总数)
     surplus: Number,    //剩余数量
     use: Number,        //使用数量(use=total-surplus)
-    updateDate: {type: Date, default: Date.now}  //更新时间
+    createDate: {type: Date, default: Date.now}  //更新时间
 }, {autoIndex: false});
 inoutSchema.plugin(paginate);
 module.exports = mongoose.model('inout', inoutSchema);
