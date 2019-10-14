@@ -17,7 +17,7 @@
           <position></position>
         </div>
         <div class="userinfo"
-             @click="test()">
+             @click="loginout()">
           <userinfo></userinfo>
         </div>
       </Row>
@@ -58,8 +58,8 @@ export default {
     // this.websocket()
   },
   methods: {
-    test () {
-      console.log('123')
+    loginout () {
+      console.log('退出登录')
       storage.CleanStorage('deviceid')
       storage.CleanStorage('devicecode')
       this.$router.push('/login')

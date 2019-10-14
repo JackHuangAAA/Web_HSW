@@ -46,7 +46,8 @@ export default {
     }
     return new Promise((resolve, reject) => {
       axios
-        .get(`/vcc${url}?t=${new Date().getTime()}`, { params: data })
+        // .get(`/vcc${url}?t=${new Date().getTime()}`, { params: data })
+        .get(`/vfc${url}?t=${new Date().getTime()}`, { params: data })
         .then(response => {
           commonResponseHandler(response, resolve, reject)
         })
@@ -60,7 +61,8 @@ export default {
     }
     return new Promise((resolve, reject) => {
       axios
-        .post(`/vcc${url}?t=${new Date().getTime()}`, data)
+        // .post(`/vcc${url}?t=${new Date().getTime()}`, data)
+        .post(`/vfc${url}?t=${new Date().getTime()}`, data)
         .then(response => {
           commonResponseHandler(response, resolve, reject)
         })

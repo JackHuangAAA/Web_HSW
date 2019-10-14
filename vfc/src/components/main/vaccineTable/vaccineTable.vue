@@ -1,17 +1,17 @@
 <template>
-  <div>
+  <div class="vacc-position">
     <Row>
       <div class="vTable-title">选择疫苗存放位置</div>
     </Row>
     <div class="vTable">
       <div class="vTable-t-b">
         <p> 上 </p>
-        <img :src="t2b">
+        <img :src="`/static/img/images/t-b.png`">
         <p style="margin-top:12px;"> 下 </p>
       </div>
       <div class="vTable-l-r">
         <p> 左 </p>
-        <img :src="l2r"
+        <img :src="`/static/img/images/l-r.png`"
             style="margin-left:20px;">
         <p style="margin-left:12px;"> 右 </p>
       </div>
@@ -53,7 +53,7 @@
     <Row class="datetime">
       <datetime>
         <div class="datetime-slot">
-          <img :src="scan"/>
+          <img :src="`/static/img/images/scan.png`"/>
           <div>提示：将疫苗条码对准识别口扫码</div>
         </div>
       </datetime>
@@ -64,9 +64,9 @@
 <script>
 import vaccineCard from './vaccineCard.vue'
 import datetime from '_c/datetime'
-import t2b from '_a/t-b.png'
-import l2r from '_a/l-r.png'
-import scan from '_a/scan.png'
+// import t2b from '_a/t-b.png'
+// import l2r from '_a/l-r.png'
+// import scan from '_a/scan.png'
 export default {
   name: 'vaccineTable',
   components: {
@@ -81,8 +81,8 @@ export default {
   },
   data () {
     return {
-      t2b, l2r,
-      scan,
+      // t2b, l2r,
+      // scan,
       vacclists: null,
       drawers: null,
       max: 2,//指定疫苗最大数

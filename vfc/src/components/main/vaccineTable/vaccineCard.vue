@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import addpng from '_a/add.png'
-import delpng from '_a/del.png'
+// import addpng from '_a/add.png'
+// import delpng from '_a/del.png'
 export default {
   name: 'vaccineCard',
   props: {
@@ -124,7 +124,7 @@ export default {
   },
   data () {
     return {
-      addpng, delpng,
+      // addpng, delpng,
       Selection: [],
       vCardModal: false,
       input: '',

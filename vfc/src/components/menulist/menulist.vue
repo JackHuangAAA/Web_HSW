@@ -69,7 +69,7 @@ export default {
   },
   methods: {
     menuIcon (icon) {
-      return `~@/assets/icon/${icon}.png`
+      return `/static/img/icon/icon/${icon}.png`
     },
     menuClick (item) {
       this.$emit('clickitem', item)
@@ -136,13 +136,13 @@ export default {
   width: 12px;
   height: 16px;
   margin: auto 0px auto 15px;
-  background-image: url("~@/assets/location-icon.png");
+  background-image: url("/static/img/images/location-icon.png");
 }
 .menu-location {
   display: flex;
   width: 98px;
   height: 30px;
-  background: @gray;
+  background: #c7d0df;
   border-radius: 15px;
   margin: 30px auto;
   align-items: center;
@@ -160,7 +160,7 @@ export default {
   position: relative;
   width: 134px;
   height: 18px;
-  background-image: url("~@/assets/logo.png");
+  background-image: url("/static/img/images/logo.png");
   background-size: 134px 18px;
   margin: 34px auto 0px auto;
 }
@@ -189,11 +189,11 @@ export default {
   margin: auto 17px auto 23px;
 }
 .icon-open {
-  background-image: url("~@/assets/menuopen.png");
+  background-image: url("/static/img/images/menuopen.png");
   background-size: 20px 22px;
 }
 .icon-close {
-  background-image: url("~@/assets/menuclose.png");
+  background-image: url("/static/img/images/menuclose.png");
   background-size: 20px 22px;
 }
 .menu-status {

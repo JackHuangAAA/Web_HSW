@@ -35,6 +35,17 @@ export default [
       title: '设置',
       icon: 'setting'
     },
-    component: () => import('@/views/setting/setting.vue')
+    component: () => import('@/views/setting/setting.vue'),
+    children:[
+      {
+        path:'/input',
+        name:'fingerInput',
+        meta:{
+          title:'指纹录入',
+          icon:'fingerInput'
+        },
+        component:()=>import('@/views/setting/fingerInput.vue')
+      }
+    ]
   }
 ]

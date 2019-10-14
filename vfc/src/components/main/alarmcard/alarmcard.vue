@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Row v-for="el in lists"
+    <Row v-for="el in 2" :key="el"
          class="alarm-card">
       <Col v-for="column in columns"
-           :span="column.width">
+           :span="column.width" :key="column.key">
         <div v-if="column.key==='ID'"
             class="alarm-card-index">
           <p>{{el['id']}}</p>

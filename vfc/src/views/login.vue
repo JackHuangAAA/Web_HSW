@@ -65,20 +65,27 @@ export default {
           break;
       }
     },
+    //指纹测试
     test () {
       let test = this.$device.finger('open').catch(err => {
         console.log(err)
       })
       console.log('test')
     },
+    // 登录
     async checkUser (form) {
+      // 验证用户
       let res = await this.$api.get('/zcy/checkUser', form)
       let check = res.data.check
       if (check) {
         let data = res.data
+        console.log(data)
+        // 存储账户、用户名
         await this.saveUser(form.code)
         await this.saveUserInfo(data)
-        await this.$api.post('/user/modifyUserByCode', { code: data.code, name: data.name })
+        //更新用户信息
+        let rs=await this.$api.post('/user/modifyUserByCode', { code: data.code, name: data.name })
+        console.log(rs)
         this.$router.push({ name: 'home' })
       }
     }

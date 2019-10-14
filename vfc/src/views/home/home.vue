@@ -20,18 +20,18 @@
         <div class="vaccine-set vaccine-in"
           @click="routerto('inbound')">
           <p>疫苗入库</p>
-          <img src="~@/assets/vaccine-in.png">
+          <img src="/static/img/images/vaccine-in.png">
         </div>
         <div class="vaccine-set vaccine-out"
             @click="routerto('outbound')">
           <p>疫苗出库</p>
-          <img src="~@/assets/vaccine-out.png">
+          <img src="/static/img/images/vaccine-out.png">
         </div>
       </div>
-      <div class="datetime">
+    </div>
+    <div class="datetime">
         <datetime></datetime>
       </div>
-    </div>
   </div>
 </template>
 
@@ -74,12 +74,12 @@ export default {
   },
   methods: {
     getHomeData () {
-      this.queryVaccine()
-      this.queryAlarmDailyInfo()
-      this.queryDrawerEmpty()
-      this.queryVaccineLowerThreshold()
-      this.queryAlarmTemperature()
-      this.queryVaccinationByCustomerCode()
+      // this.queryVaccine()
+      // this.queryAlarmDailyInfo()
+      // this.queryDrawerEmpty()
+      // this.queryVaccineLowerThreshold()
+      // this.queryAlarmTemperature()
+      // this.queryVaccinationByCustomerCode()
     },
     queryVaccinationByCustomerCode () {
       this.getTotal('customer', '/Vaccine/queryVaccinationByCustomerCode', { device: this.deviceid })
@@ -132,4 +132,10 @@ export default {
 
 <style lang="less">
 @import "~@/style/main/home.less";
+.datetime{
+  position: absolute;
+  bottom: -15px !important;
+  width: 100%;
+  height: 60px;
+}
 </style>

@@ -47,7 +47,7 @@ export default {
 .item-card {
   width: 100%;
   height: 135px;
-
+  border-radius: 10px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -55,7 +55,7 @@ export default {
 }
 .item-number {
   position: absolute;
-  top: 16px;
+  top:30px;
   left: 30px;
   color: @blue;
   font-size: 36px;
@@ -68,7 +68,7 @@ export default {
 .item-title {
   position: absolute;
   left: 27px;
-  bottom: 16px;
+  top: 75px;
   color: @black;
   font-size: 18px;
   font-weight: 400;

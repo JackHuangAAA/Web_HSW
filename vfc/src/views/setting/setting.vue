@@ -7,7 +7,8 @@
         <basic-setting style="height:100%"></basic-setting>
       </TabPane>
       <TabPane label="指纹录入">
-        <fingerprint></fingerprint>
+        <fingerprint v-if="finger==1"></fingerprint>
+        <fingerInput v-else></fingerInput>
       </TabPane>
       <TabPane label="疫苗区域划分">
         <vaccine-setting></vaccine-setting>
@@ -19,19 +20,25 @@
 
 <script>
 import fingerprint from './fingerprint'
+import fingerInput from './fingerInput'
 import VaccineSetting from './VaccineSetting'
 import basicSetting from './basicSetting'
+import { mapGetters } from 'vuex'
 export default {
   name: 'setting',
   components: {
     basicSetting,
     VaccineSetting,
-    fingerprint
+    fingerprint,
+    fingerInput
   },
   data () {
     return {
 
     }
+  },
+  computed:{
+    ...mapGetters(['finger'])
   },
   mounted () {
     this.init()

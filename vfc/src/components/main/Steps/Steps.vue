@@ -10,7 +10,7 @@
            :class="{'Steps-index-active':index<=active-1}"
            v-if="index!==0"></div>
       <div style="position:relative">
-        <div class="step-line" :class="{'step-line-active':index<=active-2}" v-if="index"></div>
+        <div class="step-line" :class="{'step-line-active':index<=active-2}" v-if="index<lists.length-1"></div>
       </div>
       
     </div>

@@ -1,10 +1,10 @@
 <template>
   <div class="userinfoType">
     <div class="headportait">
-      <img src="~@/assets/userph1.png">
+      <img src="/static/img/images/userph1.png">
     </div>
     <div class="username">
-      李晓文
+      {{username}}
     </div>
   </div>
 </template>
@@ -35,7 +35,7 @@ export default {
   flex-wrap: nowrap;
 }
 .username {
-  margin: auto 25px auto 14px;
+  margin: auto 0px auto 14px;
   font-size: 16px;
   font-family: Microsoft YaHei;
   font-weight: bold;

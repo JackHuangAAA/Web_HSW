@@ -14,11 +14,11 @@
     <!-- 警告提示 -->
     <div class="scan-notice" v-show="noticejudge">
       <Row class="scantable-close-btn">
-        <img :src="close" @click="closentc()"/>
+        <img :src="`/static/img/images/close.png`" @click="closentc()"/>
       </Row>
       <Row>
         <div class="scantable-notice-info">
-          <img :src="alarm"/>
+          <img :src="`/static/img/images/alarm.png`"/>
           <div>
             <div class="scantable-notice-s">百白破疫苗</div>
             <div>YH5683098批次有效期失效</div>
@@ -29,10 +29,10 @@
       </Row>
     </div>
     <div class="scan-notice-bg" @click="closentc()" v-show="noticejudge"></div>
-    <Row>
+    <Row class="datetime">
       <datetime>
         <div class="datetime-slot">
-          <img :src="scan"/>
+          <img :src="`/static/img/images/scan.png`"/>
           <div>提示：将疫苗条码对准识别口扫码</div>
         </div>
       </datetime>
@@ -45,9 +45,9 @@ import indexlist from './indexlist.js'
 import navHeader from '_c/main/NavHeader';
 import scanTable from '_c/main/scanTable';
 import datetime from '_c/datetime';
-import close from '_a/close.png'
-import alarm from '_a/alarm.png'
-import scan from '_a/scan.png';
+// import close from '_a/close.png'
+// import alarm from '_a/alarm.png'
+// import scan from '_a/scan.png';
 export default {
   name: 'outbound',
   methods:{
@@ -66,9 +66,9 @@ export default {
   data () {
     return {
       indexlist,
-      scan,
-      close,
-      alarm,
+      // scan,
+      // close,
+      // alarm,
       noticejudge:true,
       order:0
     }
@@ -109,5 +109,11 @@ export default {
   cursor: pointer;
   margin-top: 15px;
   margin-right: 19px;
+}
+.datetime{
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+  width: 100%;
 }
 </style>

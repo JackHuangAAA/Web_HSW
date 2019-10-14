@@ -66,6 +66,7 @@ export default {
 .scantable{
     padding: 16px 19px 0px 17px;
     text-align: center; 
+    min-height: 915px;
 }
 .scantable-head{
        

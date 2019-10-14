@@ -16,7 +16,8 @@ const store = {
     routerTitle: '主页',
     location: '西湖区',
     vacc: null, //通过zcy获取的疫苗列表
-    drawer: null //缓存的抽屉柜子
+    drawer: null, //缓存的抽屉柜子
+    finger:1
   },
 
   getters: {
@@ -40,6 +41,9 @@ const store = {
     },
     position: state => {
       return state.position
+    },
+    finger: state => {
+      return state.finger
     }
   },
 
@@ -58,6 +62,9 @@ const store = {
     },
     ChangeRoute(state, title) {
       state.routerTitle = title
+    },
+    ChangeFinger(state, page) {
+      state.routerTitle = page
     },
     SaveVaccineKinds(state, lists) {
       state.vacc = lists
@@ -79,6 +86,9 @@ const store = {
     },
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle)
+    },
+    ChangeFinger({ commit }, page) {
+      commit('ChangeRoute', page)
     },
     async getDrawer({ state, dispatch }) {
       if (state.drawer === null) {

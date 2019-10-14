@@ -25,17 +25,17 @@
       <svg style="height:22px;'">
         <path d="M74.3132 0 C47.0043 2.44032e-05 50.175 22 7.9179 22 H144.27C99.4571 22 101.622 -2.44032e-05 74.3132 0Z"
               transform="translate(-7.38794 0.5)"
-              fill="#ffffff" />
+              fill="#ecf0f8" />
       </svg>
       <div class="slider-button">
-        <img :src="thermometerPNG">
+        <img :src="`/static/img/icon/icon/thermometer.png`">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import thermometerPNG from '_a/icon/thermometer.png'
+// import thermometerPNG from '/static/img/icon/icon/thermometer.png'
 const sliderMinX = 0
 const sliderMaxX = 240
 
@@ -45,7 +45,7 @@ export default {
   name: 'thermometer',
   data () {
     return {
-      thermometerPNG,
+      // thermometerPNG,
       dragging: false,
       initialMouseX: 0,
       sliderX: 0,

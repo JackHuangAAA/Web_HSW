@@ -14,11 +14,11 @@
         <!-- 警告提示 -->
         <div class="scan-notice" v-show="noticejudge">
             <Row class="scantable-close-btn">
-                <img :src="close" @click="closentc()"/>
+                <img :src="`/static/img/images/close.png`" @click="closentc()"/>
             </Row>
             <Row>
                 <div class="scantable-notice-info">
-                    <img :src="alarm"/>
+                    <img :src="`/static/img/images/alarm.png`"/>
                     <div>
                         <div class="scantable-notice-s">百白破疫苗</div>
                         <div>YH5683098批次有效期失效</div>
@@ -29,10 +29,10 @@
             </Row>
         </div>
         <div class="scan-notice-bg" @click="closentc()" v-show="noticejudge"></div>
-        <Row>
+        <Row class="datetime">
             <datetime>
                 <div class="datetime-slot">
-                    <img :src="scan"/>
+                    <img :src="`/static/img/images/scan.png`"/>
                     <div>提示：将疫苗条码对准识别口扫码</div>
                 </div>
             </datetime>
@@ -44,16 +44,16 @@ import indexlist from '../inbound/indexlist'
 import navHeader from '_c/main/NavHeader';
 import scanTable from '_c/main/scanTable';
 import datetime from '_c/datetime';
-import close from '_a/close.png'
-import alarm from '_a/alarm.png'
-import scan from '_a/scan.png';
+// import close from '_a/close.png'
+// import alarm from '_a/alarm.png'
+// import scan from '_a/scan.png';
 export default {
     name:'scanList',
     data(){
         return{
-            scan,
-            close,
-            alarm,
+            // scan,
+            // close,
+            // alarm,
             noticejudge:true,
             order:0,
             indexlist
@@ -85,11 +85,12 @@ export default {
 }
 // 按钮
 .scantable-buttons{
-    padding:0 17px 17px 17px;
+    padding:10px 17px 17px 17px;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
     text-align: center;
+    background: #fff;
+    margin: 0;
 }
 .scantable-button{
     width: 175px;
@@ -105,5 +106,10 @@ export default {
 .scantable-complete{
     background:rgba(42,122,255,1);
 }
-
+.datetime{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+}
 </style>

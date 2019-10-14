@@ -18,13 +18,17 @@
       </div>
     </Row>
     <Row class="lack-inventory-main"
-         :gutter="10">
+         :gutter="10" v-if="lists!= null">
       <Col v-for="el in lists"
            span="12">
       <lackcard :title="el.name"
                 :value="el.surplus" :type="el"></lackcard>
       </Col>
     </Row>
+    <Rows class="lack-inventory-main"
+         :gutter="10" v-else>
+      <div>当前无数据</div>
+    </Rows>
   </div>
 </template>
 
@@ -60,10 +64,11 @@ export default {
 @import "~@/style/color.less";
 .lack-inventory {
   position: relative;
+  min-height: 915px;
   height: auto;
 }
 .lack-inventory-icon{
-  background: url("~@/assets/icon/Stock.png") no-repeat center;
+  background: url("/static/img/icon/icon/Stock.png") no-repeat center;
   width: 15px;
   height: 14px;
   margin-right: 11px;

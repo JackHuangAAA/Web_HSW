@@ -60,10 +60,10 @@ module.exports = {
   //开发配置
   devServer: {
     proxy: {
-      '/vcc': {
-        target: 'http://localhost:9998',
+      '/vfc': {
+        target: 'http://localhost:9997',
         secure: false,
-        pathRewrite: { '^/vcc': '' }
+        pathRewrite: { '^/vfc': '' }
       },
       '/socket.io': {
         target: 'http://localhost:9990',

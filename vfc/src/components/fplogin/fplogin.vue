@@ -32,7 +32,7 @@ export default {
 .fpbg {
   width: 228px;
   height: 160px;
-  background-image: url("~@/assets/fplogin.png");
+  background-image: url("/static/img/images/fplogin.png");
 }
 .fpinfo {
   width: 153px;

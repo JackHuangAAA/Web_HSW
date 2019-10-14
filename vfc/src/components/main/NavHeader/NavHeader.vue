@@ -3,7 +3,7 @@
     <div class="nav-back"
         v-show="comeback==0"
          @click="goback()">
-      <img :src="back">
+      <img :src="`/static/img/images/back.png`">
     </div>
     <div class="nav-slot">
       <slot></slot>
@@ -17,7 +17,7 @@
 
 <script>
 import Steps from '_c/main/Steps'
-import back from '_a/back.png'
+// import back from '_a/back.png'
 export default {
   name: 'NavHeader',
   components: {
@@ -41,7 +41,7 @@ export default {
   },
   data () {
     return {
-      back
+      // back
     }
   },
   methods: {
@@ -68,7 +68,8 @@ export default {
   cursor: pointer;
 }
 .nav-slot {
-  margin: auto;
+  position:absolute;
+  left: 25%;
   font-size: 30px;
   font-weight: 400;
   color: rgba(62, 73, 85, 1);

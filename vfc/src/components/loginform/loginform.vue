@@ -3,7 +3,7 @@
     <Row>
       <Input v-model="user"
              autocomplete="off"
-             placeholder="账号"><img :src="userpng"
+             placeholder="账号"><img :src="`/static/img/images/user.png`"
            class="icon"
            slot="suffix"></Input>
     </Row>
@@ -12,7 +12,7 @@
              type="password"
              autocomplete="off"
              placeholder="密码">
-      <img :src="passpng"
+      <img :src="`/static/img/images/pwd.png`"
            class="icon"
            slot="suffix"></Input>
     </Row>
@@ -31,14 +31,14 @@
 
 <script>
 import { Storages } from '@/libs/util.js'
-import userpng from '@/assets/user.png';
-import passpng from '@/assets/pwd.png'
+// import userpng from '@/assets/user.png';
+// import passpng from '@/assets/pwd.png'
 export default {
   name: 'loginform',
   data () {
     return {
-      userpng,
-      passpng,
+      // userpng,
+      // passpng,
       value: '',
       rember: false,
       user: '',

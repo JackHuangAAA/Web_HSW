@@ -40,6 +40,6 @@ export default {
   height: 70px;
 }
 .bound-content {
-  height: ~"calc(100% - 70px)";
+  // height: ~"calc(100% - 70px)";
 }
 </style>
