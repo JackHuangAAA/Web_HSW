@@ -1,9 +1,9 @@
 /**
  * Created by Administrator on 2019/9/24.
  */
-'use strict'
-const router = require('koa-router')()
-const logger = Libs.logger.getLogger('user')
+'use strict';
+const router = require('koa-router')();
+const logger = Libs.logger.getLogger('user');
 
 /**
  * @api {POST} /user/modifyUserByCode  按用户code更新用户信息，不存在时插入，存在时修改用户名
@@ -17,7 +17,7 @@ const logger = Libs.logger.getLogger('user')
 router.post(
   '/modifyUserByCode',
   Libs.router(async (ctx, next) => {
-    let user = await Domain.services.user.modifyUserByCode(ctx.request.body)
+    let user = await Domain.services.user.modifyUserByCode(ctx.request.body);
     ctx.cookies.set('token', user.token);
     return user;
   })
@@ -34,7 +34,7 @@ router.post(
 router.get(
   '/queryUserByCondition',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.queryUserByCondition(ctx.request.query)
+    return await Domain.services.user.queryUserByCondition(ctx.request.query);
   })
 );
 
@@ -50,7 +50,7 @@ router.get(
 router.post(
   '/modifyUserById',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.modifyUserById(ctx.request.body)
+    return await Domain.services.user.modifyUserById(ctx.request.body);
   })
 );
 
@@ -60,7 +60,7 @@ router.post(
 router.get(
   '/current',
   Libs.router(async (ctx, next) => {
-    return ctx.currentUser
+    return ctx.currentUser;
   })
 );
 
@@ -80,8 +80,8 @@ router.get(
 router.get(
   '/logout',
   Libs.router(async (ctx, next) => {
-    ctx.cookies.set('token', null)
-    ctx.currentUser = null
+    ctx.cookies.set('token', null);
+    ctx.currentUser = null;
   })
 );
 
@@ -91,7 +91,7 @@ router.get(
 router.get(
   '/queryUsers',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.queryUsers(ctx.request.query)
+    return await Domain.services.user.queryUsers(ctx.request.query);
   })
 );
 
@@ -101,7 +101,7 @@ router.get(
 router.post(
   '/saveUser',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.saveUser(ctx.request.body)
+    return await Domain.services.user.saveUser(ctx.request.body);
   })
 );
 
@@ -111,7 +111,7 @@ router.post(
 router.post(
   '/modifyUser',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.modifyUser(ctx.request.body)
+    return await Domain.services.user.modifyUser(ctx.request.body);
   })
 );
 
@@ -121,7 +121,7 @@ router.post(
 router.post(
   '/removeUserById',
   Libs.router(async (ctx, next) => {
-    return await Domain.services.user.removeUserById(ctx.request.body)
+    return await Domain.services.user.removeUserById(ctx.request.body);
   })
 );
 
@@ -134,7 +134,7 @@ router.post(
 router.post(
     '/deleteFinger',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.user.deleteFinger(ctx.request.body)
+        return await Domain.services.user.deleteFinger(ctx.request.body);
     })
 );
 
@@ -147,7 +147,11 @@ router.post(
 router.post(
     '/saveFinger',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.user.saveFinger(ctx.request.body)
+        return await Domain.services.user.saveFinger(ctx.request.body);
     })
 );
+<<<<<<< HEAD
 module.exports = router
+=======
+module.exports = router;
+>>>>>>> develop
