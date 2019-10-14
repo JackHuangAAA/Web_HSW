@@ -29,14 +29,13 @@
               fill="#ffffff" />
       </svg>
       <div class="slider-button">
-        <img :src="thermometerPNG">
+        <img src="static/img/icon/thermometer.png">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import thermometerPNG from "_a/icon/thermometer.png";
 const sliderMinX = 0;
 const sliderMaxX = 240;
 
@@ -46,7 +45,6 @@ export default {
   name: "thermometer",
   data() {
     return {
-      thermometerPNG,
       dragging: false,
       initialMouseX: 0,
       sliderX: 0,

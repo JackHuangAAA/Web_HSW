@@ -1,7 +1,7 @@
 <template>
   <div style="height:100%">
     <div class="alarminfo-title">
-      <img src="~@/assets/icon/alarm-yellow.png">
+      <img src="static/img/icon/alarm-yellow.png">
       <p>设备报警</p>
     </div>
     <div class="alarminfo-main-null"

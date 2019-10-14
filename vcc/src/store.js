@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import {
-  // queryDeviceByCondition,
+  queryDeviceByCondition,
   queryDrawerByCondition
 } from '@/libs/axios.js';
 import { getcode } from '@/libs/util.js';

@@ -70,7 +70,7 @@ export default {
   mounted() {},
   methods: {
     menuIcon(icon) {
-      return `~@/assets/icon/${icon}.png`;
+      return `static/img/icon/${icon}.png`;
     },
     menuClick(item) {
       this.$emit("clickitem", item);

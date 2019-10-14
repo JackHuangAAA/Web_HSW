@@ -1,5 +1,5 @@
 import axios from '@/api';
-export const queryDeviceByCondition = async deviceId => {
+export const queryDeviceByCondition= async deviceId => {
   return await axios.get(`/device/queryDeviceByCondition`, { code: deviceId });
 };
 

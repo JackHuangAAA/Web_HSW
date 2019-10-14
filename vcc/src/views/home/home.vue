@@ -1,14 +1,7 @@
 <template>
   <div class="homebox">
     <div class="leftbox">
-      <Row :gutter="13">
-        <Col span="8"
-             v-for="card in homecard">
-        <item-card :title="card.title"
-                   :icon="card.icon"
-                   :unit="card.unit">{{card.value}}</item-card>
-        </Col>
-      </Row>
+
       <Row class="lackinventory card">
         <Col span="24">
         <lackinventory :lists="lists"></lackinventory>
@@ -20,8 +13,14 @@
         <thermometer :value="0"
                      :indoor="20"></thermometer>
       </div>
-      <div class="alarminfo card">
-        <alarminfo :alarm="alarmcode"></alarminfo>
+      <div class="alarminfo">
+        <!-- <alarminfo :alarm="alarmcode"></alarminfo> -->
+        <Row :gutter="13"
+             v-for="card in homecard">
+          <item-card :title="card.title"
+                     :icon="card.icon"
+                     :unit="card.unit">{{card.value}}</item-card>
+        </Row>
       </div>
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
@@ -84,8 +83,8 @@ export default {
       // this.queryAlarmDailyInfo();//查询告警次数
       // this.queryDrawerEmpty();//查询空药柜
       // this.queryVaccineLowerThreshold();//查询库存
-      this.queryAlarmTemperature();//查询温度告警
-      this.queryVaccinationByCondition();//查询接种人数
+      this.queryAlarmTemperature(); //查询温度告警
+      this.queryVaccinationByCondition(); //查询接种人数
     },
     queryVaccinationByCondition() {
       this.getTotal("customer", "/vaccination/queryVaccinationByCondition", {
@@ -126,12 +125,12 @@ export default {
     },
     getTotal(key, url, params = null) {
       return new Promise((resolve, reject) => {
-          this.$api.get(url, params).then(res => {
-            let data = res.data;
-            let total = data.total || data.length
-            changeItem(key, total, this.homecard);
-            resolve(data);
-          });
+        this.$api.get(url, params).then(res => {
+          let data = res.data;
+          let total = data.total || data.length;
+          changeItem(key, total, this.homecard);
+          resolve(data);
+        });
       });
     },
     routerto(link) {

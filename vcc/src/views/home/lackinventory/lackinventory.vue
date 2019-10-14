@@ -55,7 +55,7 @@ export default {
   height: auto;
 }
 .lack-inventory-icon{
-  background: url("~@/assets/icon/Stock.png") no-repeat center;
+  background: '~url("_a/icon/Stock.png") no-repeat center';
   width: 15px;
   height: 14px;
   margin-right: 11px;
