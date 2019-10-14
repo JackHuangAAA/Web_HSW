@@ -4,7 +4,7 @@
       <div class="bg1"></div>
       <div class="bg2"></div>
       <div class="login-header">
-        <div class="logo item"><img src="/sttaic/img/logo.png"></div>
+        <div class="logo item"><img src="/static/img/logo.png"></div>
         <div class="logoinfo item">银信疫苗接种平台</div>
         <div class="title item">welcome to login system</div>
       </div>
@@ -32,62 +32,65 @@ import loginform from '@/components/loginform'
 import fplogin from '@/components/fplogin'
 import { mapGetters, mapActions } from "vuex";
 export default {
-  components: {
-    loginform,
-    fplogin
-  },
-  data() {
-    return {
-      login1: true,
-      login2: false,
-      ETHINK
-    };
-  },
-  computed: {
-    ...mapGetters(["device"])
-  },
-  created() {},
-  mounted() {
-    this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
-    this.$device.subscribe("SOCKET_DATA", this.SOCKET());
-  },
-  methods: {
-    ...mapActions(["saveUser"]),
-    login(type) {
-      switch (type) {
-        case "fp":
-          this.login1 = true;
-          this.login2 = false;
-          break;
-        case "up":
-          this.login1 = false;
-          this.login2 = true;
-          break;
-        default:
-          break;
-      }
+    components: {
+        loginform,
+        fplogin
     },
-    SOCKET(cb) {
-      console.log(cb);
+    data() {
+        return {
+            login1: true,
+            login2: false,
+        };
     },
-    SCANNER(cb) {
-      console.log(cb);
+    computed: {
+        ...mapGetters({
+            user:"user",
+            device:"device"
+        })
     },
-    async checkUser(form) {
-      let res = await this.$api.get("/zcy/checkUser", form);
-      let check = res.data.check;
-      if (check) {
-        let data = res.data;
-        let user = await this.$api.post("/user/modifyUserByCode", {
-          code: data.code,
-          name: data.name
-        });
-        await this.saveUser(user.data);
-        console.log(user.data);
-        this.$router.push({ name: "home" });
-      }
-    }
-  }
+    created() {},
+
+    methods: {
+        ...mapActions(["saveUser"]),
+        login(type) {
+            switch (type) {
+                case "fp":
+                    this.login1 = true;
+                    this.login2 = false;
+                    break;
+                case "up":
+                    this.login1 = false;
+                    this.login2 = true;
+                    break;
+                default:
+                    break;
+            }
+        },
+        SOCKET(cb) {
+            console.log(cb);
+        },
+        SCANNER(cb) {
+            console.log(cb);
+        },
+        async checkUser(form) {
+            let res = await this.$api.get("/zcy/checkUser", form);
+            let check = res.data.check;
+            if (check) {
+                let data = res.data;
+                let user = await this.$api.post("/user/modifyUserByCode", {
+                    code: data.code,
+                    name: data.name
+                });
+                await this.saveUser(user.data);
+                console.log(user.data);
+                this.$router.push({ name: "home" });
+            }
+        }
+    },
+    mounted() {
+        //this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
+        //this.$device.subscribe("SOCKET_DATA", this.SOCKET());
+    },
 };
 </script>
 

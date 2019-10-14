@@ -35,8 +35,6 @@ export default {
   name: "loginform",
   data() {
     return {
-      userpng,
-      passpng,
       value: "",
       rember: false,
       user: "",
