@@ -16,9 +16,9 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import alarmcard from "_c/main/alarmcard";
 import columns from "./data/columns";
-// import testdata from "./data/testdata"
 export default {
   name: "alarm",
   components: {
@@ -33,12 +33,25 @@ export default {
   created() {
     this.getAlarms();
   },
+  computed: {
+    ...mapGetters({
+      device: "device"
+    })
+  },
   methods: {
     getAlarms() {
-      this.$api.get("alarm/queryAlarmByByCondition").then(res => {
-        this.lists = res.data.rs;
-      });
-    }
+      this.$api
+        .get("alarm/queryAlarmByByCondition", {
+          device: this.device._id,
+          date: "now"
+        })
+        .then(res => {
+          this.$nextTick(() => {
+            this.lists = res.data.rs;
+          });
+        });
+    },
+
   }
 };
 </script>

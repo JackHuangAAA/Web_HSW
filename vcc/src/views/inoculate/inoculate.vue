@@ -3,7 +3,8 @@
     <inoculate-box :peopleColumns='peopleColumns'
                    :people='people'
                    :vaccineColumns='vaccineColumns'
-                   :vaccine='vaccine'></inoculate-box>
+                   :vaccine='vaccine'
+                   :type='type'></inoculate-box>
   </div>
 </template>
 
@@ -24,23 +25,42 @@ export default {
       peopleColumns: peopleColumns,
       people: people,
       vaccineColumns: vaccineColumns,
-      vaccine: vaccine
+      vaccine: vaccine,
+      type: 0
     };
   },
   created() {
     this.init();
   },
   methods: {
-    init() {
+    async init() {
       this.getpeople();
+      this.getvacc();
     },
     async getpeople() {
       let res = await this.$api.post("/zcy/reciveVaccination");
       let people = res.data;
-      console.log(people);
       this.$nextTick(() => {
         this.people = people;
+        return;
       });
+    },
+    async getvacc() {
+      let res = await this.$api.get(`/zcy/queryVaccineKinds`);
+      let vaccs = res.data;
+      this.cont(vaccs);
+    },
+    cont(vaccs) {
+      let type = 2;
+      for (let va of vaccs) {
+        if (va.name === this.people.vaccineName) {
+          this.vaccine = va;
+          type = 1;
+        }
+      }
+      this.$nextTick(()=>{
+        this.type = type;
+      })
     }
   }
 };

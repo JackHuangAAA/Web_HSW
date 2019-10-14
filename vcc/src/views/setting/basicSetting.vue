@@ -12,26 +12,29 @@
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="province"
+              :label-in-value="true"
+              @on-change="changeProvince">
+        <Option v-for="d in district" 
+                :value="d.name">{{d.name}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="city"
+              :label-in-value="true"
+              @on-change="changeCity">
+        <Option v-for="city in citys"
+                :value="city.name">{{city.name}}</Option>
       </Select>
       </Col>
       <Col span="6"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="county"
+              :label-in-value="true"
+              @on-change="changeCounty">
+        <Option v-for="county in countys"
+                :value="county.name">{{county.name}}</Option>
       </Select>
       </Col>
     </Row>
@@ -46,10 +49,10 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="cabinetNo"
+              :label-in-value="true">
+        <Option v-for="list in cabinetNoList"
+                :value="list.value">{{list.value}}</Option>
       </Select>
       </Col>
     </Row>
@@ -64,10 +67,10 @@
       </Col>
       <Col span="18"
            push="1">
-      <Select v-model="model">
-        <Option v-for="item in list"
-                :value="value"
-                :key="item"></Option>
+      <Select v-model="unit"
+              :label-in-value="true">
+        <Option v-for="u in unitlist"
+                :value="u.code">{{u.name}}</Option>
       </Select>
       </Col>
     </Row>
@@ -82,7 +85,7 @@
       </Col>
       <Col span="18"
            push="1">
-      <Input v-model="value1"
+      <Input v-model="alias"
              size="large"
              placeholder="设备编号" />
       </Col>
@@ -94,16 +97,85 @@
     <Row type="flex"
          class="bs-submit"
          justify="center">
-      <Button type="primary">保存</Button>
+      <Button type="primary"
+              @click="submit()">保存</Button>
     </Row>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "basicSetting",
   data() {
-    return {};
+    return {
+      provinces: [],
+      citys: [],
+      countys: [],
+      alias: "",
+      provinceName: "",
+      cityName: "",
+      countyName: "",
+      district: [],
+      cabinetNo: "",
+      cabinetNoList: "",
+      unit: "",
+      unitList: ""
+    };
+  },
+  computed: {
+    ...mapGetters({
+      device: "device"
+    })
+  },
+  created() {
+    this.getinit();
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      // this.provinceName = this.device.address.provinceName;
+      // this.cityName = this.device.address.cityName;
+      // this.countyName = this.device.address.countyName;
+      // this.alias = this.device.alias;
+      // this.cabinetNo = this.device.cabinetNo;
+    },
+    async getinit() {
+      await this.queryDistrict();
+      await this.queryCabinetNo();
+      await this.queryUnit();
+    },
+    async queryUnit() {
+      let res = await this.$api.get("/zcy/queryUnit");
+      this.unitlist = res.data;
+    },
+    async queryDistrict() {
+      let res = await this.$api.get("/zcy/queryDistrict");
+      let district = res.data;
+      this.district.push(district);
+    },
+    async queryCabinetNo() {
+      let res = await this.$api.get("/zcy/queryCabinetNo");
+      this.cabinetNoList = res.data;
+    },
+    changeProvince() {
+      let citys = [];
+      for (let d of this.district) {
+        if (d.name === this.provinceName) citys = d.child;
+      }
+      this.citys = citys;
+    },
+    changeCity() {
+      let countys = [];
+      for (let c of this.citys) {
+        if (c.name === this.cityName) countys = c.child;
+      }
+      this.countys = countys;
+    },
+    changeCounty() {},
+    submit() {}
   }
 };
 </script>

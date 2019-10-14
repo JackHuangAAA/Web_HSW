@@ -6,6 +6,7 @@
     </div>
     <div class="bound-content card">
       <vaccine-table :type="`check`"
+                     :drawers='drawers'
                      @click-button="outbound()">
       </vaccine-table>
     </div>
@@ -22,13 +23,28 @@ export default {
     vaccineTable,
     NavHeader
   },
-  data() {
+  data () {
     return {
-      indexlist
+      indexlist,
+      drawers: []
     };
   },
+  computed: {
+    deviceId () {
+      return this.$store.getters.deviceid;
+    }
+  },
+  created () {
+    this.init()
+  },
   methods: {
-    outbound() {
+    init () {
+      this.getdrawers()
+    },
+    async getdrawers () {
+      this.drawers = await this.$api.get(`/device/queryDeviceByCondition`, { code: this.deviceId })
+    },
+    outbound () {
       this.$router.push({
         name: "opendrawer"
       });
@@ -38,5 +54,4 @@ export default {
 </script>
 
 <style lang="less">
-
 </style>

@@ -69,16 +69,21 @@ export default {
     },
     vacclists: {
       type: Array,
-      default() {
+      default () {
+        return [];
+      }
+    },
+    drawers: {
+      type: Array,
+      defualt () {
         return [];
       }
     }
   },
-  data() {
+  data () {
     return {
       t2b,
       l2r,
-      drawers: null,
       max: 2, //指定疫苗最大数
       DrawerTree: {
         //处理数据为树状结构方便遍历抽屉格式
@@ -93,31 +98,34 @@ export default {
   },
   computed: {},
   watch: {
-    "$store.state.drawer": function(value) {
-      this.drawerinit(value.rs);
+    // "$store.state.drawer": function (value) {
+    //   this.drawerinit(value.rs);
+    // }
+    drawers (value) {
+      this.drawerinit(this.drawers.rs);
     }
   },
-  mounted() {
+  mounted () {
     this.init();
   },
   methods: {
-    vaccineadd(code, drawerid) {
+    vaccineadd (code, drawerid) {
       let va = this.vacclists.filter(el => {
         return el.code === code;
       });
       this.$emit("vaccine-add", va[0], drawerid);
     },
-    vaccinedel(va, drawerid) {
+    vaccinedel (va, drawerid) {
       this.$emit("vaccine-del", va, drawerid);
     },
-    init() {
-      this.getDrawer();
+    init () {
+      // this.getDrawer();
     },
-    async getDrawer() {
-      this.drawers = await this.$store.dispatch("getDrawer");
-      this.drawerinit(this.drawers.rs);
-    },
-    drawerinit(values) {
+    // async getDrawer () {
+    //   this.drawers = await this.$api.get(`/device/queryDeviceByCondition`, { code: deviceId })
+    //   this.drawerinit(this.drawers.rs);
+    // },
+    drawerinit (values) {
       let tree = {};
       for (let el of values) {
         if (tree[el.y] === undefined) tree[el.y] = {};
@@ -128,13 +136,13 @@ export default {
         this.DrawerTree = tree;
       });
     },
-    modelSubmit(vaccinetotal, id, vaccines) {
+    modelSubmit (vaccinetotal, id, vaccines) {
       this.$emit("submit", vaccinetotal, id, vaccines);
     },
-    clickButton() {
+    clickButton () {
       this.$emit("click-button");
     },
-    vCardClick(drawerid, vaccines) {
+    vCardClick (drawerid, vaccines) {
       this.$emit("click", drawerid, vaccines);
     }
   }

@@ -7,6 +7,7 @@
     <div class="bound-content card">
       <vaccine-table :type="`add`"
                      @submit="submit"
+                     :drawers='drawers'
                      @click-button="inbound()">
       </vaccine-table>
     </div>
@@ -23,32 +24,46 @@ export default {
     vaccineTable,
     NavHeader
   },
-  data() {
+  data () {
     return {
-      indexlist
+      indexlist,
+      drawers: []
     };
   },
+  computed: {
+    deviceId () {
+      return this.$store.getters.deviceid;
+    }
+  },
+  created () {
+    this.init()
+  },
   methods: {
-    async submit(total, drawerid, vaccines) {
+    init () {
+      this.getdrawers()
+    },
+    async getdrawers () {
+      this.drawers = await this.$api.get(`/device/queryDeviceByCondition`, { code: this.deviceId })
+    },
+    async submit (total, drawerid, vaccines) {
       let vaccinesid = [];
       let totals = [];
       let vaccine = vaccines.map(el => ({
         ...el,
         total: total[el.name]
       }));
-      console.log(vaccine);
       for (let el of vaccine) {
         vaccinesid.push(el._id);
         totals.push(el.total);
       }
-      console.log(vaccinesid, totals);
       let res = this.$api.post("/vaccine/modifyVaccine", {
         id: vaccinesid,
         vaccine: totals
       });
-      this.$store.dispatch("updateDrawe");
+      this.getdrawers()
+      // this.$store.dispatch("updateDrawe");
     },
-    inbound() {
+    inbound () {
       this.$router.push({
         name: "complete",
         params: {

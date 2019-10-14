@@ -3,6 +3,7 @@
     <vaccine-table @vaccine-add='vaccineadd'
                    @vaccine-del='vaccinedel'
                    :vacclists='vacclists'
+                   :drawers='drawers'
                    type="edit"></vaccine-table>
   </div>
 </template>
@@ -14,32 +15,39 @@ export default {
   components: {
     vaccineTable
   },
-  data() {
+  data () {
     return {
-      vacclists: []
+      vacclists: [],
+      drawers: []
     };
   },
   computed: {
-    deviceid() {
-      return this.$store.state.deviceid;
+    deviceId () {
+      return this.$store.getters.deviceid;
     }
   },
-  created() {
-    this.getvacclists();
+  created () {
+    this.init();
   },
   methods: {
-    async getvacclists() {
+    init () {
+      this.getdrawers();
+      this.getvacclists();
+    },
+    async getdrawers () {
+      this.drawers = await this.$api.get(`/device/queryDeviceByCondition`, { code: this.deviceId })
+    },
+    async getvacclists () {
       let res = await this.$api.get(`/zcy/queryVaccineKinds`);
       this.vacclists = res.data
     },
-    vaccineadd(va, drawerid) {
+    vaccineadd (va, drawerid) {
       this.addvaccine(va, drawerid);
     },
-    vaccinedel(va, drawerid) {
-      console.log(va, drawerid);
+    vaccinedel (va, drawerid) {
       this.delvaccine(va, drawerid);
     },
-    async addvaccine(vaccine, id) {
+    async addvaccine (vaccine, id) {
       if (vaccine !== undefined) {
         vaccine.device = this.deviceid;
         let checked = await this.checkVaccineOfDrawer(vaccine);
@@ -48,20 +56,22 @@ export default {
             id,
             vaccine
           });
-          this.$store.dispatch("updateDrawe");
+          // this.$store.dispatch("updateDrawe");
+          this.getdevice()
         } else {
           this.$Message.error("请勿重复添加");
         }
       }
     },
-    async delvaccine(vaccine, id) {
+    async delvaccine (vaccine, id) {
       let res = await this.$api.post("/drawer/modifyDrawerByIdDec", {
         id,
         vaccineId: vaccine._id
       });
-      this.$store.dispatch("updateDrawe");
+      // this.$store.dispatch("updateDrawe");
+      this.getgetdrawers()
     },
-    async checkVaccineOfDrawer(vaccine) {
+    async checkVaccineOfDrawer (vaccine) {
       let drawer = this.$store.state.drawer;
       let deviceid = this.$store.state.deviceid;
       let res = await this.$api.get("/vaccine/queryVaccine", {

@@ -60,7 +60,9 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["location"]),
+    location(){
+      return this.$store.state.device.address.countyName
+    },
     menustatus() {
       return this.menuOpen === false ? "展开菜单" : "折叠菜单";
     }
@@ -68,7 +70,7 @@ export default {
   mounted() {},
   methods: {
     menuIcon(icon) {
-      return `~@/assets/icon/${icon}.png`;
+      return `static/img/icon/${icon}.png`;
     },
     menuClick(item) {
       this.$emit("clickitem", item);

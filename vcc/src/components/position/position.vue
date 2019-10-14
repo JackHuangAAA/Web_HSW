@@ -12,7 +12,9 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["position"])
+    position(){
+      return this.$store.state.device.cabinetNo
+    }
   },
   created() {},
   methods: {}
