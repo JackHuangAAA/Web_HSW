@@ -125,4 +125,27 @@ router.post(
   })
 )
 
+/**
+ * 删除指纹信息
+ * @apiParam {String} id 用户id
+ * @apiParam {String} code_delete 要删除的指纹代码
+ */
+router.post(
+    '/deleteFinger',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.user.deleteFinger(ctx.request.body)
+    })
+)
+
+/**
+ * 新增指纹信息
+ * @apiParam {String} id 用户id
+ * @apiParam {String} code_new 新指纹代码
+ */
+router.post(
+    '/saveFinger',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.user.saveFinger(ctx.request.body)
+    })
+)
 module.exports = router
