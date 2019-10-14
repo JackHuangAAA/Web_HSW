@@ -150,8 +150,6 @@ router.post(
         return await Domain.services.user.saveFinger(ctx.request.body);
     })
 );
-<<<<<<< HEAD
-module.exports = router
-=======
+
 module.exports = router;
->>>>>>> develop
+
