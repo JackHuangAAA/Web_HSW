@@ -72,7 +72,7 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
                 logger.info("发送请求");
                 try {
                     Thread.sleep(10000);
-                Request request = new Request.Builder().url(Const.getUrl("vcc/device")).build();
+                Request request = new Request.Builder().url(Const.getUrl("/vcc/device")).build();
                 Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
                 String msg=response.message();
                 if (response.isSuccessful()) {
