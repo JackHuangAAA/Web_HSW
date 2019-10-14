@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import {
-  queryDeviceByCondition,
+  // queryDeviceByCondition,
   queryDrawerByCondition
 } from '@/libs/axios.js';
 import { getcode } from '@/libs/util.js';
@@ -9,7 +9,6 @@ const store = {
   state: {
     user: null,
     device: null, //当前设备
-    deviceid: null,
     routerTitle: '主页',
     drawer: null //缓存的抽屉柜子
   },
@@ -21,12 +20,15 @@ const store = {
     device: state => {
       return state.device;
     },
+    deviceid: state => {
+      return state.device._id;
+    },
     code: state => {
       return state.user;
     },
     routerTitle: state => {
       return state.routerTitle;
-    },
+    }
   },
 
   mutations: {
@@ -55,13 +57,13 @@ const store = {
     ChangeRoute({ commit }, routertitle) {
       commit('ChangeRoute', routertitle);
     },
-    async updateDrawe({ state, commit }) {
-      //用于刷新抽屉信息
-      let deviceid = state.deviceid;
-      let res = await queryDrawerByCondition(deviceid);
-      commit('SaveDrawer', res.data);
-      return res;
-    },
+    // async updateDrawe({ state, commit }) {
+    //   //用于刷新抽屉信息
+    //   let deviceid = state.device._id;
+    //   let res = await queryDrawerByCondition(deviceid);
+    //   commit('SaveDrawer', res.data);
+    //   return res;
+    // },
     async getDevice({ dispatch }) {
       let devicecode = await getcode();
       let res = await queryDeviceByCondition(devicecode);
