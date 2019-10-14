@@ -42,7 +42,7 @@ export default {
             console.log(`=> ${url}`,data || {});
         }
         return new Promise((resolve,reject)=>{
-            axios.get(`/api${url}?t=${new Date().getTime()}`, {params: data})
+            axios.get(`/vcc${url}?t=${new Date().getTime()}`, {params: data})
                 .then(response =>{
                     commonResponseHandler(response,resolve,reject)
                 }).catch(errorHandler);
@@ -54,7 +54,7 @@ export default {
             console.log(`=> ${url}`,data || {});
         }
         return new Promise((resolve,reject)=>{
-            axios.post(`/api${url}?t=${new Date().getTime()}`, data)
+            axios.post(`/vcc${url}?t=${new Date().getTime()}`, data)
             .then(response =>{
                 commonResponseHandler(response,resolve,reject)
             }).catch(errorHandler);
