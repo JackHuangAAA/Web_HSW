@@ -1,12 +1,15 @@
 <template>
   <div class="lform">
+
     <Row>
       <Input v-model="user"
              autocomplete="off"
-             placeholder="账号"><img src="/static/img/user.png"
+             placeholder="账号">
+             <img src="/static/img/user.png"
            class="icon"
            slot="suffix"></Input>
     </Row>
+    
     <Row style="padding-top:24px;">
       <Input v-model="pwd"
              type="password"
@@ -16,6 +19,7 @@
            class="icon"
            slot="suffix"></Input>
     </Row>
+
     <Row style="padding-top:19px">
       <Checkbox style="font-size:16px;"
                 v-model="rember">记住密码</Checkbox>
