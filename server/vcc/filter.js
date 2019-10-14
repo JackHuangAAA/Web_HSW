@@ -81,9 +81,9 @@ const deviceFilter = async ctx => {
             await Domain.services.drawer.saveDrawer(darwers);
         }
         //保存心跳时间
-        let now = new moment()
+        let now = new moment();
         await Domain.services.cache.setCacheToString(
-            device.code + '_heartbeat',
+            deviceCode + '_heartbeat',
             _.toString(now)
         );
         ctx.currentDevice = device;
