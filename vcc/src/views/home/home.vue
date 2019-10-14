@@ -25,18 +25,20 @@
       <div class="vaccine-set vaccine-in button"
            @click="routerto('inbound')">
         <p>疫苗入库</p>
-        <img src="~@/assets/vaccine-in.png">
+        <img :src="vaccineinPNG">
       </div>
       <div class="vaccine-set vaccine-out button"
            @click="routerto('outbound')">
         <p>疫苗出库</p>
-        <img src="~@/assets/vaccine-out.png">
+        <img :src="vaccineoutPNG">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import vaccineinPNG from '@/assets/vaccine-in.png'
+import vaccineoutPNG from '@/assets/vaccine-out.png'
 const changeItem = (key, value, obj) => {
   let tmp = obj.map(el => {
     el.name;
@@ -60,6 +62,8 @@ export default {
   },
   data() {
     return {
+      vaccineinPNG,
+      vaccineoutPNG,
       homecard: homecard,
       lists: [],
       alarmlist: [],
