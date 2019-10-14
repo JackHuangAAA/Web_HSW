@@ -48,8 +48,6 @@ public class CameraActivity extends AppCompatActivity implements CameraDialog.Ca
     private static final String DIRECTORY_NAME = "USBCamera";
     @BindView(R.id.camera_view)
     public View mTextureView;
-    @BindView(R.id.toolbar)
-    public Toolbar mToolbar;
     @BindView(R.id.seekbar_brightness)
     public SeekBar mSeekBrightness;
     @BindView(R.id.seekbar_contrast)
@@ -146,7 +144,6 @@ public class CameraActivity extends AppCompatActivity implements CameraDialog.Ca
     }
 
     private void initView() {
-        setSupportActionBar(mToolbar);
 
         mSeekBrightness.setMax(100);
         mSeekBrightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

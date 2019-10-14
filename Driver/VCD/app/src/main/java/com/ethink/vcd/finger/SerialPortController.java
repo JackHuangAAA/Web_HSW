@@ -51,13 +51,8 @@ public class SerialPortController {
 
     public boolean Read(byte[] buffer,int offset,int maxlen){
         try {
-            //finger.readFull(buffer,0,maxlen);
-            int count = 0;
-            while(count < maxlen){
-                count += finger.read(buffer,offset + count,maxlen - count);
-            }
+            finger.readFull(buffer,offset,maxlen);
             logger.info("Read: {}", HexDump.toHexString(buffer,offset,maxlen));
-            logger.info("Read count: {}", count);
         } catch (Exception e) {
             logger.error("串口读取失败",e);
             return false;
