@@ -1,34 +1,41 @@
 package com.ethink.vcd.plugin;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.os.Handler;
+import android.os.Looper;
 
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
+import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.tools.serialport.SerialPort;
+import com.ethink.tools.serialport.SerialPortManager;
+import com.ethink.tools.serialport.SerialPortSetting;
 import com.ethink.vcd.finger.FingerCommon;
 import com.ethink.vcd.finger.FingerUtil;
-import com.ethink.vcd.finger.IUsbConnState;
+import com.ethink.vcd.finger.SerialPortController;
 import com.ethink.vcd.service.api.RxManager;
 import com.ethink.vcd.utils.ResponseUtil;
+
 
 /**
  * 指纹插件
  * */
-public class FingerPlugin extends BasePlugin implements FunctionHandler  , IUsbConnState {
+public class FingerPlugin extends BasePlugin implements FunctionHandler    {
     private final RxManager rxManager;
     private Context context;
     private FingerUtil fingerUtil;
+    private SerialPort scanner;
     public FingerPlugin(Context context) {
         super("FINGER");
         this.context = context;
         rxManager = new RxManager();
-        FingerCommon fingerCommon = new FingerCommon(context, this);
-        fingerUtil = new FingerUtil(context, fingerCommon);
+    //    fingerUtil = new FingerUtil(context,new FingerCommon("/dev/ttyS3",115200));
     }
 
     @Override
     public void onStart()     {
+        initSerialPort();
         logger.info("FINGER-----------register");
         registerFunction("open", this);
         registerFunction("register", this);
@@ -51,10 +58,11 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler  , IUsbC
         pluginMessage.changeToResponse();
         switch (functionName){
             case "open":
-                fingerUtil.usbOpen(pluginMessage);
+
                 break;
             case "register":
-                fingerUtil.register(pluginMessage);
+                    fingerUtil.register(pluginMessage);
+
                 break;
             case "verify":
                 fingerUtil.verify(pluginMessage);
@@ -76,18 +84,30 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler  , IUsbC
         return pluginMessage;
     }
 
-    @Override
-    public void onUsbConnected() {
-        Toast.makeText(context, "指纹设备已连接", Toast.LENGTH_LONG).show();
+
+
+    /**
+     * 初始化扫码枪
+     */
+    public void initSerialPort() {
+        try {
+            //USB
+//            UsbSerialPortSetting setting = new UsbSerialPortSetting(UsbSerialPortSetting.PL2303_VENDOR, UsbSerialPortSetting.PL2303_PRODUCT, 0,
+//                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
+//            setting.setReadTimeout(0);
+//            scanner = SerialPortManager.getSerialPort(context, setting);
+            //串口
+//            SerialPortSetting setting = new SerialPortSetting(
+//                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
+//            setting.setReadTimeout(0);
+//            scanner = SerialPortManager.getSerialPort("/dev/ttyS3", setting);
+            logger.info("SCANNER","--------连接扫码-----------");
+        } catch (Exception e) {
+            EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
+            eventMessage.setString("data", e.getMessage());
+            pluginManager.post(eventMessage);
+            logger.error("open serial failed", e);
+        }
     }
 
-    @Override
-    public void onUsbPermissionDenied() {
-        Toast.makeText(context, "指纹设备无权限", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onDeviceNotFound() {
-        Toast.makeText(context, "没有找到模块", Toast.LENGTH_LONG).show();
-    }
 }

@@ -16,8 +16,8 @@ public class App extends Application {
         super.onCreate();
         baseApplication = this;
         Utils.init(this);
-
     }
+
 
 
     public static Context getAppContext() {
