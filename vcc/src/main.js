@@ -6,7 +6,7 @@ import router from "@/router"
 import App from "@/App.vue"
 import store from "@/store"
 import '@/theme/index'
-import '@/style/index'
+// import '@/style/index'
 import Cookies from 'js-cookie'
 import api from '@/api'
 import iView from 'iview'
