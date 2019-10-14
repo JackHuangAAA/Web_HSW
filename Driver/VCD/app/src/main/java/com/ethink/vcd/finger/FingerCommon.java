@@ -698,17 +698,20 @@ public class FingerCommon {
     }
 
     boolean ReceiveImage(byte[] p_pBuffer, int nDataLen) {
-        byte[] header = new byte[10];
-        if (!this.controller.Read(header,10)){
-            return false;
-        }
-        int dataLen =  0x000ffff & (int)this.MAKEWORD(header[7],header[6]);
-
-        if (!this.controller.Read(p_pBuffer, dataLen - 2)) {
-            return false;
-        }
-        if (!this.controller.Read(header, 2)) {
-            return false;
+        int offset = 0;
+        while(nDataLen > 0) {
+            byte[] header = new byte[10];
+            if (!this.controller.Read(header, 12)) {
+                return false;
+            }
+            int dataLen = 0x000ffff & (int) this.MAKEWORD(header[6],header[7]);
+            if (!this.controller.Read(p_pBuffer,offset, dataLen - 4)) {
+                offset += dataLen - 4;
+                return false;
+            }
+            if (!this.controller.Read(header, 2)) {
+                return false;
+            }
         }
 //        if (nDataLen < 65536) {
 //            if (!this.controller.Read(p_pBuffer, dataLen)) {
