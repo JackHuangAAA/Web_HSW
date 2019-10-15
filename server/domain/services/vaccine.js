@@ -20,20 +20,19 @@ module.exports = {
             { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { $first: "$name" } } },
             { $project: { _id: 1, name: 1, num_movie: 1 } }
 
-        ])
+        ]);
         logger.debug(`result: ${result}`);
         return { rs: result, total: result.length }
     },
 
     /**
-     * 
-     * 
+     *
      * @param {any} requestBody 
      * @returns 
      */
     queryVaccineLowerThreshold: async function (requestBody) {
         logger.debug(`queryVaccineLowerThreshold param: ${JSON.stringify(requestBody)}`);
-        let query = [{ surplus: { $lt: 10 } }]
+        let query = [{ surplus: { $lt: 10 } }];
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
@@ -44,7 +43,6 @@ module.exports = {
 
     /**
      *  按设备id查询，疫苗code分组合计疫苗数量
-     * 
      * @param {any} requestBody 
      * @returns 
      */
@@ -57,13 +55,11 @@ module.exports = {
 
             { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
 
-        ])
-        logger.debug(`result: ${result}`);
+        ]);
         return { rs: result, total: result.length, device: requestBody }
     },
     /**
      *  出库后 数量、 剩余数量清零
-     * 
      * @param {any} requestBody 
      * @returns 
      */
@@ -80,7 +76,6 @@ module.exports = {
 
     /**
      *  更新抽屉内疫苗数量信息
-     * 
      * @param {any} requestBody 
      * @returns 
      */

@@ -96,13 +96,11 @@ export default {
         async userLogin(form) {
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
-                let data = res.data;
                 let user = await this.$api.post("/user/modifyUserByCode", {
                     code: res.data.code,
                     name: res.data.name
                 });
                 await this.saveUser(user.data);
-                console.log(user.data);
                 this.$router.push('/');
             }
         },

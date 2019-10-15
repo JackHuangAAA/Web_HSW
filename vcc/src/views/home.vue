@@ -102,8 +102,11 @@
         },
         mounted(){
             //获取设备信息
-            console.log(this.$route.path);
-            console.log('111111')
+            this.$device.getDeviceCode().then(res => {
+                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    this.saveDevice(res.data[0]);
+                });
+            });
             if(this.$route.path == '/'){
                 this.$router.push('main');
             }
