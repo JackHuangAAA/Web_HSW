@@ -1,12 +1,11 @@
 package com.ethink.fps.domain.service;
 
-import com.ethink.fps.domain.Do.Finger;
-
-import java.util.List;
+import com.ethink.fps.domain.DO.Finger;
+import java.util.function.Predicate;
 
 public interface IFingerPrintStore {
-
-    void addFinger(String templete);
+    void addFinger(String tag,String base64Picture);
     void removeFinger(int id);
-    List<Finger> queryFingerList(int start,int limit);
+    void removeFinger(String tag);
+    void forEach(Predicate<Finger> func);
 }

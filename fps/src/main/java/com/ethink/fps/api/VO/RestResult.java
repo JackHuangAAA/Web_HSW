@@ -1,4 +1,4 @@
-package com.ethink.fps.api.Vo;
+package com.ethink.fps.api.VO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,11 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RestResult {
-    @JsonProperty("Status")
+    @JsonProperty("code")
     private int code;
-    @JsonProperty("ErrorMessage")
+    @JsonProperty("message")
     private String message;
-    @JsonProperty("Data")
+    @JsonProperty("data")
     private Object data;
 
     public int getCode() {

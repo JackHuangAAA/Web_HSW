@@ -1,6 +1,6 @@
 package com.ethink.fps.api.action.common;
 
-import com.ethink.fps.api.Vo.RestResult;
+import com.ethink.fps.api.VO.RestResult;
 import com.ethink.fps.exception.ServerException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.slf4j.Logger;
