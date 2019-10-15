@@ -104,6 +104,7 @@
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                 });
             });

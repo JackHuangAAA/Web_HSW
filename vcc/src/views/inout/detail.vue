@@ -64,7 +64,6 @@
             async getDetails() {
                 let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {device: this.device._id});
                 this.datas = res.data.rs;console.log('7788--->%j',res.data);
-                let aa = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
                 if(this.datas.length>10){
                     this.leftDatas = _.slice(this.datas,0,10);
                     this.rightDatas = _.slice(this.datas,10);
@@ -78,7 +77,7 @@
             }
         },
         mounted() {
-            console.log(JSON.stringify(this.user)+'----7788--->%j',this.device);
+            console.log(JSON.stringify(this.user)+'----uuuu--->'+JSON.stringify(this.device));
             //接收抽屉编号
             let action = "in";//this.$route.query.action;
             this.setAction(action);
