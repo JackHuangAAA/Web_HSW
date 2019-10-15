@@ -3,14 +3,15 @@
         <router-view></router-view>
     </div>
 </template>
-<style lang="less" scoped>
-    @import "style/vars";
-    
+<style lang="less">
+    // @import "style/vars";
+    html,body{
+        height: 100%;
+    }
     #app{
         width: 100%;
-        margin: 0;
         height: 100%;
-        min-width: @viewport-width;
+        margin: 0;
     }
 </style>
 <script>

@@ -13,7 +13,7 @@ public class Const {
     public static final String COOKIE_PREF = "cookies_prefs";
     public static String getUrl(String path){
         String base=SPUtils.getSharedStringData(App.getAppContext(),CONFIG_URL);
-        return base+"/"+path;
+        return base+path;
     }
 
 

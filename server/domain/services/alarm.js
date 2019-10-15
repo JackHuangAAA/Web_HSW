@@ -33,9 +33,7 @@ module.exports = {
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
-
-        logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
+        return result;
     },
 
     /**

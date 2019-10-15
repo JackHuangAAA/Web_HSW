@@ -8,8 +8,7 @@ var mongoose = require('mongoose');
 module.exports = {
 
     /**
-     * 
-     * 
+     *
      * @param {any} requestBody 
      * @returns 
      */

@@ -53,6 +53,22 @@ module.exports = {
     },
 
     /**
+     * 修改设备信息
+     * @param requestBody
+     * @returns {Promise.<Query>}
+     */
+    modifyDevice: async function(requestBody){
+        logger.debug("modifyDevice:" + JSON.stringify(requestBody));
+        return await Domain.models.device.updateOne({'_id': requestBody.id},
+            {
+                $set: {
+                    ...requestBody,
+                    updateDate: new Date()
+                }
+            });
+    },
+
+    /**
      * 按条件查询设备信息（状态/类型/单位）
      * @param requestBody
      * @returns {Promise.<T|Query|*>}
