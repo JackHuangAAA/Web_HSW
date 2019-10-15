@@ -12,7 +12,7 @@ const routers = [{
         { path: '/stock/stockDetail', component: (resolve) => require(['@/views/stock/stockDetail.vue'], resolve) },
         { path: '/inout/inStock', component: (resolve) => require(['@/views/inout/inStock.vue'], resolve) },
         { path: '/inout/outStock', component: (resolve) => require(['@/views/inout/outStock.vue'], resolve) },
-        { path: '/inout/outStock', component: (resolve) => require(['@/views/inout/detail.vue'], resolve) },
+        { path: '/inout/detail', component: (resolve) => require(['@/views/inout/detail.vue'], resolve) },
         { path: '/inout/scanTip', component: (resolve) => require(['@/views/inout/scanTip.vue'], resolve) }
     ]
 }, {

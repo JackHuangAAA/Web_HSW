@@ -50,7 +50,7 @@ router.get('/queryVaccineLowerThreshold',
 router.get('/queryVaccineStorageNum',
     Libs.router(async (ctx, next) => {
         let result = await Domain.services.vaccine.queryVaccineStorageNum(ctx.request.query);
-        let _result = result.rs.map(item => {
+        /*let _result = result.rs.map(item => {
             delete item._id;
             item.device = mongoose.Types.ObjectId(result.device.device)
             item.deviceType = result.device.deviceType
@@ -73,7 +73,7 @@ router.get('/queryVaccineStorageNum',
         if (ctx.request.query.type == 2) {
             await Domain.services.summary.saveSummary(_result);
             // 清零疫苗数量
-        }
+        }*/
         return result;
     })
 );
