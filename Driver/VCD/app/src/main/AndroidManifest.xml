@@ -35,6 +35,7 @@
         </activity>
         <activity android:name=".ui.FingerActivity"/>
         <service android:name=".server.VCDService"/>
+        <activity android:name=".ui.CameraActivity"/>
     </application>
 
 </manifest>

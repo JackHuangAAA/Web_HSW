@@ -1,14 +1,7 @@
 <template>
-  <div @click="disclick()">
-    <Row type="flex"
-         justify="center">
-      <div class='fpbg'></div>
-    </Row>
-    <Row type="flex"
-         justify="center"
-         style="margin-top:56px;">
-      <p class='fpinfo'>使用指纹一键登录</p>
-    </Row>
+  <div @click="disclick()" style="position:relative;height:100%">
+    <img src="/static/img/fplogin.png" class="fpbg">
+    <P class="fingerTip">使用指纹一键登录</P>
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="layout">
+  <!-- <div class="layout">
     <div class="login-main">
       <div class="bg1"></div>
       <div class="bg2"></div>
@@ -24,6 +24,31 @@
         </div>
       </div>
     </div>
+  </div> -->
+  <div class="container">
+        <div class="main">
+          <div class="title">
+          <img class="bg1" src="/static/img/loginp1.png">
+          <img class="logo" src="/static/img/logo.png">
+          <p class="logoP">银信疫苗接种平台</p>
+          <p class="logoE">welcome to login system</p>
+        </div>
+        <div class="loginContent">
+        <div class="select">
+            <p class="fingerLogin" @click="fingerLogin" :class="{'changeColor':show}">指纹登录</p>
+            <p class="accountLogin" @click="accountLogin" :class="{'changeColor':!show}">账号登录</p>
+        </div>
+        <div class="loginForm"  :class="{'loginFormChange':!show}">
+            <fplogin v-if="show"
+                   @click="test()"></fplogin>
+          <loginform v-if="!show"
+                     @Submit="checkUser"></loginform>
+        </div>
+        </div>
+        <div class="footer">
+            <img class="bg2" src="/static/img/loginp2.png">
+        </div>
+      </div>
   </div>
 </template>
 
@@ -38,8 +63,7 @@ export default {
     },
     data() {
         return {
-            login1: true,
-            login2: false,
+            show: true
         };
     },
     computed: {
@@ -55,12 +79,10 @@ export default {
         login(type) {
             switch (type) {
                 case "fp":
-                    this.login1 = true;
-                    this.login2 = false;
+                    this.show = true;
                     break;
                 case "up":
-                    this.login1 = false;
-                    this.login2 = true;
+                    this.show = false;
                     break;
                 default:
                     break;
@@ -85,6 +107,12 @@ export default {
                 console.log(user.data);
                 this.$router.push({ name: "home" });
             }
+        },
+        fingerLogin: function(){
+            this.show = true;
+        },
+        accountLogin: function(){
+            this.show = false;
         }
     },
     mounted() {
@@ -94,6 +122,6 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~@/style/login.less";
 </style>

@@ -1,33 +1,15 @@
 package com.ethink.vcd.finger;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.blankj.utilcode.util.StringUtils;
 import com.ethink.plugin.message.PluginMessage;
-import com.ethink.vcd.Const;
-import com.ethink.vcd.R;
+import com.ethink.tools.serialport.usb.util.HexDump;
+import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.utils.ResponseUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -39,19 +21,17 @@ public class FingerUtil {
     private long m_nPassedTime;
     //当前输入的id
     private int m_nUserID;
-    private Context context;
-    private DialogHandler dialogHandler;
-    private FingerData fingerData = new FingerData();
+    // private DialogHandler dialogHandler;
     private ExecutorService executorService;
     private byte[] m_binImage = new byte[1024 * 100];
     //bitmap转换为string
-    private String bitmap=null;
+    private String bitmap = null;
+    private String testFinger = null;
+    private FingerPushMessage fingerPushMessage;
 
-    public FingerUtil(Context context, FingerCommon fc) {
+    public FingerUtil(FingerPushMessage fingerPushMessage, FingerCommon fc) {
         this.fingerCommon = fc;
-        this.context = context;
-        dialogHandler = new DialogHandler(this);
-        dialogHandler.sendEmptyMessage(0);
+        this.fingerPushMessage = fingerPushMessage;
         executorService = Executors.newCachedThreadPool();
     }
 
@@ -62,77 +42,100 @@ public class FingerUtil {
         m_bCancel = true;
     }
 
- 
 
     //获取可用id
-    public void getOneEmptyId() {
+    public int getOneEmptyId() {
         cancel();
         int[] w_nEmptyID = new int[1];
         int w_nRet = fingerCommon.Run_GetEmptyID(1, m_nMaxFpCount, w_nEmptyID);
-        logger.info("结果=" + w_nRet);
         if (w_nRet != FingerCommon.ERR_SUCCESS) {
-            return;
+            return -1;
         }
         logger.info("可用id======" + w_nEmptyID[0]);
         m_nUserID = w_nEmptyID[0];
+        return m_nUserID;
     }
 
     //获取模板总数
-    public void templateTotal(PluginMessage pluginMessage) {
+    public void templateTotal() {
         cancel();
         int w_nRet;
         int[] w_nEnrollCount = new int[1];
-            w_nRet = fingerCommon.Run_GetEnrollCount(1, m_nMaxFpCount, w_nEnrollCount);
-            if (w_nRet != FingerCommon.ERR_SUCCESS) {
-                //显示错误信息
-                logger.info("获取失败" + GetErrorMsg(w_nRet));
-                ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
-            }
-            logger.info("templateTotal: " + String.format("Result : Success\r\nEnroll Count = %d", w_nEnrollCount[0]));
-            ResponseUtil.success(pluginMessage, "ok", ResponseUtil.data("count", String.valueOf(w_nEnrollCount[0])));
+        w_nRet = fingerCommon.Run_GetEnrollCount(1, m_nMaxFpCount, w_nEnrollCount);
+        logger.info("模板res{} ",w_nRet);
+        if (w_nRet != FingerCommon.ERR_SUCCESS) {
+            //显示错误信息
+            logger.error("获取失败" + GetErrorMsg(w_nRet));
+            fingerPushMessage.message("获取失败" + GetErrorMsg(w_nRet));
+        } else {
+            logger.info("模板总数======" + w_nEnrollCount[0]);
+            fingerPushMessage.pushData("成功", String.valueOf(w_nEnrollCount[0]), "/");
+        }
     }
 
     public void close() {
         if (fingerCommon != null) {
             fingerCommon.CloseComm();
+            fingerPushMessage.message("关闭成功");
+        } else {
+            fingerPushMessage.message("关闭失败");
         }
+
+    }
+
+    /*
+     * 下载指纹到模块
+     * */
+    public void downloadChar() {
+        //      byte[] p_pbyTemplate=   fingerCommon.toByteArray(testFinger);
+        byte[] p_pbyTemplate = HexDump.hexStringToByteArray(testFinger);
+        int ret = fingerCommon.Run_DownChar(1, p_pbyTemplate);
+        if (ret != FingerCommon.ERR_SUCCESS) {
+            logger.info("下载失败");
+            return;
+        }
+        int id = getOneEmptyId();
+        if (id < 0) {
+            logger.info("获取空id失败");
+            return;
+        }
+        int[] w_nDupID = new int[1];
+        int re = fingerCommon.Run_StoreChar(id, 1, w_nDupID);
+        if (re == FingerCommon.ERR_SUCCESS) {
+            logger.info("下载成功{}", w_nDupID[0]);
+        } else
+            logger.info("下载失败");
+    }
+
+    //下载指纹数据到设备
+    public void download() {
+
+
+    }
+    //验证指定指纹
+    public void verify(){
+
+    }
+    //删除指定指纹
+    public void delOne(){
 
     }
 
     public void search() {
         cancel();
-        //  fingerCommon.Run_SLEDControl(1);
         m_bCancel = false;
         executorService.execute(() -> {
             int[] w_nID = new int[1];
             int[] w_nLearned = new int[1];
-            int[] w_nWidth = new int[1];
-            int[] w_nHeight = new int[1];
             while (true) {
-                fingerData.setMsg("请按下手指");
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                if (Capturing() < 0)
-                    return;
-                fingerData.setMsg("请抬起手指");
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                // Up Cpatured Image
-                int w_nRet = fingerCommon.Run_UpImage(0, m_binImage, w_nWidth, w_nHeight);
-                if (w_nRet != FingerCommon.ERR_SUCCESS) {
-                    fingerData.setMsg(GetErrorMsg(w_nRet));
-                    dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                    return;
-                }
-                // Draw image
-                fingerData.setWidth(w_nWidth[0]);
-                fingerData.setHeight(w_nHeight[0]);
-                fingerData.setBinImage(m_binImage);
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                fingerPushMessage.message("请按下手指");
+                if (Capturing() < 0) return;
+                fingerPushMessage.message("请抬起手指");
                 // Create template
                 m_nPassedTime = SystemClock.elapsedRealtime();
-                w_nRet = fingerCommon.Run_Generate(0);
+                int w_nRet = fingerCommon.Run_Generate(0);
                 if (w_nRet != FingerCommon.ERR_SUCCESS) {
-                    fingerData.setMsg(GetErrorMsg(w_nRet));
-                    dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                    fingerPushMessage.message(GetErrorMsg(w_nRet));
                     if (w_nRet == FingerCommon.ERR_CONNECTION)
                         return;
                     else {
@@ -143,14 +146,13 @@ public class FingerUtil {
                 // Identify
                 w_nRet = fingerCommon.Run_Search(0, 1, m_nMaxFpCount, w_nID, w_nLearned);
                 m_nPassedTime = SystemClock.elapsedRealtime() - m_nPassedTime;
-
-                if (w_nRet == FingerCommon.ERR_SUCCESS)
-                    fingerData.setTips(String.format("Result : Success\r\nTemplate No : %s, Learn Result : %s\r\nMatch Time : %s ms", w_nID[0], w_nLearned[0], m_nPassedTime));
-                else {
-                    String m_strPost = GetErrorMsg(w_nRet) + String.format("\r\nMatch Time : %sms", m_nPassedTime);
-                    fingerData.setTips(m_strPost);
+                if (w_nRet == FingerCommon.ERR_SUCCESS) {
+                    fingerPushMessage.pushData("验证通过", "不返回指纹数据", String.valueOf(w_nID[0]));
+                } else {
+                    String m_strPost = GetErrorMsg(w_nRet) + String.format("Match Time : %sms", m_nPassedTime);
+                    fingerPushMessage.message(m_strPost);
                 }
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                break;
             }
 
         });
@@ -159,277 +161,137 @@ public class FingerUtil {
     }
 
 
-    public void delTemplateAll(PluginMessage pluginMessage) {
+    public void delTemplateAll() {
         int w_nRet;
         cancel();
         w_nRet = fingerCommon.Run_DelChar(1, m_nMaxFpCount);
         if (w_nRet != FingerCommon.ERR_SUCCESS) {
-            fingerData.setTips(GetErrorMsg(w_nRet));
-            logger.info(fingerData.getTips());
-            dialogHandler.obtainMessage(3, fingerData).sendToTarget();
-            ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
-            return;
+            fingerPushMessage.message(GetErrorMsg(w_nRet));
+        } else {
+            fingerPushMessage.message("Delete all OK !");
         }
-        fingerData.setTips("Delete all OK !");
-        logger.info(fingerData.getTips());
-        dialogHandler.obtainMessage(3, fingerData).sendToTarget();
-        ResponseUtil.fail(pluginMessage, "Delete all OK !");
+
     }
 
 
     //注册指纹
-    public void register(PluginMessage pluginMessage) {
+    public void register() {
+        cancel();
         int[] w_nState = new int[1];
-        getOneEmptyId();
-        if (m_nUserID < 1) {
+        int emptyId = getOneEmptyId();
+        if (emptyId < 1) {
             logger.info("未获取到可用id");
-            pluginMessage.setBool("res", false);
-            ResponseUtil.fail(pluginMessage, "未获取到可用id");
+            fingerPushMessage.message("未获取到可用id");
             return;
         }
-        int w_nRet = fingerCommon.Run_GetStatus(m_nUserID, w_nState);
+        int w_nRet = fingerCommon.Run_GetStatus(emptyId, w_nState);
         if (w_nRet != FingerCommon.ERR_SUCCESS) {
             logger.info(GetErrorMsg(w_nRet));
             //显示错误信息
-            ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
+            fingerPushMessage.message(GetErrorMsg(w_nRet));
             return;
         }
-
         if (w_nState[0] == FingerCommon.GD_TEMPLATE_NOT_EMPTY) {
             logger.info("Template is already exist");
             //显示错误信息
-            ResponseUtil.fail(pluginMessage, "Template is already exist");
+            fingerPushMessage.message("Template is already exist");
             return;
         }
-        fingerCommon.Run_SLEDControl(1);
         m_bCancel = false;
-        fingerData.setMsg("请放置手指！");
-        //显示默认图片
-        fingerData.setWidth(-1);
-        dialogHandler.obtainMessage(1, fingerData).sendToTarget();
         executorService.execute(() -> {
             int w_nUserID, result, w_nEnrollStep = 0, w_nGenCount = 3;
             int[] w_nDupID = new int[1];
-            int[] w_nWidth = new int[1];
-            int[] w_nHeight = new int[1];
-
-
-            w_nUserID = m_nUserID;
+            w_nUserID = emptyId;
             while (w_nEnrollStep < w_nGenCount) {
-                logger.debug(String.format("Input finger #%d!", w_nEnrollStep + 1));
-                fingerData.setMsg(String.format("Input finger #%d!", (w_nEnrollStep + 1)));
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                logger.debug(String.format("请按下手指，第(%s/%s)次!", (w_nEnrollStep + 1), w_nGenCount));
+                fingerPushMessage.message(String.format("请按下手指，第(%s/%s)次!", (w_nEnrollStep + 1), w_nGenCount));
                 // Capture
-                if (Capturing() < 0)
-                    return;
-                fingerData.setMsg("Release your finger.");
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                // Up Cpatured Image
-                result = fingerCommon.Run_UpImage(0, m_binImage, w_nWidth, w_nHeight);
-                if (result != FingerCommon.ERR_SUCCESS) {
-                    logger.info("shif: result: {}",result);
-                    fingerData.setMsg(GetErrorMsg(result));
-                    dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                    //  dialogHandler.obtainMessage(2, fingerData).sendToTarget();
+                if (Capturing() < 0) {
+                    fingerPushMessage.message("采集图像失败！");
                     return;
                 }
-                logger.info("run: 绘制指纹 width=" + w_nWidth[0] + "-----height=" + w_nHeight[0]);
-                // Draw image
-                fingerData.setWidth(w_nWidth[0]);
-                fingerData.setHeight(w_nHeight[0]);
-                fingerData.setBinImage(m_binImage);
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                fingerPushMessage.message("请抬起手指！");
                 // Create Template
                 result = fingerCommon.Run_Generate(w_nEnrollStep);
-
+                logger.info("创建模板次数：{}", w_nEnrollStep);
                 if (result != FingerCommon.ERR_SUCCESS) {
                     if (result == FingerCommon.ERR_BAD_QUALITY) {
-                        fingerData.setMsg("Bad quality. Try Again!");
-                        dialogHandler.obtainMessage(1, fingerData).sendToTarget();
+                        fingerPushMessage.message("Bad quality. Try Again!");
                         continue;
                     } else {
-                        fingerData.setMsg(GetErrorMsg(result));
-                        logger.info(fingerData.getMsg());
-                        dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                        //   dialogHandler.obtainMessage(2, fingerData).sendToTarget();
+                        fingerPushMessage.message(GetErrorMsg(result));
                         return;
                     }
                 }
                 w_nEnrollStep++;
             }
             logger.info("run: --------------------执行完毕");
-            //m_strPost = "Release Finger";
-            //m_FpImageViewer.post(runShowStatus);
-
-            // Merge
-
             //. Merge Template
-
             result = fingerCommon.Run_Merge(0, w_nGenCount);
             if (result != FingerCommon.ERR_SUCCESS) {
-                fingerData.setMsg(GetErrorMsg(result));
-                logger.info(fingerData.getMsg());
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                //  dialogHandler.obtainMessage(2, fingerData).sendToTarget();
+                fingerPushMessage.message(GetErrorMsg(result));
                 logger.info("run:失败原因：" + GetErrorMsg(result));
-                ResponseUtil.fail(pluginMessage, GetErrorMsg(result));
                 return;
             }
             logger.info("run: 存储指纹数据------");
             //. Store template
             result = fingerCommon.Run_StoreChar(w_nUserID, 0, w_nDupID);
-
             if (result != FingerCommon.ERR_SUCCESS) {
                 if (result == FingerCommon.ERR_DUPLICATION_ID) {
-                    fingerData.setMsg(String.format("Result : Fail\r\nDuplication ID = %d", w_nDupID[0]));
-                    logger.info("run:错误：" + fingerData.getMsg());
+                    fingerPushMessage.message(String.format("Result : Fail\r\nDuplication ID = %s", w_nDupID[0]));
                 } else {
-                    fingerData.setMsg(GetErrorMsg(result));
-                    logger.info("run:错误信息：" + fingerData.getMsg());
+                    fingerPushMessage.message(GetErrorMsg(result));
                 }
-                ResponseUtil.fail(pluginMessage, fingerData.getMsg());
-                return;
             } else {
-                fingerData.setMsg(String.format("Result : Success\rTemplate No : %d", m_nUserID));
-                logger.info("run:成功录入指纹：" + fingerData.getMsg());
                 //录入成功->下载指纹特征
                 byte[] p_pbyTemplate = new byte[512];
-                // int    re = fingerCommon.Run_UpChar(1, p_pbyTemplate);
-                int re = fingerCommon.Run_DownChar(0, p_pbyTemplate);
+                int re = fingerCommon.Run_UpChar(1, p_pbyTemplate);
+                //  int re = fingerCommon.Run_DownChar(1, p_pbyTemplate);
                 if (re == FingerCommon.ERR_SUCCESS) {
-                    ResponseUtil.success(pluginMessage, "录入成功", ResponseUtil.data("number", String.valueOf(m_nUserID), "finger", fingerCommon.byte2HexStr(p_pbyTemplate, 498),"image",bitmap));
-                } else ResponseUtil.fail(pluginMessage, GetErrorMsg(re));
+                    //    testFinger=fingerCommon.byte2HexStr(p_pbyTemplate,498);
+                    logger.info("指纹数据2： \n" + HexDump.toHexString(p_pbyTemplate));
+                    fingerPushMessage.pushData("录入成功", HexDump.toHexString(p_pbyTemplate), String.valueOf(m_nUserID));
+                } else fingerPushMessage.message("上传模板错误：" + GetErrorMsg(re));
             }
-            logger.info(fingerData.getMsg());
-            fingerData.setBinImage(m_binImage);
-            dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-            // dialogHandler.obtainMessage(2, fingerData).sendToTarget();
         });
 
     }
-
-    /**
-     * 指纹对比
-     */
-    public void verify(PluginMessage pluginMessage) {
-        fingerData.setTips("");
-        int[] w_nState = new int[1];
-        getOneEmptyId();
-        if (m_nUserID < 1) {
-            logger.info("未获取到可用id");
-            ResponseUtil.fail(pluginMessage, "未获取到可用id");
-            return;
-        }
-
-        int w_nRet = fingerCommon.Run_GetStatus(m_nUserID - 1, w_nState);
-        if (w_nRet != FingerCommon.ERR_SUCCESS) {
-            fingerData.setTips(GetErrorMsg(w_nRet));
-            dialogHandler.obtainMessage(3, fingerData).sendToTarget();
-            ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
-            return;
-        }
-        if (w_nState[0] == FingerCommon.GD_TEMPLATE_EMPTY) {
-            fingerData.setTips("Template is empty");
-            dialogHandler.obtainMessage(3, fingerData).sendToTarget();
-            ResponseUtil.fail(pluginMessage, "Template is empty");
-            return;
-        }
-
-        String finger = pluginMessage.getString("finger");
-        if (StringUtils.isEmpty(finger)) {
-            ResponseUtil.fail(pluginMessage, "缺少finger指纹数据");
-            return;
-        }
-        byte[] p_pbyTemplate = fingerCommon.toByteArray(finger);
-        //上传模板
-        int re = fingerCommon.Run_UpChar(1, p_pbyTemplate);
-        if (re != FingerCommon.ERR_SUCCESS) {
-            ResponseUtil.fail(pluginMessage, "上传指纹数据失败！");
-            return;
-        }
-        fingerData.setMsg("Press finger");
-        dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-        fingerCommon.Run_SLEDControl(1);
-        m_bCancel = false;
-        executorService.execute(() -> {
-            int[] w_nLearned = new int[1];
-            int[] w_nWidth = new int[1];
-            int[] w_nHeight = new int[1];
-
-            if (Capturing() < 0)
-                return;
-            fingerData.setMsg("Release your finger.");
-            dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-            // Up Cpatured Image
-            int result = fingerCommon.Run_UpImage(0, m_binImage, w_nWidth, w_nHeight);
-
-            if (result != FingerCommon.ERR_SUCCESS) {
-                fingerData.setMsg(GetErrorMsg(result));
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
-                return;
-            }
-
-            // Draw image
-            fingerData.setWidth(w_nWidth[0]);
-            fingerData.setHeight(w_nHeight[0]);
-            fingerData.setBinImage(m_binImage);
-            dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-            // Create template
-            m_nPassedTime = SystemClock.elapsedRealtime();
-            result = fingerCommon.Run_Generate(0);
-
-            if (result != FingerCommon.ERR_SUCCESS) {
-                fingerData.setMsg(GetErrorMsg(result));
-                logger.info(fingerData.getMsg());
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                //     dialogHandler.obtainMessage(2, fingerData).sendToTarget();
-                ResponseUtil.fail(pluginMessage, GetErrorMsg(w_nRet));
-                return;
-            }
-
-            // Verify
-            result = fingerCommon.Run_Verify(m_nUserID - 1, 0, w_nLearned);
-            m_nPassedTime = SystemClock.elapsedRealtime() - m_nPassedTime;
-            if (result == FingerCommon.ERR_SUCCESS) {
-                fingerData.setMsg(String.format("Result : Success\r\nTemplate No : %d, Learn Result : %d\r\nMatch Time : %dms", m_nUserID - 1, w_nLearned[0], m_nPassedTime));
-                ResponseUtil.success(pluginMessage, fingerData.getMsg(),null);
-            } else {
-                fingerData.setMsg(GetErrorMsg(w_nRet));
-                ResponseUtil.fail(pluginMessage, fingerData.getMsg());
-            }
-            dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-            //   dialogHandler.obtainMessage(2, fingerData).sendToTarget();
-        });
-
-    }
-
 
     private int Capturing() {
         int w_nRet;
         while (true) {
             w_nRet = fingerCommon.Run_GetImage();
             if (w_nRet == FingerCommon.ERR_CONNECTION) {
-                fingerData.setMsg("Communication error! status=" + w_nRet);
-                logger.info("Capturing: 错误：" + fingerData.getMsg());
-                dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-                //  dialogHandler.obtainMessage(2, fingerData).sendToTarget();
                 return -1;
             } else if (w_nRet == FingerCommon.ERR_SUCCESS)
                 break;
             if (m_bCancel) {
-                StopOperation();
                 return -1;
             }
         }
         return 0;
     }
 
-    private void StopOperation() {
-        fingerData.setMsg("Canceled");
-        dialogHandler.obtainMessage(1, fingerData).sendToTarget();
-        //    dialogHandler.obtainMessage(2, fingerData).sendToTarget();
+
+    //检测手指
+    private int fingerDetect() {
+        int[] w_nState = new int[1];
+        while (true) {
+            int re = fingerCommon.Run_FingerDetect(w_nState);
+            logger.info("re ={},w_nState={}", re, w_nState[0]);
+            if (re == FingerCommon.ERR_SUCCESS && w_nState[0] == 1) {
+                //检测到手指
+                //   int res = fingerCommon.Run_TestConnection();
+                logger.info("测试结果");
+                break;
+            }
+            if (m_bCancel) {
+                return -1;
+            }
+        }
+        return 0;
     }
+
 
     private String GetErrorMsg(int nErrorCode) {
         String str;
@@ -499,178 +361,6 @@ public class FingerUtil {
                 break;
         }
         return str;
-    }
-
-
-    private static class DialogHandler extends Handler {
-        private ImageView m_FpImageViewer;
-        private TextView m_txtStatus, m_btnCancel, mTips;
-        private AlertDialog alertDialog;
-        private FingerUtil fingerUtil;
-        private byte[] m_bmpImage = new byte[1024 * 100];
-
-        private DialogHandler(FingerUtil fu) {
-            WeakReference<FingerUtil>    contextWeakReference = new WeakReference<>(fu);
-            this.fingerUtil = contextWeakReference.get();
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    if (fingerUtil == null || fingerUtil.context == null) return;
-                    View view = LayoutInflater.from(fingerUtil.context).inflate(R.layout.finger_popupwindow, null, false);
-                    m_FpImageViewer = view.findViewById(R.id.finger_image);
-                    m_txtStatus = view.findViewById(R.id.tv_status);
-                    m_btnCancel = view.findViewById(R.id.cancel);
-                    mTips = view.findViewById(R.id.tips);
-                    m_btnCancel.setOnClickListener((new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            m_bCancel = true;
-                            if (alertDialog != null) {
-                                alertDialog.cancel();
-                            }
-                        }
-                    }));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(fingerUtil.context);
-                    alertDialog = builder.setView(view).create();
-                    alertDialog.setCancelable(false);
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    break;
-                case 1:
-                    if (alertDialog == null) return;
-                    FingerData fingerData = (FingerData) msg.obj;
-                    if (fingerData == null) return;
-                    m_txtStatus.setText(fingerData.getMsg());
-                    if (!TextUtils.isEmpty(fingerData.getTips())) {
-                        mTips.setText(fingerData.getTips());
-                    } else {
-                        mTips.setText("");
-                    }
-                    if (fingerData.getHeight() > 0 && fingerData.getWidth() > 0) {
-                        //绘制图片
-                        MakeBMPBuf(fingerData.getBinImage(), m_bmpImage, fingerData.getWidth(), fingerData.getHeight());
-                        int nSize;
-                        if ((fingerData.getWidth() % 4) != 0)
-                            nSize = fingerData.getWidth() + (4 - (fingerData.getWidth() % 4));
-                        else {
-                            nSize = fingerData.getWidth();
-                        }
-                        nSize = 1078 + nSize * fingerData.getHeight();
-                        //DebugManage.WriteBmp(m_bmpImage, nSize);
-                       Log.d("FingerUtil",String.format("handleMessage: 对比指纹绘制：binImage=%s bmpImage=%s width=%s height=%s nsize=%s", fingerData.getBinImage()[0], m_bmpImage[0], fingerData.getWidth(), fingerData.getHeight(), nSize));
-                        Bitmap image = BitmapFactory.decodeByteArray(m_bmpImage, 0, nSize);
-                        fingerUtil.bitmap= Const.bitmapToString(image);
-                        m_FpImageViewer.setImageBitmap(image);
-                    } else {
-                        m_FpImageViewer.setImageResource(R.drawable.finger_icon);
-                    }
-                    if (!alertDialog.isShowing()) {
-                        alertDialog.show();
-                    }
-                    break;
-                case 2:
-                    if (fingerUtil == null || fingerUtil.context == null) return;
-                    //  fingerUtil.fingerCommon.Run_SLEDControl(0);
-                    break;
-                case 3:
-                    FingerData data = (FingerData) msg.obj;
-                    if (data != null && !TextUtils.isEmpty(data.getTips())) {
-                        Toast.makeText(fingerUtil.context, data.getTips(), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-
-
-            }
-        }
-
-        private void MakeBMPBuf(byte[] Input, byte[] Output, int iImageX, int iImageY) {
-            byte[] w_bTemp = new byte[4];
-            byte[] head = new byte[1078];
-            byte[] head2 = {
-                    /***************************/
-                    //file header
-                    0x42, 0x4d,//file type
-                    //0x36,0x6c,0x01,0x00, //file size***
-                    0x0, 0x0, 0x0, 0x00, //file size***
-                    0x00, 0x00, //reserved
-                    0x00, 0x00,//reserved
-                    0x36, 0x4, 0x00, 0x00,//head byte***
-                    /***************************/
-                    //infoheader
-                    0x28, 0x00, 0x00, 0x00,//struct size
-
-                    //0x00,0x01,0x00,0x00,//map width***
-                    0x00, 0x00, 0x0, 0x00,//map width***
-                    //0x68,0x01,0x00,0x00,//map height***
-                    0x00, 0x00, 0x00, 0x00,//map height***
-
-                    0x01, 0x00,//must be 1
-                    0x08, 0x00,//color count***
-                    0x00, 0x00, 0x00, 0x00, //compression
-                    //0x00,0x68,0x01,0x00,//data size***
-                    0x00, 0x00, 0x00, 0x00,//data size***
-                    0x00, 0x00, 0x00, 0x00, //dpix
-                    0x00, 0x00, 0x00, 0x00, //dpiy
-                    0x00, 0x00, 0x00, 0x00,//color used
-                    0x00, 0x00, 0x00, 0x00,//color important
-            };
-
-            int i, j, num, iImageStep;
-
-            Arrays.fill(w_bTemp, (byte) 0);
-
-            System.arraycopy(head2, 0, head, 0, head2.length);
-
-            if ((iImageX % 4) != 0)
-                iImageStep = iImageX + (4 - (iImageX % 4));
-            else
-                iImageStep = iImageX;
-
-            num = iImageX;
-            head[18] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[19] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[20] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[21] = (byte) (num & (byte) 0xFF);
-
-            num = iImageY;
-            head[22] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[23] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[24] = (byte) (num & (byte) 0xFF);
-            num = num >> 8;
-            head[25] = (byte) (num & (byte) 0xFF);
-
-            j = 0;
-            for (i = 54; i < 1078; i = i + 4) {
-                head[i] = head[i + 1] = head[i + 2] = (byte) j;
-                head[i + 3] = 0;
-                j++;
-            }
-
-            System.arraycopy(head, 0, Output, 0, 1078);
-
-            if (iImageStep == iImageX) {
-                for (i = 0; i < iImageY; i++) {
-                    System.arraycopy(Input, i * iImageX, Output, 1078 + i * iImageX, iImageX);
-                }
-            } else {
-                iImageStep = iImageStep - iImageX;
-
-                for (i = 0; i < iImageY; i++) {
-                    System.arraycopy(Input, i * iImageX, Output, 1078 + i * (iImageX + iImageStep), iImageX);
-                    System.arraycopy(w_bTemp, 0, Output, 1078 + i * (iImageX + iImageStep) + iImageX, iImageStep);
-                }
-            }
-        }
-
     }
 
 
