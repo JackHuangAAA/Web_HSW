@@ -3,9 +3,12 @@ package com.ethink.fps.domain.service;
 import com.ethink.fps.domain.DO.Finger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -41,7 +44,16 @@ public class FingerPrintStoreImpl implements IFingerPrintStore {
 
     @Override
     public void forEach(Predicate<Finger> func) {
-        List<Finger> list = jdbcTemplate.queryForList("select * from finger", Finger.class);
+        List<Finger> list = (List<Finger>) jdbcTemplate.query("select id,tag,temp from finger", new RowMapper<Finger>() {
+            @Override
+            public Finger mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Finger finger = new Finger();
+                finger.setId(rs.getInt(1));
+                finger.setTag(rs.getString(2));
+                finger.setTemp(rs.getString(3));
+                return finger;
+            }
+        });
         Iterator<Finger> it = list.iterator();
         while (it.hasNext()) {
             Finger finger = it.next();

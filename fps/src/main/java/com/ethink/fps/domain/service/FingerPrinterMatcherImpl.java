@@ -6,6 +6,10 @@ import com.machinezoo.sourceafis.FingerprintTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 

@@ -1,12 +1,12 @@
 package com.ethink.fps.api.action;
 
+import com.ethink.fps.api.VO.MatchResult;
 import com.ethink.fps.api.VO.RestResult;
 import com.ethink.fps.api.action.common.Action;
 import com.ethink.fps.api.action.common.RspCode;
 import com.ethink.fps.domain.DO.Finger;
 import com.ethink.fps.domain.service.IFingerPrintStore;
 import com.ethink.fps.domain.service.IFingerPrinterMatcher;
-import com.ethink.fps.exception.ServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,9 +29,13 @@ public class StoreAction extends Action {
         Finger finger = fingerPrinterMatcher.match(base64Pic);
         RestResult result = new RestResult();
         if (finger != null) {
-            result.setData(finger);
+            MatchResult matchResult = new MatchResult();
+            matchResult.setId(finger.getId());
+            matchResult.setTag(finger.getTag());
+            result.setData(matchResult);
         } else {
-            throw new ServerException(RspCode.NOT_MATCH, "not match");
+            result.setCode(RspCode.NOT_MATCH);
+            result.setMessage("not match");
         }
         return result;
     }

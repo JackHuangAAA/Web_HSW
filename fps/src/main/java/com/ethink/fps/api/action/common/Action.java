@@ -19,20 +19,13 @@ public class Action {
 
     @ExceptionHandler
     public RestResult exp(HttpServletRequest request, Exception e) {
-        logger.error("Action catch exception {}",e);
+        logger.error("Action catch exception",e);
         RestResult result = new RestResult();
+        result.setCode(RspCode.SERVER_ERROR);
+        result.setMessage(e.getMessage());
         if(e instanceof ServerException){
             result.setCode(((ServerException) e).getCode());
             result.setMessage(e.getMessage());
-        }else if(e instanceof HttpMessageNotReadableException) {
-
-            if(((HttpMessageNotReadableException) e).getRootCause() instanceof InvalidFormatException) {
-
-            }else {
-
-            }
-        } else{
-
         }
         return result;
     }
