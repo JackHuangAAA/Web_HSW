@@ -46,7 +46,7 @@
                 <p class="cardTwo">接种顾客</p>
                 <img class="cardImg" src="/static/img/customer.png">
             </div>
-            <div class="addButton">
+            <div class="addButton" @click="vaccineIn()">
                 疫苗入库
             </div>
             <div class="outButton">
@@ -84,8 +84,10 @@
             ...mapActions({
                 saveUser: 'saveUser',
                 setCurrentMenu: 'setCurrentMenu'
-            })
-
+            }),
+            vaccineIn: function(){
+                this.$router.push('/inout/inStock');
+            }
         },
         mounted() {
 
