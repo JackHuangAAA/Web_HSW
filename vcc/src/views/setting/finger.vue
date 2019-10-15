@@ -1,7 +1,7 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <Table :columns="cols" :data="datas" size="small" :highlight-row="true"></Table>
+        <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
         <div align="center">
             <Button type="primary" @click="register">register</Button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -23,7 +23,7 @@
                 cols: [
                 {
                     type: 'index',
-                    width:52
+                    width: 150
                 },{
                     title: '指纹CODE',
                     key: 'finger'
@@ -110,5 +110,6 @@
     };
 </script>
 <style lang="less">
+    @import '~@/style/color.less';
     @import "~@/style/finger.less";
 </style>

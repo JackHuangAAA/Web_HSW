@@ -38,7 +38,7 @@
           <div class="vCard-edit-img"
                @click="Vaccine('del',vc)"
                :class="{'cur-po':!NotEdit}">
-            <img :src="delpng">
+            <img :src="`/static/img/images/del.png`">
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
           <div class="vCard-edit-img"
                @click="Vaccine('add')"
                :class="{'cur-po':!NotEdit}">
-            <img :src="addpng">
+            <img :src="`/static/img/images/add.png`">
           </div>
         </div>
       </div>
@@ -102,8 +102,8 @@
 </template>
 
 <script>
-import addpng from "_a/add.png";
-import delpng from "_a/del.png";
+// import addpng from "_a/add.png";
+// import delpng from "_a/del.png";
 export default {
   name: "vaccineCard",
   props: {
@@ -131,8 +131,8 @@ export default {
   },
   data() {
     return {
-      addpng,
-      delpng,
+      // addpng,
+      // delpng,
       Selection: true,
       vCardModal: false,
       input: {},

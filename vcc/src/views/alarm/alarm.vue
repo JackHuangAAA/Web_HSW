@@ -11,25 +11,24 @@
         </div>
         <div class="alarm-main">
             <Row v-for="(item, index) in datas" class="alarm-card">
-                <Col span="1">
-                    <div>#</div>
+                <Col span="1" class="alarm-card-id">
                     <div>{{index+1}}</div>
                 </Col>
-                <Col span="3">
-                <div>报警类型</div>
-                <div>{{item.type}}</div>
+                <Col span="3" class="alarm-card-pd">
+                    <div class="alarm-card-title">报警类型:</div>
+                    <div class="alarm-card-info">{{item.type}}</div>
                 </Col>
-                <Col span="4">
-                <div>报警时间</div>
-                <div>{{getAlarmDate(item.createDate)}}</div>
+                <Col span="5" class="alarm-card-pd">
+                    <div class="alarm-card-title">报警时间:</div>
+                    <div class="alarm-card-info">{{getAlarmDate(item.createDate)}}</div>
                 </Col>
-                <Col span="8">
-                <div>报警原因</div>
-                <div>{{item.reason}}</div>
+                <Col span="7" class="alarm-card-pd">
+                    <div class="alarm-card-title">报警原因:</div>
+                    <div class="alarm-card-info">{{item.reason}}</div>
                 </Col>
-                <Col span="8">
-                <div>解决情况</div>
-                <div>{{item.solution}}</div>
+                <Col span="8" class="alarm-card-pd">
+                    <div class="alarm-card-title">解决情况:</div>
+                    <div class="alarm-card-info">{{item.solution}}</div>
                 </Col>
             </Row>
         </div>
@@ -57,7 +56,7 @@
                         device: this.device._id,
                         ifToday: "today"
                     }).then(res => {
-                        this.datas = res.data;console.log('------>%j',res.data);
+                        this.datas = res.data;
                     });
             },
             getAlarmDate(val){
