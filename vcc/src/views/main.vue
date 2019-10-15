@@ -46,10 +46,10 @@
                 <p class="cardTwo">接种顾客</p>
                 <img class="cardImg" src="/static/img/customer.png">
             </div>
-            <div class="addButton">
+            <div class="addButton" @click="vaccineIn()">
                 疫苗入库
             </div>
-            <div class="outButton">
+            <div class="outButton" @click="vaccineOut()">
                 疫苗出库
             </div>
         </div>
@@ -99,29 +99,24 @@
             },
             //查询抽屉疫苗信息
             async queryDrawerByCondition(){
-                let res = await this.$api.get("/drawer/queryDrawerByCondition",{
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
                 let array = res.data;
-                for(let i=0;i<10;i++){  /*console.log(i*2+'====='+(i+1)*2+"====%j",_.slice(res.data,i*2,(i+1)*2));
-                    let drawer = _.slice(res.data,i*2,(i+1)*2);
-                    let temp = [];
-                    temp.push(drawer[0].vaccine);
-                    temp.push(drawer[1].vaccine);*/
-                    console.log("temp[0].vaccine====%j",array[i].vaccine);
+                for (let i = 0; i < 10; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    if(num>0){
-                        for(let k=0;k<num;k++){
-                            if(k==0){
+                    if (num > 0) {
+                        for (let k = 0; k < num; k++) {
+                            if (k == 0) {
                                 temp.vaccineOneName = vaccine[k].name;
                                 temp.vaccineOneCount = vaccine[k].surplus;
                             }
-                            if(k==1){
+                            if (k == 1) {
                                 temp.vaccineTwoName = vaccine[k].name;
                                 temp.vaccineTwoCount = vaccine[k].surplus;
                             }
                         }
-                    }else{
+                    } else {
                         temp.vaccineOneName = '';
                         temp.vaccineOneCount = '';
                         temp.vaccineTwoName = '';
@@ -129,6 +124,12 @@
                     }
                     this.vaccineData.push(temp);
                 }
+            },
+            vaccineIn(){
+                this.$router.push('/inout/inStock');
+            },
+            vaccineOut(){
+                this.$router.push('/inout/outStock');
             }
         },
         mounted() {
