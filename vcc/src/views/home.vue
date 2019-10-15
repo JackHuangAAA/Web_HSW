@@ -23,13 +23,10 @@
                     <p>李晓文</p>
                     <img src="/static/img/userph1.png">
                 </div>
-
+                <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
                 <router-view ref="contentView" class="layout-main-page"></router-view>
-            </div>
-            <div class="foot">
-                <p class="dateTime">{{nowdate}}</p>
             </div>
         </div>
 </template>
@@ -50,7 +47,10 @@
                 nowdate: null,
                 code: '17694709073',
                 pageName: '主页',
-                menu: [{name:'主页',img:'/static/img/home.png'},{name:'库存',img:'/static/img/inventory.png'},{name:'报警',img:'/static/img/alarm.png'},{name:'设置',img:'/static/img/setting.png'}],
+                menu: [{name:'主页',img:'/static/img/home.png'},{name:'接种',img:'/static/img/inoculate.png'},
+                {name:'库存',img:'/static/img/inventory.png'},{name:'报警',img:'/static/img/alarm.png'},
+                {name:'报废',img:'/static/img/delete.png'},{name:'设置',img:'/static/img/setting.png'}],
+
                 isactive: 0,
                 ifShowMenu: false ,
                 menuStatus: '展开菜单'

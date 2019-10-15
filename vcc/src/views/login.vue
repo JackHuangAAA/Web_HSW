@@ -1,29 +1,4 @@
 <template>
-  <!-- <div class="layout">
-    <div class="login-main">
-      <div class="bg1"></div>
-      <div class="bg2"></div>
-      <div class="login-header">
-        <div class="logo item"><img src="/static/img/logo.png"></div>
-        <div class="logoinfo item">银信疫苗接种平台</div>
-        <div class="title item">welcome to login system</div>
-      </div>
-      <div class="login">
-        <div class="tab item">
-          <p :class="{'tabactive':login1}"
-             @click="login('fp')">指纹登陆</p>
-          <p :class="{'tabactive':login2}"
-             style="padding-left:62px;"
-             @click="login('up')">用户密码登录</p>
-        </div>
-        <div class="loginform item">
-          <fplogin v-if="login1"></fplogin>
-          <loginform v-if="login2"
-                     @Submit="userLogin"></loginform>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="container">
         <div class="main">
           <div class="title">
@@ -44,9 +19,9 @@
                      @Submit="userLogin"></loginform>
         </div>
         </div>
-        <div class="footer">
+        <!-- <div class="footer">
             <img class="bg2" src="/static/img/loginp2.png">
-        </div>
+        </div> -->
       </div>
   </div>
 </template>
