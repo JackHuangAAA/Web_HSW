@@ -45,5 +45,6 @@
     };
 </script>
 <style lang="less">
+    @import '~@/style/color.less';
     @import "~@/style/setting.less";
 </style>

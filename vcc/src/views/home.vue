@@ -105,7 +105,8 @@
             console.log(this.$route.path);
             console.log('111111')
             if(this.$route.path == '/'){
-                this.$router.push('main');
+                //this.$router.push('main');
+                this.$router.push('setting/setting');
             }
         }
     }
