@@ -1,26 +1,5 @@
 <template>
     <div class="layout">
-        <!-- 导航头部 -->
-        <header class="layout-nav">
-            <div class="layout-nav-wrap">
-                <div class="layout-logo">
-                    <img src="/static/img/logo.png"/>
-                </div>
-                <div class="layout-menu">
-                    hhhhhhhhhh
-
-                </div>
-
-                <div class="layout-nav-profile">
-                    <div class="layout-welcome">
-                        欢迎，【{{ user ? user.name : ''}}】
-                    </div>
-
-                </div>
-            </div>
-        </header>
-
-        <div class="layout-nav-divider"></div>
         <div class="layout-main">
             <router-view ref="contentView" class="layout-main-page"></router-view>
             <Spin fix v-show="loading">
@@ -41,6 +20,7 @@
             return {
                 version: this.$config.version,
                 title: this.$config.appName,
+                loading: false
                 }
         },
         computed: {
@@ -69,9 +49,15 @@
         },
         mounted(){
             //获取设备信息
+            this.$device.getDeviceCode().then(res => {console.log("======HOME======="+res.deviceId);
+                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    console.log("DEVICE======="+JSON.stringify(res));
+                    this.saveDevice(res.data[0]);
+                });
+            });
 
             if(this.$route.path == '/'){
-                this.$router.push('/main');
+                this.$router.push('/setting/setting');
             }
         }
     }

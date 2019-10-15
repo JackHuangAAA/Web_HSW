@@ -17,10 +17,9 @@
              @click="login('up')">用户密码登录</p>
         </div>
         <div class="loginform item">
-          <fplogin v-if="login1"
-                   @click="test()"></fplogin>
+          <fplogin v-if="login1"></fplogin>
           <loginform v-if="login2"
-                     @Submit="checkUser"></loginform>
+                     @Submit="userLogin"></loginform>
         </div>
       </div>
     </div>
@@ -72,18 +71,17 @@ export default {
         SCANNER(cb) {
             console.log(cb);
         },
-        async checkUser(form) {
+        async userLogin(form) {
             let res = await this.$api.get("/zcy/checkUser", form);
-            let check = res.data.check;
-            if (check) {
+            if (res.data.check) {
                 let data = res.data;
                 let user = await this.$api.post("/user/modifyUserByCode", {
-                    code: data.code,
-                    name: data.name
+                    code: res.data.code,
+                    name: res.data.name
                 });
                 await this.saveUser(user.data);
                 console.log(user.data);
-                this.$router.push({ name: "home" });
+                this.$router.push('/');
             }
         }
     },
