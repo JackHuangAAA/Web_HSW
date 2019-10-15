@@ -41,7 +41,7 @@
             <fplogin v-if="show"
                    @click="test()"></fplogin>
           <loginform v-if="!show"
-                     @Submit="checkUser"></loginform>
+                     @Submit="userLogin"></loginform>
         </div>
         </div>
         <div class="footer">
