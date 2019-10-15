@@ -45,7 +45,7 @@
                 version: this.$config.version,
                 title: this.$config.appName,
                 nowdate: null,
-                code: '17694709073',
+                code: '2号接种台',
                 pageName: '主页',
                 menu: [{name:'主页',img:'/static/img/home.png'},{name:'接种',img:'/static/img/inoculate.png'},
                 {name:'库存',img:'/static/img/inventory.png'},{name:'报警',img:'/static/img/alarm.png'},
@@ -104,6 +104,7 @@
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                 });
             });
