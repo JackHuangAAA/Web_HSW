@@ -26,7 +26,7 @@
                 <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
-                <router-view ref="contentView" class="layout-main-page"></router-view>
+                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
 </template>
