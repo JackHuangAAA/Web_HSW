@@ -23,7 +23,7 @@ const vaccinationSchema = mongoose.Schema({
         vaccineCode: String,//疫苗编号
         vaccineName: String,//疫苗名称
         supervisionCode: String,//药品监管码
-        expiry: Date,       //药品监管码
+        expiry: Date,       //有效日期
         producer: String    //生产商
     },
     result:Number,          //匹配结果(0:不匹配;1:匹配)
