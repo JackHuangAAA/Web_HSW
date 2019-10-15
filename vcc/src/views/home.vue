@@ -81,7 +81,7 @@
                 pageName: '主页',
                 menu: [{name:'主页',img:'/static/img/home.png'},{name:'库存',img:'/static/img/inventory.png'},{name:'报警',img:'/static/img/alarm.png'},{name:'设置',img:'/static/img/setting.png'}],
                 isactive: 0,
-                ifShowMenu: true ,
+                ifShowMenu: false ,
                 menuStatus: '展开菜单'
                 }
         },
@@ -131,13 +131,14 @@
         },
         mounted(){
             //获取设备信息
-
+            console.log(this.$route.path);
+            console.log('111111')
             if(this.$route.path == '/'){
                 this.$router.push('/main');
             }
         }
     }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import "~@/style/home.less";
 </style>
