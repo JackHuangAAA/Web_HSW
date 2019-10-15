@@ -1,31 +1,63 @@
 <!--接种页面-->
 <template>
     <div class="inoculate card">
-        <Row>
+        <Row class="inoculate-row">
             <Col span="12">
-                <div>接种人信息</div>
-                <div>
-                 {{info.customer.code}} &nbsp;&nbsp;{{info.customer.name}}
-                    年龄：{{info.customer.age}}
-                    接种疫苗：{{info.customer.vaccineName}}
-                    数量：{{info.customer.vaccineNum}}
+                <div class="title-center">接种人信息</div>
+                <div class="inoculate-info">
+                    <div class="inoculate-info-column">
+                        <div class="inoculate-content human-info">
+                            <div>{{info.customer.code}}号</div>
+                            <div>&nbsp;&nbsp;{{info.customer.name}}</div>
+                        </div>
+                        <div class="inoculate-content">
+                            <div>接种疫苗：</div>
+                            <div class="blue">{{info.customer.vaccineName}}</div>
+                        </div>
+                    </div>
+                    <div class="inoculate-info-column">
+                        <div class="inoculate-content">
+                            <div>年龄：</div>
+                            <div>{{info.customer.age}}</div>
+                        </div>                        
+                        <div class="inoculate-content">
+                            <div>接种支数：</div>
+                            <div>{{info.customer.vaccineNum}}</div>
+                        </div>
+                    </div>
                 </div>
             </Col>
-            <Col span="12">
-                <div>疫苗信息</div>
-                <div>
-                    品名：{{vaccine.vaccineName}}
-                    批次号：{{vaccine.supervisionCode}}
-                    有效期：{{vaccine.expiry}}
-                    生产企业：{{vaccine.producer}}
+            <Col span="12" class="inoculate-row">
+                <div class="title-center">疫苗信息</div>
+                <div class="inoculate-info">
+                    <div class="inoculate-info-column">
+                        <div class="inoculate-content">
+                            <div>品名：</div>
+                            <div class="blue">{{vaccine.vaccineName}}</div>
+                        </div>
+                        <div class="inoculate-content">
+                            <div>有效期：</div>
+                            <div>{{vaccine.expiry}}</div>
+                        </div>
+                    </div>
+                    <div class="inoculate-info-column">
+                        <div class="inoculate-content">
+                            <div>批次号：</div>
+                            <div>{{vaccine.supervisionCode}}</div>
+                        </div>                        
+                        <div class="inoculate-content">
+                            <div>生产企业：</div>
+                            <div>{{vaccine.producer}}</div>
+                        </div>
+                    </div> 
                 </div>
             </Col>
         </Row>
-        <Row>
-            <Col span="12">
-                <div v-if="progress==0"> 请扫描疫苗，核对是否正确</div>
-                <div v-if="progress==1">疫苗接种信息匹配成功</div>
-                <div v-if="progress==2">疫苗接种信息匹配失败</div>
+        <Row class="inoculate-notice">
+            <Col span="24">
+                <div v-if="progress==0" class="inoculate-notice-rs"><img src="/static/img/scan.png"/><div>请扫描疫苗，核对是否正确</div></div>
+                <div v-if="progress==1" class="inoculate-notice-rs"><img src="/static/img/succeed.png"/><div>疫苗接种信息匹配成功</div></div>
+                <div v-if="progress==2" class="inoculate-notice-rs"><img src="/static/img/error.png"/>疫苗接种信息匹配失败</div>
             </Col>
         </Row>
     </div>
@@ -56,7 +88,7 @@
             //测试使用
             async queryVaccine() {
                 let res = await this.$api.get(`/zcy/queryVaccine`);
-                this.vaccine = res.data;
+                this.vaccine = res.data;console.log('100-------------%',this.vaccine)
             }
 
         },

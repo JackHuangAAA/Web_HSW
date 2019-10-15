@@ -7,13 +7,14 @@
                 <div class="Steps"> 
                     <div class="Steps-item"
                         v-for="(list,index) in lists">
+                        <div style="position:relative">
+                            <div class="step-line" :class="{'step-line-active':index<=active-1}" v-if="index<lists.length-1"></div>
+                        </div> 
                         <div class="Steps-index"
                             :class="{'Steps-index-active':index<=active}">{{index+1}}</div>
                         <div class="Steps-step"
                             :class="{'Steps-active':index<=active}">{{list.title}}</div>
-                        <div style="position:relative">
-                            <div class="step-line" :class="{'step-line-active':index<=active-1}" v-if="index<lists.length-1"></div>
-                        </div>          
+                                 
                     </div>
                 </div>
             </div>

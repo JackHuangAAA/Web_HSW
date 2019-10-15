@@ -1,19 +1,23 @@
 <!--出入库明细-->
 <template>
-    <div>
-        <div>疫苗{{action}}完成</div>
-        <div>{{action}}人员：{{user.name}} &nbsp;&nbsp;&nbsp;&nbsp; {{action}}时间：{{now}}</div>
+    <div class="inoculate">
+        <div class="stock-title"><img src="/static/img/succeed.png"/>疫苗{{action}}完成</div>
+        <div class="stock-menber">
+            <div>{{action}}人员：{{user.name}}</div>
+            <div>{{action}}时间：{{now}}</div>
+        </div>
+        <div class="goHome"></div>
         <!--head-->
         <Row>
-            <Col span="12">
-                <Row>
+            <Col span="12" class="column-pd">
+                <Row class=" row-center">
                     <Col span="6">#</Col>
                     <Col span="9">疫苗名称</Col>
                     <Col span="9">{{action}}数量</Col>
                 </Row>
             </Col>
-            <Col span="12">
-                <Row>
+            <Col span="12" class="column-pd">
+                <Row class=" row-center">
                     <Col span="6">#</Col>
                     <Col span="9">疫苗名称</Col>
                     <Col span="9">{{action}}数量</Col>
@@ -22,15 +26,15 @@
         </Row>
         <!--data-->
         <Row>
-            <Col span="12">
-            <Row v-for="(item, index) in leftDatas">
+            <Col span="12" class="column-pd">
+            <Row v-for="(item, index) in leftDatas" class="stock-row row-center">
                 <Col span="6">{{index+1}}</Col>
                 <Col span="9">{{item.name}}</Col>
                 <Col span="9">{{item.surplus}}</Col>
             </Row>
             </Col>
-            <Col span="12">
-            <Row v-for="(item, index) in rightDatas">
+            <Col span="12" class="column-pd">
+            <Row v-for="(item, index) in rightDatas" class="stock-row row-center">
                 <Col span="6">{{index+10}}</Col>
                 <Col span="9">{{item.name}}</Col>
                 <Col span="9">{{item.surplus}}</Col>
