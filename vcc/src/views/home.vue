@@ -93,7 +93,6 @@
             },
             changeMenu: function(index){
                 this.isactive = index;
-                alert(index);
                 if(index==0){  this.$router.push('/main'); }
                 if(index==1){  this.$router.push('/vaccination/vaccination'); }
                 if(index==2){  this.$router.push('/stock/stock'); }
