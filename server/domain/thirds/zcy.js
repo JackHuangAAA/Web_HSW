@@ -13,11 +13,11 @@ module.exports = {
    * @returns {Promise.<boolean>}
    */
   checkUser: async function(requestBody) {
-    logger.debug(`checkUser param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`checkUser param: ${JSON.stringify(requestBody)}`);
     if (requestBody.code == 'admin' && requestBody.password == '000000') {
-      return { code: 'admin', name: '小米', check: true }
+      return { code: 'admin', name: '小米', check: true };
     }
-    return { check: false }
+    return { check: false };
   },
 
   /**
@@ -26,7 +26,7 @@ module.exports = {
    * @returns {Promise.<{}>}
    */
   queryDistrict: async function(requestBody) {
-    logger.debug(`queryDistrict param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryDistrict param: ${JSON.stringify(requestBody)}`);
     let result = {
       name: '浙江省',
       code: '330000000000',
@@ -100,8 +100,8 @@ module.exports = {
           ]
         }
       ]
-    }
-    return result
+    };
+    return result;
   },
 
   /**
@@ -110,15 +110,15 @@ module.exports = {
    * @returns {Promise.<{}>}
    */
   queryUnit: async function(requestBody) {
-    logger.debug(`queryUnit param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryUnit param: ${JSON.stringify(requestBody)}`);
     let result = [
       { code: '3200001', name: '武林' },
       { code: '3200002', name: '望江' },
       { code: '3200003', name: '南星' },
       { code: '3200004', name: '湖滨' },
       { code: '3200005', name: '朝晖' }
-    ]
-    return result
+    ];
+    return result;
   },
 
   /**
@@ -127,7 +127,7 @@ module.exports = {
    * @returns {Promise.<[*,*,*,*,*]>}
    */
   queryCabinetNo: async function(requestBody) {
-    logger.debug(`queryCabinetNo param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryCabinetNo param: ${JSON.stringify(requestBody)}`);
     let result = [
       { value: '1100001' },
       { value: '1100002' },
@@ -135,7 +135,7 @@ module.exports = {
       { value: '1100004' },
       { value: '1100005' }
     ]
-    return result
+    return result;
   },
 
   /**
@@ -144,15 +144,15 @@ module.exports = {
    * @returns {Promise.<[*,*,*,*,*]>}
    */
   queryVaccine: async function(requestBody) {
-    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
     let result = {
       code: 'ym20190920134508999',
       name: '脊髓灰质炎疫苗',
       supervisionCode: 'jg20190920001',
       expiry: new Date(),
       producer: '长春生物制药'
-    }
-    return result
+    };
+    return result;
   },
   /**
    * 查询疫苗总种类信息
@@ -160,7 +160,7 @@ module.exports = {
    * @returns {Promise.<[*,*,*,*,*]>}
    */
   queryVaccineKinds: async function(requestBody) {
-    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
     let result = [
       {
       code: 'ym20190920134508991',
@@ -190,8 +190,8 @@ module.exports = {
       expiry: new Date(),
       producer: '长春生物制药'
     }
-  ]
-    return result
+  ];
+    return result;
   },
 
   /**
@@ -200,15 +200,17 @@ module.exports = {
    * @returns {Promise.<[*,*,*,*,*]>}
    */
   reciveVaccination: async function(requestBody) {
-    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`)
+    logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
     let result = {
-      code: '089',
-      name: '李义',
-      age: 4,
-      vaccineCode: 'ym20190920134508999',
-      vaccineName: '脊髓灰质炎疫苗',
-      vaccineNum: 1
-    }
-    return result
+        customer:{
+            code: '089',
+            name: '李义',
+            age: 4,
+            vaccineCode: 'ym20190920134508999',
+            vaccineName: '脊髓灰质炎疫苗',
+            vaccineNum: 1
+        }
+    };
+    return result;
   }
 }

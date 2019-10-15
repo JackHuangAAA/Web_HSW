@@ -1,29 +1,28 @@
 <template>
-  <div class="layout">
-    <div class="login-main">
-      <div class="bg1"></div>
-      <div class="bg2"></div>
-      <div class="login-header">
-        <div class="logo item"><img src="/static/img/logo.png"></div>
-        <div class="logoinfo item">银信疫苗接种平台</div>
-        <div class="title item">welcome to login system</div>
-      </div>
-      <div class="login">
-        <div class="tab item">
-          <p :class="{'tabactive':login1}"
-             @click="login('fp')">指纹登陆</p>
-          <p :class="{'tabactive':login2}"
-             style="padding-left:62px;"
-             @click="login('up')">用户密码登录</p>
+  <div class="container">
+        <div class="main">
+          <div class="title">
+          <img class="bg1" src="/static/img/loginp1.png">
+          <img class="logo" src="/static/img/logo.png">
+          <p class="logoP">银信疫苗接种平台</p>
+          <p class="logoE">welcome to login system</p>
         </div>
-        <div class="loginform item">
-          <fplogin v-if="login1"
+        <div class="loginContent">
+        <div class="select">
+            <p class="fingerLogin" @click="fingerLogin" :class="{'changeColor':show}">指纹登录</p>
+            <p class="accountLogin" @click="accountLogin" :class="{'changeColor':!show}">账号登录</p>
+        </div>
+        <div class="loginForm"  :class="{'loginFormChange':!show}">
+            <fplogin v-if="show"
                    @click="test()"></fplogin>
-          <loginform v-if="login2"
-                     @Submit="checkUser"></loginform>
+          <loginform v-if="!show"
+                     @Submit="userLogin"></loginform>
         </div>
+        </div>
+        <!-- <div class="footer">
+            <img class="bg2" src="/static/img/loginp2.png">
+        </div> -->
       </div>
-    </div>
   </div>
 </template>
 
@@ -38,8 +37,7 @@ export default {
     },
     data() {
         return {
-            login1: true,
-            login2: false,
+            show: true
         };
     },
     computed: {
@@ -55,12 +53,10 @@ export default {
         login(type) {
             switch (type) {
                 case "fp":
-                    this.login1 = true;
-                    this.login2 = false;
+                    this.show = true;
                     break;
                 case "up":
-                    this.login1 = false;
-                    this.login2 = true;
+                    this.show = false;
                     break;
                 default:
                     break;
@@ -72,19 +68,22 @@ export default {
         SCANNER(cb) {
             console.log(cb);
         },
-        async checkUser(form) {
+        async userLogin(form) {
             let res = await this.$api.get("/zcy/checkUser", form);
-            let check = res.data.check;
-            if (check) {
-                let data = res.data;
+            if (res.data.check) {
                 let user = await this.$api.post("/user/modifyUserByCode", {
-                    code: data.code,
-                    name: data.name
+                    code: res.data.code,
+                    name: res.data.name
                 });
                 await this.saveUser(user.data);
-                console.log(user.data);
-                this.$router.push({ name: "home" });
+                this.$router.push('/');
             }
+        },
+        fingerLogin: function(){
+            this.show = true;
+        },
+        accountLogin: function(){
+            this.show = false;
         }
     },
     mounted() {
@@ -94,6 +93,6 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import "~@/style/login.less";
 </style>

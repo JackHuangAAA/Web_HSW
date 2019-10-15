@@ -29,7 +29,7 @@ const commonResponseHandler = (response,resolve,reject)=>{
 
 const errorHandler = (err)=>{
     if(config.env == 'development'){
-        console.error(`=> ${err}`);
+        //console.error(`=> ${err}`);
     }
     Message.error({content:'请求异常',closable: true,duration: 0});
 };

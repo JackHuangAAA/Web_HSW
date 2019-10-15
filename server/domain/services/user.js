@@ -15,7 +15,7 @@ module.exports = {
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   modifyUserByCode: async function(requestBody) {
-    logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
+    logger.debug(`modifyUserByCode param: ${JSON.stringify(requestBody)}`);
     let user = await Domain.models.user.update(
       { code: requestBody.code },
       {
