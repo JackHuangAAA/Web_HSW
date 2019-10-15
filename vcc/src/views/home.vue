@@ -1,37 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <div class="layout">
-=======
-    <!-- <div class="layout">
-        <header class="layout-nav">
-            <div class="layout-nav-wrap">
-                <div class="layout-logo">
-                </div>
-                <div class="layout-menu">
-                    hhhhhhhhhh
-
-                </div>
-
-                <div class="layout-nav-profile">
-                    <div class="layout-welcome">
-                        欢迎，【{{ user ? user.name : ''}}】
-                    </div>
-
-                </div>
-            </div>
-        </header>
-
-        <div class="layout-nav-divider"></div>
->>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
-        <div class="layout-main">
-            <router-view ref="contentView" class="layout-main-page"></router-view>
-            <Spin fix v-show="loading">
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>加载中...</div>
-            </Spin>
-        </div>
-
-    </div> -->
         <div class="layout">
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
                     <img class="menuListLogo" src="/static/img/logo.png">
@@ -52,7 +19,7 @@
                 </div>
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{code}}</div>
-                <div class="user">
+                <div class="user" @click="logout()">
                     <p>李晓文</p>
                     <img src="/static/img/userph1.png">
                 </div>
@@ -80,9 +47,6 @@
             return {
                 version: this.$config.version,
                 title: this.$config.appName,
-<<<<<<< HEAD
-                loading: false
-=======
                 nowdate: null,
                 code: '17694709073',
                 pageName: '主页',
@@ -90,7 +54,6 @@
                 isactive: 0,
                 ifShowMenu: false ,
                 menuStatus: '展开菜单'
->>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
                 }
         },
         computed: {
@@ -139,20 +102,10 @@
         },
         mounted(){
             //获取设备信息
-<<<<<<< HEAD
-            this.$device.getDeviceCode().then(res => {console.log("======HOME======="+res.deviceId);
-                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
-                    console.log("DEVICE======="+JSON.stringify(res));
-                    this.saveDevice(res.data[0]);
-                });
-            });
-
-=======
             console.log(this.$route.path);
             console.log('111111')
->>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
             if(this.$route.path == '/'){
-                this.$router.push('/setting/setting');
+                this.$router.push('main');
             }
         }
     }
