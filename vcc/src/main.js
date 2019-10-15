@@ -14,9 +14,12 @@ import config from '@/config';
 import rem from '@/rem';
 import device from '@/device.js';
 
+<<<<<<< HEAD
+=======
 
 
 
+>>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
 if (config.env == 'development') {

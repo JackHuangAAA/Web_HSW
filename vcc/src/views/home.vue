@@ -1,4 +1,7 @@
 <template>
+<<<<<<< HEAD
+    <div class="layout">
+=======
     <!-- <div class="layout">
         <header class="layout-nav">
             <div class="layout-nav-wrap">
@@ -19,6 +22,7 @@
         </header>
 
         <div class="layout-nav-divider"></div>
+>>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
         <div class="layout-main">
             <router-view ref="contentView" class="layout-main-page"></router-view>
             <Spin fix v-show="loading">
@@ -76,13 +80,17 @@
             return {
                 version: this.$config.version,
                 title: this.$config.appName,
+<<<<<<< HEAD
+                loading: false
+=======
                 nowdate: null,
                 code: '17694709073',
                 pageName: '主页',
                 menu: [{name:'主页',img:'/static/img/home.png'},{name:'库存',img:'/static/img/inventory.png'},{name:'报警',img:'/static/img/alarm.png'},{name:'设置',img:'/static/img/setting.png'}],
                 isactive: 0,
-                ifShowMenu: true ,
+                ifShowMenu: false ,
                 menuStatus: '展开菜单'
+>>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
                 }
         },
         computed: {
@@ -131,13 +139,24 @@
         },
         mounted(){
             //获取设备信息
+<<<<<<< HEAD
+            this.$device.getDeviceCode().then(res => {console.log("======HOME======="+res.deviceId);
+                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    console.log("DEVICE======="+JSON.stringify(res));
+                    this.saveDevice(res.data[0]);
+                });
+            });
 
+=======
+            console.log(this.$route.path);
+            console.log('111111')
+>>>>>>> 629a1754c8bc540f0f8863c8b089fb75ac43843e
             if(this.$route.path == '/'){
-                this.$router.push('/main');
+                this.$router.push('/setting/setting');
             }
         }
     }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 @import "~@/style/home.less";
 </style>
