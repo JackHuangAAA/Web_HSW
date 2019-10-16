@@ -21,20 +21,26 @@
                         <div class="cabines">
                             <div class="cabine" v-for="(item,index) in cabineData">
                                 <!-- <Input v-model="value" placeholder="选择疫苗名称" class="chooseVaccine"/> -->
-                                <div class="noVaccine">
-                                    <Select v-model="value" class="chooseVaccine">
+                                <div class="noVaccine" v-show="ifOneChoose">
+                                    <Select v-model="value" class="chooseVaccine"  @on-change="selectOne()">
                                         <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select>
                                 </div>
-                                <div class="vaccineName">
+                                <div class="noVaccineTwo" v-show="ifTwoChoose">
+                                    <Select v-model="value1" class="chooseVaccine"  @on-change="selectTwo()">
+                                        <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    </Select>
+                                </div>
+                                <div class="vaccineName" v-show="ifVaccineOne">
                                     麻疹疫苗
                                 </div>
-                                <div class="vaccineNameTwo">
+                                <div class="vaccineNameTwo" v-show="ifVaccineTwo">
                                     狂犬疫苗
                                 </div>
-                                <img src="/static/img/add.png" class="addImg addImg2" @click="addVaccine()">
-                                <img src="/static/img/del.png" class="delImg delImg2">
-                                <img src="/static/img/del.png" class="delImgTwo delImgTwo2">
+                                <img src="/static/img/add.png" class="addImg" @click="addVaccine(index)" v-show="ifOneChoose">
+                                <img src="/static/img/add.png" class="addImg2" @click="addVaccineTwo(index)" v-show="ifTwoChoose">
+                                <img src="/static/img/del.png" class="delImg" v-show="ifVaccineOne" @click="delVaccineOne()">
+                                <img src="/static/img/del.png" class="delImgTwo" v-show="ifVaccineTwo" @click="delVaccineTwo()">
                             </div>
                         </div>
                     </div>
@@ -54,8 +60,16 @@
             return {
                 row: 0,
                 value: '',
+                value1: '',
                 cabineData: [{},{},{},{},{},{},{},{}],
-                cityList: [{value:22,label:22},{value:33,label:33}]
+                cityList: [{value:22,label:22},{value:33,label:33}],
+                cityList2: [{value:22,label:'q'},{value:33,label:'a'}],
+                ifAdd: false,
+                ifVaccineOne: false,
+                ifVaccineTwo: false,
+                ifOneChoose: true,
+                ifTwoChoose: false,
+                ifAddTwo: false
             };
         },
         computed: {
@@ -64,8 +78,40 @@
             })
         },
         methods: {
-            addVaccine: function(){
-
+            addVaccine: function(index){
+                if(this.ifAdd == true){
+                    this.ifOneChoose = false;
+                    this.ifVaccineOne = true;
+                    this.ifTwoChoose = true;
+                    // this.value = "";
+                    // this.ifAdd = false;
+                }
+            },
+            addVaccineTwo: function(){
+                if(this.ifAddTwo == true){
+                    this.ifTwoChoose = false;
+                    this.ifVaccineTwo = true;
+                }
+            },
+            selectOne: function(){
+                this.ifAdd = true;
+            },
+            selectTwo: function(){
+                console.log('1111111');
+                // console.log('test:' + this.ifAddTwo);
+                this.ifAddTwo = true;
+            },
+            delVaccineOne: function(){
+                if(this.ifTwoChoose == true){
+                    this.ifOneChoose = true;
+                    this.ifVaccineOne = false;
+                    this.ifTwoChoose = false
+                }
+            },
+            delVaccineTwo: function(){
+                this.ifVaccineTwo = false;
+                this.ifTwoChoose = true;
+                this.value1 = "";
             }
         },
         mounted() {

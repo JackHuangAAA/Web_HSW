@@ -219,14 +219,6 @@ div {
   width: 100%;
   margin-top: -1px;
 }
-.addImg {
-  width: 14px;
-  height: 14px;
-  position: absolute;
-  left: calc(80.5%);
-  top: 50%;
-  margin-top: -7px;
-}
 .noVaccine {
   width: 38.5%;
   height: 30px;
@@ -235,7 +227,28 @@ div {
   margin-top: -15px;
   left: 28%;
 }
+.noVaccineTwo {
+  width: 38.5%;
+  height: 30px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+  left: 53%;
+}
+.addImg {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  left: calc(80.5%);
+  top: 50%;
+  margin-top: -7px;
+}
 .addImg2 {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 50%;
+  margin-top: -7px;
   left: 93%;
 }
 .vaccineName {
@@ -249,7 +262,6 @@ div {
   font-size: 0.875rem;
   color: #3E4955;
   font-weight: bold;
-  display: none;
 }
 .delImg {
   width: 14px;
@@ -258,7 +270,6 @@ div {
   top: 50%;
   margin-top: -1.5px;
   left: 32%;
-  display: none;
 }
 .vaccineNameTwo {
   width: 30%;
@@ -272,7 +283,6 @@ div {
   color: #3E4955;
   font-weight: bold;
   left: calc(40%);
-  display: none;
 }
 .delImgTwo {
   width: 14px;
@@ -281,5 +291,4 @@ div {
   top: 50%;
   margin-top: -1.5px;
   left: 93%;
-  display: none;
 }
