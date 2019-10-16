@@ -3,6 +3,8 @@ package com.ethink.fps.domain.service;
 import com.ethink.fps.domain.DO.Finger;
 import com.machinezoo.sourceafis.FingerprintMatcher;
 import com.machinezoo.sourceafis.FingerprintTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class FingerPrinterMatcherImpl implements IFingerPrinterMatcher {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private double threshold = 40;
     private int dpi = 500;
 
@@ -31,6 +33,7 @@ public class FingerPrinterMatcherImpl implements IFingerPrinterMatcher {
         store.forEach((Finger finger) -> {
             FingerprintTemplate target = new FingerprintTemplate().deserialize(finger.getTemp());
             double score = matcher.match(target);
+            logger.info("tag:{},score:{}",finger.getTag(),score);
             if (score > threshold) {
                 result.set(finger);
                 return true;
