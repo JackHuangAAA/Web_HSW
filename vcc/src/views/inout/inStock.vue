@@ -45,7 +45,7 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="addVaccine(index)">
+                            <div class="cabine" v-for="(item,index) in cabineData" @click="addVaccine(index)">
                                 <div class="cabineLeft">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
                                     <p class="vaccineOneCount">{{item.countOne||0}}支</p>
@@ -68,12 +68,10 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
-
     export default {
         data() {
             return {
-                cabineDatas: [{nameOne: '狂犬疫苗',nameTwo: '麻疹疫苗',countOne:100,countTwo:100},{},{},{}],
+                cabineData: [{nameOne: '狂犬疫苗',nameTwo: '麻疹疫苗',countOne:100,countTwo:100},{},{},{}],
                 index: '1',
                 row: 0,
                 addForm: false, //添加弹窗是否显示
@@ -84,61 +82,31 @@
             }
         },
         computed: {
-            ...mapGetters({
-                user: 'user',
-                device: 'device',
-            })
+
         },
         components:{},
         methods: {
             back: function(){
                 this.$router.push('/main');
             },
-            async queryDrawerByCondition(){
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
-                });console.log("99------------>"+JSON.stringify(res.data));
-                let array = res.data;
-                for (let i = 0; i < 10; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-                            if (k == 0) {
-                                temp.nameOne = vaccine[k].name;
-                                temp.countOne = vaccine[k].surplus;
-                            }
-                            if (k == 1) {
-                                temp.nameTwo = vaccine[k].name;
-                                temp.countTwo = vaccine[k].surplus;
-                            }
-                        }
-                    } else {
-                        temp.nameOne = '';
-                        temp.countOne = '';
-                        temp.nameTwo = '';
-                        temp.countTwo = '';
-                    }
-                    this.cabineDatas.push(temp);
-                }
-            },
             addVaccine: function(index){
                 console.log(index);
                 this.addForm = true;
-                this.addVaccineOne = this.cabineDatas[index].nameOne;
-                this.addVaccineTwo = this.cabineDatas[index].nameTwo;
+                this.addVaccineOne = this.cabineData[index].nameOne;
+                this.addVaccineTwo = this.cabineData[index].nameTwo;
             },
             cancel: function(){
                 this.addForm = false;
             },
             yes: function(){
                 this.addForm = false;
+            }
         },
         mounted() {
-            this.row = Math.ceil(this.cabineDatas.length/2);
-            this.queryDrawerByCondition();
+            this.row = Math.ceil(this.cabineData.length/2);
+            console.log(this.row);
         }
-    }
-    }
+    };
 </script>
 <style lang="less" scoped>
     @import "~@/style/inStock.less";
