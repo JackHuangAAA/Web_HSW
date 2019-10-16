@@ -9,18 +9,20 @@
                 <img class="menuImg" :src="item.img">
                 {{item.name}}
             </div>
+            <div class="defind">技术支持：银信博荣</div>
         </div>
         <HeaderComponent></HeaderComponent>
         <div class="layout-main">
-            <!-- <LeftComponent v-bind:menus="menus"></LeftComponent> -->
-            <div class="layout-main-right" style="border: none;">
+            <div class="layout-main-right">
                 <div class="layout-content">
                     <div class="layout-content-main">
-                        <router-view ref="contentView"></router-view>
-                        <Spin fix v-show="loading">
+                        <keep-alive>
+                            <router-view ref="contentView"></router-view>
+                        </keep-alive>
+                        <!-- <Spin fix v-show="loading">
                             <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
                             <div>加载中...</div>
-                        </Spin>
+                        </Spin> -->
                     </div>
                 </div>
             </div>
@@ -32,7 +34,6 @@
     import {mapGetters, mapActions, mapState} from 'vuex'
     import md5 from 'js-md5'
     import HeaderComponent from '@/components/header.vue'
-    import LeftComponent from '@/components/left.vue'
 
     export default {
 
@@ -59,7 +60,6 @@
         },
         components: {
             HeaderComponent,
-            LeftComponent
         },
         methods: {
             ...mapActions({
