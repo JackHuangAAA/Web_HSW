@@ -165,23 +165,19 @@
                 this.cabinetNos = res.data;
             },
             changeProvince(event) {
-                alert("asd1")
                 this.formBasic.address.provinceName = event.label;
             },
             changeCity(event) {
-                alert("asd2")
                 this.formBasic.address.cityName = event.label;
             },
             changeCounty(event){
-                alert("asd3")
                 this.formBasic.address.countyName = event.label;
-                alert(this.formBasic.countyName)
             },
             changeUnit(event){
                 this.formBasic.unitName = event.label;
             },
-            save(name){alert(name)
-                this.$refs[name].validate((valid) => {alert('------'+valid)
+            save(name){
+                this.$refs[name].validate((valid) => {
                     if (valid) { // 新增操作
                         //新增类型时，型号保存到this.typeForm.models，点击保存按钮才保存数据
 

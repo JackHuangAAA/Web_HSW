@@ -48,7 +48,7 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveInouts: async function(requestBody){
+    saveInout: async function(requestBody){
         logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
     },
