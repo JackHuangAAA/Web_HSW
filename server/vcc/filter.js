@@ -134,11 +134,11 @@ const operationlogSave = async (ctx) => {
         console.log(ctx.request.body.type);
         console.log(typeof (ctx.request.body.type));
 
-
+        let action,action_name;
         if (ctx.request.body.type == 1) {
-            var action ="4", action_name = "入库";
+            action ="4", action_name = "入库";
         } else {
-            var action ="5", action_name = "出库";
+            action ="5", action_name = "出库";
         }
         console.log(action);
         let query ={
