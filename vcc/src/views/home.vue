@@ -115,7 +115,7 @@
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
-                        this.$router.push('main');
+                        this.$router.push('/setting/setting');
                     }
                 });
             });
