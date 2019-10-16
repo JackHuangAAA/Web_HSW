@@ -24,22 +24,14 @@ html{
     width: 100%;
     color: white;
     text-align: center;
-    z-index: 999;
+    z-index: 200;
     background:rgba(255,255,255,1);
     box-shadow:0px 2px 8px 0px rgba(205,216,229,0.6);
     .layout-nav-wrap{
-        min-width:1366px;
+        min-width:@min-width;
         text-align: center;
-    }
-    .layout-logo{
-        float: left;
-        line-height: @nav-height;
-        height: @nav-height;
-        width:187px;
-        img{
-            margin: 0 auto;
-            width: 157px;
-            height: 22px;
+        .layout-nav-title{
+            
         }
     }
 }
@@ -51,7 +43,7 @@ html{
     line-height: @nav-height;
     height: @nav-height;
     left: 0px;
-    min-width: 1366px;
+    min-width: @min-width;
     width: calc(100% - 10px);
     z-index: 11;
     text-align: right;
@@ -62,13 +54,15 @@ html{
     .layout-avatar{
         display: inline-block;
         height: @nav-height;
-        width: 50px;
+        width: 56px;
         text-align: center;
         margin-left: 0;
         img{
             display: inline-block;
             vertical-align: middle;
-            margin-right: 5px;
+            margin-right: 16px;
+            width: 40px;
+            height: 40px;
         }
         img:hover {
             filter:alpha(Opacity=50);
@@ -92,15 +86,47 @@ html{
     //overflow: auto;
 }
 
-.layout-menu-left {
-    width: 200px;
+.menu-list {
+    width: 210px;
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 21px;
-    background:rgba(255,255,255,1);
-    box-shadow:0px 6px 8px 0px rgba(205,216,229,0.6);
+    left: 0px;
+    background:#181F48;
     min-height: 600px;
+    font-size:15px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color:rgba(169,172,188,1);
+    z-index: 999;
+}
+.menu-logo{
+    width: 100%;
+    height: @nav-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.menu-line{
+    width:210px;
+    height:1px;
+    background:rgba(53,59,95,1);
+}
+.menuBlock{
+    width:210px;
+    height:58px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    margin-top: 6px;
+}
+.menuBlock img{
+    padding-left: 27px;
+    padding-right: 24px;
+}
+.bg{
+    background:rgba(15,22,52,1);
 }
 
 .layout-main-right {

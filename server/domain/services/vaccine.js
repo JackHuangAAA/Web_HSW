@@ -81,16 +81,10 @@ module.exports = {
      */
     modifyVaccine: async function (requestBody) {
         logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
-        await Domain.models.vaccine.update(
-            { _id: requestBody.ids[0] },
+        return await Domain.models.vaccine.update(
+            { _id: requestBody.id },
             {
-                $set: { total: requestBody.totals[0] }
-            }
-        );
-        await Domain.models.vaccine.update(
-            { _id: requestBody.ids[1] },
-            {
-                $set: { total: requestBody.totals[1] }
+                $set: { ...requestBody }
             }
         );
     }
