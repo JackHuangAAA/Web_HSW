@@ -1,6 +1,7 @@
 <!--设备基础-->
 <template>
     <div class="basic">
+        <Form ref="frmEdit" :model="formBasic" :rules="ruleValidate" >
         <Row class="bs-row" type="flex" :gutter="8" align="middle">
             <Col span="4" justify="end">
                 <p class="bs-title">
@@ -8,19 +9,25 @@
                 </p>
             </Col>
             <Col span="6" push="1">
-                <Select v-model="form.address.provinceCode" :label-in-value="true" @on-change="changeProvince">
-                    <Option v-for="province in provinces" :value="province.code">{{province.name}}</Option>
-                </Select>
+                <FormItem prop="address.provinceCode">
+                    <Select v-model="formBasic.address.provinceCode" :label-in-value="true" @on-change="changeProvince">
+                        <Option v-for="province in provinces" :value="province.code">{{province.name}}</Option>
+                    </Select>
+                </FormItem>
             </Col>
             <Col span="6" push="1">
-                <Select v-model="form.address.cityCode" :label-in-value="true" @on-change="changeCity">
-                    <Option v-for="city in citys" :value="city.code">{{city.name}}</Option>
-                </Select>
+                <FormItem prop="address.cityCode">
+                    <Select v-model="formBasic.address.cityCode" :label-in-value="true" @on-change="changeCity">
+                        <Option v-for="city in citys" :value="city.code">{{city.name}}</Option>
+                    </Select>
+                </FormItem>
             </Col>
             <Col span="6" push="1">
-                <Select v-model="form.address.countyCode" :label-in-value="true" @on-change="changeCounty">
+            <FormItem prop="address.countyCode">
+                <Select v-model="formBasic.address.countyCode" :label-in-value="true" @on-change="changeCounty">
                     <Option v-for="county in countys" :value="county.code">{{county.name}}</Option>
                 </Select>
+                </FormItem>
             </Col>
         </Row>
         <Row class="bs-row" align="middle" type="flex">
@@ -30,9 +37,11 @@
                 </p>
             </Col>
             <Col span="18" push="1">
-                <Select v-model="form.cabinetNo" :label-in-value="true">
+            <FormItem prop="cabinetNo">
+                <Select v-model="formBasic.cabinetNo" :label-in-value="true">
                     <Option v-for="list in cabinetNos" :value="list.value">{{list.value}}</Option>
                 </Select>
+                </FormItem>
             </Col>
         </Row>
         <Row class="bs-row" align="middle" type="flex">
@@ -42,9 +51,11 @@
                 </p>
             </Col>
             <Col span="18" push="1">
-                <Select v-model="form.unitCode" :label-in-value="true" @on-change="changeUnit">
+            <FormItem prop="unitCode">
+                <Select v-model="formBasic.unitCode" :label-in-value="true" @on-change="changeUnit">
                     <Option v-for="u in units" :value="u.code">{{u.name}}</Option>
                 </Select>
+                </FormItem>
             </Col>
         </Row>
         <Row class="bs-row" align="middle" type="flex">
@@ -54,15 +65,18 @@
                 </p>
             </Col>
             <Col span="18" push="1">
-                <Input v-model="form.alias" size="large" placeholder="设备编号" />
+            <FormItem prop="alias">
+                <Input v-model="formBasic.alias" size="large" placeholder="设备编号"/>
+                </FormItem>
             </Col>
         </Row>
         <Row type="flex" justify="center">
             <p class="bs-info">更改基本信息后请点击保存按钮</p>
         </Row>
         <Row type="flex" class="bs-submit" justify="center">
-            <Button type="primary" @click="save()">保存</Button>
+            <Button type="primary" @click="save('frmEdit')">保存</Button>
         </Row>
+        </Form>
     </div>
 </template>
 
@@ -76,7 +90,7 @@
                 countys: [],
                 cabinetNos: [],
                 units: [],
-                form:{
+                formBasic:{
                     alias: "",
                     address:{
                         provinceCode: "",
@@ -89,6 +103,26 @@
                     cabinetNo: "",
                     unitCode: "",
                     unitName: ""
+                },
+                ruleValidate: {
+                    alias: [
+                        { required: true, message: 'The alias cannot be empty', trigger: 'blur' }
+                    ],
+                    cabinetNo:[
+                        { required: true, type: 'string', message: 'Please select the No', trigger: 'change'}
+                    ],
+                    unitCode:[
+                        { required: true, type: 'string', message: 'Please select the unit', trigger: 'change' }
+                    ],
+                    'address.cityCode': [
+                        { required: true, type: 'string', message: 'Please select the city', trigger: 'change' }
+                    ],
+                    'address.provinceCode': [
+                        { required: true, type: 'string', message: 'Please select the provinces', trigger: 'change' }
+                    ],
+                    'address.countyCode': [
+                        { required: true, type: 'string', message: 'Please select the county', trigger: 'change' }
+                    ]
                 }
             };
         },
@@ -103,12 +137,16 @@
                 await this.queryCabinetNo();
                 await this.queryUnit();
                 //获取设备信息
-                this.form.alias = this.device.alias;
-                this.form.address.provinceCode = this.device.address.provinceCode;
-                this.form.address.cityCode = this.device.address.cityCode;
-                this.form.address.countyCode = this.device.address.countyCode;
-                this.form.cabinetNo = this.device.cabinetNo;
-                this.form.unitCode = this.device.unitCode;
+                this.formBasic.alias = this.device.alias;
+                this.formBasic.address.provinceCode = this.device.address.provinceCode;
+                this.formBasic.address.cityCode = this.device.address.cityCode;
+                this.formBasic.address.countyCode = this.device.address.countyCode;
+                this.formBasic.address.provinceName = this.device.address.provinceName;
+                this.formBasic.address.cityName = this.device.address.cityName;
+                this.formBasic.address.countyName = this.device.address.countyName;
+                this.formBasic.cabinetNo = this.device.cabinetNo;
+                this.formBasic.unitCode = this.device.unitCode;
+                this.formBasic.unitName = this.device.unitName;
             },
 
             async queryUnit() {
@@ -127,31 +165,31 @@
                 this.cabinetNos = res.data;
             },
             changeProvince(event) {
-                this.form.address.provinceName = event.label;
+                this.formBasic.address.provinceName = event.label;
             },
             changeCity(event) {
-                this.form.address.cityName = event.label;
+                this.formBasic.address.cityName = event.label;
             },
             changeCounty(event){
-                this.form.address.countyName = event.label;
+                this.formBasic.address.countyName = event.label;
             },
             changeUnit(event){
-                this.form.unitName = event.label;
+                this.formBasic.unitName = event.label;
             },
-            save(){
-                //this.$refs[name].validate((valid) => {
-                    //if (valid) { // 新增操作
+            save(name){
+                this.$refs[name].validate((valid) => {
+                    if (valid) { // 新增操作
                         //新增类型时，型号保存到this.typeForm.models，点击保存按钮才保存数据
 
                             this.$api.post('/device/modifyDevice', {
                                 id: this.device._id,
-                                ...this.form
+                                ...this.formBasic
                             }).then(response => {
                                 this.$Message.success('修改设备归属成功!');
                             });
 
-                    //}
-                //});
+                    }
+                });
             }
 
         },
