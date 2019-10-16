@@ -6,7 +6,7 @@
             <div>{{action}}人员：{{user.name}}</div>
             <div>{{action}}时间：{{now}}</div>
         </div>
-        <div class="goHome"></div>
+        <div class="goHome" @click="goHome()"></div>
         <!--head-->
         <Row>
             <Col span="12" class="column-pd">
@@ -67,23 +67,24 @@
         methods: {
             async getDetails() {
                 let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {device: this.device._id});
-                this.datas = res.data.rs;console.log('7788--->%j',res.data);
+                this.datas = res.data.rs;
                 if(this.datas.length>10){
                     this.leftDatas = _.slice(this.datas,0,10);
                     this.rightDatas = _.slice(this.datas,10);
                 }else{
                     this.leftDatas = this.datas;
                 }
-                console.log(this.leftDatas+'----yyy-----'+this.rightDatas)
+            },
+            goHome(){
+                this.$router.push("/main");
             },
             setAction(val){
                 this.action = (val=='in')?'入库':'出库';
             }
         },
         mounted() {
-            console.log(JSON.stringify(this.user)+'----uuuu--->'+JSON.stringify(this.device));
-            //接收抽屉编号
-            let action = "in";//this.$route.query.action;
+            //接收出入库参数
+            let action = this.$route.query.action;
             this.setAction(action);
             this.getDetails();
         }

@@ -1,5 +1,6 @@
 <template>
         <div class="layout">
+            <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
                     <img class="menuListLogo" src="/static/img/logo.png">
                     <p class="logoDes">{{device.unitName}}</p>

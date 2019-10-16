@@ -2,13 +2,8 @@
     <div>
         <header class="layout-nav">
             <div class="layout-nav-wrap">
-                <div class="layout-logo">
-                    <img src="/static/img/logo.png" />
-                </div>
+                <div class="layout-nav-title">智慧门诊疫苗接种应用系统</div>
                 <div class="layout-nav-profile">
-                    <div class="layout-welcome">
-                        欢迎，【{{ user ? user.name : ''}}】
-                    </div>
                     <Dropdown>
                         <div class="layout-avatar">
                             <img src="/static/img/user.png" />
@@ -26,6 +21,9 @@
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
+                    <div class="layout-welcome">
+                        {{ user ? user.name : '李晓文'}}
+                    </div>
                 </div>
             </div>
         </header>
