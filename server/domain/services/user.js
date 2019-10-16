@@ -77,15 +77,19 @@ module.exports = {
    */
   checkToken: async function(token) {
     logger.debug(`checkToken param: ${token}`);
-    let user = await Domain.models.user.findOne({ token: token }, null, {
-      lean: true
-    });
+    let user = await Domain.models.user.findOne({ token: token }, null, {lean: true}).populate({
+        path: 'role',
+        populate: {
+            path: 'permission'
+        }
+    });console.log('user------>%j',user);
     if (user != null) {
       await this.refreshLastLogin(user.code);
       return {
         _id: user._id,
         code: user.code,
         name: user.name,
+          permission: user.role.permission,
         finger: user.finger
       }
     } else {
@@ -99,7 +103,7 @@ module.exports = {
    * @param password
    * @returns {Promise.<*>}
    */
-  /*login: async function(code, password) {
+  login: async function(code, password) {
     logger.debug(`login param code: ${code}, password: ${password}`)
     let op = await Domain.models.user.findOne({ code: code })
     logger.debug(op, code)
@@ -125,7 +129,7 @@ module.exports = {
     } else {
       throw Libs.error('0002', `用户${code}不存在`) //用户${code}不存在
     }
-  },*/
+  },
 
   /**
    * 更新用户最近一次token
@@ -200,7 +204,7 @@ module.exports = {
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
-        $set: { ...requestBody }
+        $set: requestBody
       }
     )
   },
