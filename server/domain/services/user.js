@@ -89,7 +89,7 @@ module.exports = {
         _id: user._id,
         code: user.code,
         name: user.name,
-          permission: user.role.permission,
+          //permission: user.role.permission,
         finger: user.finger
       }
     } else {

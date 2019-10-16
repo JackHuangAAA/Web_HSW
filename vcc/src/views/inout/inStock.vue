@@ -4,18 +4,18 @@
         <div class="black" v-if="addForm">
             <div class="addForm">
                 <img src="/static/img/close.png" @click="cancel()">
-                <div class="vaccineAddOne">
+                <div class="vaccineAddOne" v-if="addVaccineOne">
                     <p class="vaccineAddName">{{addVaccineOne}}:</p>
                     <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
                 </div>
-                <div class="vaccineAddTwo">
+                <div class="vaccineAddTwo" v-if="addVaccineTwo">
                     <p class="vaccineAddName">{{addVaccineTwo}}:</p>
                     <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
                 </div>
                 <div class="cancel" @click="cancel()">
                     取消
                 </div>
-                <div class="addYes" @click="yes()">
+                <div class="addYes" @click="inStock()">
                     确定
                 </div>
             </div>
@@ -45,12 +45,12 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineData" @click="addVaccine(index)">
-                                <div class="cabineLeft">
+                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="addVaccine(index)">
+                                <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
                                     <p class="vaccineOneCount">{{item.countOne||0}}支</p>
                                 </div>
-                                <div class="cabineRight">
+                                <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
                                 </div>
@@ -68,43 +68,103 @@
     </div>
 </template>
 <script>
+    import {mapGetters} from 'vuex'
     export default {
         data() {
             return {
-                cabineData: [{nameOne: '狂犬疫苗',nameTwo: '麻疹疫苗',countOne:100,countTwo:100},{},{},{}],
+                cabineDatas: [],
                 index: '1',
-                row: 0,
+                row: 5,
                 addForm: false, //添加弹窗是否显示
                 addVaccineOne: '',
                 addVaccineTwo: '',
-                vaccineOneCount: "",
-                vaccineTwoCount: ""
+                vaccineOneCount: 0,
+                vaccineTwoCount: 0,
+                vaccineOneId: '',
+                vaccineTwoId: '',
             }
         },
         computed: {
-
+            ...mapGetters({
+                user: 'user',
+                device: 'device',
+            })
         },
         components:{},
         methods: {
-            back: function(){
+            async queryDrawerByCondition(){
+                this.cabineDatas = [];
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
+                    device: this.device._id
+                });
+                let array = res.data;
+                for (let i = 0; i < 10; i++) {
+                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
+                    if (num > 0) {
+                        for (let k = 0; k < num; k++) {
+
+                            if (k == 0) {
+                                temp.nameOne = vaccine[k].name;
+                                temp.countOne = vaccine[k].surplus;
+                                temp.idOne = vaccine[k]._id;
+                            }
+                            if (k == 1) {
+                                temp.nameTwo = vaccine[k].name;
+                                temp.countTwo = vaccine[k].surplus;
+                                temp.idTwo = vaccine[k]._id;
+                            }
+                        }
+                    } else {
+                        temp.nameOne = '';
+                        temp.countOne = '';
+                        temp.nameTwo = '';
+                        temp.countTwo = '';
+                    }
+                    this.cabineDatas.push(temp);
+                }
+            },
+            back(){
                 this.$router.push('/main');
             },
-            addVaccine: function(index){
-                console.log(index);
-                this.addForm = true;
-                this.addVaccineOne = this.cabineData[index].nameOne;
-                this.addVaccineTwo = this.cabineData[index].nameTwo;
+            addVaccine(index){
+                this.addVaccineOne = this.cabineDatas[index].nameOne;
+                this.addVaccineTwo = this.cabineDatas[index].nameTwo;
+                this.vaccineOneCount = this.cabineDatas[index].countOne;
+                this.vaccineTwoCount = this.cabineDatas[index].countTwo;
+                this.vaccineOneId = this.cabineDatas[index].idOne;
+                this.vaccineTwoId = this.cabineDatas[index].idTwo
+                if(this.addVaccineOne || this.addVaccineTwo){
+                    this.addForm = true;
+                }
             },
-            cancel: function(){
+            cancel(){
+                this.addVaccineOne = '';
+                this.addVaccineTwo = '';
+                this.vaccineOneCount = 0;
+                this.vaccineTwoCount = 0;
                 this.addForm = false;
             },
-            yes: function(){
+            async inStock(){
+                if(this.vaccineOneId){
+                    await this.$api.post("/vaccine/modifyVaccine", {
+                        id: this.vaccineOneId,
+                        total: this.vaccineOneCount,
+                        surplus: this.vaccineOneCount
+                    });
+                }
+                if(this.vaccineTwoId){
+                    await this.$api.post("/vaccine/modifyVaccine", {
+                        id: this.vaccineTwoId,
+                        total: this.vaccineTwoCount,
+                        surplus: this.vaccineTwoCount
+                    });
+                }
+                this.queryDrawerByCondition();
                 this.addForm = false;
             }
         },
         mounted() {
-            this.row = Math.ceil(this.cabineData.length/2);
-            console.log(this.row);
+            this.queryDrawerByCondition();
         }
     };
 </script>
