@@ -25,8 +25,8 @@
         <div class="cabineStatus">
             <div class="temperature">
                 <img src="/static/img/temperature.png">
-                <p class="temP">{{temperatureDes}}</p>
-                <p class="temStatus">{{temperature}}</p>
+                <p class="temP">{{temperature}}</p>
+                <p class="temStatus">{{temperatureDes}}</p>
                 <!--<p class="roomTem">室温： 26℃</p>-->
                 <p class="tem1">{{temperature-3}}</p>
                 <p class="tem2">{{temperature-2}}</p>
