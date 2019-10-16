@@ -130,9 +130,11 @@
                 this.form.address.provinceName = event.label;
             },
             changeCity(event) {
+                   console.log('in city')
                 this.form.address.cityName = event.label;
             },
             changeCounty(event){
+                   console.log('in counet')
                 this.form.address.countyName = event.label;
             },
             changeUnit(event){
@@ -142,13 +144,13 @@
                 //this.$refs[name].validate((valid) => {
                     //if (valid) { // 新增操作
                         //新增类型时，型号保存到this.typeForm.models，点击保存按钮才保存数据
-
-                            this.$api.post('/device/modifyDevice', {
-                                id: this.device._id,
-                                ...this.form
-                            }).then(response => {
-                                this.$Message.success('修改设备归属成功!');
-                            });
+                            console.log(this.form, 'form')
+                            // this.$api.post('/device/modifyDevice', {
+                            //     id: this.device._id,
+                            //     ...this.form
+                            // }).then(response => {
+                            //     this.$Message.success('修改设备归属成功!');
+                            // });
 
                     //}
                 //});

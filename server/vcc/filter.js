@@ -27,8 +27,10 @@ const bindUserFilter = async (ctx,next) => {console.log('ctx.url----------'+ctx.
                 !_.endsWith(ctx.url, 'test=0')
             ) {
                 let token = ctx.cookies.get('token');
+                console.log(token,'-----------------token')
                 if (!_.isEmpty(token)) {
                     let result = await Domain.services.user.checkToken(token);
+                       console.log(result,'-----------------result')
                     ctx.currentUser = result;
                     await next();
                 } else {

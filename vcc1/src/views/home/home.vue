@@ -48,7 +48,7 @@ const changeItem = (key, value, obj) => {
     return el;
   });
 };
-import homecard from "./data/homecard";
+// import homecard from "./data/homecard";
 import alarminfo from "./alarminfo";
 import thermometer from "./thermometer";
 import itemCard from "_c/main/itemcard";

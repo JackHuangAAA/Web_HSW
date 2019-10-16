@@ -18,7 +18,7 @@
 <script>
 import { mapGetters } from "vuex";
 import alarmcard from "_c/main/alarmcard";
-import columns from "./data/columns";
+// import columns from "./data/columns";
 export default {
   name: "alarm",
   components: {

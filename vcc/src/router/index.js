@@ -32,6 +32,7 @@ router.beforeEach((to, from, next) => {console.log(to.path+'------------'+from.p
     let menu = getRouterConfig(to.path);
     if (menu != null) {
         let p = Promise.resolve();
+        console.log(store.getters.user , 'store.getters.user================================== ')
         if (store.getters.user == null && to.path != '/login') { //当前用户信息不存在
             p = api.get('/user/current').then((result) => {
                 store.dispatch('saveUser', result.data);
