@@ -1,10 +1,10 @@
 <!--库存详细-->
 <template>
     <div class="inoculate card">
-        <Row>
+        <Row class="inoculate-title">
             <Col span="24">详情页面</Col>
         </Row>
-        <Row>
+        <Row class="inoculate-table-row">
             <Col span="1">#</Col>
             <Col span="6">疫苗名称</Col>
             <Col span="5">位置信息</Col>
@@ -12,7 +12,7 @@
             <Col span="4">接种数量</Col>
             <Col span="4">剩余数量</Col>
         </Row>
-        <Row v-for="(item, index) in datas">
+        <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
             <Col span="1">{{index+1}}</Col>
             <Col span="6">{{item.name}}</Col>
             <Col span="5">({{item.position}})</Col>
@@ -20,6 +20,7 @@
             <Col span="4">{{item.total-item.surplus}}</Col>
             <Col span="4">{{item.surplus}}</Col>
         </Row>
+        <div class="goback">返回上一页</div>
     </div>
 </template>
 
@@ -41,8 +42,8 @@
         methods: {
             async getDetails(val) {
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {id: val});
-                this.position = res.data[0].x+','+res.data[0].y;
-                this.datas = res.data[0].vaccine;
+                this.position = res.data.rs[0].x+','+res.data.rs[0].y;
+                this.datas = res.data.rs[0].vaccine;
             }
         },
         mounted() {

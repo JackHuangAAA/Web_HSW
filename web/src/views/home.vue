@@ -1,6 +1,6 @@
 <template>
-    <div class="layout">
-        <!-- 导航头部 -->
+    <!--<div class="layout">
+        &lt;!&ndash; 导航头部 &ndash;&gt;
         <header class="layout-nav">
             <div class="layout-nav-wrap">
                 <div class="layout-logo">
@@ -46,7 +46,7 @@
                 <div>加载中...</div>
             </Spin>
         </div>
-        <!--设置-->
+        &lt;!&ndash;设置&ndash;&gt;
         <Modal ref="settingModal" title="密码修改" :width="534" :height="300" :closable="false" :mask-closable="false" :footerHide="true">
             <Form ref="frmSetting" :model="frmSetting" :rules="ruleValidate" :label-width="100" slot="content">
                 <FormItem label="请输入旧密码" prop="password">
@@ -64,14 +64,78 @@
                 <Button type="primary" @click="saveSetting('frmSetting')" style="height: 36px; width:88px;">保 存</Button>
             </div>
         </Modal>
+    </div>-->
+    <div class="layout">
+        <HeaderComponent></HeaderComponent>
+        <div class="layout-main">
+            <LeftComponent v-bind:menus="menus"></LeftComponent>
+            <div class="layout-main-right" style="border: none;">
+                <div class="layout-content">
+                    <div class="layout-content-main">
+                        <router-view ref="contentView"></router-view>
+                        <Spin fix v-show="loading">
+                            <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                            <div>加载中...</div>
+                        </Spin>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 <script>
     import {mapGetters, mapActions, mapState} from 'vuex'
     import md5 from 'js-md5'
-    import routerConfig from '@/router'
+    import HeaderComponent from '@/components/header.vue'
+    import LeftComponent from '@/components/left.vue'
 
     export default {
+
+        data() {
+            return {
+                loading: false,
+                menus: [],
+            }
+        },
+        computed: {
+            ...mapGetters({
+                currentMenu: 'currentMenu',
+                user: 'user'
+            })
+        },
+        components: {
+            HeaderComponent,
+            LeftComponent
+        },
+        methods: {
+            ...mapActions({
+                setCurrentMenu: 'setCurrentMenu',
+                saveUser: 'saveUser'
+            })
+        },
+        mounted() {
+            this.$api.get('/user/current').then((result) => {console.log("VVV9-----------"+JSON.stringify(result.data));
+                this.menus = result.data.permission.children;
+                this.menus.unshift({
+                    expand: true,
+                    icon: "",
+                    pid: null,
+                    sort: 0,
+                    url:'/homePage',
+                    title: "首页"
+                });
+                this.saveUser(result.data);
+                this.setCurrentMenu(this.menus);
+                sessionStorage.setItem('menus', JSON.stringify( this.menus) );
+                sessionStorage.setItem('user', JSON.stringify( result.data) );
+            });
+            if (this.$route.path == '/') {
+                this.$router.push('/main');
+            }
+        }
+    }
+    /*export default {
 
         data () {
             const checkOldPwd = (rule, value, callback, source, options) => {
@@ -99,8 +163,7 @@
                 loading: false,
                 menus: [],
                 title: this.$config.appName,
-                userPic: 'tuichu',
-                //activeMenu: null,
+                //userPic: 'tuichu',
                 frmSetting: {
                     name: '',
                     phone: '',
@@ -148,7 +211,10 @@
                 currentMenu: 'currentMenu'
             })
         },
-        components:{},
+        components:{
+            HeaderComponent,
+            LeftComponent
+        },
         watch:{
             '$route.path':function(n,o){
                 this.currentPath = n
@@ -208,9 +274,24 @@
             });
         },
         mounted(){
-            if(this.$route.path == '/'){
-                this.$router.push('/main');
-            }
+            this.$api.get('/user/current').then((result) => {
+                this.menus.unshift({
+                    expand: true,
+                    icon: "",
+                    pid: null,
+                    sort: 0,
+                    url:'/homePage',
+                    title: "首页"
+                });
+                this.saveUser(result.data);
+                this.menus = result.data;
+                if(this.$route.path == '/'){
+                    this.$router.push('/main');
+                }
+            });
         }
-    }
+    }*/
 </script>
+<style lang="less" scoped>
+    @import "~@/style/layout.less";
+</style>

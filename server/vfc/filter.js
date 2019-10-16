@@ -4,12 +4,15 @@
 'use strict';
 
 const logger = Libs.logger.getLogger('filter');
-const excluded = ['/user/login'];
+const excluded = ['/zcy/checkUser',
+'/user/modifyUserByCode',
+'/device/queryDeviceByCondition',
+'/device'];
 const bindUserFilter = async (ctx,next) => {
     try {
         if (_.find(excluded, v => {
                 return _.startsWith(ctx.url, v);
-            }) == undefined) {
+            }) == undefined) {console.log('11---->'+ctx.url);
             let token = ctx.cookies.get('token');
             if (!_.isEmpty(token)) {
                 let result = await Domain.services.user.checkToken(token);

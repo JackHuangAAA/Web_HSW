@@ -10,7 +10,7 @@ const paginate = require('mongoose-paginate');
  */
 const roleSchema = mongoose.Schema({
     name: String,    //名称
-    type: Number,    //类型(0:运营公司(银信);1:服务公司(药企))
+    type: Number,    //类型(0:;1:)
     permission: {type:mongoose.Schema.Types.ObjectId, ref:'permission'}, //权限
     notes: String,   //说明
     createDate: {type: Date, default: Date.now}, //创建时间

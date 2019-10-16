@@ -55,7 +55,7 @@ router.get('/queryVaccinationByCondition',
  * @apiGroup vaccination
  * @apiVersion 1.0.0
  * @apiDescription 查询当日该设备接种人
- * @apiParam {Number} deviceid 设备ID   ！！！vaccination_models未找到该字段
+ * @apiParam {Number} device   设备ID   ！！！vaccination_models未找到该字段
  * @apiSuccess {JSON}  Object  version model数组
  */
 router.get('/queryVaccinationDailyInfo',

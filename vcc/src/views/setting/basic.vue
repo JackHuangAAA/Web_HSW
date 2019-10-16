@@ -1,6 +1,6 @@
 <!--设备基础-->
 <template>
-    <div>
+    <div class="basic">
         <Row class="bs-row" type="flex" :gutter="8" align="middle">
             <Col span="4" justify="end">
                 <p class="bs-title">
@@ -162,5 +162,6 @@
 </script>
 
 <style lang="less">
+    @import '~@/style/color.less';
     @import "~@/style/basic.less";
 </style>
