@@ -41,9 +41,7 @@ http.listen(9996 || 8080, '0.0.0.0');
 async function execute() {
     _.mapKeys(map, async function (value, key) {
         // 报警信息 （温度报警次数、报警次数、报警信息）
-
         let deviceData = await Domain.services.device.queryDeviceByCondition({ code: key });
-        console.log(deviceData, 'deviceData')
         let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: deviceData[0]._id });
         // 疫苗种类
         let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: deviceData[0]._id });

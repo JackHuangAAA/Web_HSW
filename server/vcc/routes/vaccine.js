@@ -87,14 +87,29 @@ router.get('/queryVaccineStorageNum',
  * @apiParam {String} device 设备id
  * @apiSuccess {OBject}  json  操作返回数据
  */
-router.post('/clearVacineTotal',
+router.post('/clearVaccineTotal',
     Libs.router(async (ctx, next) => {
         return await Domain.services.vaccine.clearVaccineTotal(ctx.request.body);
     })
 );
 
 /**
- * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗数量信息
+ * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 更新抽屉内疫苗信息
+ * @apiParam {Array} ids 疫苗ids
+ * @apiParam {Array} totals 入库后抽屉内疫苗数组
+ * @apiSuccess {OBject}  json  操作返回数据
+ */
+router.post('/modifyVaccine',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+    })
+);
+
+/**
+ * @api {POST} /vaccine/modifyVaccineNum  更新抽屉内疫苗数量信息
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 更新抽屉内疫苗数量信息
@@ -102,9 +117,9 @@ router.post('/clearVacineTotal',
  * @apiParam {Array} totals 入库后抽屉内疫苗数量数组
  * @apiSuccess {OBject}  json  操作返回数据
  */
-router.post('/modifyVaccine',
+router.post('/modifyVaccineNum',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+        return await Domain.services.vaccine.modifyVaccineNum(ctx.request.body);
     })
 );
 

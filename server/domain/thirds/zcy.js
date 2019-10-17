@@ -37,7 +37,7 @@ module.exports = {
           child: [
             {
               name: '上城区',
-              code: '330102000000',
+              code: '330101000000',
               child: [
                 {
                   name: '清波街道',

@@ -57,6 +57,7 @@ module.exports = {
                     updateDate: new Date()
                 }
             });
+<<<<<<< HEAD
 
         let query = {device:requestBody.device};
         let result = await Domain.models.temperature.find(query).sort({ createDate : -1 });
@@ -104,6 +105,9 @@ module.exports = {
         }else{
             return await Domain.models.temperature.create(requestBody);
         }
+=======
+        return Domain.models.temperature.create(requestBody);
+>>>>>>> develop
     }
 
 };
