@@ -123,4 +123,19 @@ router.post('/modifyVaccineNum',
     })
 );
 
+/**
+ * @api {GET} /vaccine/queryVaccineByCondition  按指定条件查询疫苗信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 按指定条件查询疫苗信息
+ * @apiParam {String} device 设备id
+ * @apiParam {String} code 疫苗编码
+ * @apiSuccess {Array}  rs  查询疫苗信息
+ */
+router.get('/queryVaccineByCondition',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.queryVaccineByCondition(ctx.request.query);
+    })
+);
+
 module.exports = router;

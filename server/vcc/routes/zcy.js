@@ -92,8 +92,20 @@ router.get('/queryVaccineKinds',
  */
 router.post('/reciveVaccination',
     Libs.router(async (ctx, next) => {
-        return await Domain.thirds.zcy.reciveVaccination(ctx.request.query);
+        return await Domain.thirds.zcy.reciveVaccination(ctx.request.body);
     })
 );
 
+/**
+ * @api {POST} /reciveVaccinationStatus  接收任务完成状态
+ * @apiGroup zcy
+ * @apiVersion 1.0.0
+ * @apiDescription 接收政采云推送的接种信息
+ * @apiSuccess Json  Object 响应信息
+ */
+router.post('/reciveVaccinationStatus',
+    Libs.router(async (ctx, next) => {
+        return await Domain.thirds.zcy.reciveVaccinationStatus(ctx.request.body);
+    })
+);
 module.exports = router;
