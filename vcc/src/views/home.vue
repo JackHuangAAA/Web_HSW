@@ -20,9 +20,12 @@
                 </div>
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{device.cabinetNo}}</div>
-                <div class="user" @click="logout()">
+                <div class="user">
                     <p>{{user.name}}</p>
                     <img src="/static/img/userph1.png">
+                </div>
+                <div class="out">
+                    <span @click="logout()" style="cursor: pointer;z-index:99">退出</span>
                 </div>
                 <p class="dateTime">{{nowdate}}</p>
             </div>

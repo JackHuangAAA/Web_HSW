@@ -1,8 +1,9 @@
 @import '~@/style/color.less';
 .inoculate{
-    margin: 20px;
-    width: ~'calc(100% - 40px)';
-    height: ~'calc(100% - 40px)';
+    margin-top: 20px;
+    margin-left: 20px;
+    width: calc(100% - 40px)!important;
+    height: ~'calc(100% - 40px)'!important;
     background: @white;
     border-radius: 10px;
     padding: 2.125rem 2.625rem;
@@ -25,6 +26,7 @@
     align-items: flex-start;
     justify-content: center;
     margin-left: 2rem;
+    position: relative;
 }
 .inoculate-content{
     margin-top: 1.25rem;
@@ -75,4 +77,19 @@
 }
 .inoculate-notice-rs img{
     margin-right: 20px;
+}
+.leftBcg{
+    width: 49%;
+    height: 15rem;
+    background-color: #F4F7FC;
+    position: absolute;
+    top: 3rem;
+}
+.rightBcg{
+    width: 49%;
+    height: 15rem;
+    background-color: #F4F7FC;
+    position: absolute;
+    top: 3rem;
+    left: 51%;
 }

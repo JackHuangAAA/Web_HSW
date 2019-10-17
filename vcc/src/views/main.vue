@@ -10,7 +10,9 @@
             </div>
             <div class="vaccineContent">
                 <div v-for="(item,index) in vaccineData" class="vaccineStatusShow" 
-                v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10}'>
+                v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,
+                tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10,
+                noData:item.vaccineOneCount == ""&&item.vaccineOneCount !== 0}'>
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
                         <p class="vaccineOneName">{{item.vaccineOneName}}</p>
                         <p class="vaccineOneCount">{{item.vaccineOneCount || 0}}支</p>
@@ -123,6 +125,7 @@
                         temp.vaccineTwoCount = '';
                     }
                     this.vaccineData.push(temp);
+                    console.log(this.vaccineData);
                 }
             },
             vaccineIn(){

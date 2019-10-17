@@ -233,7 +233,7 @@
   color: white;
   height: 2.3125rem;
   line-height: 2.3125rem;
-  left: 8%;
+  left: 14%;
   top: 18.66%;
 }
 .temStatus {
@@ -300,4 +300,7 @@
   line-height: 1rem;
   left: 45.5%;
   color: white;
+}
+.noData {
+  background-color: white!important;
 }
