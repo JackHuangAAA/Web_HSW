@@ -10,7 +10,9 @@
             </div>
             <div class="vaccineContent">
                 <div v-for="(item,index) in vaccineData" class="vaccineStatusShow" 
-                v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10}'>
+                v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,
+                tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10,
+                noData:item.vaccineOneCount == ""&&item.vaccineOneCount !== 0}'>
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
                         <p class="vaccineOneName">{{item.vaccineOneName}}</p>
                         <p class="vaccineOneCount">{{item.vaccineOneCount || 0}}支</p>
@@ -123,6 +125,7 @@
                         temp.vaccineTwoCount = '';
                     }
                     this.vaccineData.push(temp);
+                    console.log(this.vaccineData);
                 }
             },
             vaccineIn(){
@@ -133,31 +136,7 @@
             }
         },
         mounted() {
-            //接收硬件推送温度信息
-            //this.$device.subscribe('SERVER_PUSH', (data) => {
-                console.log('subscribe==>SERVER_PUSH');
-                let temp = '', val= 8;//data.data;
-                if(val>5 || val<0){
-                    this.temperatureDes = '异常';
-                    if(val>5){
-                        temp = '高于正常温度5℃';
-                    }else {
-                        temp = '低于正常温度0℃';
-                    }
-                    this.$api.post("/alarm/saveAlarm", {
-                        device: this.device._id,
-                        deviceType: 1, //1:接种柜;
-                        unitCode: this.device.unitCode,
-                        unitName: this.device.unitName,
-                        type: 1,       //1:温度异常
-                        reason: `当前温度${val},${temp}`
-                    })
-                }else{
-                    this.temperatureDes = '正常';
-                }
-                this.temperature = val;
-            //});
-
+            //查询首页数据
             this.queryDrawerByCondition();
             this.queryAlarmByByCondition();
             this.queryVaccinationDailyInfo();

@@ -56,6 +56,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
+        if (!_.isEmpty(requestBody.vaccineCode)) {
+            query.push({ "vaccine": requestBody.vaccineCode });
+        }
         query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.drawer.find(query).sort({ "y": 1, "x": 1 }).populate("vaccine");
         return result;

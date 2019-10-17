@@ -28,6 +28,7 @@
 import loginform from '@/components/loginform'
 import fplogin from '@/components/fplogin'
 import { mapGetters, mapActions } from "vuex";
+
 export default {
     components: {
         loginform,
@@ -65,7 +66,7 @@ export default {
                 code: 'admin',
                 password: '000000',
 
-            }
+            };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
                 let user = await this.$api.post("/user/modifyUserByCode", {
@@ -76,16 +77,24 @@ export default {
                 this.$router.push('/');
             }
         },
-        fingerLogin: function() {
+        fingerLogin() {
             this.show = true;
         },
-        accountLogin: function() {
+        accountLogin() {
             this.show = false;
+        },
+        //接收指纹比对结果
+        checkFinger(){
+            /*this.$device.subscribe("FINGER_RESULT", (res) => {
+                console.log('SERVER_PUSH==>FINGER_RESULT');
+            );*/
         }
     },
     mounted() {
         //this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
         //this.$device.subscribe("SOCKET_DATA", this.SOCKET());
+        //指纹登录 todo
+        this.checkFinger();
     },
 };
 </script>

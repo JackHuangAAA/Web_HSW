@@ -114,6 +114,33 @@ module.exports = {
                 $set: { ...requestBody }
             }
         );
+    },
+
+    /**
+     * 按指定条件查询疫苗信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    queryVaccineByCondition: async function(requestBody){
+        logger.debug(`queryVaccineByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [], sort=null;
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({ "code": requestBody.code });
+        }
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({ "name": requestBody.name });
+        }
+        if (requestBody.surplusIsNotZero) {
+            query.push({ "surplus": {'$gt':0}});
+        }
+        if (requestBody.sortSurplus) {
+            sort = {sort:{surplus: 1}};
+        }
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        return await Domain.models.vaccine.find(query,null, sort);
     }
 
 };
