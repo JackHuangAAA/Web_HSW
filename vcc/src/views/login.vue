@@ -62,12 +62,6 @@ export default {
                     break;
             }
         },
-        SOCKET(cb) {
-            console.log(cb);
-        },
-        SCANNER(cb) {
-            console.log(cb);
-        },
         async userLogin(form) {
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {

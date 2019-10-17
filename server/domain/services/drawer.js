@@ -47,6 +47,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.id)) {
             query.push({ "_id": requestBody.id });
         }
+        if (!_.isEmpty(requestBody['ids[]'])) {
+            query.push({ "_id": { $in: requestBody['ids[]'] } });
+        }
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }

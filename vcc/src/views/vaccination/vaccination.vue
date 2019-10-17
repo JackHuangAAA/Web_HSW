@@ -7,22 +7,22 @@
                 <div class="inoculate-info">
                     <div class="inoculate-info-column">
                         <div class="inoculate-content human-info">
-                            <div>{{info.customer.code}}号</div>
-                            <div>&nbsp;&nbsp;{{info.customer.name}}</div>
+                            <div>{{info.customer? info.customer.code:''}}号</div>
+                            <div>{{info.customer?info.customer.name: ''}}</div>
                         </div>
                         <div class="inoculate-content">
                             <div>接种疫苗：</div>
-                            <div class="blue">{{info.customer.vaccineName}}</div>
+                            <div class="blue">{{info.customer?info.customer.vaccineName: ''}}</div>
                         </div>
                     </div>
                     <div class="inoculate-info-column">
                         <div class="inoculate-content">
                             <div>年龄：</div>
-                            <div>{{info.customer.age}}</div>
+                            <div>{{info.customer?info.customer.age:''}}</div>
                         </div>                        
                         <div class="inoculate-content">
                             <div>接种支数：</div>
-                            <div>{{info.customer.vaccineNum}}</div>
+                            <div>{{info.customer?info.customer.vaccineNum:''}}</div>
                         </div>
                     </div>
                 </div>
@@ -78,6 +78,10 @@
         methods: {
             //比对疫苗信息
             async matchInfo(obj){
+
+                //疫苗数量减少1
+
+                //比对成功，增加接种信息
 
             },
             //测试使用

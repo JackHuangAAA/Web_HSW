@@ -31,6 +31,7 @@
                     <div class="alarm-card-info">{{item.solution}}</div>
                 </Col>
             </Row>
+            <div v-if="nullData" style="width:100%;text-align:center;font-size: 20px;">暂无数据</div>
         </div>
     </div>
 </template>
@@ -48,7 +49,10 @@
         computed: {
             ...mapGetters({
                 device: "device"
-            })
+            }),
+            nullData:function () {
+                return this.datas.length==0?true:false;
+            }
         },
         methods: {
             getAlarms() {
