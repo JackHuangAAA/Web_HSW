@@ -49,8 +49,8 @@
         },
         computed: {
             ...mapGetters({
-                currentMenu: 'currentMenu',
-                user: 'user'
+                user: 'user',
+                // isactive:'isactive'
             })
         },
         components: {
@@ -58,8 +58,7 @@
         },
         methods: {
             ...mapActions({
-                setCurrentMenu: 'setCurrentMenu',
-                saveUser: 'saveUser'
+                CurrentMenu: 'setCurrentMenu',
             }),
             changeMenu(index){
                 this.isactive = index;

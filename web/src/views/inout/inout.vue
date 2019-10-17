@@ -28,11 +28,11 @@
             <Col span="2">库存剩余</Col>
             <Col span="2">操作</Col>
         </Row>
-        <Row v-for="item of 10" :key="item" class="main-table-body">
-            <Col span="1" class="id-center">{{item}}</Col>
-            <Col span="2">冷藏柜</Col>
+        <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
+            <Col span="1" class="id-center">{{index+1}}</Col>
+            <Col span="2">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
             <Col span="3">Y750230-64368</Col>
-            <Col span="5">西湖区蒋村街道社区卫生服务中心</Col>
+            <Col span="5">{{item.unitName||'--'}}</Col>
             <Col span="5">2019-9-29 ~ 2019-9-29</Col>
             <Col span="2">300</Col>
             <Col span="2">100</Col>
@@ -45,15 +45,35 @@
     </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
     data(){
         return{
             value1:'',
             value2:'',
             value3: ['2016-01-01', '2016-02-15'],
-            active:3
+            active:1,
+            lists:[],
+
         }
-    }
+    },
+    methods:{
+        queryInouts(){
+            this.$api.get('/inout/queryInouts',{size:10,page:this.active,test:0}).then(res=>{
+                let data=res.data.rs
+                for(let i=0;i<data.length;i++){
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                }
+                this.lists=data
+            })
+        },
+        routerTo(){
+            this.$router.push({})
+        },
+    },
+    created(){
+        this.queryInouts()
+    },
 }
 </script>
 <style lang="less" scoped>

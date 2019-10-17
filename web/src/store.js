@@ -7,7 +7,8 @@ import Vue from "vue"
  const store = {
     state: {
         user: null,
-        //currentMenu: {}//当前菜单
+        // currentMenu: {}//当前菜单
+        isactive:0
     },
 
     getters: {
@@ -17,6 +18,9 @@ import Vue from "vue"
         // currentMenu: state => {
         //     return state.currentMenu;
         // }
+        isactive:state=>{
+            return state.isactive
+        }
     },
 
     mutations: {
@@ -26,6 +30,9 @@ import Vue from "vue"
         // ['CURRENT_MENU']: (state, action) => {
         //     state.currentMenu = action;
         // }
+        ['IS_ACTIVE']:(state,action)=>{
+            state.isactive=action
+        }
     },
 
     actions: {
@@ -35,6 +42,9 @@ import Vue from "vue"
         // setCurrentMenu({commit}, currentMenu){
         //     commit('CURRENT_MENU', currentMenu);
         // }
+        setActive({commit},action){
+            commit('IS_ACTIVE',action)
+        }
     }
 }
 

@@ -127,6 +127,8 @@
                 i_abnormalCount:0,
                 i_normalCount:0,
                 lists:[],
+                alarmList:[],
+                
             }
         },
         computed: {
@@ -172,7 +174,7 @@
             },
             queryAlarmDailyInfo(){
                 this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
-                    console.log(res)
+                    
                 })
             },
 

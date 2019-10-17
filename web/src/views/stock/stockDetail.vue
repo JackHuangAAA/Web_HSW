@@ -44,7 +44,7 @@
             </Row>
         </Row>
         <Row>
-            <div class="comeback">返回</div>
+            <div class="comeback" @click="routerTo()">返回</div>
             <Page :total="100" show-elevator :current="active"/>
         </Row>        
     </div>
@@ -54,7 +54,7 @@ export default {
     data(){
         return{
             value1:'',
-            active:3,
+            active:1,
             list:[
                 {'num':1},
                 {'num':2},
@@ -65,8 +65,21 @@ export default {
     },
     created(){
         this.getlist()
+        this.queryDeviceByVaccineStock()
     },
     methods:{
+        queryDeviceByVaccineStock(){
+            this.$api.get('/device/queryDeviceByVaccineStock',
+            {deviceId:this.$route.query.code,
+            page:this.active,
+            size:10,
+            test:0}).then(res=>{
+
+            })
+        },
+        routerTo(){
+            this.$router.go(-1)
+        },
         getlist(){
             for(let i=0;i<4;i++){
                 this.$set(this.list[i],"isShow",false)
