@@ -7,7 +7,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import columns from "./data/columns.js";
+// import columns from "./data/columns.js";
 import showTable from "_c/main/showTable";
 export default {
   name: "fingerprint",

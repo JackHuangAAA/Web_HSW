@@ -3,8 +3,8 @@
             <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
                     <img class="menuListLogo" src="/static/img/logo.png">
-                    <p class="logoDes">{{device.unitName}}</p>
-                    <div class="local">{{device.address.countyName}}</div>
+                    <p class="logoDes">{{device && device.unitName || ''}}</p>
+                    <div class="local">{{device && device.address && device.address.countyName || ''}}</div>
                     <p class="menuListP"></p>
                     <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
                         <img class="menuImg" :src="item.img">
@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="pageName">{{pageName}}</div>
-                <div class="code">{{device.cabinetNo}}</div>
+                <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
                     <img src="/static/img/userph1.png">
@@ -33,14 +33,16 @@
                 <router-view ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
+        </div>
+    </div>
 </template>
 <script>
-    import {mapGetters, mapActions, mapState} from 'vuex'
-    import md5 from 'js-md5'
-    import routerConfig from '@/router'
-    import moment from 'moment';
-    moment.locale('zh-cn');
-    global.moment = moment;
+import { mapGetters, mapActions, mapState } from 'vuex'
+import md5 from 'js-md5'
+import routerConfig from '@/router'
+import moment from 'moment';
+moment.locale('zh-cn');
+global.moment = moment;
 
     export default {
         name: "datetime",
@@ -72,12 +74,6 @@
         },
         created() {
             this.dateint();
-        },
-        components:{},
-        watch:{
-           /* '$route.path':function(n,o){
-                this.currentPath = n
-            }*/
         },
         methods: {
             ...mapActions({
@@ -137,12 +133,12 @@
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
-                        this.$router.push('/setting/setting');
+                        this.$router.push('/main');
                     }
                 });
             });
         }
-    }
+}
 </script>
 <style lang="less" scoped>
 @import "~@/style/home.less";
