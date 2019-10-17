@@ -282,7 +282,7 @@ div {
   font-size: 0.875rem;
   color: #3E4955;
   font-weight: bold;
-  left: calc(40%);
+  left: calc(20%);
 }
 .delImgTwo {
   width: 14px;
@@ -290,5 +290,5 @@ div {
   position: absolute;
   top: 50%;
   margin-top: -1.5px;
-  left: 93%;
+  left: 73%;
 }
