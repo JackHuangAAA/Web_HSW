@@ -37,7 +37,7 @@
                         </div>
                         <div class="inoculate-content">
                             <div>有效期：</div>
-                            <div>{{vaccine.expiry}}</div>
+                            <div>{{getExpiryDate(vaccine.expiry)}}</div>
                         </div>
                     </div>
                     <div class="inoculate-info-column">
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
     import moment from 'moment';
 
     export default {
@@ -71,19 +72,17 @@
         data() {
             return {
                 progress:0,
+                vaccinationData:'', //接种信息
                 info: '',
                 vaccine: ''
             };
         },
+        computed: {
+            ...mapGetters({
+                device: 'device',
+            })
+        },
         methods: {
-            //比对疫苗信息
-            async matchInfo(obj){
-
-                //疫苗数量减少1
-
-                //比对成功，增加接种信息
-
-            },
             //测试使用
             async getCustomer() {
                 let res = await this.$api.post("/zcy/reciveVaccination");
@@ -93,11 +92,49 @@
             async queryVaccine() {
                 let res = await this.$api.get(`/zcy/queryVaccine`);
                 this.vaccine = res.data;console.log('100-------------%',this.vaccine)
-            }
+            },
+            //比对疫苗信息
+            async matchInfo(obj){
 
+                //疫苗数量减少1
+
+                //比对成功，增加接种信息
+
+            },
+            getExpiryDate(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            async openDrawer(val){
+                //查询疫苗所在抽屉信息,使用规则：多个柜子满足,按最少优先使用
+                let vaccine = await this.$api.get(`/vaccine/queryVaccineByCondition`,{
+                    device: this.device._id,
+                    sortSurplus: true,
+                    surplusIsNotZero: true,
+                    code: '002'  //val.vaccineCode
+                });
+                let drawer = await this.$api.get(`/drawer/queryDrawerByCondition`,{
+                    device: this.device._id,
+                    vaccineCode: vaccine.data[0]._id
+                });
+                console.log('drawer===>',drawer)
+                //调用打开抽屉接口
+                this.$device.openDrawer();
+            },
+            //接收接种状态
+            receiveVaccination(){
+                this.$device.subscribe('VACCINATION_STATUS', (data) => {
+                    console.log('SERVER_PUSH==>VACCINATION_STATUS');
+                    let vaccination = null;
+
+                    this.$router.push('/main');
+                });
+            }
         },
         mounted() {
-            //接收导医台推送的接种信息
+            //接收推送的接种信息
+            this.vaccinationData = this.$route.query.vaccination;
+            //打开需要接种的疫苗所在抽屉
+            this.openDrawer(this.vaccinationData);
             let data = "";
             this.matchInfo(data);
             //测试使用

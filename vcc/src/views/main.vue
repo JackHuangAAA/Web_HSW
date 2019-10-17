@@ -133,31 +133,7 @@
             }
         },
         mounted() {
-            //接收硬件推送温度信息
-            //this.$device.subscribe('SERVER_PUSH', (data) => {
-                console.log('subscribe==>SERVER_PUSH');
-                let temp = '', val= 8;//data.data;
-                if(val>5 || val<0){
-                    this.temperatureDes = '异常';
-                    if(val>5){
-                        temp = '高于正常温度5℃';
-                    }else {
-                        temp = '低于正常温度0℃';
-                    }
-                    this.$api.post("/alarm/saveAlarm", {
-                        device: this.device._id,
-                        deviceType: 1, //1:接种柜;
-                        unitCode: this.device.unitCode,
-                        unitName: this.device.unitName,
-                        type: 1,       //1:温度异常
-                        reason: `当前温度${val},${temp}`
-                    })
-                }else{
-                    this.temperatureDes = '正常';
-                }
-                this.temperature = val;
-            //});
-
+            //查询首页数据
             this.queryDrawerByCondition();
             this.queryAlarmByByCondition();
             this.queryVaccinationDailyInfo();

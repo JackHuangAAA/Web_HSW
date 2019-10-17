@@ -119,6 +119,43 @@ global.moment = moment;
                     this.imgMenu = '/static/img/menuopen.png';
                     this.menuStatus = '展开菜单'
                 }
+            },
+            //接收温度信息
+            receiveTemperature(){
+                this.$device.subscribe('TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE');
+                    let temp = '', val= 8;//data.data;
+                    if(val>5 || val<0){
+                        this.temperatureDes = '异常';
+                        if(val>5){
+                            temp = '高于正常温度5℃';
+                        }else {
+                            temp = '低于正常温度0℃';
+                        }
+                        this.$api.post("/alarm/saveAlarm", {
+                            device: this.device._id,
+                            deviceType: 1, //1:接种柜;
+                            unitCode: this.device.unitCode,
+                            unitName: this.device.unitName,
+                            type: 1,       //1:温度异常
+                            reason: `当前温度${val},${temp}`
+                        })
+                    }else{
+                        this.temperatureDes = '正常';
+                    }
+                    this.temperature = val;
+                    //保存温度到设备记录
+                    this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
+                });
+            },
+            //接收接种信息
+            receiveVaccination(){
+                this.$device.subscribe('VACCINATION', (data) => {
+                    console.log('SERVER_PUSH==>VACCINATION');
+                    let vaccination = null;
+
+                    this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+                });
             }
         },
         mounted(){
@@ -132,6 +169,11 @@ global.moment = moment;
                     }
                 });
             });
+            //接收温度信息 todo
+            this.receiveTemperature();
+            //接收接种信息 todo
+            this.receiveVaccination();
+
         }
 }
 </script>
