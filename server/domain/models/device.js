@@ -22,6 +22,7 @@ const deviceSchema = mongoose.Schema({
     cabinetNo: String,//接种台号
     unitCode: String, //所属单位编号
     unitName: String, //所属单位
+    temperature:Number, //最新一次温度
     notes: String,    //备注
     createDate: {type: Date, default: Date.now}, //创建时间
     updateDate: {type: Date, default: Date.now}  //更新时间

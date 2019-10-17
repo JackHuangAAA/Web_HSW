@@ -107,13 +107,14 @@ module.exports = {
         logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
         let today = moment();
         let query = [];
-        let dailyInfo = { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate()  };
-        query.push({ "createDate": dailyInfo });
         //0查询总体设备状态统计；1查询各单位设备状态统计
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": parseInt(requestBody.type)});
+        }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         if(requestBody.flag=="1"){
 
-            return await Domain.models.device.aggregate([{$match:query},{$group:{
+            return await Domain.models.device.aggregate([{$group:{
                     _id:{
                         "type":"$type",
                         "status":"$status",
@@ -125,7 +126,6 @@ module.exports = {
         }else{
             return await Domain.models.device.aggregate([{$match:query},{$group:{
                     _id:{
-                        "type":"$type",
                         "status":"$status"
                     },
                     count:{$sum:1}

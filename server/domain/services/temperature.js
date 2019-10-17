@@ -50,6 +50,13 @@ module.exports = {
      */
     saveTemperatures: async function(requestBody){
         logger.debug(`saveTemperatures param: ${JSON.stringify(requestBody)}`);
+        await Domain.models.device.updateOne({'_id': requestBody.device},
+            {
+                $set: {
+                    temperature:requestBody.degree[0].value,
+                    updateDate: new Date()
+                }
+            });
         return Domain.models.temperature.create(requestBody);
     }
 
