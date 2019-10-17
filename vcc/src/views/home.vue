@@ -67,6 +67,9 @@ global.moment = moment;
                 device: 'device'
             })
         },
+        created() {
+            this.dateint();
+        },
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
