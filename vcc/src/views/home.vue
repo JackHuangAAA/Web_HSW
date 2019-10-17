@@ -20,14 +20,19 @@
                 </div>
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
-                <div class="user" @click="logout()">
+                <div class="user">
                     <p>{{user.name}}</p>
                     <img src="/static/img/userph1.png">
                 </div>
-            <p class="dateTime">{{nowdate}}</p>
+                <div class="out">
+                    <span @click="logout()" style="cursor: pointer;z-index:99">退出</span>
+                </div>
+                <p class="dateTime">{{nowdate}}</p>
+            </div>
+            <div class="main">
+                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
+            </div>
         </div>
-        <div class="main">
-            <router-view ref="contentView" style="width:100%;height:100%"></router-view>
         </div>
     </div>
 </template>

@@ -2,6 +2,8 @@
 <template>
     <div class="inoculate card">
         <Row class="inoculate-row">
+            <div class="leftBcg"></div>
+            <div class="rightBcg"></div>
             <Col span="12">
                 <div class="title-center">接种人信息</div>
                 <div class="inoculate-info">
