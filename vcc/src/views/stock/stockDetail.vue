@@ -41,7 +41,7 @@
         },
         methods: {
             async getDetails(val) {
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {id: val});console.log(res.data[0].y+'ttt-----------%j',res.data[0]);
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {id: val});
                 this.position = res.data[0].x+','+res.data[0].y;
                 this.datas = res.data[0].vaccine;
             }

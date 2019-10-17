@@ -12,7 +12,7 @@ const bindUserFilter = async (ctx,next) => {
     try {
         if (_.find(excluded, v => {
                 return _.startsWith(ctx.url, v);
-            }) == undefined) {console.log('11---->'+ctx.url);
+            }) == undefined) {
             let token = ctx.cookies.get('token');
             if (!_.isEmpty(token)) {
                 let result = await Domain.services.user.checkToken(token);

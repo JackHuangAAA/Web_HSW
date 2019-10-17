@@ -14,7 +14,7 @@ module.exports = {
    * @param requestBody
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
-  modifyUserByCode: async function(requestBody) {
+  modifyUserByCode: async function (requestBody) {
     logger.debug(`modifyUserByCode param: ${JSON.stringify(requestBody)}`);
     let user = await Domain.models.user.update(
       { code: requestBody.code },
@@ -40,7 +40,7 @@ module.exports = {
    * @param requestBody
    * @returns {*|T|Query}
    */
-  queryUserByCondition: function(requestBody) {
+  queryUserByCondition: function (requestBody) {
     logger.debug(`queryUserByCondition param: ${JSON.stringify(requestBody)}`);
     let query = [];
     if (!_.isEmpty(requestBody.code)) {
@@ -59,7 +59,7 @@ module.exports = {
    * @param requestBody
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
-  modifyUserById: async function(requestBody) {
+  modifyUserById: async function (requestBody) {
     logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.update(
       { _id: requestBody.id },
@@ -75,25 +75,26 @@ module.exports = {
    * @param token
    * @returns {Promise.<{_id, code, name, password, role: *, phone: (*|string|Array)}>}
    */
-  checkToken: async function(token) {
+  checkToken: async function (token) {
     logger.debug(`checkToken param: ${token}`);
-    let user = await Domain.models.user.findOne({ token: token }, null, {lean: true}).populate({
-        path: 'role',
-        populate: {
-            path: 'permission'
-        }
+    let user = await Domain.models.user.findOne({ token: token }, null, { lean: true }).populate({
+      path: 'role',
+      populate: {
+        path: 'permission'
+      }
     });
+
     if (user != null) {
       await this.refreshLastLogin(user.code);
       return {
         _id: user._id,
         code: user.code,
         name: user.name,
-          //permission: user.role.permission,
+        permission: user.role && user.role.permission || '', // type=2返回
         finger: user.finger
       }
     } else {
-      throw Libs.error('0001', '无效token');
+      throw Libs.error('0001', '无效tokenyyy');
     }
   },
 
@@ -103,7 +104,7 @@ module.exports = {
    * @param password
    * @returns {Promise.<*>}
    */
-  login: async function(code, password) {
+  login: async function (code, password) {
     logger.debug(`login param code: ${code}, password: ${password}`)
     let op = await Domain.models.user.findOne({ code: code })
     logger.debug(op, code)
@@ -137,7 +138,7 @@ module.exports = {
    * @param token
    * @returns {*}
    */
-  updateUserToken: function(code, token) {
+  updateUserToken: function (code, token) {
     logger.debug(`updateUserToken param code: ${code}, token: ${token}`);
     return Domain.models.user.findOneAndUpdate(
       { code: code },
@@ -151,7 +152,7 @@ module.exports = {
    * @param code
    * @returns {*}
    */
-  refreshLastLogin: function(code) {
+  refreshLastLogin: function (code) {
     logger.debug(`refreshLastLogin param code: ${code}`)
     return Domain.models.user.update(
       { code: code },
@@ -164,7 +165,7 @@ module.exports = {
    * @param requestBody
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
-  queryUsers: async function(requestBody) {
+  queryUsers: async function (requestBody) {
     logger.debug(`queryUsers param: ${json.stringify(requestBody)}`)
     let query = []
     if (!_.isEmpty(requestBody.code)) {
@@ -189,7 +190,7 @@ module.exports = {
    * @param requestBody
    * @returns {Promise.<requestBody>}
    */
-  saveUser: async function(requestBody) {
+  saveUser: async function (requestBody) {
     logger.debug(`saveUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.create(requestBody)
   },
@@ -199,7 +200,7 @@ module.exports = {
    * @param requestBody
    * @returns {Promise.<*>}
    */
-  modifyUser: async function(requestBody) {
+  modifyUser: async function (requestBody) {
     logger.debug(`modifyUser param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
@@ -214,43 +215,43 @@ module.exports = {
    * @param requestBody
    * @returns {*}
    */
-  removeUserById: function(requestBody) {
+  removeUserById: function (requestBody) {
     logger.debug(`removeUserById param: ${JSON.stringify(requestBody)}`);
     return Domain.models.user.findOneAndRemove({ _id: requestBody.id })
   },
 
-    /**
-     * 删除指纹信息
-     * @param requestBody
-     * @returns {Promise.<*>}
-     */
-    deleteFinger: async function(requestBody) {
-        logger.debug(`deleteFinger param: ${JSON.stringify(requestBody)}`);
-        return await Domain.models.user.updateOne(
-            { _id: requestBody.id },
-            {
-                $pull:{
-                  "finger":requestBody.code_delete
-                }
-            }
-        );
-    },
+  /**
+   * 删除指纹信息
+   * @param requestBody
+   * @returns {Promise.<*>}
+   */
+  deleteFinger: async function (requestBody) {
+    logger.debug(`deleteFinger param: ${JSON.stringify(requestBody)}`);
+    return await Domain.models.user.updateOne(
+      { _id: requestBody.id },
+      {
+        $pull: {
+          "finger": requestBody.code_delete
+        }
+      }
+    );
+  },
 
-    /**
-     * 保存指纹信息
-     * @param requestBody
-     * @returns {Promise.<*>}
-     */
-    saveFinger: async function(requestBody) {
-        logger.debug(`saveFinger param: ${JSON.stringify(requestBody)}`);
-        return await Domain.models.user.updateOne(
-            { _id: requestBody.id },
-            {
-                $push:{
-                    "finger":requestBody.code_new
-                }
-            }
-        );
+  /**
+   * 保存指纹信息
+   * @param requestBody
+   * @returns {Promise.<*>}
+   */
+  saveFinger: async function (requestBody) {
+    logger.debug(`saveFinger param: ${JSON.stringify(requestBody)}`);
+    return await Domain.models.user.updateOne(
+      { _id: requestBody.id },
+      {
+        $push: {
+          "finger": requestBody.code_new
+        }
+      }
+    );
 
-    }
+  }
 }
