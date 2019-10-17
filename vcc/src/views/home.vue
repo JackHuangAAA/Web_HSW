@@ -46,7 +46,7 @@
                 version: this.$config.version,
                 title: this.$config.appName,
                 nowdate: null,
-                imgMenu: '/static/img/menuclose.png',
+                imgMenu: '/static/img/menuopen.png',
                 pageName: '主页',
                 menu: [
                     {name:'主页',img:'/static/img/home.png'},
