@@ -128,7 +128,6 @@ module.exports = {
                     },
                     count:{$sum:1}
                 }}]);
-
         }else{
             return await Domain.models.device.aggregate([{$match:query},{$group:{
                     _id:{

@@ -36,6 +36,7 @@ module.exports = {
         query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.temperature.paginate(query, {
             sort: {"_id": -1},
+            populate:[{path:'device',select:'code alias'}],
             page: requestBody.page,
             limit: parseInt(requestBody.size),
             lean:true
