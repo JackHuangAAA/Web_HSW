@@ -50,6 +50,14 @@ module.exports = {
      */
     saveTemperatures: async function(requestBody){
         logger.debug(`saveTemperatures param: ${JSON.stringify(requestBody)}`);
+        await Domain.models.device.updateOne({'_id': requestBody.device},
+            {
+                $set: {
+                    temperature:requestBody.degree[0].value,
+                    updateDate: new Date()
+                }
+            });
+
         let query = {device:requestBody.device};
         let result = await Domain.models.temperature.find(query).sort({ createDate : -1 });
         let time_now = new Date();

@@ -107,8 +107,12 @@ module.exports = {
         logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
         let today = moment();
         let query = [];
-        let dailyInfo = { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate()  };
-        query.push({ "createDate": dailyInfo });
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": parseInt(requestBody.type)});
+        }
         //0查询总体设备状态统计；1查询各单位设备状态统计
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         if(requestBody.flag=="1"){
