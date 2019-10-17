@@ -4,7 +4,7 @@
         <Col span="24">
             <Tabs :animated="false">
                <TabPane label="设置">
-                    <basic></basic>
+                     <basic></basic> 
                 </TabPane>
                 <TabPane label="指纹录入">
                     <finger></finger>

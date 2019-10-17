@@ -3,8 +3,8 @@
             <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
                     <img class="menuListLogo" src="/static/img/logo.png">
-                    <p class="logoDes">{{device.unitName}}</p>
-                    <div class="local">{{device.address.countyName}}</div>
+                    <p class="logoDes">{{device && device.unitName || ''}}</p>
+                    <div class="local">{{device && device.address && device.address.countyName || ''}}</div>
                     <p class="menuListP"></p>
                     <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
                         <img class="menuImg" :src="item.img">
@@ -14,30 +14,30 @@
             <div class="head">
                 <div class="menu" @click="openCloseMenu()">
                     <div class="menuContent">
-                        <img src="/static/img/userph1.png">
+                        <img :src="imgMenu">
                         {{menuStatus}}
                     </div>
                 </div>
                 <div class="pageName">{{pageName}}</div>
-                <div class="code">{{device.cabinetNo}}</div>
+                <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user" @click="logout()">
                     <p>{{user.name}}</p>
                     <img src="/static/img/userph1.png">
                 </div>
-                <p class="dateTime">{{nowdate}}</p>
-            </div>
-            <div class="main">
-                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
-            </div>
+            <p class="dateTime">{{nowdate}}</p>
         </div>
+        <div class="main">
+            <router-view ref="contentView" style="width:100%;height:100%"></router-view>
+        </div>
+    </div>
 </template>
 <script>
-    import {mapGetters, mapActions, mapState} from 'vuex'
-    import md5 from 'js-md5'
-    import routerConfig from '@/router'
-    import moment from 'moment';
-    moment.locale('zh-cn');
-    global.moment = moment;
+import { mapGetters, mapActions, mapState } from 'vuex'
+import md5 from 'js-md5'
+import routerConfig from '@/router'
+import moment from 'moment';
+moment.locale('zh-cn');
+global.moment = moment;
 
     export default {
         name: "datetime",
@@ -46,6 +46,7 @@
                 version: this.$config.version,
                 title: this.$config.appName,
                 nowdate: null,
+                imgMenu: '/static/img/menuopen.png',
                 pageName: '主页',
                 menu: [
                     {name:'主页',img:'/static/img/home.png'},
@@ -69,12 +70,6 @@
         created() {
             this.dateint();
         },
-        components:{},
-        watch:{
-           /* '$route.path':function(n,o){
-                this.currentPath = n
-            }*/
-        },
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
@@ -94,17 +89,34 @@
             },
             changeMenu: function(index){
                 this.isactive = index;
-                if(index==0){  this.$router.push('/main'); }
-                if(index==1){  this.$router.push('/vaccination/vaccination'); }
-                if(index==2){  this.$router.push('/stock/stock'); }
-                if(index==3){  this.$router.push('/alarm/alarm'); }
-                if(index==4){  this.$router.push('/setting/setting'); }
+                if(index==0){
+                    this.pageName = "主页";
+                    this.$router.push('/main');
+                }
+                if(index==1){
+                    this.pageName = "接种";
+                    this.$router.push('/vaccination/vaccination');
+                }
+                if(index==2){
+                    this.pageName = "库存";
+                    this.$router.push('/stock/stock');
+                }
+                if(index==3){
+                    this.pageName = "报警";
+                    this.$router.push('/alarm/alarm');
+                }
+                if(index==4){
+                    this.pageName = "设置";
+                    this.$router.push('/setting/setting');
+                }
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;
                 if(this.ifShowMenu == true){
+                    this.imgMenu = '/static/img/menuclose.png';
                     this.menuStatus = '折叠菜单'
                 }else{
+                    this.imgMenu = '/static/img/menuopen.png';
                     this.menuStatus = '展开菜单'
                 }
             }
@@ -116,12 +128,12 @@
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
-                        this.$router.push('/setting/setting');
+                        this.$router.push('/main');
                     }
                 });
             });
         }
-    }
+}
 </script>
 <style lang="less" scoped>
 @import "~@/style/home.less";

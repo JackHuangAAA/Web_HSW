@@ -178,9 +178,7 @@ module.exports = {
                 updateDate:result_device.docs[i].updateDate,
                 flag:1 //1库存正常，0库存不足
             };
-
             if(deviceId_array.includes(result_device.docs[i]._id.toString())){
-                console.log(result_device.docs[i]._id);
                 newObj.flag=0;
             }
             result_objarray.push(newObj)
