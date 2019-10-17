@@ -26,13 +26,13 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineData">
-                                <Checkbox v-model="item.single" class="checkBox"></Checkbox>
-                                <div class="cabineLeft">
+                            <div class="cabine" v-for="(item,index) in cabineDatas">
+                                <Checkbox v-model="item.single" class="checkBox" v-if="item.nameOne"></Checkbox>
+                                <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
                                     <p class="vaccineOneCount">{{item.countOne||0}}支</p>
                                 </div>
-                                <div class="cabineRight">
+                                <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
                                 </div>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="finish">
-                        <div class="finishButton">
+                        <div class="finishButton" @click="openDrawer">
                             完成
                         </div>
                     </div>
@@ -50,12 +50,14 @@
     </div>
 </template>
 <script>
+    import {mapGetters} from 'vuex'
+
     export default {
         data() {
             return {
-                cabineData: [{nameOne: '狂犬疫苗',nameTwo: '麻疹疫苗',countOne:100,countTwo:100},{},{},{}],
+                cabineDatas: [],
                 index: '1',
-                row: 0,
+                row: 5,
                 addVaccineOne: '',
                 addVaccineTwo: '',
                 vaccineOneCount: "",
@@ -63,20 +65,73 @@
             }
         },
         computed: {
-
+            ...mapGetters({
+                user: 'user',
+                device: 'device',
+            })
         },
         components:{},
         methods: {
+            async queryDrawerByCondition(){
+                this.cabineDatas = [];
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
+                    device: this.device._id
+                });
+                let array = res.data;
+                for (let i = 0; i < 10; i++) {
+                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
+                    temp.drawerId = array[i]._id;
+                    temp.x = array[i].x;
+                    temp.y = array[i].y;
+                    if (num > 0) {
+                        for (let k = 0; k < num; k++) {
+                            temp.single = true;
+                            if (k == 0) {
+                                temp.nameOne = vaccine[k].name;
+                                temp.countOne = vaccine[k].surplus;
+                                temp.idOne = vaccine[k]._id;
+                                temp.codeOne = vaccine[k].code;
+                            }
+                            if (k == 1) {
+                                temp.nameTwo = vaccine[k].name;
+                                temp.countTwo = vaccine[k].surplus;
+                                temp.idTwo = vaccine[k]._id;
+                                temp.codeTwo = vaccine[k].code;
+                            }
+                        }
+                    } else {
+                        temp.nameOne = '';
+                        temp.countOne = '';
+                        temp.nameTwo = '';
+                        temp.countTwo = '';
+                    }
+                    this.cabineDatas.push(temp);
+                }
+            },
             back: function(){
                 this.$router.push('/main');
+            },
+            //打开指定抽屉
+            openDrawer(){
+                //获取选中的的抽屉
+                let ids = [], array = this.cabineDatas;
+                for(let n=0;n<array.length;n++) {
+                    if(array[n].single){
+                        ids.push(array[n].drawerId);
+                    }
+                }
+                //调用Android接口，打开抽屉  todo
+
+                console.log('33--------->%j',ids)
+                this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
             }
         },
         mounted() {
-            this.row = Math.ceil(this.cabineData.length/2);
+            this.queryDrawerByCondition();
             //给数组添加checkbox 来判断是否选中 选中为true 未选中为false
-            this.cabineData.forEach(item => {
+            /*this.cabineDatas.forEach(item => {
                 item.single = false;
-            });
+            });*/
         }
     };
 </script>

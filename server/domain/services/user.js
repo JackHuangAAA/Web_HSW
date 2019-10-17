@@ -82,7 +82,7 @@ module.exports = {
         populate: {
             path: 'permission'
         }
-    });console.log('user------>%j',user);
+    });
     if (user != null) {
       await this.refreshLastLogin(user.code);
       return {
