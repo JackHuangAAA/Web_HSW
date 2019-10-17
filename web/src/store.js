@@ -7,34 +7,34 @@ import Vue from "vue"
  const store = {
     state: {
         user: null,
-        currentMenu: {}//当前菜单
+        //currentMenu: {}//当前菜单
     },
 
     getters: {
         user: state => {
             return state.user;
         },
-        currentMenu: state => {
-            return state.currentMenu;
-        }
+        // currentMenu: state => {
+        //     return state.currentMenu;
+        // }
     },
 
     mutations: {
         ['SAVE_USER']: (state, action) => {
             state.user = action;
         },
-        ['CURRENT_MENU']: (state, action) => {
-            state.currentMenu = action;
-        }
+        // ['CURRENT_MENU']: (state, action) => {
+        //     state.currentMenu = action;
+        // }
     },
 
     actions: {
         saveUser({commit}, user){
             commit('SAVE_USER', user);
         },
-        setCurrentMenu({commit}, currentMenu){
-            commit('CURRENT_MENU', currentMenu);
-        }
+        // setCurrentMenu({commit}, currentMenu){
+        //     commit('CURRENT_MENU', currentMenu);
+        // }
     }
 }
 

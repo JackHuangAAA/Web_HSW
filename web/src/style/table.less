@@ -5,23 +5,26 @@
   font-size:18px;
   font-weight: bold;
   min-height: 500px;
+  color: @black;
 }
 .main-table-head{
   font-size: 16px;
   height:44px;
   line-height: 44px;
-  margin-top: 25px;
+  margin-top: 18px;
 }
 .main-table-body{
   font-size: 14px;
   font-weight:400;
   height:44px;
   line-height: 44px;
+  color: @dark;
   background: @cyan;
   margin-top: 6px;
 }
 .id-center{
   text-align: center;
+  padding-right: 10px;
 }
 .main-table-title{
   padding-top: 25px;
@@ -55,6 +58,30 @@
   .main-table-box-lab{
     width: 100px;
   }
+}
+.ivu-select{
+  width: 85%;
+}
+.ivu-select-selection{
+  width: 85%;
+}
+.detail-table-head{
+  font-size: 15px;
+  height:44px;
+  line-height: 44px;
+  border-bottom: 1px solid rgba(220,220,220,1);
+  border-left: 1px solid rgba(220,220,220,1);
+  border-right: 1px solid rgba(220,220,220,1);
+}
+.detail-table-body{
+  font-size: 14px;
+  font-weight:400;
+  height:44px;
+  line-height: 44px;
+  color: @dark;
+  border-bottom: 1px solid rgba(220,220,220,1);
+  border-left: 1px solid rgba(220,220,220,1);
+  border-right: 1px solid rgba(220,220,220,1);
 }
 .ivu-select-single .ivu-select-selection{
   width: 85%;
@@ -104,6 +131,7 @@
 //展开详情
 .open-detail{
   color: @blue;
+  cursor: pointer;
 }
 // stockDetail
 .stockDetail-table-title{
@@ -159,7 +187,11 @@
   display: flex;
   flex-direction: row;
 }
+.show{
+  height: auto;
+  transition: .5s height;
+}
 .none{
-  height: 0;
+  height: 0 !important;
   overflow: hidden;
 }

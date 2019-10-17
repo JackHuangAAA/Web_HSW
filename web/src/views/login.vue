@@ -141,17 +141,17 @@
         },
 
         mounted(){
-            if(this.loginUser){
-                this.$router.push('/');
-            }
-            if(localStorage.user != null){
-                this.loginFrm.user = localStorage.user;
-                this.rember = true;
-            }
-            if(localStorage.password != null){
-                this.loginFrm.password = localStorage.password;
-            }
-            this.$refs.userInput.focus();
+            // if(this.loginUser){
+            //     this.$router.push('/');
+            // }
+            // if(localStorage.user != null){
+            //     this.loginFrm.user = localStorage.user;
+            //     this.rember = true;
+            // }
+            // if(localStorage.password != null){
+            //     this.loginFrm.password = localStorage.password;
+            // }
+            // this.$refs.userInput.focus();
         }
     }
 

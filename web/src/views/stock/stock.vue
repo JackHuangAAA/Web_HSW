@@ -22,14 +22,14 @@
             <Col span="4">库存状态</Col>
             <Col span="3">操作</Col>
         </Row>
-        <Row v-for="item of 10" :key="item" class="main-table-body">
-            <Col span="2" class="id-center">{{item}}</Col>
-            <Col span="3">冷藏柜</Col>
+        <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
+            <Col span="2" class="id-center">{{index+1}}</Col>
+            <Col span="3">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
             <Col span="4">Y750230-64368</Col>
-            <Col span="5">西湖区蒋村街道社区卫生服务中心</Col>
+            <Col span="5">{{item.unitName||'不明'}}</Col>
             <Col span="3">1号接种台</Col>
-            <Col span="4" :class="{abnormal:true}">库存缺少、问题疫苗</Col>
-            <Col span="3" class="view-detail">查看详情</Col>
+            <Col span="4" :class="{abnormal:true}">{{item.flag==0?'正常':'库存缺少、问题疫苗'}}</Col>
+            <Col span="3" class="view-detail"><div @click="()=>{this.$router.push('/stock/stockDetail')}">查看详情</div></Col>
         </Row>
         <Row>
             <Page :total="100" show-elevator :current="active"/>
@@ -37,14 +37,31 @@
     </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
     data(){
         return{
             value1:'',
             value2:'',
             active:2,
+            lists:[],
         }
-    }
+    },
+    methods:{
+        queryDeviceStock(){
+            this.$api.get('/device/queryDeviceStock',{page:1,size:10,test:0}).then(res=>{
+                let data=res.data.rs
+                for(let i=0;i<data.length;i++){
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                }
+                this.lists=data
+            })
+        },
+    },
+    created(){
+        this.queryDeviceStock()
+    },
+
 }
 </script>
 <style lang="less" scoped>

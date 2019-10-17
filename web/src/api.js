@@ -17,8 +17,8 @@ const commonResponseHandler = (response,resolve,reject)=>{
         console.log(`<= ${response.config.url}`,response.data);
     }
     if (response.data.code == RSP_CODE.NO_LOGIN) {
-
-        router.push('/login');
+        //未登录跳转login
+        // router.push('/login');
     } else if (response.data.code == '9999') {
         Message.error({content:response.data.message,closable: true,duration: 0});
     } else {

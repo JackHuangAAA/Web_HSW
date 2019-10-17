@@ -1,59 +1,64 @@
 <template>
     <div class="main">
-        <Row :gutter="20" class="main-top">
-            <Col span="8">
+        <Row  class="main-top">
+            <div class="box-shadow">
+            <Col span="24">
                 <Row class="main-box-title">冷藏柜统计</Row>
                 <Row class="main-box" :gutter="18">
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/count.png" alt="">
-                            <div>70</div>
+                            <div>{{f_abnormalCount+f_normalCount}}</div>
                             <div>冷藏柜</div>
                         </div>                            
                     </Col>
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/normal.png" alt="">
-                            <div>50</div>
+                            <div>{{f_normalCount}}</div>
                             <div>正常</div>
                         </div>                            
                     </Col>
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/abnormal.png" alt="">
-                            <div>20</div>
+                            <div>{{f_abnormalCount}}</div>
                             <div>异常</div>
                         </div>                            
                     </Col>
                 </Row>
-            </Col>            
-            <Col span="8">
+            </Col>
+            </div>
+            <div class="box-shadow">        
+            <Col span="24">
                 <Row class="main-box-title">接种柜统计</Row>
                 <Row class="main-box" :gutter="18">
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/count.png" alt="">
-                            <div>70</div>
+                            <div>{{i_abnormalCount+i_normalCount}}</div>
                             <div>接种柜</div>
                         </div>                            
                     </Col>
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/normal.png" alt="">
-                            <div>58</div>
+                            <div>{{i_normalCount}}</div>
                             <div>正常</div>
                         </div>                            
                     </Col>
                     <Col span="8">
                         <div class="box-bs">
                             <img src="/static/img/abnormal.png" alt="">
-                            <div>2</div>
+                            <div>{{i_abnormalCount}}</div>
                             <div>异常</div>
                         </div>
                     </Col>
                 </Row>
             </Col>
-            <Col span="8">
+            </div>
+            <div class="box-shadow">
+            <Col span="24" >
                 <Row class="main-box-title">温度报警</Row>
                 <Row>
                     <div v-for="(item) of 4" :key="item" class="temperature-alarm">
@@ -65,12 +70,13 @@
                     </div>
                 </Row>
             </Col>
+            </div>
         </Row>
         <!-- table -->
         <div class="main-table">
             <Row>
-                <Col span="19" class="main-table-title">各单位设备数量统计</Col>
-                <Col span="5" class="main-table-search">
+                <Col span="18" class="main-table-title">各单位设备数量统计</Col>
+                <Col span="6" class="main-table-search">
                     <div class="main-table-search-lab">接种单位:</div>                    
                     <input v-model="value1" placeholder="" />
                 </Col>
@@ -86,9 +92,9 @@
                 <Col span="3">正常接种柜</Col>
                 <Col span="3">异常接种柜</Col>
             </Row>
-            <Row v-for="item of 9" :key="item" class="main-table-body">
-                <Col span="2" class="id-center">{{item}}</Col>
-                <Col span="4">1</Col>
+            <Row v-for="(item,index) of 5" :key="index" class="main-table-body">
+                <Col span="2" class="id-center">1</Col>
+                <Col span="4">{{index}}</Col>
                 <Col span="3">1</Col>
                 <Col span="3">1</Col>
                 <Col span="3">1</Col>
@@ -115,25 +121,65 @@
     export default {
         data() {
             return {
-                value1:''
+                value1:'',
+                f_abnormalCount:0,
+                f_normalCount:0,
+                i_abnormalCount:0,
+                i_normalCount:0,
+                lists:[],
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                currentMenu: 'currentMenu',
+                // currentMenu: 'currentMenu',
             })
         },
         components:{},
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
-                setCurrentMenu: 'setCurrentMenu'
-            })
+                // setCurrentMenu: 'setCurrentMenu'
+            }),
+            queryDeviceByAggregate(){
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,test:0}).then(res=>{
+                    let data=res.data;
+                    for(let i=0;i<data.length;i++){
+                        if(data[i]._id.type==1 && data[i]._id.status==1){
+                            this.i_normalCount=data[i].count
+                        }
+                        if(data[i]._id.type==1 && data[i]._id.status==2){
+                            this.i_abnormalCount+=data[i].count
+                        }
+                        if(data[i]._id.type==1 && data[i]._id.status==0){
+                            this.i_abnormalCount+=data[i].count
+                        }
+                        if(data[i]._id.type==2 && data[i]._id.status==1){
+                            this.f_normalCount=data[i].count
+                        }
+                        if(data[i]._id.type==2 && data[i]._id.status==2){
+                            this.f_abnormalCount+=data[i].count
+                        }
+                        if(data[i]._id.type==2 && data[i]._id.status==0){
+                            this.f_abnormalCount+=data[i].count
+                        }
+                    }
+                    console.log(this.i_abnormalCount +" "+this.i_normalCount+" " +this.f_abnormalCount+ " "+this.f_normalCount)
+                })
+                this.$api.get('/device/queryDeviceByAggregate',{flag:1,test:0}).then(res=>{
+                    
+                })
+            },
+            queryAlarmDailyInfo(){
+                this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
+                    console.log(res)
+                })
+            },
 
         },
         mounted() {
-
+            this.queryDeviceByAggregate()
+            this.queryAlarmDailyInfo()
         }
     }
 </script>

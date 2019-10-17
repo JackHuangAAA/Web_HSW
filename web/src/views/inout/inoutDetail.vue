@@ -9,7 +9,7 @@
                 </Select>
             </Col>
         </Row>      
-        <!-- <Row class="main-table-head">
+        <Row class="main-table-head">
             <Col span="3" class="id-center">序号</Col>
             <Col span="3">类型</Col>
             <Col span="4">操作人</Col>
@@ -17,50 +17,34 @@
             <Col span="5">疫苗数量</Col>
             <Col span="3">操作</Col>
         </Row>
-        <Row  v-for="item of 10" :key="item" class="main-table-body">
-            <Col span="3" class="id-center">{{item}}</Col>
-            <Col span="3">入库</Col>
-            <Col span="4">黄旭佳</Col>
-            <Col span="6">2019-9-20 10:38:28</Col>
-            <Col span="5" :class="{abnormal:true}">100</Col>
-            <Col span="3" class="open-detail">展开详情</Col>
-            <Col span="24" v-if="item==9">
-                <div>
-                    <Col span="3">序号</Col>
+        <Row  v-for="(item,index) of list" :key="index">
+            <Row class="main-table-body">
+                <Col span="3" class="id-center">{{index+1}}</Col>
+                <Col span="3">入库</Col>
+                <Col span="4">黄旭佳</Col>
+                <Col span="6">2019-9-20 10:38:28</Col>
+                <Col span="5" :class="{abnormal:true}">100</Col>
+                <Col span="3" class="open-detail"><div @click="()=>{$set(item,'isShow',!item.isShow)}">{{item.isShow==false?'展开详情':'收起'}}</div></Col>
+            </Row>
+            <Row span="24" class="show" :class="{none:!item.isShow,}">
+                <Row class="detail-table-head">
+                    <Col span="3" class="id-center">序号</Col>
                     <Col span="3">疫苗名称</Col>
                     <Col span="4">批次号</Col>
                     <Col span="6">生产厂家</Col>
                     <Col span="5">有效期</Col>
                     <Col span="3">入库数量</Col>
-                </div>
-            </Col>
-        </Row> -->
-        <div class="list-row">
-            <div>序号</div>
-            <div>类型</div>
-            <div>操作人</div>
-            <div>操作时间</div>
-            <div>疫苗数量</div>
-            <div>操作</div>
-        </div>
-        <div v-for="(item,index) of list" :key="item.num"  class="list-column">
-            <div class="list-row">
-                <div span="3" class="id-center">{{item.num}}</div>
-                <div span="3">入库</div>
-                <div span="4">黄旭佳</div>
-                <div span="6">2019-9-20 10:38:28</div>
-                <div span="5" :class="{abnormal:true}">100</div>
-                <div span="3" class="open-detail" @click="openShow(index)">展开详情</div>
-            </div>
-            <div class="list-row" :class="{none:item.isShow==false}">
-                <div span="3" class="id-center">{{item.num}}</div>
-                <div span="3">入库</div>
-                <div span="4">黄旭佳</div>
-                <div span="6">2019-9-20 10:38:28</div>
-                <div span="5" :class="{abnormal:true}">100</div>
-                <div span="3" class="open-detail">展开详情</div>
-            </div>
-        </div>
+                </Row>
+                <Row v-for="item of 6" :key="item" class="detail-table-body">
+                    <Col span="3" class="id-center">{{item}}</Col>
+                    <Col span="3">百白破疫苗</Col>
+                    <Col span="4">Y750230-64368</Col>
+                    <Col span="6">北京天坛生物制品股份有限公司</Col>
+                    <Col span="5">2019-09-18 12:30:28</Col>
+                    <Col span="3">80</Col>
+                </Row>
+            </Row>
+        </Row>
         <Row>
             <div class="comeback">返回</div>
             <Page :total="100" show-elevator :current="active"/>
@@ -88,17 +72,12 @@ export default {
     methods:{
         getlist(){
             for(let i=0;i<4;i++){
-                this.list[i]["isShow"]=false
+                this.$set(this.list[i],"isShow",false)
             }
-            console.log(this.list)
-        },
-        openShow(index){
-            this.list[index]["isShow"]=!this.list[index]["isShow"]
             console.log(this.list)
         },
     }
 }
 </script>
 <style lang="less" scoped>
-
 </style>
