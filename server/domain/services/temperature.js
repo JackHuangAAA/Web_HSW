@@ -57,7 +57,6 @@ module.exports = {
                     updateDate: new Date()
                 }
             });
-<<<<<<< HEAD
 
         let query = {device:requestBody.device};
         let result = await Domain.models.temperature.find(query).sort({ createDate : -1 });
@@ -87,7 +86,6 @@ module.exports = {
         };
 
         //若存在当天的时间记录，则将温度信息插入已有记录的温度数组
-
         time_now_end = time_now.setHours(23,59,59,999);
         time_now_start = time_now.setHours(0,0,0,0);
 
@@ -105,9 +103,8 @@ module.exports = {
         }else{
             return await Domain.models.temperature.create(requestBody);
         }
-=======
         return Domain.models.temperature.create(requestBody);
->>>>>>> develop
+
     }
 
 };

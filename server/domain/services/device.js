@@ -103,19 +103,16 @@ module.exports = {
      * @param requestBody
      * @returns {JSON}  Object  version model数组，不同类型的数量统计
      */
-    queryDeviceByAggregate: async function(currentUser,requestBody){
+    queryDeviceByAggregate: async function(requestBody){
         logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
         let today = moment();
         let query = [];
-<<<<<<< HEAD
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
         if (!_.isEmpty(requestBody.type)) {
             query.push({"type": parseInt(requestBody.type)});
         }
-=======
->>>>>>> develop
         //0查询总体设备状态统计；1查询各单位设备状态统计
         if (!_.isEmpty(requestBody.type)) {
             query.push({"type": parseInt(requestBody.type)});

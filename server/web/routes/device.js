@@ -50,7 +50,7 @@ router.post('/saveDevice',
  */
 router.get('/queryDeviceByAggregate',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.device.queryDeviceByAggregate(ctx.currentUser,ctx.request.query);
+        return await Domain.services.device.queryDeviceByAggregate(ctx.request.query);
     })
 );
 
