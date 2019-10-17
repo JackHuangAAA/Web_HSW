@@ -43,6 +43,7 @@ router.get('/queryAlarm',
  * @apiGroup alarm
  * @apiVersion 1.0.0
  * @apiDescription 查询报警信息
+ * @apiParam {String} [ifToday] 是否查询今日信息，若无则查询所有时间
  * @apiParam {String} [device] 设备
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号

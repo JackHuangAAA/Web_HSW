@@ -53,6 +53,7 @@
         data() {
             return {
                 action:'',
+                outVaccineIds:[],
                 now: moment().format('YYYY-MM-DD HH:mm:ss'),
                 leftDatas:[],
                 rightDatas:[]
@@ -65,14 +66,27 @@
             })
         },
         methods: {
+            async clearVaccineNumber(){
+                await this.$api.post("/vaccine/clearVaccineTotal", {
+                    device: this.device._id,
+                    ids: this.outVaccineIds
+                });
+            },
             async getDetails() {
-                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {device: this.device._id});
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    ids: this.outVaccineIds
+                });
                 this.datas = res.data.rs;
                 if(this.datas.length>10){
                     this.leftDatas = _.slice(this.datas,0,10);
                     this.rightDatas = _.slice(this.datas,10);
                 }else{
                     this.leftDatas = this.datas;
+                }
+                //出库时需要对疫苗数量清零
+                if(this.action == '出库'){
+                    await this.clearVaccineNumber();
                 }
             },
             goHome(){
@@ -84,8 +98,9 @@
         },
         mounted() {
             //接收出入库参数
-            let action = this.$route.query.action;
-            this.setAction(action);
+            this.outVaccineIds = this.$route.query.ids;
+            this.action = this.$route.query.action;
+            this.setAction(this.action);
             this.getDetails();
         }
     };

@@ -44,12 +44,13 @@ router.post('/saveDevice',
  * @apiGroup device
  * @apiVersion 1.0.0
  * @apiDescription 聚合查询，各单位各设备类型不同状态的设备数量统计
- * @apiParam flag 0查询总体设备信息，1查询各单位设备信息
+ * @apiParam [Number] flag 0查询总体设备信息，1查询各单位设备信息
+ * @apiParam [Number] type 1接种柜，2冷藏柜
  * @apiSuccess {JSON}  Object  version model数组
  */
 router.get('/queryDeviceByAggregate',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.device.queryDeviceByAggregate(ctx.currentUser,ctx.request.query);
+        return await Domain.services.device.queryDeviceByAggregate(ctx.request.query);
     })
 );
 

@@ -19,4 +19,10 @@ module.exports = {
 
     },
     TIMEDATA: "timedData",
-};
+    //温度正常区间
+    TEMPERATURE_REGION:{
+        MAX:5,
+        MIN:0
+    }
+}
+;

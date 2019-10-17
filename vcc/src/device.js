@@ -16,6 +16,11 @@ export default {
             return deviceid.res;
         }
     },
+    //打开抽屉
+    openDrawer(val){
+        console.log('DEVICE===>OPEN_DRAWER');
+        
+    },
     //注册指纹
     fingerRegister(){
         console.log('FINGER===>REGISTER');

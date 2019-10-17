@@ -21,26 +21,26 @@
                         <div class="cabines">
                             <div class="cabine" v-for="(item,index) in cabineData">
                                 <!-- <Input v-model="value" placeholder="选择疫苗名称" class="chooseVaccine"/> -->
-                                <div class="noVaccine" v-show="ifOneChoose">
-                                    <Select v-model="value" class="chooseVaccine"  @on-change="selectOne()">
+                                <div class="noVaccine" v-show=item.ifOneChoose>
+                                    <Select v-model="item.vaccineOne" class="chooseVaccine"  @on-change="selectOne(index)">
                                         <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select>
                                 </div>
-                                <div class="noVaccineTwo" v-show="ifTwoChoose">
-                                    <Select v-model="value1" class="chooseVaccine"  @on-change="selectTwo()">
-                                        <Option v-for="item in cityList2" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <div class="noVaccineTwo" v-show=item.ifTwoChoose>
+                                    <Select v-model="item.vaccineTwo" class="chooseVaccine"  @on-change="selectTwo(index)">
+                                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                     </Select>
                                 </div>
-                                <div class="vaccineName" v-show="ifVaccineOne">
+                                <div class="vaccineName" v-show=item.ifVaccineOne>
                                     麻疹疫苗
                                 </div>
-                                <div class="vaccineNameTwo" v-show="ifVaccineTwo">
+                                <div class="vaccineNameTwo" v-show=item.ifVaccineTwo>
                                     狂犬疫苗
                                 </div>
-                                <img src="/static/img/add.png" class="addImg" @click="addVaccine(index)" v-show="ifOneChoose">
-                                <img src="/static/img/add.png" class="addImg2" @click="addVaccineTwo(index)" v-show="ifTwoChoose">
-                                <img src="/static/img/del.png" class="delImg" v-show="ifVaccineOne" @click="delVaccineOne()">
-                                <img src="/static/img/del.png" class="delImgTwo" v-show="ifVaccineTwo" @click="delVaccineTwo()">
+                                <img src="/static/img/add.png" class="addImg" @click="addVaccine(index)" v-show=item.ifOneChoose>
+                                <img src="/static/img/add.png" class="addImg2" @click="addVaccineTwo(index)" v-show=item.ifTwoChoose>
+                                <img src="/static/img/del.png" class="delImg" v-show=item.ifVaccineOne @click="delVaccineOne(index)">
+                                <img src="/static/img/del.png" class="delImgTwo" v-show=item.ifVaccineTwo @click="delVaccineTwo(index)">
                             </div>
                         </div>
                     </div>
@@ -59,17 +59,14 @@
         data() {
             return {
                 row: 0,
-                value: '',
-                value1: '',
                 cabineData: [{},{},{},{},{},{},{},{}],
                 cityList: [{value:22,label:22},{value:33,label:33}],
-                cityList2: [{value:22,label:'q'},{value:33,label:'a'}],
-                ifAdd: false,
-                ifVaccineOne: false,
-                ifVaccineTwo: false,
-                ifOneChoose: true,
-                ifTwoChoose: false,
-                ifAddTwo: false
+                // ifAdd: false,
+                // ifVaccineOne: false,
+                // ifVaccineTwo: false,
+                // ifOneChoose: true,
+                // ifTwoChoose: false,
+                // ifAddTwo: false
             };
         },
         computed: {
@@ -79,43 +76,62 @@
         },
         methods: {
             addVaccine: function(index){
-                if(this.ifAdd == true){
-                    this.ifOneChoose = false;
-                    this.ifVaccineOne = true;
-                    this.ifTwoChoose = true;
-                    // this.value = "";
-                    // this.ifAdd = false;
+                if(this.cabineData[index].ifAdd == true){
+                    this.cabineData[index].ifOneChoose = false;
+                    this.cabineData[index].ifVaccineOne = true;
+                    this.cabineData[index].ifTwoChoose = true;
+                }
+                this.$forceUpdate()
+                console.log(this.cabineData);
+            },
+            addVaccineTwo: function(index){
+                if(this.cabineData[index].ifAddTwo == true){
+                    this.cabineData[index].ifTwoChoose = false;
+                    this.cabineData[index].ifVaccineTwo = true;
+                }
+                this.$forceUpdate()
+            },
+            selectOne: function(index){
+                if(this.cabineData[index].vaccineOne !== "" && this.cabineData[index].vaccineOne !== undefined){
+                    this.cabineData[index].ifAdd = true;
                 }
             },
-            addVaccineTwo: function(){
-                if(this.ifAddTwo == true){
-                    this.ifTwoChoose = false;
-                    this.ifVaccineTwo = true;
+            selectTwo: function(index){
+                if(this.cabineData[index].vaccineTwo !== "" && this.cabineData[index].vaccineTwo !== undefined){
+                    this.cabineData[index].ifAddTwo = true;
                 }
             },
-            selectOne: function(){
-                this.ifAdd = true;
-            },
-            selectTwo: function(){
-                console.log('1111111');
-                // console.log('test:' + this.ifAddTwo);
-                this.ifAddTwo = true;
-            },
-            delVaccineOne: function(){
-                if(this.ifTwoChoose == true){
-                    this.ifOneChoose = true;
-                    this.ifVaccineOne = false;
-                    this.ifTwoChoose = false
+            delVaccineOne: function(index){
+                if(this.cabineData[index].ifTwoChoose == true){
+                    this.cabineData[index].ifOneChoose = true;
+                    this.cabineData[index].ifVaccineOne = false;
+                    this.cabineData[index].ifTwoChoose = false;
+                     this.cabineData[index].vaccineOne = "";
                 }
+                this.cabineData[index].ifAdd = false;
+                this.$forceUpdate()
             },
-            delVaccineTwo: function(){
-                this.ifVaccineTwo = false;
-                this.ifTwoChoose = true;
-                this.value1 = "";
+            delVaccineTwo: function(index){
+                this.cabineData[index].ifVaccineTwo = false;
+                this.cabineData[index].ifTwoChoose = true;
+                this.cabineData[index].vaccineTwo = "";
+                this.cabineData[index].ifAddTwo = false;
+                console.log(index + '--' +this.cabineData[index].ifAddTwo);
+                this.$forceUpdate()
             }
         },
         mounted() {
-
+            this.cabineData.forEach(item =>{
+                item.vaccineOne = "";
+                item.vaccineTwo = "";
+                item.ifAdd = false;        //第一个加号是否可点击
+                item.ifAddTwo = false;     //第二个加号是否可点击
+                item.ifOneChoose = true;   //第一个select是否显示
+                item.ifTwoChoose = false;  //第二个select是否显示
+                item.ifVaccineOne = false; //第一个已选择疫苗是否显示
+                item.ifVaccineTwo = false; //第二个已选择疫苗是否显示
+            })
+            this.$forceUpdate()
         },
     };
 </script>

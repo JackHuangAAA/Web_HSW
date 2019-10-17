@@ -140,8 +140,8 @@
             addVaccine(index){
                 this.addVaccineOne = this.cabineDatas[index].nameOne;
                 this.addVaccineTwo = this.cabineDatas[index].nameTwo;
-                this.vaccineOneCount = this.cabineDatas[index].countOne;
-                this.vaccineTwoCount = this.cabineDatas[index].countTwo;
+                this.vaccineOneCount = 0;
+                this.vaccineTwoCount = 0;
                 this.vaccineOneId = this.cabineDatas[index].idOne;
                 this.vaccineTwoId = this.cabineDatas[index].idTwo;
                 this.vaccineOneCode = this.cabineDatas[index].codeOne;
@@ -161,8 +161,8 @@
                 this.vaccineTwoCount = 0;
                 this.addForm = false;
             },
-            async modifyVaccine(params){
-                await this.$api.post("/vaccine/modifyVaccine", params);
+            async modifyVaccineNum(params){
+                await this.$api.post("/vaccine/modifyVaccineNum", params);
             },
             async saveInout(params){
                 await this.$api.post("/inout/saveInout", params);
@@ -170,7 +170,7 @@
             async inStock(){
                 //抽屉1号格
                 if(this.vaccineOneId){
-                    await this.modifyVaccine({
+                    await this.modifyVaccineNum({
                         id: this.vaccineOneId,
                         total: this.vaccineOneCount,
                         surplus: this.vaccineOneCount
@@ -187,7 +187,7 @@
                 }
                 //抽屉2号格
                 if(this.vaccineTwoId){
-                    await this.modifyVaccine({
+                    await this.modifyVaccineNum({
                         id: this.vaccineTwoId,
                         total: this.vaccineTwoCount,
                         surplus: this.vaccineTwoCount

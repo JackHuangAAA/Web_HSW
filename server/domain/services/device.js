@@ -103,17 +103,24 @@ module.exports = {
      * @param requestBody
      * @returns {JSON}  Object  version model数组，不同类型的数量统计
      */
-    queryDeviceByAggregate: async function(currentUser,requestBody){
+    queryDeviceByAggregate: async function(requestBody){
         logger.debug(`queryDeviceByAggregate param: ${JSON.stringify(requestBody)}`);
         let today = moment();
         let query = [];
-        let dailyInfo = { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate()  };
-        query.push({ "createDate": dailyInfo });
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": parseInt(requestBody.type)});
+        }
         //0查询总体设备状态统计；1查询各单位设备状态统计
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": parseInt(requestBody.type)});
+        }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         if(requestBody.flag=="1"){
 
-            return await Domain.models.device.aggregate([{$match:query},{$group:{
+            return await Domain.models.device.aggregate([{$group:{
                     _id:{
                         "type":"$type",
                         "status":"$status",
@@ -121,11 +128,9 @@ module.exports = {
                     },
                     count:{$sum:1}
                 }}]);
-
         }else{
             return await Domain.models.device.aggregate([{$match:query},{$group:{
                     _id:{
-                        "type":"$type",
                         "status":"$status"
                     },
                     count:{$sum:1}
@@ -178,9 +183,7 @@ module.exports = {
                 updateDate:result_device.docs[i].updateDate,
                 flag:1 //1库存正常，0库存不足
             };
-
             if(deviceId_array.includes(result_device.docs[i]._id.toString())){
-                console.log(result_device.docs[i]._id);
                 newObj.flag=0;
             }
             result_objarray.push(newObj)

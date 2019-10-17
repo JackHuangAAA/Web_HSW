@@ -28,7 +28,7 @@ let getRouterConfig = function (path) {
     return config
 };
 
-router.beforeEach((to, from, next) => {console.log(to.path+'------------'+from.path)
+router.beforeEach((to, from, next) => {
     let menu = getRouterConfig(to.path);
     if (menu != null) {
         let p = Promise.resolve();

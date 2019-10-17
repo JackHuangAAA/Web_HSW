@@ -12,7 +12,7 @@ const excluded = [
   '/device'
 ];
 
-const bindUserFilter = async (ctx,next) => {console.log('ctx.url----------'+ctx.url)
+const bindUserFilter = async (ctx,next) => {
     try {
         //绕过用户判断进行操作流水保存，正式测试时将该函数放在下方//保存操作记录！！！
         await operationlogSave(ctx);
@@ -131,13 +131,17 @@ const operationlogSave = async (ctx) => {
 
 
         //type=1入库，type=2出库
-        if (ctx.request.body.type == 1) {
-            let action ="4", action_name = "入库";
-        } else {
-            let action ="5", action_name = "出库";
-        }
+        console.log(ctx.request.body.type);
+        console.log(typeof (ctx.request.body.type));
 
-        await Domain.services.log.saveLog({
+        let action,action_name;
+        if (ctx.request.body.type == 1) {
+            action ="4", action_name = "入库";
+        } else {
+            action ="5", action_name = "出库";
+        }
+        console.log(action);
+        let query ={
             userCode: result.userCode,
             userName: result.userName,
             device: ctx.request.body.device,
@@ -145,8 +149,10 @@ const operationlogSave = async (ctx) => {
             unitCode: ctx.request.body.unitCode,
             unitName: ctx.request.body.unitName,
             action: action,
-            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" + action_name + ctx.request.body.use + "支" + ctx.request.body.vaccineName,
+            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" +"("+ctx.request.body.x+","+ctx.request.body.y+")"+ action_name + ctx.request.body.total + "支" + ctx.request.body.vaccineName,
             operatorDte: ctx.request.body.createDate
-        });
+        };
+
+        await Domain.services.log.saveLog(query);
     }
 }
