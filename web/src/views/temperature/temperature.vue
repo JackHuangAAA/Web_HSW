@@ -1,20 +1,20 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="5" class="main-table-title">温度运行监控</Col>
-            <Col span="6" class="main-table-search">
+            <Col span="9" class="main-table-title">温度运行监控</Col>
+            <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">接种单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryTemperatures()"/>
             </Col>
-            <Col span="7" class="main-table-box">
+            <Col span="5" class="main-table-box">
                 <div class="main-table-box-lab">疫苗柜类型:</div>                    
-                <Select v-model="select">
+                <Select v-model="select" @on-change="search_queryTemperatures()">
                     <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
-            <Col span="6" class="main-table-box">
-                <div>时间:</div>
-                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+            <Col span="5" class="main-table-box">
+                <div class="main-table-box-time">时间:</div>
+                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="Select date"></DatePicker>
             </Col>
         </Row>      
         <Row class="main-table-head">
@@ -29,7 +29,7 @@
         <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
             <Col span="2" class="id-center">{{index+1}}</Col>
             <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="3">{{item.alias||'--'}}</Col><!-- Y750230-64368 -->
+            <Col span="3">{{item.device==null?'--':item.device.alias?item.device.alias:'--'}}</Col><!-- Y750230-64368 -->
             <Col span="5">{{item.unitName||'--'}}</Col>
             <Col span="3" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value+'℃'||'不明'}}</Col>
             <Col span="4" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value>=0 && item.degree[0].value<=5?'正常':'异常'}}</Col>
@@ -104,7 +104,8 @@ export default {
             this.queryTemperatures()
         },
         dateChange(daterange){
-            this.dateTime=daterange;
+            this.dateTime=daterange
+            this.search_queryTemperatures()
         }
     },
     created(){

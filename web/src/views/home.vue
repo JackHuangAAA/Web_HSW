@@ -55,9 +55,9 @@
             HeaderComponent,
         },
         methods: {
-            ...mapActions({
-                CurrentMenu: 'setCurrentMenu',
-            }),
+            // ...mapActions({
+            //     CurrentMenu: 'setCurrentMenu',
+            // }),
             changeMenu(index){
                 this.isactive = index;
                 if(index==0){  this.$router.push('/main'); }
@@ -68,6 +68,7 @@
             },
         },
         mounted() {
+            this.isactive=this.$route.name
             // this.$api.get('/user/current').then((result) => {console.log("VVV9-----------"+JSON.stringify(result.data));
             //     this.menus = result.data.permission.children;
             //     this.menus.unshift({

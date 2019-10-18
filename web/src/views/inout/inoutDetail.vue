@@ -1,7 +1,8 @@
 <template>
     <div class="main-table main-tb">
         <Row>
-            <Col span="18" class="stockDetail-table-title">Y750230-64368<span>冷藏柜</span><i>西湖区蒋村街道社区卫生服务中心</i><i>2019-9-20</i><i>~</i><i>2019-9-20</i></Col>
+            <Col span="18" class="stockDetail-table-title">{{alias}}<span>{{type}}</span><i>{{position}}</i><i>{{date.slice(0,11)}}</i></Col>
+            <!-- <i>2019-9-20</i><i>~</i><i>2019-9-20</i> -->
             <Col span="6" class="main-table-box">
                 <div class="main-table-box-lab">类型:</div>                    
                 <Select v-model="select">
@@ -17,12 +18,12 @@
             <Col span="5">疫苗数量</Col>
             <Col span="3">操作</Col>
         </Row>
-        <Row  v-for="(item,index) of list" :key="index">
+        <Row  v-for="(item,index) of lists" :key="index">
             <Row class="main-table-body">
                 <Col span="3" class="id-center">{{index+1}}</Col>
-                <Col span="3">入库</Col>
+                <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
                 <Col span="4">黄旭佳</Col>
-                <Col span="6">2019-9-20 10:38:28</Col>
+                <Col span="6">{{item.createDate}}</Col>
                 <Col span="5" :class="{abnormal:true}">100</Col>
                 <Col span="3" class="open-detail"><div @click="()=>{$set(item,'isShow',!item.isShow)}">{{item.isShow==false?'展开详情':'收起'}}</div></Col>
             </Row>
@@ -52,12 +53,17 @@
     </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
     data(){
         return{
             select:'',
             active:1,
             total:0,
+            date:'',//日期
+            position:'',//单位
+            alias:'',//设备编号别名
+            type:'',//冷藏柜or疫苗柜
             select_type:{
                 0:{
                     name:'请选择'
@@ -69,17 +75,29 @@ export default {
                     name:'出库'
                 }
             },
-            list:[
-            ]
+            lists:[]
         }
     },
     created(){
-        this.getlist()
+        this.date=this.$route.query.dateTime
+        this.position=this.$route.query.position
+        this.alias=this.$route.query.alias
+        this.type=this.$route.query.type
+        this.queryInouts()
     },
     methods:{
         queryInouts(){
-            this.$api.get('/inout/queryInouts',{}).then(res=>{
-
+            this.search_active=1
+            this.$api.get('/inout/queryInouts',{size:10,page:this.active,test:0}).then(res=>{
+                let data=res.data.rs
+                for(let i=0;i<data.length;i++){
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                }
+                for(let i=0;i<data.length;i++){
+                    this.$set(data[i],"isShow",false)
+                }
+                this.total=res.data.total
+                this.lists=data
             })
         },
         indexChange(i){
@@ -88,12 +106,6 @@ export default {
         },
         dateChange(daterange){
             this.dateTime=daterange;
-        },
-        getlist(){
-            for(let i=0;i<4;i++){
-                this.$set(this.list[i],"isShow",false)
-            }
-            console.log(this.list)
         },
         routerTo(){
             this.$router.go(-1)
