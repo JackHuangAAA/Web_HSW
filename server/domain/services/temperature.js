@@ -23,6 +23,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
+        }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
             begin = begin.startOf('day').toDate();

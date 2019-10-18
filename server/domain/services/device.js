@@ -149,8 +149,8 @@ module.exports = {
         if (!_.isEmpty(requestBody.type)) {
             query.push({"type": requestBody.type});
         }
-        if (!_.isEmpty(requestBody.unitCode)) {
-            query.push({"unitCode": requestBody.unitCode});
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
         }
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         //查询疫苗不足的设备信息
