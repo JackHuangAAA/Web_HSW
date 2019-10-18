@@ -9,7 +9,7 @@ div {
   left: 0;
 }
 .inStockTitle {
-  height: 9.75%;
+  height: 7.1%;
   width: 100%;
   background-color: #ecf0f8;
   position: relative;
@@ -23,16 +23,15 @@ div {
   cursor: pointer;
 }
 .main {
-  width: 96.8%;
-  height: 87%;
+  width: 100%;
+  height: 92.9%;
   background-color: white;
-  margin: 0 auto;
   border-radius: 10px;
 }
 .headP {
-  width: 50%;
+  width: 40%;
   height: 1.875rem;
-  margin-left: 25%;
+  margin-left: 20%;
   font-size: 1.875rem;
   color: #3E4955;
   line-height: 1.875rem;
@@ -47,7 +46,11 @@ div {
 }
 .mainBottom {
   width: 100%;
-  height: 90.3%;
+  height: 72.8%;
+}
+.finish {
+  width: calc(54.65rem);
+  height: 17.5%;
 }
 .mainBottomLeft {
   width: 8%;
@@ -56,7 +59,7 @@ div {
   position: relative;
 }
 .mainBottomRight {
-  width: calc(57.65rem);
+  width: calc(46.65rem);
   height: 100%;
   float: left;
   overflow: auto;
@@ -70,17 +73,12 @@ div {
 }
 .cabine {
   width: calc(48.875%);
-  height: 18.6%;
+  height: 12.5%;
   background-color: white;
   float: left;
   margin-top: 1rem;
   margin-right: 1.125rem;
   box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.19);
-}
-.finish {
-  width: calc(34.35%);
-  height: 100%;
-  float: left;
   position: relative;
 }
 .cabine:nth-child(1),
@@ -90,9 +88,9 @@ div {
 .vaccineIn {
   position: absolute;
   right: 1.64%;
-  height: 3.0625rem;
-  width: 18.5%;
-  top: calc(48.46875%);
+  height: 3rem;
+  width: 35%;
+  top: calc(48.5%);
 }
 .finishButton {
   width: 75%;
@@ -118,7 +116,7 @@ div {
 .ctOne,
 .ctTwo {
   font-size: 0.875rem;
-  top: 50%;
+  top: 70%;
 }
 .ctLeft,
 .ctRight {
@@ -135,14 +133,13 @@ div {
   left: 43%;
 }
 .ctRight {
-  right: 43%;
+  right: 33.3%;
 }
 .l_r {
   width: 9%;
   left: 50%;
   position: absolute;
-  margin-left: -4.5%;
-  top: 40%;
+  top: 38%;
 }
 .ctTop,
 .ctBottom {
@@ -163,7 +160,7 @@ div {
   height: 18%;
   right: 0;
   position: absolute;
-  top: 36.5%;
+  top: 35.5%;
 }
 .index {
   width: 12%;
@@ -172,7 +169,7 @@ div {
 }
 .indexBlock {
   width: 100%;
-  height: 18.6%;
+  height: 12.5%;
 }
 .indexBlock:nth-child(1) {
   margin-top: 1.5px;
@@ -198,12 +195,17 @@ div {
   width: 50%;
   height: 100%;
   float: left;
-  position: relative;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .cabineRight {
   width: 50%;
   height: 100%;
   float: right;
+  position: absolute;
+  left: 0;
+  top: 0;
   position: relative;
 }
 .vaccineOneName,
@@ -268,32 +270,6 @@ div {
   position: absolute;
   top: 7.1875rem;
 }
-.cancel {
-  width: 9.625rem;
-  height: 2.875rem;
-  background-color: #8C8C8C;
-  border: 1px solid #8c8c8c;
-  position: absolute;
-  left: 7.0625rem;
-  top: 13.4375rem;
-  line-height: 2.875rem;
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-}
-.addYes {
-  width: 9.625rem;
-  height: 2.875rem;
-  background-color: #2A7AFF;
-  border: 1px solid #8c8c8c;
-  position: absolute;
-  left: 17.625rem;
-  top: 13.4375rem;
-  line-height: 2.875rem;
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-}
 .addInput {
   position: absolute;
   top: 0;
@@ -309,4 +285,34 @@ div {
   width: 10.5rem;
   height: 100%;
   text-align: right;
+}
+.cancel {
+  width: 21.88%;
+  height: 3.25rem;
+  background-color: #8C8C8C;
+  float: right;
+  margin-top: 1rem;
+  margin-right: 1rem;
+  font-size: 1.125rem;
+  color: white;
+  text-align: center;
+  line-height: 3.25rem;
+}
+.yes {
+  width: 21.88%;
+  height: 3.25rem;
+  background-color: #2A7AFF;
+  float: right;
+  margin-top: 1rem;
+  margin-right: 1.125rem;
+  font-size: 1.125rem;
+  color: white;
+  text-align: center;
+  line-height: 3.25rem;
+}
+.checkBox {
+  position: absolute;
+  left: 50%;
+  top: 0.7rem;
+  margin-left: -7px;
 }
