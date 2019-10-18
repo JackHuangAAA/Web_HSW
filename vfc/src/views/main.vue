@@ -24,12 +24,6 @@
                 <p class="tem6">{{temperature+2}}</p>
                 <p class="tem7">{{temperature+3}}</p>
             </div>
-            <div class="addButton" @click="vaccineIn()">
-                疫苗入库
-            </div>
-            <div class="outButton" @click="vaccineOut()">
-                疫苗出库
-            </div>
         </div>
 
         <div class="vaccineStatus">
@@ -55,16 +49,15 @@
                     </div>
                 </div>
             </div>
-            <div class="button">
+        </div>
+        <div class="button">
                 <div class="buttonLeft">
-
+                    <div class="ymrk" @click="vaccineIn()">疫苗入库</div>
                 </div>
                 <div class="buttonRight">
-
+                    <div class="ymck" @click="vaccineOut()">疫苗出库</div>
                 </div>
             </div>
-        </div>
-        
     </div>
 </template>
 
