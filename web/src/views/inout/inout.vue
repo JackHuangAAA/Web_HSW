@@ -8,7 +8,7 @@
             </Col>
             <Col span="6" class="main-table-box">
                 <div class="main-table-box-lab">疫苗柜类型:</div>                    
-                <Select v-model="select">
+                <Select v-model="select" @on-change="search_queryInouts()">
                     <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
@@ -30,13 +30,13 @@
         </Row>
         <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
             <Col span="1" class="id-center">{{index+1}}</Col>
-            <Col span="2">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="3">Y750230-64368</Col>
+            <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
+            <Col span="3">{{item.alias||'--'}}</Col>
             <Col span="5">{{item.unitName||'--'}}</Col>
             <Col span="5">{{item.createDate}}</Col><!--2019-9-29 ~ 2019-9-29 -->
-            <Col span="2">{{item.total}}</Col>
-            <Col span="2">{{item.total-item.surplus}}</Col>
-            <Col span="2">{{item.surplus}}</Col>
+            <Col span="2">{{item.total||'--'}}</Col>
+            <Col span="2">{{item.total-item.surplus||'--'}}</Col>
+            <Col span="2">{{item.surplus||'--'}}</Col>
             <Col span="2" class="view-detail"><div @click="routerTo(item._id)">查看详情</div></Col>
         </Row>
         <Row>
@@ -107,6 +107,7 @@ export default {
         },
         dateChange(daterange){
             this.dateTime=daterange;
+            this.search_queryInouts()
         },
         routerTo(_id){
             this.$router.push({path:'/inout/inoutDetail',query:{_id:_id}})

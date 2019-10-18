@@ -4,8 +4,8 @@
             <Col span="18" class="stockDetail-table-title">Y750230-64368<span>冷藏柜</span><i>西湖区蒋村街道社区卫生服务中心</i><i>2019-9-20</i><i>~</i><i>2019-9-20</i></Col>
             <Col span="6" class="main-table-box">
                 <div class="main-table-box-lab">类型:</div>                    
-                <Select v-model="value1">
-                    <Option v-for="item in 3" :value="item" :key="item">{{ item }}</Option>
+                <Select v-model="select">
+                    <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
         </Row>      
@@ -47,7 +47,7 @@
         </Row>
         <Row>
             <div class="comeback" @click="routerTo()">返回</div>
-            <Page :total="100" show-elevator :current="active"/>
+            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -55,14 +55,21 @@
 export default {
     data(){
         return{
-            value1:'',
-            value2:1,
-            active:2,
+            select:'',
+            active:1,
+            total:0,
+            select_type:{
+                0:{
+                    name:'请选择'
+                },
+                1:{
+                    name:'入库'
+                },
+                2:{
+                    name:'出库'
+                }
+            },
             list:[
-                {'num':1},
-                {'num':2},
-                {'num':3},
-                {'num':4},
             ]
         }
     },
@@ -72,8 +79,15 @@ export default {
     methods:{
         queryInouts(){
             this.$api.get('/inout/queryInouts',{}).then(res=>{
-                
+
             })
+        },
+        indexChange(i){
+            this.active=i
+            this.queryInouts()
+        },
+        dateChange(daterange){
+            this.dateTime=daterange;
         },
         getlist(){
             for(let i=0;i<4;i++){

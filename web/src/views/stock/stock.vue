@@ -25,7 +25,7 @@
         <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
             <Col span="2" class="id-center">{{index+1}}</Col>
             <Col span="3">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="4">Y750230-64368</Col>
+            <Col span="4">{{item.alias||'--'}}</Col><!--Y750230-64368-->
             <Col span="5">{{item.unitName||'不明'}}</Col>
             <Col span="3">1号接种台</Col>
             <Col span="4" :class="{abnormal:true}">{{item.flag==0?'正常':'库存缺少、问题疫苗'}}</Col>

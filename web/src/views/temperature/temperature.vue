@@ -29,7 +29,7 @@
         <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
             <Col span="2" class="id-center">{{index+1}}</Col>
             <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="3">Y750230-64368</Col>
+            <Col span="3">{{item.alias||'--'}}</Col><!-- Y750230-64368 -->
             <Col span="5">{{item.unitName||'--'}}</Col>
             <Col span="3" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value+'℃'||'不明'}}</Col>
             <Col span="4" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value>=0 && item.degree[0].value<=5?'正常':'异常'}}</Col>
