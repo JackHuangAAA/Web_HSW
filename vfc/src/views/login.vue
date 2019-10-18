@@ -69,7 +69,8 @@ export default {
             if (res.data.check) {
                 let user = await this.$api.post("/user/modifyUserByCode", {
                     code: res.data.code,
-                    name: res.data.name
+                    name: res.data.name,
+                    type: 1 //医生
                 });
                 await this.saveUser(user.data);
                 this.$router.push('/');

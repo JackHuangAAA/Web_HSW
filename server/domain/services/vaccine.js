@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 module.exports = {
 
     /**
-     *
+     * 查询设备疫苗类型信息
      * @param {any} requestBody 
      * @returns 
      */
