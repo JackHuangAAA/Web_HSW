@@ -6,11 +6,11 @@
                 <img src="/static/img/close.png" @click="cancel()">
                 <div class="vaccineAddOne" v-if="addVaccineOne">
                     <p class="vaccineAddName">{{addVaccineOne}}:</p>
-                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput" @on-focus="vaccineOneCount=''"/>
                 </div>
                 <div class="vaccineAddTwo" v-if="addVaccineTwo">
                     <p class="vaccineAddName">{{addVaccineTwo}}:</p>
-                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput" @on-focus="vaccineTwoCount=''"/>
                 </div>
                 <div class="cancel" @click="cancel()">
                     取消
@@ -68,7 +68,9 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
+    import uuid from 'uuid/v1';
+
     export default {
         data() {
             return {
@@ -168,6 +170,8 @@
                 await this.$api.post("/inout/saveInout", params);
             },
             async inStock(){
+                //batchId为一次流水id(1次流水可能有2条入库记录)
+                let batchId = uuid();
                 //抽屉1号格
                 if(this.vaccineOneId){
                     await this.modifyVaccineNum({
@@ -176,6 +180,7 @@
                         surplus: this.vaccineOneCount
                     });
                     await this.saveInout({
+                        batchId: batchId,
                         ...this.commonData,
                         x: this.vaccineOneX,
                         y: this.vaccineOneY,
@@ -193,6 +198,7 @@
                         surplus: this.vaccineTwoCount
                     });
                     await this.saveInout({
+                        batchId: batchId,
                         ...this.commonData,
                         x: this.vaccineTwoX,
                         y: this.vaccineTwoY,

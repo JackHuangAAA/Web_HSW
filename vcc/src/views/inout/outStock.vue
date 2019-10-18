@@ -50,7 +50,8 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
+    import uuid from 'uuid/v1';
 
     export default {
         data() {

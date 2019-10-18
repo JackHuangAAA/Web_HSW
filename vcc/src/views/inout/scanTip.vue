@@ -65,7 +65,7 @@
             async finishOutStock(){
                 let datas = await this.queryDrawerByCondition();
                 //准备出库记录数据
-                let vaccineIds = [], result = [];
+                let vaccineIds = [], result = [], batchId = uuid();//batchId为一次流水id(1次流水可能有多条入库记录)
                 for(let i=0;i<datas.length;i++){
                     let vaccine = datas[i].vaccine;
                     for(let k=0;k<vaccine.length;k++){

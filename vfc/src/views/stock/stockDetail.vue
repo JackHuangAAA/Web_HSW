@@ -6,11 +6,12 @@
         </Row>
         <Row class="inoculate-table-row">
             <Col span="1">#</Col>
-            <Col span="6">疫苗名称</Col>
-            <Col span="5">位置信息</Col>
-            <Col span="4">入库数量</Col>
-            <Col span="4">接种数量</Col>
-            <Col span="4">剩余数量</Col>
+            <Col span="5">疫苗名称</Col>
+            <Col span="4">批次号</Col>
+            <Col span="5">有效期</Col>
+            <Col span="3">入库数量</Col>
+            <Col span="3">接种数量</Col>
+            <Col span="3">剩余数量</Col>
         </Row>
         <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
             <Col span="1">{{index+1}}</Col>
