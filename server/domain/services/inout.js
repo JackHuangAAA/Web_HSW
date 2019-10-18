@@ -40,7 +40,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
             populate:[{path:'device',select:'code alias'}],
