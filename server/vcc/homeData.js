@@ -44,7 +44,7 @@ async function execute() {
         let deviceData = await Domain.services.device.queryDeviceByCondition({ code: key });
         let alarmData = await Domain.services.alarm.queryAlarmByByCondition({ device: deviceData[0]._id });
         // 疫苗种类
-        let vaccineNum = await Domain.services.vaccine.queryVaccine({ device: deviceData[0]._id });
+        let vaccineNum = await Domain.services.vaccine.queryVaccineNum({ device: deviceData[0]._id });
         // 缺少库存
          let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: deviceData[0]._id});
         // 空余药柜
