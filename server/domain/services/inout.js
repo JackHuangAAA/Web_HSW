@@ -167,7 +167,14 @@ module.exports = {
         }
 
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
-        return Domain.models.inout.find(query);
+        let result = await Domain.models.inout.paginate(query, {
+            sort: {"_id": -1},
+            populate:[{path:'user',select:'name'}],
+            page: requestBody.page,
+            limit: parseInt(requestBody.size),
+            lean:true
+        });
+        return {rs: result.docs, total: result.total};
     },
 
 };
