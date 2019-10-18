@@ -81,7 +81,7 @@ router.get('/queryDeviceByCondition',
  * @apiParam {Number} page 第几页
  * @apiParam {Number} size 每页显示数目
  * @apiParam {Number} [type] 设备类型：1接种柜/2冷藏柜
- * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} [unitName] 所属单位名称
  * @apiSuccess {JSON}  Object  version model数组
  */
 router.get('/queryDeviceStock',
