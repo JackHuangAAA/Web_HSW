@@ -44,7 +44,7 @@
             return {
                 cabineDatas: [],
                 index: '1',
-                row: 5
+                row: 6
             }
         },
         computed: {
@@ -60,7 +60,7 @@
                     device: this.device._id
                 });
                 let array = res.data;
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 12; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
                     temp.id = array[i]._id;
                     temp.x = array[i].x;

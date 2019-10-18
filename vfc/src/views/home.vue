@@ -104,7 +104,7 @@ global.moment = moment;
                     this.pageName = "报警";
                     this.$router.push('/alarm/alarm');
                 }
-                if(index==4){
+                if(index==3){
                     this.pageName = "设置";
                     this.$router.push('/setting/setting');
                 }
@@ -121,7 +121,7 @@ global.moment = moment;
             },
             //接收温度信息
             receiveTemperature(){
-                this.$device.subscribe('TEMPERATURE', (data) => {
+                //this.$device.subscribe('TEMPERATURE', (data) => {
                     console.log('SERVER_PUSH==>TEMPERATURE');
                     let temp = '', val= 8;//data.data;
                     if(val>5 || val<0){
@@ -145,16 +145,7 @@ global.moment = moment;
                     this.temperature = val;
                     //保存温度到设备记录
                     this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
-                });
-            },
-            //接收接种信息
-            receiveVaccination(){
-                this.$device.subscribe('VACCINATION', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION');
-                    let vaccination = null;
-
-                    this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
-                });
+                //});
             }
         },
         mounted(){
@@ -170,9 +161,6 @@ global.moment = moment;
             });
             //接收温度信息 todo
             this.receiveTemperature();
-            //接收接种信息 todo
-            this.receiveVaccination();
-
         }
 }
 </script>

@@ -39,12 +39,12 @@
                 <p class="tem7">{{temperature+3}}</p>
             </div>
             <div class="abnormalTemperature">
-                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{alarmNumber}}</span>/次</p>
+                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{alarmNumber||0}}</span>/次</p>
                 <p class="cardTwo">温度异常</p>
                 <img class="cardImg" src="/static/img/warning.png">
             </div>
             <div class="peopleCount">
-                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{customerNumber}}</span>/人</p>
+                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{customerNumber||0}}</span>/人</p>
                 <p class="cardTwo">接种顾客</p>
                 <img class="cardImg" src="/static/img/customer.png">
             </div>
@@ -69,7 +69,7 @@
             return {
                 alarmNumber: 0,
                 customerNumber:0,
-                temperature: -0,
+                temperature: 0,
                 temperatureDes:'正常',
                 vaccineData:[]
             }
