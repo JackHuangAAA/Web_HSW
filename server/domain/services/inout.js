@@ -13,7 +13,7 @@ module.exports = {
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
     queryInoutsBybatchId: async function(requestBody){
-        logger.debug(`queryInouts param: ${JSON.stringify(requestBody)}`);
+        logger.debug(`queryInoutsBybatchId param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.deviceId)) {
             query.push({"device": requestBody.deviceId});
@@ -61,8 +61,8 @@ module.exports = {
             {$group:{
                 _id: "$batchId",
                 "type":{"$first":"$type"},
-                "deviceType":{"$first":"deviceType"},
-                "unitName":{"$first":"unitName"},
+                "deviceType":{"$first":"$deviceType"},
+                "unitName":{"$first":"$unitName"},
                 count:{$sum:"$total"}
             }},
             {$skip:(requestBody.page-1)*requestBody.size},
@@ -169,9 +169,9 @@ module.exports = {
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
-            populate:[{path:'user',select:'name'}],
-            page: requestBody.page,
-            limit: parseInt(requestBody.size),
+            populate:[{path:'user',select:'name'},{path:'device',select:'alias'}],
+            page: requestBody.page || 1,
+            limit: parseInt(requestBody.size) || 10,
             lean:true
         });
         return {rs: result.docs, total: result.total};
