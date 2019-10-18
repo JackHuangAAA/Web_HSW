@@ -8,12 +8,12 @@ var mongoose = require('mongoose');
 module.exports = {
 
     /**
-     *
+     * 查询设备疫苗类型信息
      * @param {any} requestBody 
      * @returns 
      */
     queryVaccineNum: async function (requestBody) {
-        logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
+        logger.debug(`queryVaccineNum param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
             { $match: { device: deviceId } },

@@ -27,6 +27,7 @@ router.post('/saveSummary',
  * @apiParam {String} [device] 设备ID
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} [unitName] 所属单位名称
  * @apiParam {String} [code] 疫苗编号
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间

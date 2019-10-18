@@ -2,14 +2,14 @@
     <div class="container">
         <div class="cabineStatus">
             <div class="abnormalTemperature">
-                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{alarmNumber}}</span>/次</p>
+                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{alarmNumber||0}}</span>/次</p>
                 <p class="cardTwo">温度异常</p>
                 <img class="cardImg" src="/static/img/warning.png">
             </div>
             <div class="peopleCount">
-                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{customerNumber}}</span>/人</p>
-                <p class="cardTwo">接种顾客</p>
-                <img class="cardImg" src="/static/img/customer.png">
+                <p class="cardOne"><span style="font-size:2.25rem;margin-right:5px;">{{vaccineNumber||0}}</span>/种</p>
+                <p class="cardTwo">疫苗种类</p>
+                <img class="cardImg" src="/static/img/vaccinekinds.png">
             </div>
             <div class="temperature">
                 <img src="/static/img/temperature.png">
@@ -23,12 +23,6 @@
                 <p class="tem5">{{temperature+1}}</p>
                 <p class="tem6">{{temperature+2}}</p>
                 <p class="tem7">{{temperature+3}}</p>
-            </div>
-            <div class="addButton" @click="vaccineIn()">
-                疫苗入库
-            </div>
-            <div class="outButton" @click="vaccineOut()">
-                疫苗出库
             </div>
         </div>
 
@@ -55,16 +49,15 @@
                     </div>
                 </div>
             </div>
-            <div class="button">
+        </div>
+        <div class="button">
                 <div class="buttonLeft">
-
+                    <div class="ymrk" @click="vaccineIn()">疫苗入库</div>
                 </div>
                 <div class="buttonRight">
-
+                    <div class="ymck" @click="vaccineOut()">疫苗出库</div>
                 </div>
             </div>
-        </div>
-        
     </div>
 </template>
 
@@ -78,8 +71,8 @@
         data() {
             return {
                 alarmNumber: 0,
-                customerNumber:0,
-                temperature: -0,
+                vaccineNumber:0,
+                temperature: 0,
                 temperatureDes:'正常',
                 vaccineData:[]
             }
@@ -101,13 +94,12 @@
                     });
                 this.alarmNumber = res.data.length;
             },
-            //当天服务人数
-            async queryVaccinationDailyInfo(){
-                let res = await this.$api.get("/vaccination/queryVaccinationDailyInfo",{
-                    device: this.device._id,
-                    ifToday:'today'
+            //冷藏柜已有疫苗种类
+            async queryVaccineNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineNum",{
+                    device: this.device._id
                 });
-                this.customerNumber = res.data.length;
+                this.vaccineNumber = res.data.length;
             },
             //查询抽屉疫苗信息
             async queryDrawerByCondition(){
@@ -115,7 +107,7 @@
                     device: this.device._id
                 });
                 let array = res.data;
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 12; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
                     if (num > 0) {
                         for (let k = 0; k < num; k++) {
@@ -135,7 +127,6 @@
                         temp.vaccineTwoCount = '';
                     }
                     this.vaccineData.push(temp);
-                    console.log(this.vaccineData);
                 }
             },
             vaccineIn(){
@@ -145,11 +136,11 @@
                 this.$router.push('/inout/outStock');
             }
         },
-        mounted() {
+        mounted() {console.log('this.device-----%',this.device)
             //查询首页数据
             this.queryDrawerByCondition();
             this.queryAlarmByByCondition();
-            this.queryVaccinationDailyInfo();
+            this.queryVaccineNum();
         }
     }
 </script>

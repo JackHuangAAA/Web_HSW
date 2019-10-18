@@ -31,6 +31,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});
         }
