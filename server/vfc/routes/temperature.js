@@ -1,19 +1,42 @@
-const mongoose = require('mongoose');
-const paginate = require('mongoose-paginate');
+/**
+ * Created by Administrator on 2019/9/27 0027.
+ */
+'use strict';
+const router = require('koa-router')();
+const logger = Libs.logger.getLogger('temperature');
 
 /**
- * 温度信息(设备一天内的温度)
+ * @api {GET} /temperature/queryTemperatures  查询温度信息
+ * @apiGroup temperature
+ * @apiVersion 1.0.0
+ * @apiDescription 查询温度信息
+ * @apiParam {String} [deviceId] 设备id
+ * @apiParam {String} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} page 第几页
+ * @apiParam {String} size 每页显示数目
+ * @apiParam {String} begin 开始时间
+ * @apiParam {String} end 结束时间
+ * @apiSuccess {JSON}  Object  temperature model 数组
  */
-const temperatureSchema = mongoose.Schema({
-    device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
-    deviceType: Number, //设备类型
-    unitCode: String,   //所属单位编号
-    unitName: String,   //所属单位
-    degree: [{
-        time: String, //时间
-        value: Number //温度值
-    }],//全天温度
-    createDate: {type: Date, default: Date.now}  //操作时间
-}, {autoIndex: false});
-temperatureSchema.plugin(paginate);
-module.exports = mongoose.model('temperature', temperatureSchema);
+router.get('/queryTemperatures',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.temperature.queryTemperatures(ctx.request.query);
+    })
+);
+
+/**
+ * @api {POST} /temperature/saveTemperature  增加温度信息
+ * @apiGroup temperature
+ * @apiVersion 1.0.0
+ * @apiDescription 增加温度信息
+ * @apiParam {JSON}  Object  temperature model
+ * @apiSuccess {JSON}  Object  temperature model
+ */
+router.post('/saveTemperatures',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.temperature.saveTemperatures(ctx.request.body);
+    })
+);
+
+module.exports = router;
