@@ -24,7 +24,7 @@ module.exports = {
             query.push({"unitCode": requestBody.unitCode});
         }
         if (!_.isEmpty(requestBody.unitName)) {
-            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
