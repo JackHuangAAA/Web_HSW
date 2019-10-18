@@ -9,7 +9,6 @@ module.exports = {
 
     /**
      *
-     *
      * @param {any} requestBody
      * @returns
      */
@@ -105,12 +104,12 @@ module.exports = {
     queryVaccinationDailyInfo: async function(requestBody){
         logger.debug(`queryVaccinationByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
-        if (!_.isEmpty(requestBody.deviceid)) {
-            query.push({ "device": mongoose.Types.ObjectId(requestBody.deviceid) });
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": mongoose.Types.ObjectId(requestBody.device) });
         }
-        let today = moment();
-        let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
-        if (!_.isEmpty(requestBody.today)) {
+        if (!_.isEmpty(requestBody.ifToday)) {
+            let today = moment();
+            let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
             query.push({ "createDate": dailyInfo });
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};

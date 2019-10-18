@@ -19,10 +19,16 @@ module.exports = {
             query.push({"device": requestBody.deviceId});
         }
         if (!_.isEmpty(requestBody.code)) {
-            query.push({"vaccineCode": requestBody.code});
+            query.push({"code": requestBody.code});
         }
         if (!_.isEmpty(requestBody.name)) {
-            query.push({"vaccineName": new RegExp(requestBody.name)});
+            query.push({"name": new RegExp(requestBody.name)});
+        }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
@@ -37,6 +43,7 @@ module.exports = {
         query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
+            populate:[{path:'device',select:'code alias'}],
             page: requestBody.page,
             limit: parseInt(requestBody.size)
         });
@@ -48,7 +55,7 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveInouts: async function(requestBody){
+    saveInout: async function(requestBody){
         logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
     },

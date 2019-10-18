@@ -15,7 +15,7 @@ module.exports = {
     queryAlarmByByCondition: async function (requestBody) {
         logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
-         if (!_.isEmpty(requestBody.ifToday)) {
+        if (!_.isEmpty(requestBody.ifToday)) {
            let today = moment();
            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
         }
@@ -33,9 +33,7 @@ module.exports = {
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         let result = await Domain.models.alarm.find(query);
-
-        logger.debug(`result: ${result}`);
-        return { rs: result, total: result.length }
+        return result;
     },
 
     /**
@@ -72,6 +70,40 @@ module.exports = {
     saveAlarm: async function(requestBody){
         logger.debug(`saveAlarm param: ${JSON.stringify(requestBody)}`);
         return Domain.models.alarm.create(requestBody);
+    },
+
+    /**
+     * 查询今日报警信息
+     * @param requestBody
+     * @returns
+     */
+    queryAlarmDailyInfo: async function(requestBody){
+        logger.debug(`queryAlarmDailyInfo param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": mongoose.Types.ObjectId(requestBody.device) });
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({ "deviceType": requestBody.deviceType });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.ifToday)) {
+            let today = moment();
+            let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
+            query.push({ "createDate": dailyInfo });
+        }
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+
+        return await Domain.models.alarm.find(query);
     }
+
 
 };

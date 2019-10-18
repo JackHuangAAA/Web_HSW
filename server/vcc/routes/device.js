@@ -53,6 +53,20 @@ router.post('/saveDevice',
 );
 
 /**
+ * @api {POST} /device/modifyDevice  修改设备信息
+ * @apiGroup device
+ * @apiVersion 1.0.0
+ * @apiDescription 修改设备信息
+ * @apiParam {JSON}  Object  device model
+ * @apiSuccess {JSON}  Object  device model
+ */
+router.post('/modifyDevice',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.device.modifyDevice(ctx.request.body);
+    })
+);
+
+/**
  * @api {GET} /device/queryDeviceByCondition  按条件查询设备信息
  * @apiGroup device
  * @apiVersion 1.0.0

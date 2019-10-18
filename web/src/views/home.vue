@@ -1,77 +1,94 @@
 <template>
     <div class="layout">
-        <!-- 导航头部 -->
-        <header class="layout-nav">
-            <div class="layout-nav-wrap">
-                <div class="layout-logo">
-                    <img src="/static/img/logo.png"/>
-                </div>
-                <div class="layout-menu">
-                    <div v-for="(menu, index) in menus" :key="index" @click="selectMenu(menu)" class="layout-menu-button" :class="currentPath == menu.url? 'active':''">
-                        <div>
-                            <img :src="'/static/img/' + menu.icon +'.png'">
-                        </div>
-                        <span>{{menu.name}}</span>
-                    </div>
-                </div>
-
-                <div class="layout-nav-profile">
-                    <div class="layout-welcome">
-                        欢迎，【{{ user ? user.name : ''}}】
-                    </div>
-                    <Dropdown>
-                        <div class="layout-avatar">
-                            <img src="/static/img/user_head.png" />
-                        </div>
-                    <DropdownMenu slot="list" style="width:110px;">
-                        <DropdownItem @click.native="setting">
-                            <div style="display: inline-block;vertical-align: middle;"><img src="/static/img/passwd.png" ></img></div>
-                            <div style="display: inline-block;margin-left: 12px;margin-right: 4px;">修改密码</div>
-                        </DropdownItem>
-                        <DropdownItem @click.native="logout">
-                            <div style="display: inline-block;vertical-align: middle;"><img src="/static/img/logout.png" ></img></div>
-                            <div style="display: inline-block;margin-left: 12px;margin-right: 4px;">退出登录</div>
-                        </DropdownItem>
-                    </DropdownMenu>
-                    </Dropdown>
-                </div>
+        <div class="menu-list">
+            <div class="menu-logo">
+                <img src="/static/img/s_logo.png" alt="">
             </div>
-        </header>
-
-        <div class="layout-nav-divider"></div>
-        <div class="layout-main">
-            <router-view ref="contentView" class="layout-main-page"></router-view>
-            <Spin fix v-show="loading">
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>加载中...</div>
-            </Spin>
+            <div class="menu-line"></div>
+            <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
+                <img class="menuImg" :src="item.img">
+                {{item.name}}
+            </div>
         </div>
-        <!--设置-->
-        <Modal ref="settingModal" title="密码修改" :width="534" :height="300" :closable="false" :mask-closable="false" :footerHide="true">
-            <Form ref="frmSetting" :model="frmSetting" :rules="ruleValidate" :label-width="100" slot="content">
-                <FormItem label="请输入旧密码" prop="password">
-                    <Input type="password" v-model="frmSetting.password" placeholder=""></Input>
-                </FormItem>
-                <FormItem label="请输入新密码" prop="newpassword">
-                    <Input type="password" v-model="frmSetting.newpassword" placeholder=""></Input>
-                </FormItem>
-                <FormItem label="请确认新密码" prop="newpassword1">
-                    <Input type="password" v-model="frmSetting.newpassword1" placeholder=""></Input>
-                </FormItem>
-            </Form>
-            <div slot="footer">
-                <Button @click="cancelSetting('frmSetting')" style="margin-right:10px; height: 36px; width:88px;">取 消</Button>
-                <Button type="primary" @click="saveSetting('frmSetting')" style="height: 36px; width:88px;">保 存</Button>
+        <HeaderComponent></HeaderComponent>
+        <div class="layout-main">
+            <!-- <LeftComponent v-bind:menus="menus"></LeftComponent> -->
+            <div class="layout-main-right" style="border: none;">
+                <div class="layout-content">
+                    <div class="layout-content-main">
+                        <router-view ref="contentView"></router-view>
+                        <Spin fix v-show="loading">
+                            <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
+                            <div>加载中...</div>
+                        </Spin>
+                    </div>
+                </div>
             </div>
-        </Modal>
+        </div>
+
     </div>
 </template>
 <script>
     import {mapGetters, mapActions, mapState} from 'vuex'
     import md5 from 'js-md5'
-    import routerConfig from '@/router'
+    import HeaderComponent from '@/components/header.vue'
+    import LeftComponent from '@/components/left.vue'
 
     export default {
+
+        data() {
+            return {
+                loading: false,
+                menus: [],
+                menu: [
+                    {name:'首页',img:'/static/img/home.png'},
+                    {name:'疫苗柜运行监控',img:'/static/img/monitor.png'},
+                    {name:'疫苗柜库存监控',img:'/static/img/stock.png'},
+                    {name:'上报温度查询',img:'/static/img/alarm.png'},
+                    //{name:'报废',img:'/static/img/delete.png'},
+                    {name:'出入库记录',img:'/static/img/inout.png'}
+                ],
+                isactive:0
+            }
+        },
+        computed: {
+            ...mapGetters({
+                currentMenu: 'currentMenu',
+                user: 'user'
+            })
+        },
+        components: {
+            HeaderComponent,
+            LeftComponent
+        },
+        methods: {
+            ...mapActions({
+                setCurrentMenu: 'setCurrentMenu',
+                saveUser: 'saveUser'
+            })
+        },
+        mounted() {
+            this.$api.get('/user/current').then((result) => {console.log("VVV9-----------"+JSON.stringify(result.data));
+                this.menus = result.data.permission.children;
+                this.menus.unshift({
+                    expand: true,
+                    icon: "",
+                    pid: null,
+                    sort: 0,
+                    url:'/homePage',
+                    title: "首页"
+                });
+                this.saveUser(result.data);
+                this.setCurrentMenu(this.menus);
+                sessionStorage.setItem('menus', JSON.stringify( this.menus) );
+                sessionStorage.setItem('user', JSON.stringify( result.data) );
+            });
+            if (this.$route.path == '/') {
+                this.$router.push('/main');
+            }
+        }
+    }
+    /*export default {
 
         data () {
             const checkOldPwd = (rule, value, callback, source, options) => {
@@ -99,8 +116,7 @@
                 loading: false,
                 menus: [],
                 title: this.$config.appName,
-                userPic: 'tuichu',
-                //activeMenu: null,
+                //userPic: 'tuichu',
                 frmSetting: {
                     name: '',
                     phone: '',
@@ -148,7 +164,10 @@
                 currentMenu: 'currentMenu'
             })
         },
-        components:{},
+        components:{
+            HeaderComponent,
+            LeftComponent
+        },
         watch:{
             '$route.path':function(n,o){
                 this.currentPath = n
@@ -208,9 +227,24 @@
             });
         },
         mounted(){
-            if(this.$route.path == '/'){
-                this.$router.push('/main');
-            }
+            this.$api.get('/user/current').then((result) => {
+                this.menus.unshift({
+                    expand: true,
+                    icon: "",
+                    pid: null,
+                    sort: 0,
+                    url:'/homePage',
+                    title: "首页"
+                });
+                this.saveUser(result.data);
+                this.menus = result.data;
+                if(this.$route.path == '/'){
+                    this.$router.push('/main');
+                }
+            });
         }
-    }
+    }*/
 </script>
+<style lang="less" scoped>
+    @import "~@/style/layout.less";
+</style>

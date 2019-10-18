@@ -1,105 +1,105 @@
 <template>
-  <div class="layout">
-    <div class="login-main">
-      <div class="bg1"></div>
-      <div class="bg2"></div>
-      <div class="login-header">
-        <div class="logo item"><img :src="ETHINK"></div>
-        <div class="logoinfo item">银信疫苗接种平台</div>
-        <div class="title item">welcome to login system</div>
-      </div>
-      <div class="login">
-        <div class="tab item">
-          <p :class="{'tabactive':login1}"
-             @click="login('fp')">指纹登陆</p>
-          <p :class="{'tabactive':login2}"
-             style="padding-left:62px;"
-             @click="login('up')">用户密码登录</p>
+    <div class="container">
+        <div class="main">
+            <div class="title">
+                <img class="bg1" src="/static/img/loginp1.png">
+                <img class="logo" src="/static/img/logo.png">
+                <p class="logoP">银信疫苗接种平台</p>
+                <p class="logoE">welcome to login system</p>
+            </div>
+            <div class="loginContent">
+                <div class="select">
+                    <p class="fingerLogin" @click="fingerLogin" :class="{'changeColor':show}">指纹登录</p>
+                    <p class="accountLogin" @click="accountLogin" :class="{'changeColor':!show}">账号登录</p>
+                </div>
+                <div class="loginForm" :class="{'loginFormChange':!show}">
+                    <fplogin v-if="show" @click="test()"></fplogin>
+                    <loginform v-if="!show" @Submit="userLogin"></loginform>
+                </div>
+            </div>
+            <!-- <div class="footer">
+                <img class="bg2" src="/static/img/loginp2.png">
+            </div> -->
         </div>
-        <div class="loginform item">
-          <fplogin v-if="login1"
-                   @click="test()"></fplogin>
-          <loginform v-if="login2"
-                     @Submit="checkUser"></loginform>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
-import ETHINK from "@/assets/logo.png";
-import loginform from "_c/loginform";
-import fplogin from "_c/fplogin";
+import loginform from '@/components/loginform'
+import fplogin from '@/components/fplogin'
 import { mapGetters, mapActions } from "vuex";
+
 export default {
-  components: {
-    loginform,
-    fplogin
-  },
-  data() {
-    return {
-      login1: true,
-      login2: false,
-      ETHINK
-    };
-  },
-  computed: {
-    ...mapGetters(["device"])
-  },
-  created() {},
-  mounted() {
-    this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
-    this.$device.subscribe("SOCKET_DATA", this.SOCKET());
-  },
-  methods: {
-    ...mapActions(["saveUser"]),
-    login(type) {
-      switch (type) {
-        case "fp":
-          this.login1 = true;
-          this.login2 = false;
-          break;
-        case "up":
-          this.login1 = false;
-          this.login2 = true;
-          break;
-        default:
-          break;
-      }
+    components: {
+        loginform,
+        fplogin
     },
-    SOCKET(cb) {
-      console.log(cb);
+    data() {
+        return {
+            show: true
+        };
     },
-    SCANNER(cb) {
-      console.log(cb);
+    computed: {
+        ...mapGetters({
+            user: "user",
+            device: "device"
+        })
     },
-    test() {
-      // let deviceid = this.$device.getDeviceCode();
-      // console.log(JSON.stringify(deviceid));
-      let test = this.$device.finger("open").catch(err => {
-        console.log(JSON.stringify(err));
-      });
-      console.log("test");
+    created() { },
+
+    methods: {
+        ...mapActions(["saveUser"]),
+        login(type) {
+            switch (type) {
+                case "fp":
+                    this.show = true;
+                    break;
+                case "up":
+                    this.show = false;
+                    break;
+                default:
+                    break;
+            }
+        },
+        async userLogin(form) {
+            form = {
+                code: 'admin',
+                password: '000000',
+
+            };
+            let res = await this.$api.get("/zcy/checkUser", form);
+            if (res.data.check) {
+                let user = await this.$api.post("/user/modifyUserByCode", {
+                    code: res.data.code,
+                    name: res.data.name,
+                    type: 1 //接种医生
+                });
+                await this.saveUser(user.data);
+                this.$router.push('/');
+            }
+        },
+        fingerLogin() {
+            this.show = true;
+        },
+        accountLogin() {
+            this.show = false;
+        },
+        //接收指纹比对结果
+        checkFinger(){
+            /*this.$device.subscribe("FINGER_RESULT", (res) => {
+                console.log('SERVER_PUSH==>FINGER_RESULT');
+            );*/
+        }
     },
-    async checkUser(form) {
-      let res = await this.$api.get("/zcy/checkUser", form);
-      let check = res.data.check;
-      if (check) {
-        let data = res.data;
-        let user = await this.$api.post("/user/modifyUserByCode", {
-          code: data.code,
-          name: data.name
-        });
-        await this.saveUser(user.data);
-        console.log(user.data);
-        this.$router.push({ name: "home" });
-      }
-    }
-  }
+    mounted() {
+        //this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
+        //this.$device.subscribe("SOCKET_DATA", this.SOCKET());
+        //指纹登录 todo
+        this.checkFinger();
+    },
 };
 </script>
 
-<style lang="less">
-@import "~@/style/main/login.less";
+<style lang="less" scoped>
+@import "~@/style/login.less";
 </style>

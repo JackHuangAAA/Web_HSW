@@ -10,7 +10,7 @@
         width: 100%;
         margin: 0;
         height: 100%;
-        min-width: @viewport-width;
+        min-width: @min-width;
     }
 </style>
 <script>
