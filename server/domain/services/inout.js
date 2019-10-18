@@ -19,10 +19,16 @@ module.exports = {
             query.push({"device": requestBody.deviceId});
         }
         if (!_.isEmpty(requestBody.code)) {
-            query.push({"vaccineCode": requestBody.code});
+            query.push({"code": requestBody.code});
         }
         if (!_.isEmpty(requestBody.name)) {
-            query.push({"vaccineName": new RegExp(requestBody.name)});
+            query.push({"name": new RegExp(requestBody.name)});
+        }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);

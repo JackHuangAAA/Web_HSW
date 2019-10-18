@@ -12,7 +12,7 @@ module.exports = {
      * @param {any} requestBody 
      * @returns 
      */
-    queryVaccine: async function (requestBody) {
+    queryVaccineNum: async function (requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         let result = await Domain.models.vaccine.aggregate([
@@ -141,6 +141,32 @@ module.exports = {
         }
         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
         return await Domain.models.vaccine.find(query,null, sort);
-    }
+    },
+
+    /**
+     * 查询疫苗信息
+     * @param requestBody
+     * @returns {Promise.<{rs: *, total: (*|number)}>}
+     */
+    queryVaccine: async function(requestBody){
+        logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.deviceId)) {
+            query.push({"device": requestBody.deviceId});
+        }
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({"name": requestBody.name});
+        }
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        let result = await Domain.models.vaccine.paginate(query, {
+            sort: {"_id": -1},
+            page: requestBody.page,
+            limit: parseInt(requestBody.size)
+        });
+
+        return {rs: result.docs, total: result.total};
+    },
+
+
 
 };
