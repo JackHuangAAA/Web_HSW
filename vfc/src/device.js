@@ -9,7 +9,7 @@ export default {
     },
     async getDeviceCode() {
         if (config.env == 'development'){
-            return { deviceId: 'DT0001' };
+            return { deviceId: 'FT0001' };
         } else {
             let deviceid = await $d.invoke('SERVER', 'GetDeviceId');
             console.log('getDeviceCode===>' + JSON.stringify(deviceid));
