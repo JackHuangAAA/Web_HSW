@@ -1,5 +1,6 @@
 package com.ethink.fps.api.action;
 
+import com.ethink.fps.Version;
 import com.ethink.fps.api.VO.MatchResult;
 import com.ethink.fps.api.VO.RestResult;
 import com.ethink.fps.api.action.common.Action;
@@ -47,7 +48,7 @@ public class StoreAction extends Action {
         int count = 0;
         if (finger == null) {
             count = fingerPrintStore.addFinger(tag, base64Pic);
-        }else{
+        } else {
             result.setCode(RspCode.EXITS);
             count = fingerPrintStore.countByTag(tag);
         }
@@ -64,6 +65,14 @@ public class StoreAction extends Action {
             fingerPrintStore.removeFinger(tag);
         }
         RestResult result = new RestResult();
+        return result;
+    }
+
+    @RequestMapping(value = "/version", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public RestResult version() {
+        RestResult result = new RestResult();
+        result.setData(Version.version);
         return result;
     }
 }
