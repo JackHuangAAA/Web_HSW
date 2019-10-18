@@ -22,6 +22,7 @@ module.exports = {
         $set: {
           code: requestBody.code,
           name: requestBody.name,
+          type: requestBody.type,
           lastLogin: new Date()
         }
       },
