@@ -5,6 +5,7 @@ public class Finger {
     private int id;
     private String tag;
     private String temp;
+    private byte[] pic;
 
     public int getId() {
         return id;
@@ -28,5 +29,13 @@ public class Finger {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public byte[] getPic() {
+        return pic;
+    }
+
+    public void setPic(byte[] pic) {
+        this.pic = pic;
     }
 }
