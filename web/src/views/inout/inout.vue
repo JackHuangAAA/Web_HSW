@@ -19,30 +19,22 @@
         </Row>      
         <Row class="main-table-head">
             <Col span="1" class="id-center">序号</Col>
-            <Col span="2">疫苗柜类型</Col>
-            <Col span="3">疫苗柜编号</Col>
-            <Col span="5">所在单位</Col>
-            <Col span="5">日期</Col>
-            <Col span="2">入库总量</Col>
-            <Col span="2">出库总量</Col>
-            <Col span="2">库存剩余</Col>
-            <Col span="2">操作</Col>
+            <Col span="3">疫苗柜类型</Col>
+            <Col span="3">所在单位</Col>
+            <Col span="8">操作批次号</Col>
+            <Col span="3">疫苗数量</Col>
+            <Col span="3">操作类型</Col>
+            <Col span="3">操作</Col>
         </Row>
         <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
             <Col span="1" class="id-center">{{index+1}}</Col>
-            <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="3">{{item.device==null?'--':item.device.alias?item.device.alias:'--'}}</Col>
-            <Col span="5">{{item.unitName||'--'}}</Col>
-            <Col span="5">{{item.createDate}}</Col><!--2019-9-29 ~ 2019-9-29 -->
-            <Col span="2">{{item.total||'--'}}</Col>
-            <Col span="2">{{item.total-item.surplus||'--'}}</Col>
-            <Col span="2">{{item.surplus||'--'}}</Col>
-            <Col span="2" class="view-detail">
-                <div @click="routerTo(
-                    item._id,item.createDate,
-                    item.unitName,
-                    item.device==null?'--':item.device.alias?item.device.alias:'--',
-                    item.deviceType==1?'接种柜':'冷藏柜')">查看详情</div>
+            <Col span="3">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
+            <Col span="3">{{item.unitName}}</Col>
+            <Col span="8">{{item._id||'--'}}</Col>
+            <Col span="3">{{item.count||'--'}}</Col><!--2019-9-29 ~ 2019-9-29 -->
+            <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
+            <Col span="3" class="view-detail">
+                <div @click="routerTo(item._id)">查看详情</div>
             </Col>
         </Row>
         <Row>
@@ -78,11 +70,11 @@ export default {
     methods:{
         queryInouts(){
             this.search_active=1
-            this.$api.get('/inout/queryInouts',{size:10,page:this.active,test:0}).then(res=>{
+            this.$api.get('/inout/queryInoutsBybatchId',{size:10,page:this.active,test:0}).then(res=>{
                 let data=res.data.rs
-                for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
-                }
+                // for(let i=0;i<data.length;i++){
+                //     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                // }
                 this.total=res.data.total
                 this.lists=data
             })
@@ -98,11 +90,11 @@ export default {
                 end:this.dateTime[1],
                 test:0
             }
-            this.$api.get('/inout/queryInouts',formdata).then(res=>{
+            this.$api.get('/inout/queryInoutsBybatchId',formdata).then(res=>{
                 let data=res.data.rs
-                for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
-                }
+                // for(let i=0;i<data.length;i++){
+                //     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                // }
                 this.total=res.data.total
                 this.lists=data
             })
@@ -115,8 +107,8 @@ export default {
             this.dateTime=daterange;
             this.search_queryInouts()
         },
-        routerTo(_id,date,position,alias,type){
-            this.$router.push({path:'/inout/inoutDetail',query:{_id:_id,dateTime:date,position,alias,type}})
+        routerTo(_id){
+            this.$router.push({path:'/inout/inoutDetail',query:{_id:_id}})
         },
     },
     created(){

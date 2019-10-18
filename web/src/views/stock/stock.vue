@@ -8,7 +8,7 @@
             </Col>
             <Col span="6" class="main-table-box">
                 <div class="main-table-box-lab">疫苗柜类型:</div>                    
-                <Select v-model="select">
+                <Select v-model="select" @on-change="search_queryDeviceStock()">
                     <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
@@ -29,7 +29,11 @@
             <Col span="5">{{item.unitName||'不明'}}</Col>
             <Col span="3">1号接种台</Col>
             <Col span="4" :class="{abnormal:true}">{{item.flag==0?'正常':'库存缺少、问题疫苗'}}</Col>
-            <Col span="3" class="view-detail"><div @click="routerTo(item._id)">查看详情</div></Col>
+            <Col span="3" class="view-detail"><div @click="routerTo(
+                item._id,
+                item.type==1?'接种柜':'冷藏柜',
+                item.alias?item.alias:'',
+                item.unitName)">查看详情</div></Col>
         </Row>
         <Row>
             <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
@@ -81,7 +85,6 @@ export default {
                 unitName:this.unitName==''?'':this.unitName,
                 test:0
             }
-            console.log(this.unitName+this.select+'---------------------------这里是搜索')
             this.$api.get('/device/queryDeviceStock',formdata).then(res=>{
                 let data=res.data.rs
                 for(let i=0;i<data.length;i++){
@@ -95,8 +98,8 @@ export default {
             this.active=i
             this.queryDeviceStock()
         },
-        routerTo(_id){
-            this.$router.push({path:'/stock/stockDetail',query:{_id:_id}})
+        routerTo(_id,type,alias,position){
+            this.$router.push({path:'/stock/stockDetail',query:{_id:_id,type,alias,position}})
         }
     },
     created(){

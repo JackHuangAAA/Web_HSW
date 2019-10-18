@@ -10,7 +10,7 @@
                     <!-- <Input class="login-input" ref="userInput"  type="text" v-model="loginFrm.user" size="large" placeholder="账户" @on-change="userChange">
                         <Icon type="ios-person-outline" slot="suffix"></Icon>
                     </Input> -->
-                    <Input placeholder="账号" class="login-input" autocomplete="off" size="large">
+                    <Input placeholder="账号" v-model="loginFrm.user" @on-change="userChange" class="login-input" autocomplete="off" size="large">
                         <img src="/static/img/account.png" slot="suffix" class="login-icon" />
                     </Input>
         
@@ -20,7 +20,7 @@
                     <!-- <Input class="login-input" type="password" icon="locked" v-model="loginFrm.password" size="large" placeholder="密码" @on-change="pwdChange" @on-enter="login(loginFrm)">
                         <Icon type="ios-lock-outline" slot="suffix"></Icon>
                     </Input> -->
-                    <Input placeholder="密码" type="password" size="large" autocomplete="off" class="login-input">
+                    <Input placeholder="密码" type="password" size="large"  v-model="loginFrm.password" @on-change="pwdChange" @on-enter="login(loginFrm)" autocomplete="off" class="login-input">
                         <img src="/static/img/pwd.png" slot="suffix" class="login-icon" />
                     </Input>
                     <div class="errortip" v-if="pwdErrShow"><span>{{pwderror}}</span></div>
