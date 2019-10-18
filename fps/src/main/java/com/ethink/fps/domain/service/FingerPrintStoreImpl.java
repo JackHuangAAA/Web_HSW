@@ -27,9 +27,15 @@ public class FingerPrintStoreImpl implements IFingerPrintStore {
     }
 
     @Override
-    public void addFinger(String tag, String base64Picture) {
+    public int countByTag(String tag) {
+        return jdbcTemplate.queryForInt("select count(*) from finger where tag = ?",tag);
+    }
+
+    @Override
+    public int addFinger(String tag, String base64Picture) {
         String temp = matcher.getTemp(base64Picture);
         jdbcTemplate.update("insert into finger(tag,temp) values(?,?)", tag, temp);
+        return jdbcTemplate.queryForInt("select count(*) from finger where tag = ?",tag);
     }
 
     @Override

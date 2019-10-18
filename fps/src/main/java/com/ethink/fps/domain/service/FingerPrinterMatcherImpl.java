@@ -33,7 +33,6 @@ public class FingerPrinterMatcherImpl implements IFingerPrinterMatcher {
         store.forEach((Finger finger) -> {
             FingerprintTemplate target = new FingerprintTemplate().deserialize(finger.getTemp());
             double score = matcher.match(target);
-            logger.info("tag:{},score:{}",finger.getTag(),score);
             if (score > threshold) {
                 result.set(finger);
                 return true;

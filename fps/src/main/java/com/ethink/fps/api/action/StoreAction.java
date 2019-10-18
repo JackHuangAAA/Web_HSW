@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
  * Created by Administrator on 2016/12/29.
  */
 @RestController
-@RequestMapping("/")
 public class StoreAction extends Action {
 
     @Autowired
@@ -43,8 +42,16 @@ public class StoreAction extends Action {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public RestResult register(@RequestParam("tag") String tag, @RequestBody String base64Pic) {
-        fingerPrintStore.addFinger(tag, base64Pic);
         RestResult result = new RestResult();
+        Finger finger = fingerPrinterMatcher.match(base64Pic);
+        int count = 0;
+        if (finger == null) {
+            count = fingerPrintStore.addFinger(tag, base64Pic);
+        }else{
+            result.setCode(RspCode.EXITS);
+            count = fingerPrintStore.countByTag(tag);
+        }
+        result.setData(count);
         return result;
     }
 
