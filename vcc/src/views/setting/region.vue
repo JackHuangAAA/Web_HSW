@@ -22,33 +22,33 @@
                             <div class="cabine" v-for="(item,index) in cabineData">
                                 <!-- <Input v-model="value" placeholder="选择疫苗名称" class="chooseVaccine"/> -->
                                 <div class="noVaccine" v-show=item.ifOneChoose>
-                                    <Select v-model="item.vaccineOne" class="chooseVaccine"  @on-change="selectOne(index)">
-                                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    <Select v-model="item.vaccineOne" class="chooseVaccine" :label-in-value="true" @on-change="selectOne(index,$event)">
+                                        <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
                                     </Select>
                                 </div>
                                 <div class="noVaccineTwo" v-show=item.ifTwoChoose>
-                                    <Select v-model="item.vaccineTwo" class="chooseVaccine"  @on-change="selectTwo(index)">
-                                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                    <Select v-model="item.vaccineTwo" class="chooseVaccine" :label-in-value="true" @on-change="selectTwo(index,$event)">
+                                        <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
                                     </Select>
                                 </div>
                                 <div class="vaccineName" v-show=item.ifVaccineOne>
-                                    麻疹疫苗
+                                    {{item && item.vaccine && item.vaccine[0] && item.vaccine[0].name}}
                                 </div>
                                 <div class="vaccineNameTwo" v-show=item.ifVaccineTwo>
-                                    狂犬疫苗
+                                    {{item && item.vaccine && item.vaccine[1] && item.vaccine[1].name}}
                                 </div>
-                                <img src="/static/img/add.png" class="addImg" @click="addVaccine(index)" v-show=item.ifOneChoose>
-                                <img src="/static/img/add.png" class="addImg2" @click="addVaccineTwo(index)" v-show=item.ifTwoChoose>
-                                <img src="/static/img/del.png" class="delImg" v-show=item.ifVaccineOne @click="delVaccineOne(index)">
-                                <img src="/static/img/del.png" class="delImgTwo" v-show=item.ifVaccineTwo @click="delVaccineTwo(index)">
+                                <img src="/static/img/add.png" class="addImg" v-show="item.ifOneChoose" @click="addVaccine(index)">
+                                <img src="/static/img/add.png" class="addImg2" v-show="item.ifTwoChoose" @click="addVaccineTwo(index)">
+                                <img src="/static/img/del.png" class="delImg" v-show="item.ifVaccineOne" @click="delVaccineOne(index)">
+                                <img src="/static/img/del.png" class="delImgTwo" v-show="item.ifVaccineTwo" @click="delVaccineTwo(index)">
                             </div>
                         </div>
                     </div>
-                    <div class="finish">
+                    <!--<div class="finish">
                         <div class="finishButton">
                             完成
                         </div>
-                    </div>
+                    </div>-->
                 </div>
     </div>
 </template>
@@ -59,14 +59,10 @@
         data() {
             return {
                 row: 0,
-                cabineData: [{},{},{},{},{},{},{},{}],
-                cityList: [{value:22,label:22},{value:33,label:33}],
-                // ifAdd: false,
-                // ifVaccineOne: false,
-                // ifVaccineTwo: false,
-                // ifOneChoose: true,
-                // ifTwoChoose: false,
-                // ifAddTwo: false
+                cabineData: [],
+                kindList: [],
+                vaccineOneName:'',
+                vaccineTwoName:''
             };
         },
         computed: {
@@ -75,63 +71,172 @@
             })
         },
         methods: {
-            addVaccine: function(index){
+            async addVaccine(index){
+                //显示第二个select
                 if(this.cabineData[index].ifAdd == true){
-                    this.cabineData[index].ifOneChoose = false;
-                    this.cabineData[index].ifVaccineOne = true;
-                    this.cabineData[index].ifTwoChoose = true;
+                    //增加疫苗信息到DB
+                    let drawer = this.cabineData[index];
+                    await this.$api.post("/drawer/modifyDrawerById", {
+                        id: drawer._id,
+                        vaccine: {
+                            device: this.device._id,   //设备
+                            code: drawer.vaccineOne,   //疫苗编号
+                            name: this.vaccineOneName  //疫苗名称
+                        }
+                    });
+                    //this.cabineData[index].ifOneChoose = false;
+                    //this.cabineData[index].ifVaccineOne = true;
+                    //this.cabineData[index].ifTwoChoose = true;
+                    this.queryDrawerByCondition();
                 }
-                this.$forceUpdate()
-                console.log(this.cabineData);
+                //this.$forceUpdate();
             },
-            addVaccineTwo: function(index){
+            async addVaccineTwo(index){
+                //显示第2个疫苗可以删除标记
                 if(this.cabineData[index].ifAddTwo == true){
-                    this.cabineData[index].ifTwoChoose = false;
-                    this.cabineData[index].ifVaccineTwo = true;
+                    //增加疫苗信息到DB
+                    let drawer = this.cabineData[index];
+                    await this.$api.post("/drawer/modifyDrawerById", {
+                        id: drawer._id,
+                        vaccine: {
+                            device: this.device._id,   //设备
+                            code: drawer.vaccineOne,   //疫苗编号
+                            name: this.vaccineTwoName  //疫苗名称
+                        }
+                    });
+                    //this.cabineData[index].ifTwoChoose = false;
+                    //this.cabineData[index].ifVaccineTwo = true;
+                    this.queryDrawerByCondition();
                 }
-                this.$forceUpdate()
+                //this.$forceUpdate();
             },
-            selectOne: function(index){
+            selectOne(index, event){
+                this.cabineData[index].ifAdd = false;
+                if(event == undefined){ return false;}//删除时，阻止异常报错
                 if(this.cabineData[index].vaccineOne !== "" && this.cabineData[index].vaccineOne !== undefined){
+                    /*let temp = this.cabineData[index].vaccine;
+                    if(temp[0] == this.cabineData[index].vaccineOne){
+                        this.$Message.info({
+                            content: '同一个抽屉不允许设置相同的疫苗',
+                            duration: 10,
+                            closable: true
+                        });
+                        return false;
+                    }*/
+                    this.vaccineOneName = event.label;//新选择的疫苗名称
                     this.cabineData[index].ifAdd = true;
                 }
             },
-            selectTwo: function(index){
+            selectTwo(index, event){
+                this.cabineData[index].ifAddTwo = false;
+                if(event==undefined){ return false;}//删除时，阻止异常报错
                 if(this.cabineData[index].vaccineTwo !== "" && this.cabineData[index].vaccineTwo !== undefined){
+                    let temp = this.cabineData[index].vaccine;
+                    if(temp[0].code == this.cabineData[index].vaccineTwo){
+                        this.$Message.error({
+                            content: '同一个抽屉不允许设置相同的疫苗',
+                            duration: 10,
+                            closable: true
+                        });
+                        return false;
+                    }
+                    this.vaccineTwoName = event.label;//新选择的疫苗名称
                     this.cabineData[index].ifAddTwo = true;
                 }
             },
-            delVaccineOne: function(index){
-                if(this.cabineData[index].ifTwoChoose == true){
+            async delVaccineOne(index){
+                //删除疫苗信息从DB
+                let drawer = this.cabineData[index];
+                let res = await this.$api.post("/drawer/modifyDrawerByIdDec", {
+                        id: drawer._id,
+                        vaccineId:  drawer.vaccine[0]._id//疫苗id
+                    }
+                );
+                this.queryDrawerByCondition();
+                /*if(this.cabineData[index].ifTwoChoose == true){
                     this.cabineData[index].ifOneChoose = true;
                     this.cabineData[index].ifVaccineOne = false;
                     this.cabineData[index].ifTwoChoose = false;
-                     this.cabineData[index].vaccineOne = "";
+                    this.cabineData[index].vaccineOne = "";
                 }
                 this.cabineData[index].ifAdd = false;
-                this.$forceUpdate()
+                this.$forceUpdate()*/
             },
-            delVaccineTwo: function(index){
-                this.cabineData[index].ifVaccineTwo = false;
+            async delVaccineTwo(index){
+                //删除疫苗信息从DB
+                let drawer = this.cabineData[index];
+                let res = await this.$api.post("/drawer/modifyDrawerByIdDec", {
+                        id: drawer._id,
+                        vaccineId:  drawer.vaccine[1]._id//疫苗id
+                    }
+                );
+                this.queryDrawerByCondition();
+                /*this.cabineData[index].ifVaccineTwo = false;
                 this.cabineData[index].ifTwoChoose = true;
                 this.cabineData[index].vaccineTwo = "";
                 this.cabineData[index].ifAddTwo = false;
-                console.log(index + '--' +this.cabineData[index].ifAddTwo);
-                this.$forceUpdate()
+                this.$forceUpdate()*/
+            },
+            async queryVaccineKinds(){
+                let res = await this.$api.get("/zcy/queryVaccineKinds");
+                this.kindList = res.data;
+            },
+            async queryDrawerByCondition(){
+                this.cabineData = [];
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
+                    device: this.device._id
+                });
+                this.cabineData = res.data;
+                //初始化区域信息
+                this.cabineData.forEach(item =>{
+                    let vaccine = item.vaccine;
+                    //vaccine有值时，控制显示内容
+                    if(vaccine.length>0){
+                        //抽屉只有一中疫苗
+                        if(vaccine.length ==1){
+                            item.vaccineOne = vaccine[0].code;
+                            item.vaccineTwo = "";
+                            item.ifAdd = false;        //第一个加号不可点击
+                            item.ifAddTwo = false;      //第二个加号是可点击
+                            item.ifOneChoose = false;  //第一个select不显示
+                            item.ifTwoChoose = true;  //第二个select显示
+                            item.ifVaccineOne = true; //第一个已选择疫苗显示
+                            item.ifVaccineTwo = false; //第二个已选择疫苗不显示
+                        }
+                        //抽屉只有2中疫苗
+                        if(vaccine.length ==2){
+                            for(let i=0;i<vaccine.length;i++){
+                                if(i=0){
+                                    item.vaccineOne = vaccine[i].code;
+                                }
+                                if(i=1){
+                                    item.vaccineTwo = vaccine[i].code;
+                                }
+                                item.ifAdd = false;        //第一个加号不可点击
+                                item.ifAddTwo = false;     //第二个加号不可点击
+                                item.ifOneChoose = false;   //第一个select不显示
+                                item.ifTwoChoose = false;  //第二个select不显示
+                                item.ifVaccineOne = true; //第一个已选择疫苗显示
+                                item.ifVaccineTwo = true; //第二个已选择疫苗显示
+                            }
+                        }
+                    }else{
+                        //原始初始化
+                        item.vaccineOne = "";
+                        item.vaccineTwo = "";
+                        item.ifAdd = false;        //第一个加号是否可点击
+                        item.ifAddTwo = false;     //第二个加号是否可点击
+                        item.ifOneChoose = true;   //第一个select是否显示
+                        item.ifTwoChoose = false;  //第二个select是否显示
+                        item.ifVaccineOne = false; //第一个已选择疫苗是否显示
+                        item.ifVaccineTwo = false; //第二个已选择疫苗是否显示
+                    }
+                });
             }
         },
         mounted() {
-            this.cabineData.forEach(item =>{
-                item.vaccineOne = "";
-                item.vaccineTwo = "";
-                item.ifAdd = false;        //第一个加号是否可点击
-                item.ifAddTwo = false;     //第二个加号是否可点击
-                item.ifOneChoose = true;   //第一个select是否显示
-                item.ifTwoChoose = false;  //第二个select是否显示
-                item.ifVaccineOne = false; //第一个已选择疫苗是否显示
-                item.ifVaccineTwo = false; //第二个已选择疫苗是否显示
-            })
-            this.$forceUpdate()
+            this.queryVaccineKinds();
+            this.queryDrawerByCondition();
         },
     };
 </script>

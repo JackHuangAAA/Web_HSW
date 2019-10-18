@@ -79,7 +79,7 @@ module.exports = {
                 $push: { vaccine: vaccineData._id }
             }
         );
-        return { vaccineData: vaccineData }
+        return { vaccineData: vaccineData };
     },
     /**
   * 
