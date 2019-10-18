@@ -24,6 +24,12 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({"name": new RegExp(requestBody.name)});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
+        }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
             begin = begin.startOf('day').toDate();
