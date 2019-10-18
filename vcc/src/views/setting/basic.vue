@@ -106,22 +106,22 @@ export default {
             },
             ruleValidate: {
                 alias: [
-                    { required: true, message: 'The alias cannot be empty', trigger: 'blur' }
+                    { required: true, message: '请输入设备编号', trigger: 'blur' }
                 ],
                 cabinetNo: [
-                    { required: true, type: 'string', message: 'Please select the No', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择接种台编号', trigger: 'change' }
                 ],
                 unitCode: [
-                    { required: true, type: 'string', message: 'Please select the unit', trigger: 'change' }
-                ],
-                'address.cityCode': [
-                    { required: true, type: 'string', message: 'Please select the city', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择所在单位', trigger: 'change' }
                 ],
                 'address.provinceCode': [
-                    { required: true, type: 'string', message: 'Please select the provinces', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择省份', trigger: 'change' }
+                ],
+                'address.cityCode': [
+                    { required: true, type: 'string', message: '请选择市', trigger: 'change' }
                 ],
                 'address.countyCode': [
-                    { required: true, type: 'string', message: 'Please select the county', trigger: 'change' }
+                    { required: true, type: 'string', message: '请选择区(县)', trigger: 'change' }
                 ]
             }
         };

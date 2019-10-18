@@ -6,19 +6,19 @@ const router = require('koa-router')()
 const logger = Libs.logger.getLogger('device')
 
 router.get(
-  '/',
-  Libs.router(async (ctx, next) => {
-    return ctx.currentDevice
-  })
-),
-  router.get(
-    '/queryDeviceByCondition',
+    '/',
     Libs.router(async (ctx, next) => {
-      return await Domain.services.device.queryDeviceByCondition(
-        ctx.request.query
-      )
+        return ctx.currentDevice
     })
-  )
+),
+    router.get(
+        '/queryDeviceByCondition',
+        Libs.router(async (ctx, next) => {
+            return await Domain.services.device.queryDeviceByCondition(
+                ctx.request.query
+            )
+        })
+    )
 
 /**
  * @api {GET} /device/queryDevices  查询设备信息
@@ -49,6 +49,20 @@ router.get('/queryDevices',
 router.post('/saveDevice',
     Libs.router( async (ctx, next) => {
         return await Domain.services.device.saveDevice(ctx.request.body);
+    })
+);
+
+/**
+ * @api {POST} /device/modifyDevice  修改设备信息
+ * @apiGroup device
+ * @apiVersion 1.0.0
+ * @apiDescription 修改设备信息
+ * @apiParam {JSON}  Object  device model
+ * @apiSuccess {JSON}  Object  device model
+ */
+router.post('/modifyDevice',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.device.modifyDevice(ctx.request.body);
     })
 );
 
