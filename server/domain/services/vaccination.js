@@ -26,6 +26,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
 
         let result = await Domain.models.vaccination.aggregate([{"$match": {"$and": query}},
             {"$group": {_id: '$code', num_coustomer: {$sum: 1}}},
@@ -49,6 +52,13 @@ module.exports = {
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({"device": requestBody.device});
+        }
+
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
         let result = await Domain.models.vaccination.paginate(query, {
             sort: {"_id": -1},
@@ -70,7 +80,6 @@ module.exports = {
 
 	 /**
      * 按条件查询接种记录
-     * 按接种序号分组统计客户数量aggregate
      * @param requestBody
      * @returns
      */
@@ -90,7 +99,7 @@ module.exports = {
              query.push({ "unitCode": requestBody.unitCode });
          }
          if (!_.isEmpty(requestBody.unitName)) {
-             query.push({ "unitName": requestBody.unitName });
+             query.push({"unitName":  new RegExp(requestBody.unitName)});
          }
          query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
          return await Domain.models.vaccination.find(query);
