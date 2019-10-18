@@ -12,7 +12,7 @@ const logger = Libs.logger.getLogger('temperature');
  * @apiDescription 查询温度信息
  * @apiParam {String} [deviceId] 设备id
  * @apiParam {String} [deviceType] 设备类型
- * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {String} [unitName] 所属单位名称
  * @apiParam {String} page 第几页
  * @apiParam {String} size 每页显示数目
  * @apiParam {String} begin 开始时间

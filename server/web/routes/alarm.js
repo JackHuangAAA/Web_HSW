@@ -47,6 +47,7 @@ router.get('/queryAlarm',
  * @apiParam {String} [device] 设备
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
+ ** @apiParam {String} [unitName] 所属单位名称
  * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足)
  * @apiSuccess {JSON}  Object  inout model 数组
  */

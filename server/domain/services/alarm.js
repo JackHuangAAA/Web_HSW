@@ -89,6 +89,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
+        }
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
         }
