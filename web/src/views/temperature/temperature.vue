@@ -14,7 +14,7 @@
             </Col>
             <Col span="6" class="main-table-box">
                 <div>时间:</div>
-                <DatePicker :value="dateTime" format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
             </Col>
         </Row>      
         <Row class="main-table-head">
@@ -71,7 +71,7 @@ export default {
             this.$api.get('/temperature/queryTemperatures',{page:this.active,size:10,test:0}).then(res=>{
                 let data=res.data.rs
                 for(let i=0;i<data.length;i++){
-                    // data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
                 }
                 this.lists=data
                 this.total=res.data.total
@@ -103,6 +103,9 @@ export default {
             this.active=i
             this.queryTemperatures()
         },
+        dateChange(daterange){
+            this.dateTime=daterange;//这样value的值就是日期
+        }
     },
     created(){
         this.queryTemperatures()
