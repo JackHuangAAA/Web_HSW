@@ -4,12 +4,12 @@
             <Col span="13" class="main-table-title">疫苗柜库存监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">接种单位:</div>                    
-                <input v-model="value1" placeholder="" />
+                <input v-model="unitName" placeholder="" @keyup.enter="search_queryDeviceStock()"/>
             </Col>
             <Col span="6" class="main-table-box">
                 <div class="main-table-box-lab">疫苗柜类型:</div>                    
-                <Select v-model="value2">
-                    <Option v-for="item in 3" :value="item" :key="item">{{ item }}</Option>
+                <Select v-model="select">
+                    <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
         </Row>      
@@ -41,16 +41,48 @@ import moment from 'moment'
 export default {
     data(){
         return{
-            value1:'',
-            value2:'',
+            unitName:'',
+            select:0,
             active:1,
             lists:[],
             total:0,
+            search_active:1,
+            select_type:{
+                0:{
+                    name:'请选择'
+                },
+                1:{
+                    name:'接种柜'
+                },
+                2:{
+                    name:'冷藏柜'
+                }
+            }
         }
     },
     methods:{
         queryDeviceStock(){
-            this.$api.get('/device/queryDeviceStock',{page:1,size:10,test:0}).then(res=>{
+            this.search_active=1
+            this.$api.get('/device/queryDeviceStock',{page:this.active,size:10,test:0}).then(res=>{
+                let data=res.data.rs
+                for(let i=0;i<data.length;i++){
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                }
+                this.total=res.data.total
+                this.lists=data
+            })
+        },
+        search_queryDeviceStock(){
+            this.active=1
+            let formdata={
+                page:this.search_active,
+                size:10,
+                type:this.select==0?'':this.select,
+                unitName:this.unitName==''?'':this.unitName,
+                test:0
+            }
+            console.log(this.unitName+this.select+'---------------------------这里是搜索')
+            this.$api.get('/device/queryDeviceStock',formdata).then(res=>{
                 let data=res.data.rs
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
