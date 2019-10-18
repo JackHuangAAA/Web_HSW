@@ -189,6 +189,20 @@ module.exports = {
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
           producer: '长春生物制药'
+        },
+        {
+          code: 'ym20190920134508995',
+          name: '流感疫苗',
+          supervisionCode: 'jg20190920001',
+          expiry: new Date(),
+          producer: '长春生物制药'
+        },
+        {
+          code: 'ym20190920134508996',
+          name: '腮腺炎疫苗',
+          supervisionCode: 'jg20190920001',
+          expiry: new Date(),
+          producer: '长春生物制药'
         }
       ];
         return result;

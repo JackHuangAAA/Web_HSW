@@ -125,7 +125,6 @@
                         temp.vaccineTwoCount = '';
                     }
                     this.vaccineData.push(temp);
-                    console.log(this.vaccineData);
                 }
             },
             vaccineIn(){
