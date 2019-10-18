@@ -1,30 +1,11 @@
 <!--入库-->
 <template>
     <div style="position:relative">
-        <div class="black" v-if="addForm">
-            <div class="addForm">
-                <img src="/static/img/close.png" @click="cancel()">
-                <div class="vaccineAddOne" v-if="addVaccineOne">
-                    <p class="vaccineAddName">{{addVaccineOne}}:</p>
-                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
-                </div>
-                <div class="vaccineAddTwo" v-if="addVaccineTwo">
-                    <p class="vaccineAddName">{{addVaccineTwo}}:</p>
-                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
-                </div>
-                <div class="cancel" @click="cancel()">
-                    取消
-                </div>
-                <div class="addYes" @click="inStock()">
-                    确定
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="inStockTitle">
                     <img src="/static/img/back.png" class="back" @click="back()">
-                    <p class="headP">请选择疫苗入库的抽屉</p>
-                    <img src="/static/img/vaccineIn.png" class="vaccineIn">
+                    <p class="headP">请将入库疫苗扫码</p>
+                    <img src="/static/img/vaccineInTip.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="mainTop">
@@ -46,21 +27,25 @@
                         </div>
                         <div class="cabines">
                             <div class="cabine" v-for="(item,index) in cabineDatas" @click="addVaccine(index)">
+                                <Checkbox v-model="item.single" class="checkBox"></Checkbox>
                                 <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
-                                    <p class="vaccineOneCount">{{item.countOne||0}}支</p>
+                                    <!-- <p class="vaccineOneCount">{{item.countOne||0}}支</p> -->
                                 </div>
                                 <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                    <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
+                                    <!-- <p class="vaccineTwoCount">{{item.countTwo||0}}支</p> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="finish">
-                        <div class="finishButton" @click="finishInStock">
-                            完成
-                        </div>
+                </div>
+                <div class="finish">
+                    <div class="yes" @click="next()">
+                        确定
+                    </div>
+                    <div class="cancel" @click="back()">
+                        取消
                     </div>
                 </div>
             </div>
@@ -132,34 +117,33 @@
                         temp.countTwo = '';
                     }
                     this.cabineDatas.push(temp);
+                    this.cabineDatas.forEach(item =>{
+                        item.single = false;
+                    })
                 }
             },
             back(){
                 this.$router.push('/main');
             },
-            addVaccine(index){
-                this.addVaccineOne = this.cabineDatas[index].nameOne;
-                this.addVaccineTwo = this.cabineDatas[index].nameTwo;
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
-                this.vaccineOneId = this.cabineDatas[index].idOne;
-                this.vaccineTwoId = this.cabineDatas[index].idTwo;
-                this.vaccineOneCode = this.cabineDatas[index].codeOne;
-                this.vaccineTwoCode = this.cabineDatas[index].codeTwo;
-                this.vaccineOneX = this.cabineDatas[index].x;
-                this.vaccineTwoX = this.cabineDatas[index].x;
-                this.vaccineOneY = this.cabineDatas[index].y;
-                this.vaccineTwoY = this.cabineDatas[index].y;
-                if(this.addVaccineOne || this.addVaccineTwo){
-                    this.addForm = true;
-                }
+            next: function(){
+                this.$router.push('/inout/inStockCount');
             },
-            cancel(){
-                this.addVaccineOne = '';
-                this.addVaccineTwo = '';
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
-                this.addForm = false;
+            addVaccine(index){
+                // this.addVaccineOne = this.cabineDatas[index].nameOne;
+                // this.addVaccineTwo = this.cabineDatas[index].nameTwo;
+                // this.vaccineOneCount = 0;
+                // this.vaccineTwoCount = 0;
+                // this.vaccineOneId = this.cabineDatas[index].idOne;
+                // this.vaccineTwoId = this.cabineDatas[index].idTwo;
+                // this.vaccineOneCode = this.cabineDatas[index].codeOne;
+                // this.vaccineTwoCode = this.cabineDatas[index].codeTwo;
+                // this.vaccineOneX = this.cabineDatas[index].x;
+                // this.vaccineTwoX = this.cabineDatas[index].x;
+                // this.vaccineOneY = this.cabineDatas[index].y;
+                // this.vaccineTwoY = this.cabineDatas[index].y;
+                // if(this.addVaccineOne || this.addVaccineTwo){
+                //     this.addForm = true;
+                // }
             },
             async modifyVaccineNum(params){
                 await this.$api.post("/vaccine/modifyVaccineNum", params);
