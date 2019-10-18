@@ -14,7 +14,7 @@ const RSP_CODE = {
 
 const commonResponseHandler = (response,resolve,reject)=>{
     if(config.env == 'development'){
-        // console.log(`<= ${response.config.url}`,response.data);
+        console.log(`<= ${response.config.url}`,response.data);
     }
     if (response.data.code == RSP_CODE.NO_LOGIN) {
         //未登录跳转login

@@ -17,8 +17,8 @@
             <Row class="main-table-body">
                 <div @click="()=>{$set(item,'isShow',!item.isShow)}" style="cursor:pointer">
                     <Col span="2" class="id-center">{{index+1}}</Col>
-                    <Col span="10">冷藏柜</Col>
-                    <Col span="9" :class="{abnormal:true}">100</Col>
+                    <Col span="10">{{item.name}}</Col>
+                    <Col span="9" :class="{abnormal:true}">{{item.surplus}}</Col>
                     <Col span="3" :class="{abnormal:true}">库存不足</Col>
                 </div>
             </Row>
@@ -45,7 +45,7 @@
         </Row>
         <Row>
             <div class="comeback" @click="routerTo()">返回</div>
-            <Page :total="100" show-elevator :current="active"/>
+            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -55,36 +55,45 @@ export default {
         return{
             value1:'',
             active:1,
-            list:[
-                {'num':1},
-                {'num':2},
-                {'num':3},
-                {'num':4},
-            ]
+            _id:'',
+            list:[],
+            total:0,
         }
     },
     created(){
-        this.getlist()
+        this._id=this.$route.query._id
         this.queryDeviceByVaccineStock()
     },
+    wathch:{
+        '$route.path'(to,from){
+            console.log(to,from+'--------------------------------')
+            this._id=this.$route.query._id
+        },
+        _id(){
+            this.queryDeviceByVaccineStock()
+        },
+    },
     methods:{
-        queryDeviceByVaccineStock(){
-            this.$api.get('/device/queryDeviceByVaccineStock',
-            {deviceId:this.$route.query.code,
+        async queryDeviceByVaccineStock(){
+            let rs=await this.$api.get('/device/queryDeviceByVaccineStock',
+            {deviceId:this._id,
             page:this.active,
             size:10,
             test:0}).then(res=>{
-
+                let data=res.data.rs
+                for(let i=0;i<data.length;i++){
+                    this.$set(data[i],"isShow",false)
+                }
+                this.total=res.data.total
+                this.list=data
             })
+        },
+        indexChange(i){
+            this.active=i
+            this.queryDeviceByVaccineStock()
         },
         routerTo(){
             this.$router.go(-1)
-        },
-        getlist(){
-            for(let i=0;i<4;i++){
-                this.$set(this.list[i],"isShow",false)
-            }
-            console.log(this.list)
         },
     }
 }

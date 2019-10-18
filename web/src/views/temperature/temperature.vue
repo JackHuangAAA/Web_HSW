@@ -36,7 +36,7 @@
             <Col span="5">{{item.createDate}}</Col>
         </Row>
         <Row>
-            <Page :total="100" show-elevator :current="active"/>
+            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -50,6 +50,7 @@ export default {
             value3: ['2016-01-01', '2016-02-15'],
             active:1,
             lists:[],
+            total:0,
         }
     },
     methods:{
@@ -59,19 +60,21 @@ export default {
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
                 }
-                this.lists=res.data.rs
-
+                this.lists=data
+                this.total=res.data.total
                 console.log(this.lists)
             })
-        }
+        },
+        indexChange(i){
+            this.active=i
+            this.queryTemperatures()
+        },
     },
     created(){
         this.queryTemperatures()
     },
     watch:{
-        active(){
-            this.queryTemperatures()
-        }
+
     }
 }
 </script>

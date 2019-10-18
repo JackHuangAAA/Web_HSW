@@ -61,12 +61,13 @@
             <Col span="24" >
                 <Row class="main-box-title">温度报警</Row>
                 <Row>
-                    <div v-for="(item) of 4" :key="item" class="temperature-alarm">
+                    <div v-for="(item,index) of alarmList" :key="index" class="temperature-alarm">
                         <div class="temperature-alarm-icon">
                             <img src="/static/img/alarm_notice.png" alt="">
-                            <div>杭州市第一人民医院</div>
+                            <div>{{item.unitName}}</div>
                         </div>                        
-                        <div>第一站点接种设备<span>20℃</span></div>
+                        <div>{{item.reason}}</div>
+                        <!-- 第一站点接种设备<span>20℃</span> -->
                     </div>
                 </Row>
             </Col>
@@ -92,7 +93,7 @@
                 <Col span="3">正常接种柜</Col>
                 <Col span="3">异常接种柜</Col>
             </Row>
-            <Row v-for="(item,index) of 5" :key="index" class="main-table-body">
+            <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
                 <Col span="2" class="id-center">1</Col>
                 <Col span="4">{{index}}</Col>
                 <Col span="3">1</Col>
@@ -144,37 +145,43 @@
                 // setCurrentMenu: 'setCurrentMenu'
             }),
             queryDeviceByAggregate(){
-                this.$api.get('/device/queryDeviceByAggregate',{flag:0,test:0}).then(res=>{
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:1,test:0}).then(res=>{
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
-                        if(data[i]._id.type==1 && data[i]._id.status==1){
+                        if(data[i]._id.status==1){
                             this.i_normalCount=data[i].count
                         }
-                        if(data[i]._id.type==1 && data[i]._id.status==2){
+                        if(data[i]._id.status==2){
                             this.i_abnormalCount+=data[i].count
                         }
-                        if(data[i]._id.type==1 && data[i]._id.status==0){
+                        if(data[i]._id.status==0){
                             this.i_abnormalCount+=data[i].count
                         }
-                        if(data[i]._id.type==2 && data[i]._id.status==1){
+                    }
+                })
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:2,test:0}).then(res=>{
+                    let data=res.data;
+                    for(let i=0;i<data.length;i++){
+                        if(data[i]._id.status==1){
                             this.f_normalCount=data[i].count
                         }
-                        if(data[i]._id.type==2 && data[i]._id.status==2){
+                        if(data[i]._id.status==2){
                             this.f_abnormalCount+=data[i].count
                         }
-                        if(data[i]._id.type==2 && data[i]._id.status==0){
+                        if(data[i]._id.status==0){
                             this.f_abnormalCount+=data[i].count
                         }
                     }
-                    console.log(this.i_abnormalCount +" "+this.i_normalCount+" " +this.f_abnormalCount+ " "+this.f_normalCount)
                 })
-                this.$api.get('/device/queryDeviceByAggregate',{flag:1,test:0}).then(res=>{
-                    
-                })
+                // this.$api.get('/device/queryDeviceByAggregate',{flag:1,test:0}).then(res=>{
+                //     //查询各单位设备数量
+                // })
             },
             queryAlarmDailyInfo(){
                 this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
-                    
+                    let data=res.data
+                    data=data.slice(0,4)
+                    this.alarmList=data
                 })
             },
 

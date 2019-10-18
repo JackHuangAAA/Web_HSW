@@ -16,9 +16,7 @@
             <div class="layout-main-right">
                 <div class="layout-content">
                     <div class="layout-content-main">
-                        <keep-alive>
-                            <router-view ref="contentView"></router-view>
-                        </keep-alive>
+                        <router-view ref="contentView"></router-view>
                     </div>
                 </div>
             </div>

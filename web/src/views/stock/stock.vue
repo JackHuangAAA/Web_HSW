@@ -29,10 +29,10 @@
             <Col span="5">{{item.unitName||'不明'}}</Col>
             <Col span="3">1号接种台</Col>
             <Col span="4" :class="{abnormal:true}">{{item.flag==0?'正常':'库存缺少、问题疫苗'}}</Col>
-            <Col span="3" class="view-detail"><div @click="routerTo(item.code)">查看详情</div></Col>
+            <Col span="3" class="view-detail"><div @click="routerTo(item._id)">查看详情</div></Col>
         </Row>
         <Row>
-            <Page :total="100" show-elevator :current="active"/>
+            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -45,6 +45,7 @@ export default {
             value2:'',
             active:1,
             lists:[],
+            total:0,
         }
     },
     methods:{
@@ -54,11 +55,16 @@ export default {
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
                 }
+                this.total=res.data.total
                 this.lists=data
             })
         },
-        routerTo(code){
-            this.$router.push({path:'/stock/stockDetail',query:{code:code}})
+        indexChange(i){
+            this.active=i
+            this.queryDeviceStock()
+        },
+        routerTo(_id){
+            this.$router.push({path:'/stock/stockDetail',query:{_id:_id}})
         }
     },
     created(){
