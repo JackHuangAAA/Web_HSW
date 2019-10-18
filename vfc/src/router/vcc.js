@@ -1,18 +1,22 @@
-import Main from '@/views/main.vue'
 export default [
   {
     path: '/home',
-    name: 'home',
     meta: {
-      title: '主页',
+      title: '首页',
       icon: 'home'
     },
-    component: () => import('@/views/home/home.vue')
+    component: () => import('@/views/home.vue')
+  },
+  {
+    path: '/vaccination',
+    meta: {
+      title: '接种',
+      icon: 'inoculate'
+    },
+    component: () => import('@/views/vaccination/vaccination.vue')
   },
   {
     path: '/inventory',
-    name: 'inventory',
-    redirect: '/vaccine/inventorys',
     meta: {
       title: '库存',
       icon: 'inventory',
@@ -21,7 +25,6 @@ export default [
   },
   {
     path: '/alarm',
-    name: 'alarm',
     meta: {
       title: '报警',
       icon: 'alarm'
@@ -30,22 +33,10 @@ export default [
   },
   {
     path: '/setting',
-    name: 'setting',
     meta: {
       title: '设置',
       icon: 'setting'
     },
-    component: () => import('@/views/setting/setting.vue'),
-    children:[
-      {
-        path:'/input',
-        name:'fingerInput',
-        meta:{
-          title:'指纹录入',
-          icon:'fingerInput'
-        },
-        component:()=>import('@/views/setting/fingerInput.vue')
-      }
-    ]
+    component: () => import('@/views/setting/setting.vue')
   }
-]
+];

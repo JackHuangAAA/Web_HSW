@@ -1,0 +1,110 @@
+div {
+  box-sizing: border-box;
+}
+.container {
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid white;
+  background-image: url('/static/img/loginBack.png');
+  background-size: 100% 100%;
+}
+.main {
+  width: 94.5%;
+  height: 85.5%;
+  margin: 0 auto;
+  margin-top: 5.55%;
+  background-color: white;
+  position: relative;
+}
+.title {
+  width: 100%;
+  height: 26.5%;
+  position: relative;
+}
+.loginContent {
+  width: 100%;
+  height: 73.5%;
+  border-top: 1px solid white;
+  position: relative;
+}
+.bg1 {
+  width: 55px;
+  height: 50px;
+  position: absolute;
+  right: 2.34%;
+  top: 20%;
+}
+.logo {
+  width: 27.8%;
+  height: 9.66%;
+  position: absolute;
+  left: 36.1%;
+  top: 53.1%;
+}
+.logoP {
+  width: 100%;
+  height: 11.8%;
+  font-size: 1.3125rem;
+  font-family: Microsoft YaHei;
+  font-weight: bold;
+  color: #3E4955;
+  position: absolute;
+  top: 67.6%;
+  line-height: 100%;
+  text-align: center;
+  letter-spacing: 5px;
+}
+.logoE {
+  width: 100%;
+  height: 21%;
+  position: absolute;
+  bottom: 0%;
+  font-size: 2.25rem;
+  line-height: 100%;
+  font-weight: bold;
+  color: #C9D3ED;
+  text-align: center;
+}
+.bg2 {
+  width: 16.8%;
+  height: 17.7%;
+  position: absolute;
+  bottom: 4.7%;
+  left: 6%;
+}
+.select {
+  width: 34.8%;
+  height: 5%;
+  margin-left: 32.6%;
+  top: 8.5%;
+  position: absolute;
+}
+.fingerLogin {
+  float: left;
+  font-size: 1.5rem;
+  line-height: 100%;
+  font-weight: bold;
+}
+.accountLogin {
+  float: right;
+  font-size: 1.5rem;
+  line-height: 100%;
+  font-weight: bold;
+}
+.loginForm {
+  width: 33.3%;
+  height: 34.5%;
+  position: absolute;
+  margin-left: 33.35%;
+  top: 24%;
+}
+.loginFormChange {
+  width: 57%;
+  height: 65%;
+  position: absolute;
+  top: 20%;
+  margin-left: 21.5%;
+}
+.changeColor {
+  color: #2A7AFF;
+}
