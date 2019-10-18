@@ -46,7 +46,7 @@
             </Row>
         </Row>
         <Row>
-            <div class="comeback">返回</div>
+            <div class="comeback" @click="routerTo()">返回</div>
             <Page :total="100" show-elevator :current="active"/>
         </Row>        
     </div>
@@ -70,11 +70,19 @@ export default {
         this.getlist()
     },
     methods:{
+        queryInouts(){
+            this.$api.get('/inout/queryInouts',{}).then(res=>{
+                
+            })
+        },
         getlist(){
             for(let i=0;i<4;i++){
                 this.$set(this.list[i],"isShow",false)
             }
             console.log(this.list)
+        },
+        routerTo(){
+            this.$router.go(-1)
         },
     }
 }

@@ -104,7 +104,7 @@ export default {
             this.queryTemperatures()
         },
         dateChange(daterange){
-            this.dateTime=daterange;//这样value的值就是日期
+            this.dateTime=daterange;
         }
     },
     created(){
