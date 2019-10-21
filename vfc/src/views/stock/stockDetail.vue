@@ -1,9 +1,9 @@
 <!--库存详细-->
 <template>
     <div class="inoculate card">
-        <Row class="inoculate-title">
+        <!-- <Row class="inoculate-title">
             <Col span="24">详情页面</Col>
-        </Row>
+        </Row> -->
         <Row class="inoculate-table-row">
             <Col span="1">#</Col>
             <Col span="5">疫苗名称</Col>
