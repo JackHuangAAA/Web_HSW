@@ -56,7 +56,7 @@ public class ConfigActivity extends AppCompatActivity {
         String serial= PhoneUtils.getSerial();
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://192.168.0.67:8080");
+            etUrl.setText("http://192.168.0.162:8080");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
 
         } else {
@@ -66,7 +66,7 @@ public class ConfigActivity extends AppCompatActivity {
             etSerial.setText(serial);
         }
         if (socketUrl.isEmpty()) {
-            edSocket.setText("http://192.168.0.67:9996");
+            edSocket.setText("http://192.168.0.162:9996");
         } else {
             edSocket.setText(socketUrl);
         }
