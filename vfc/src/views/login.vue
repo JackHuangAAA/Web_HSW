@@ -63,7 +63,7 @@ export default {
         async userLogin(form) {
             form = {
                 code: 'admin',
-                password: '00000',
+                password: '000000',
 
             };
             let res = await this.$api.get("/zcy/checkUser", form);
