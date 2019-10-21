@@ -14,7 +14,7 @@
                 </div>
                 <div class="loginForm" :class="{'loginFormChange':!show}">
                     <fplogin v-if="show" @click="test()"></fplogin>
-                    <loginform v-if="!show" @Submit="userLogin"></loginform>
+                    <loginform v-if="!show" :state="state" @Submit="userLogin"></loginform>
                 </div>
             </div>
             <!-- <div class="footer">
@@ -36,7 +36,8 @@ export default {
     },
     data() {
         return {
-            show: true
+            show: true,
+            state:true,
         };
     },
     computed: {
@@ -69,6 +70,7 @@ export default {
             };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
+                this.state=true
                 let user = await this.$api.post("/user/modifyUserByCode", {
                     code: res.data.code,
                     name: res.data.name,
@@ -76,6 +78,8 @@ export default {
                 });
                 await this.saveUser(user.data);
                 this.$router.push('/');
+            }else{
+                this.state=false
             }
         },
         fingerLogin() {
