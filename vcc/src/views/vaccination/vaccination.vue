@@ -66,8 +66,9 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
     import moment from 'moment';
+    import uuid from 'uuid/v1';
 
     export default {
 
@@ -100,11 +101,18 @@
 
                 //疫苗数量减少1
 
-                //比对成功，增加接种信息
-
+                //比对成功，增加出库信息和接种信息
+                await this.saveInout({type:0});
+                await this.saveVaccination({});
             },
             getExpiryDate(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            async saveInout(params){
+                await this.$api.post("/inout/saveInout", params);
+            },
+            async saveVaccination(params){
+                await this.$api.post("/vaccination/saveVaccination", params);
             },
             async openDrawer(val){
                 //查询疫苗所在抽屉信息,使用规则：多个柜子满足,按最少优先使用

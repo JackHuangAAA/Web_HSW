@@ -71,7 +71,7 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
         while (!Thread.interrupted()) {
                 logger.info("发送请求");
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(10000*60);
                 Request request = new Request.Builder().url(Const.getUrl("/vcc/device")).build();
                 Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
                 String msg=response.message();

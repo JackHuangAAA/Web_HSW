@@ -47,6 +47,22 @@
                         <p class="vaccineTwoName">{{item.vaccineTwoName}}</p>
                         <p class="vaccineTwoCount">{{item.vaccineTwoCount || 0}}支</p>
                     </div>
+                    <div class="vaccineLeft" v-if="item.vaccineThreeName">
+                        <p class="vaccineOneName">{{item.vaccineThreeName}}</p>
+                        <p class="vaccineOneCount">{{item.vaccineThreeCount || 0}}支</p>
+                    </div>
+                    <div class="vaccineRight" v-if="item.vaccineFourName">
+                        <p class="vaccineTwoName">{{item.vaccineFourName}}</p>
+                        <p class="vaccineTwoCount">{{item.vaccineFourCount || 0}}支</p>
+                    </div>
+                    <div class="vaccineLeft" v-if="item.vaccineFiveName">
+                        <p class="vaccineOneName">{{item.vaccineFiveName}}</p>
+                        <p class="vaccineOneCount">{{item.vaccineFiveCount || 0}}支</p>
+                    </div>
+                    <div class="vaccineRight" v-if="item.vaccineSixName">
+                        <p class="vaccineTwoName">{{item.vaccineSixName}}</p>
+                        <p class="vaccineTwoCount">{{item.vaccineSixCount || 0}}支</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -119,12 +135,36 @@
                                 temp.vaccineTwoName = vaccine[k].name;
                                 temp.vaccineTwoCount = vaccine[k].surplus;
                             }
+                            if (k == 2) {
+                                temp.vaccineThreeName = vaccine[k].name;
+                                temp.vaccineThreeCount = vaccine[k].surplus;
+                            }
+                            if (k == 3) {
+                                temp.vaccineFourName = vaccine[k].name;
+                                temp.vaccineFourCount = vaccine[k].surplus;
+                            }
+                            if (k == 4) {
+                                temp.vaccineFiveName = vaccine[k].name;
+                                temp.vaccineFiveCount = vaccine[k].surplus;
+                            }
+                            if (k == 5) {
+                                temp.vaccineSixName = vaccine[k].name;
+                                temp.vaccineSixCount = vaccine[k].surplus;
+                            }
                         }
                     } else {
                         temp.vaccineOneName = '';
                         temp.vaccineOneCount = '';
                         temp.vaccineTwoName = '';
                         temp.vaccineTwoCount = '';
+                        temp.vaccineThreeName = '';
+                        temp.vaccineThreeCount = '';
+                        temp.vaccineFourName = '';
+                        temp.vaccineFourCount = '';
+                        temp.vaccineFiveName = '';
+                        temp.vaccineFiveCount = '';
+                        temp.vaccineSixName = '';
+                        temp.vaccineSixCount = '';
                     }
                     this.vaccineData.push(temp);
                 }

@@ -9,7 +9,7 @@ const logger = Libs.logger.getLogger('vaccination');
  * @api {GET} /vaccination/queryVaccine查询疫苗信息
  * @apiGroup vaccine
  * @apiVersion 1.0.0
- * @apiDescription 查询接种记录
+ * @apiDescription 查询疫苗信息
  *  @apiParam {Number} size 每次显示条数
  *  @apiParam {Number} page 显示第几页
  * @apiParam {String} [deviceId] 设备ID
