@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="table">
-                    <div v-for="(item,index) in tableDatas" @click="selectVaccine(index)" class="tableData" :class="{clicked: clickIndex==index}">
+                    <div v-for="(item,index) in tableDatas" class="tableData">
                         <div class="index">
                             <span v-if="index>8">{{index+1}}</span>
                             <span v-if="index<8 || index ==8">0{{index+1}}</span>
@@ -72,10 +72,6 @@
             },
             returnMain: function(){
                 this.$router.push('/main');
-            },
-            selectVaccine: function(index){
-                this.clickIndex = index;
-                this.ifTip = true;
             }
         },
         mounted() {
