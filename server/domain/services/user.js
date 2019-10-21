@@ -95,7 +95,7 @@ module.exports = {
         finger: user.finger
       }
     } else {
-      throw Libs.error('0001', '无效tokenyyy');
+      throw Libs.error('0001', '无效token');
     }
   },
 
