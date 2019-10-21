@@ -239,5 +239,36 @@ module.exports = {
             status: finish
         };
         return result;
+    },
+
+    /**
+     * 根据条形码查询疫苗信息
+     * @param requestBody
+     * @returns {Promise.<{customer: {code: string, name: string, age: number, vaccineCode: string, vaccineName: string, vaccineNum: number}}>}
+     */
+    queryVaccineByBarcode: async function(requestBody) {
+        logger.debug(`queryVaccineByBarcode param: ${JSON.stringify(requestBody)}`);
+        let result = {
+            code: '001',
+            name:'疫苗0',
+            batchNo:'B-999',
+        };
+        return result;
+    },
+
+    /**
+     * queryExceptionVaccine
+     * @param requestBody
+     * @returns {Promise.<{code: number, name: string, batchNo: string}>}
+     */
+    queryExceptionVaccine: async function(requestBody) {
+        logger.debug(`queryExceptionVaccine param: ${JSON.stringify(requestBody)}`);
+        let result = {
+            code: '002',
+            name:'疫苗0',
+            batchNo:'B-999'
+        };
+        return result;
     }
+
 }

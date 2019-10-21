@@ -84,15 +84,28 @@ router.get('/queryVaccineKinds',
 );
 
 /**
- * @api {POST} /reciveVaccination  接收接种信息
+ * @api {POST} /queryVaccineByBarcode  根据条形码查询疫苗信息
  * @apiGroup zcy
  * @apiVersion 1.0.0
- * @apiDescription 接收政采云推送的接种信息
+ * @apiDescription 调用政采云接口，根据条形码查询疫苗信息
  * @apiSuccess Json  Object 响应信息
  */
-router.post('/reciveVaccination',
+router.get('/queryVaccineByBarcode',
     Libs.router(async (ctx, next) => {
-        return await Domain.thirds.zcy.reciveVaccination(ctx.request.query);
+        return await Domain.thirds.zcy.queryVaccineByBarcode(ctx.request.query);
+    })
+);
+
+/**
+ * @api {POST} /queryExceptionVaccine  查询异常疫苗信息
+ * @apiGroup zcy
+ * @apiVersion 1.0.0
+ * @apiDescription 调用政采云接口，查询异常疫苗信息
+ * @apiSuccess Json  Object 响应信息
+ */
+router.get('/queryExceptionVaccine',
+    Libs.router(async (ctx, next) => {
+        return await Domain.thirds.zcy.queryExceptionVaccine(ctx.request.query);
     })
 );
 
