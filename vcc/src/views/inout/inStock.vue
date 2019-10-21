@@ -6,11 +6,11 @@
                 <img src="/static/img/close.png" @click="cancel()">
                 <div class="vaccineAddOne" v-if="addVaccineOne">
                     <p class="vaccineAddName">{{addVaccineOne}}:</p>
-                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput" @on-focus="vaccineOneCount=''"/>
+                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
                 </div>
                 <div class="vaccineAddTwo" v-if="addVaccineTwo">
                     <p class="vaccineAddName">{{addVaccineTwo}}:</p>
-                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput" @on-focus="vaccineTwoCount=''"/>
+                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
                 </div>
                 <div class="cancel" @click="cancel()">
                     取消
@@ -83,8 +83,8 @@
                 vaccineOneCode: '',//抽屉1号格疫苗编号
                 addVaccineTwo: '',//抽屉2号格疫苗名称
                 vaccineTwoCode: '',//抽屉2号格疫苗编号
-                vaccineOneCount: 0,//抽屉1号格疫苗数量
-                vaccineTwoCount: 0,//抽屉2号格疫苗数量
+                vaccineOneCount: null,//抽屉1号格疫苗数量
+                vaccineTwoCount: null,//抽屉2号格疫苗数量
                 vaccineOneId: '',//抽屉1号格疫苗id
                 vaccineTwoId: '',//抽屉2号格疫苗id
                 vaccineOneX: '',//抽屉1号格疫苗X
@@ -142,8 +142,8 @@
             addVaccine(index){
                 this.addVaccineOne = this.cabineDatas[index].nameOne;
                 this.addVaccineTwo = this.cabineDatas[index].nameTwo;
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
+                this.vaccineOneCount = null;
+                this.vaccineTwoCount = null;
                 this.vaccineOneId = this.cabineDatas[index].idOne;
                 this.vaccineTwoId = this.cabineDatas[index].idTwo;
                 this.vaccineOneCode = this.cabineDatas[index].codeOne;
@@ -159,8 +159,8 @@
             cancel(){
                 this.addVaccineOne = '';
                 this.addVaccineTwo = '';
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
+                this.vaccineOneCount = null;
+                this.vaccineTwoCount = null;
                 this.addForm = false;
             },
             async modifyVaccineNum(params){
@@ -173,7 +173,7 @@
                 //batchId为一次流水id(1次流水可能有2条入库记录)
                 let batchId = uuid();
                 //抽屉1号格
-                if(this.vaccineOneId){
+                if(this.vaccineOneId && this.vaccineOneCount>0){
                     await this.modifyVaccineNum({
                         id: this.vaccineOneId,
                         total: this.vaccineOneCount,
@@ -191,11 +191,12 @@
                     });
                 }
                 //抽屉2号格
-                if(this.vaccineTwoId){
+                if(this.vaccineTwoId && this.vaccineTwoCount>0){
                     await this.modifyVaccineNum({
                         id: this.vaccineTwoId,
                         total: this.vaccineTwoCount,
                         surplus: this.vaccineTwoCount
+
                     });
                     await this.saveInout({
                         batchId: batchId,

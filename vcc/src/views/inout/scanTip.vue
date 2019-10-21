@@ -30,6 +30,7 @@
 </template>
 <script>
     import {mapGetters} from 'vuex'
+    import uuid from 'uuid/v1';
 
     export default {
         data(){
@@ -70,6 +71,7 @@
                     let vaccine = datas[i].vaccine;
                     for(let k=0;k<vaccine.length;k++){
                         let temp = {}; //关键
+                        temp.batchId = batchId;
                         temp = _.assign(temp, this.commonData); //关键
                         temp.x = datas[i].x;
                         temp.y = datas[i].y;
