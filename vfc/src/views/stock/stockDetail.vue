@@ -16,7 +16,8 @@
         <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
             <Col span="1">{{index+1}}</Col>
             <Col span="6">{{item.name}}</Col>
-            <Col span="5">({{position}})</Col>
+            <Col span="5">({{item.batchNo}})</Col>
+            <Col span="5">({{item.expiry}})</Col>
             <Col span="4">{{item.total}}</Col>
             <Col span="4">{{item.total-item.surplus}}</Col>
             <Col span="4">{{item.surplus}}</Col>
@@ -32,18 +33,12 @@
 
         data() {
             return {
-                progress:0,
-                info: '',
-                vaccine: '',
-                datas:[],
-                position:''
-
+                datas:[]
             };
         },
         methods: {
             async getDetails(val) {
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {id: val});
-                this.position = res.data[0].x+','+res.data[0].y;
                 this.datas = res.data[0].vaccine;
             }
         },
