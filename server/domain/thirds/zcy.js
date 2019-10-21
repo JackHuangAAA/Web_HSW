@@ -266,7 +266,7 @@ module.exports = {
         let result = {
             code: '002',
             name:'疫苗0',
-            batchNo:'B-999',
+            batchNo:'B-999'
         };
         return result;
     }

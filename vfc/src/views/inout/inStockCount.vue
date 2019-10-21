@@ -5,10 +5,10 @@
                 <img src="/static/img/close.png" class="close" @click="closeTip()">
                 <div class="tipsTitle">
                     <img src="/static/img/info.png" class="info">
-                    <p class="tipsTitleP">百白破疫苗</p>
+                    <p class="tipsTitleP">{{exName}}</p>
                 </div>
                 <div class="tipP">
-                    YH5683098批次有效期失效请将此疫苗报废处理
+                    {{exReason}}
                 </div>
                 <div class="tipsYes" @click="closeTip()">
                     确定
@@ -84,7 +84,9 @@
                 drawerId:'',
                 commonData: null,
                 batchId:'',
-                map: null
+                map: null,
+                exName: '',
+                exReason:''
             }
         },
         computed: {
@@ -114,8 +116,30 @@
             async saveInout(params){
                 await this.$api.post("/inout/saveInout", params);
             },
-            async queryDrawerByCondition(val){
-                this.tableDatas = [], this.map = new Map();
+            async queryExceptionVaccine(){
+                return await this.$api.get("/zcy/queryExceptionVaccine");
+            },
+            async setCash(){
+                this.map = new Map();
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
+                    id: this.drawerId
+                });
+                let array = res.data;
+                let vaccines = array[0].vaccine;
+                for (let k = 0; k < vaccines.length; k++) {
+                    let  temp = {};
+                    temp.drawerId = array[0]._id;
+                    temp.vaccineId = vaccines[k]._id;
+                    temp.code = vaccines[k].code;
+                    temp.name = vaccines[k].name;
+                    temp.batchNo = vaccines[k].batchNo;
+                    temp.x = array[0].x;
+                    temp.y = array[0].y;console.log('kk===='+vaccines[k].code+'-'+vaccines[k].batchNo)
+                    this.map.set(vaccines[k].code+'-'+vaccines[k].batchNo,temp); //缓存本抽屉疫苗数据，在变更数量时使用
+                }
+            },
+            async queryDrawerByCondition(){
+                this.tableDatas = [];
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     id: this.drawerId
                 });
@@ -127,15 +151,13 @@
                     let  temp = {};
                     temp.id = array[0]._id;
                     temp.vaccineId = vaccines[k]._id;
+                    temp.code = vaccines[k].code;
                     temp.name = vaccines[k].name;
                     temp.batchNo = vaccines[k].batchNo;
                     temp.x = array[0].x;
                     temp.y = array[0].y;
                     temp.count = 0;
-                    this.map.set(vaccines[k].code+'-'+vaccines[k].batchNo,temp); //缓存本抽屉疫苗数据，在变更数量时使用
-                    if(val){
-                        this.tableDatas.push(temp);
-                    }
+                    this.tableDatas.push(temp);
                 }
             },
             //扫描枪扫码数量增加后，自动保存
@@ -143,7 +165,16 @@
                 //this.$device.subscribe('SCAN_ADD_VACCINE', (data) => {
                     console.log('SERVER_PUSH==>SCAN_ADD_VACCINE');
                     let result= {code: '1',name:'y1',batchNo:'1'};// 模拟扫描枪返回结果 todo
-                    let data = this.map.get(result.code+'-'+result.batchNo);
+                    //检查是否异常疫苗
+                    let ex = await this.queryExceptionVaccine();
+                    if(result.batchNo == ex.batchNo){
+                        this.exName = result.name;
+                        this.exReason = "报废或失效"; // todo
+                        this.ifTip = true;
+                        return false;
+                    }
+                    //从缓存取数据
+                    let data = this.map.get(result.code+'-'+result.batchNo);console.log((result.code+'-'+result.batchNo)+'-----map--',data)
                     //缓存找不到批次信息，是新批次，需要增加
                     if(_.isEmpty(data)){
                         //新增疫苗（新批次）与抽屉关联
@@ -157,23 +188,16 @@
                                 surplus:1    //剩余数量
                             }});
                         //页面数据更新
-                        this.freshTableDatas({
-                            name:result.name,
-                            batchNo:result.batchNo,
-                            x:this.commonData.x,
-                            y:this.commonData.y,
-                            count:1
-                        });
+                        await this.freshTableDatas('add', result.code, result.name, result.batchNo);
                     }else{
-                        let vaccineId = await this.getVaccineId(data,result.code);console.log('vaccineId---->'+vaccineId);
                         //修改数量
                         await this.modifyVaccineNum({
-                            id: vaccineId,
+                            id: data.vaccineId,
                             total: 1,
                             surplus: 1
                         });
                         //页面数据更新
-                        data.count = parseInt(data.count) + 1;
+                        await this.freshTableDatas('modify',result.code, result.name, result.batchNo);
                     }
                     //增加入库记录
                     await this.saveInout({
@@ -184,30 +208,51 @@
                         total: 1,
                         surplus: 1
                     });
+                    //刷新缓存
+                    this.setCash();
                 //});
             },
-            getVaccineId(obj,code){
-                let id='';
-                for(let n=0;n<obj.length;n++){
-                    if(code == obj[n]){console.log('obj[n]======%j',obj[n]);
-                        id =  obj[n].vaccineId;
-                        break;
+            freshTableDatas(action,code,name,batchNo){
+                let arr = this.tableDatas;
+                if(action == 'add'){
+                    for(let i=0;i<arr.length;i++){
+                       arr[i].clickIndex = null;//行颜色选中
+                    }
+                    arr.unshift({
+                        name:name,
+                        batchNo:batchNo,
+                        x:this.commonData.x,
+                        y:this.commonData.y,
+                        clickIndex: 0,//行颜色选中
+                        count:1
+                    });
+                }else{
+                    for(let i=0;i<arr.length;i++){
+                        if(arr[i].code==code || arr[i].batchNo==batchNo){
+                            arr[i].count = arr[i].count + 1;
+                            arr[i].clickIndex = i;//行颜色选中
+                            break;
+                        }else{
+                            arr[i].clickIndex = null;
+                        }
                     }
                 }
-                return id;
-            },
-            freshTableDatas(val){
-                this.tableDatas.push(val);
             },
             finish(){
-                this.$router.push({ path: '/inout/inStockEnd', query: { batchId: this.batchId }});
+                let datas = [],array = this.tableDatas;
+                for(let t=0;t<array.length;t++){
+                    if(array[t].count>0){
+                        datas.push(array[t]);
+                    }
+                }
+                this.$router.push({ path: '/inout/inStockEnd', query: { datas: datas }});
             }
         },
         mounted() {
             //监听扫描枪事件
             setInterval(() => {
                 this.scanSave();
-            }, 5000000);
+            }, 5000);
             //this.scanSave();
             this.drawerId = this.$route.query.drawerId;
             this.batchId = uuid();
@@ -219,6 +264,7 @@
                 unitCode: this.device.unitCode,
                 unitName: this.device.unitName
             };
+            this.setCash();
             this.queryDrawerByCondition(true);
         }
     };

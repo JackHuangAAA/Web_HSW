@@ -32,16 +32,16 @@
                             <span v-if="index<8 || index ==8">0{{index+1}}</span>
                         </div>
                         <div class="vaccineName">
-                            {{item.vaccineName}}
+                            {{item.name}}
                         </div>
                         <div class="code">
-                            {{item.code}}
+                            {{item.batchNo}}
                         </div>
                         <div class="coordinate">
-                            {{item.site}}
+                            ({{item.x}},{{item.x}})
                         </div>
                         <div class="count">
-                            <p class="countInput">11</p>
+                            <p class="countInput">{{item.count}}</p>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
     export default {
         data() {
             return {
-                tableDatas: [{vaccineName: '百白破疫苗',code:'yHUG-7U940',site: '(1,1)',count:0},{vaccineName:'狂犬疫苗',code:'yHUG-7U940',site: '(1,1)',count:0}],
+                tableDatas: [],
                 clickIndex: 0,
                 ifTip: false
             }
@@ -79,7 +79,7 @@
             }
         },
         mounted() {
-
+            this.tableDatas = this.$route.query.datas;
         }
     };
 </script>
