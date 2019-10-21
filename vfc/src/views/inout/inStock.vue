@@ -54,9 +54,9 @@
                     <div class="yes" @click="next()">
                         确定
                     </div>
-                    <div class="cancel" @click="back()">
+                    <!-- <div class="cancel" @click="back()">
                         取消
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
