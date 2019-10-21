@@ -55,7 +55,7 @@
                             ({{item.x}},{{item.x}})
                         </div>
                         <div class="count">
-                            <input type="text" class="countInput" v-model="item.count">
+                            <input type="text" class="countInput" v-model="item.count" readonly ="readonly">
                         </div>
                     </div>
                 </div>
