@@ -56,6 +56,12 @@ module.exports = {
         target: "http://localhost:9997",
         secure: false,
         pathRewrite: { "^/vfc": "" }
+      },
+      "/socket.io": {
+        target: "http://localhost:9990",
+        secure: false,
+        changeOrigin: true,
+        ws: true
       }
     }
   },
@@ -67,4 +73,4 @@ module.exports = {
       }
     }
   }
-}
+};

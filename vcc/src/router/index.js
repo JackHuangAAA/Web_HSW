@@ -13,7 +13,7 @@ const RouterConfig = {
     routes: Routers
 }
 
-const router = new VueRouter(RouterConfig)
+const router = new VueRouter(RouterConfig);
 
 let routers = [];
 _.forEach(RouterConfig.routes, v => {
@@ -24,14 +24,14 @@ _.forEach(RouterConfig.routes, v => {
 });
 
 let getRouterConfig = function (path) {
-    let config = _.find(routers, { path: path })
+    let config = _.find(routers, { path: path });
     return config
-}
+};
 
 router.beforeEach((to, from, next) => {
     let menu = getRouterConfig(to.path);
     if (menu != null) {
-        let p = Promise.resolve();console.log(store.getters.user+'---11----'+to.path)
+        let p = Promise.resolve();
         if (store.getters.user == null && to.path != '/login') { //当前用户信息不存在
             p = api.get('/user/current').then((result) => {
                 store.dispatch('saveUser', result.data);

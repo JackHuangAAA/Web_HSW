@@ -5,7 +5,8 @@ const paginate = require('mongoose-paginate');
  * 出入库记录`
  */
 const inoutSchema = mongoose.Schema({
-    type: Number, //类型(1:入库;2:出库)
+    batchId:String, //操作批次Id
+    type: Number, //类型(0:接种,1:入库;2:出库)
     user: {type:mongoose.Schema.Types.ObjectId, ref:'user'},//用户
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
     deviceType: Number, //设备类型
@@ -14,8 +15,8 @@ const inoutSchema = mongoose.Schema({
     x: Number,          //横坐标
     y: Number,          //纵坐标
     supervisionCode: String,//药品监管码
-    code: String,//疫苗编号
-    name: String,//疫苗名称
+    code: String,       //疫苗编号
+    name: String,       //疫苗名称
     total: Number,      //数量(入库总数)
     surplus: Number,    //剩余数量
     use: Number,        //使用数量(use=total-surplus)

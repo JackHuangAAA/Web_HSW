@@ -8,7 +8,7 @@ const logger = Libs.logger.getLogger('inout');
 module.exports = {
 
     /**
-     * 查询出入库信息
+     * 查询出入库信息(以流水号分组展示)
      * @param requestBody
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
@@ -18,11 +18,20 @@ module.exports = {
         if (!_.isEmpty(requestBody.deviceId)) {
             query.push({"device": requestBody.deviceId});
         }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({"type": requestBody.type});
+        }
         if (!_.isEmpty(requestBody.code)) {
-            query.push({"vaccineCode": requestBody.code});
+            query.push({"code": requestBody.code});
         }
         if (!_.isEmpty(requestBody.name)) {
-            query.push({"vaccineName": new RegExp(requestBody.name)});
+            query.push({"name": new RegExp(requestBody.name)});
+        }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({"deviceType": requestBody.deviceType});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
@@ -34,13 +43,29 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length==2?{"$and": query} : query.length==1 ? query[0] : {};
-        let result = await Domain.models.inout.paginate(query, {
-            sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size)
-        });
-        return {rs: result.docs, total: result.total};
+
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        let total,docs;
+        docs = await Domain.models.inout.aggregate([{$match:query},{$group:{
+                _id:{
+                    "batchId":"$batchId"
+                },
+                count:{$sum:"$total"}
+            }}]);
+        total=docs.length;
+
+        docs = await Domain.models.inout.aggregate([{$match:query},{$group:{
+                _id:{
+                    "batchId":"$batchId"
+                },
+                count:{$sum:"$total"}
+            }},
+            {'$project':{"":0,"code":1,"name":1,"dosage":1,"producer":1,"craftId":1}},
+            {$skip:(requestBody.page-1)*requestBody.size},
+            {$limit:parseInt(requestBody.size)}
+        ]);
+
+        return {rs: docs, total: total};
     },
 
     /**
@@ -48,7 +73,7 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<requestBody>}
      */
-    saveInouts: async function(requestBody){
+    saveInout: async function(requestBody){
         logger.debug(`saveInout param: ${JSON.stringify(requestBody)}`);
         return Domain.models.inout.create(requestBody);
     },
@@ -79,6 +104,9 @@ module.exports = {
         }
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
+        }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName":  new RegExp(requestBody.unitName)});
         }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);

@@ -93,7 +93,7 @@ router.get(
   Libs.router(async (ctx, next) => {
     return await Domain.services.user.queryUsers(ctx.request.query);
   })
-)
+);
 
 /**
  * 增加用户信息
@@ -128,6 +128,7 @@ router.post(
 /**
  * 删除指纹信息
  * @apiParam {String} id 用户id
+ * @apiParam {String} deviceid 设备ID
  * @apiParam {String} code_delete 要删除的指纹代码
  */
 router.post(
@@ -140,6 +141,7 @@ router.post(
 /**
  * 新增指纹信息
  * @apiParam {String} id 用户id
+ *  * @apiParam {String} deviceid 设备ID
  * @apiParam {String} code_new 新指纹代码
  */
 router.post(
@@ -148,4 +150,6 @@ router.post(
         return await Domain.services.user.saveFinger(ctx.request.body);
     })
 );
+
 module.exports = router;
+

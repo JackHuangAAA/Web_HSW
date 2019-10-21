@@ -13,7 +13,7 @@ const RouterConfig = {
     routes: Routers
 }
 
-const router = new VueRouter(RouterConfig)
+const router = new VueRouter(RouterConfig);
 
 let routers = [];
 _.forEach(RouterConfig.routes, v => {
@@ -24,9 +24,9 @@ _.forEach(RouterConfig.routes, v => {
 });
 
 let getRouterConfig = function (path) {
-    let config = _.find(routers, { path: path })
+    let config = _.find(routers, { path: path });
     return config
-}
+};
 
 router.beforeEach((to, from, next) => {
     let menu = getRouterConfig(to.path);

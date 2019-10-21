@@ -14,12 +14,6 @@ import config from '@/config';
 import rem from '@/rem';
 import device from '@/device.js';
 
-device.getDeviceCode().then(res =>{
-    global.deviceCode = res.deviceId;
-    console.log('global.deviceCode=====>'+global.deviceCode)
-});
-
-
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
 if (config.env == 'development') {

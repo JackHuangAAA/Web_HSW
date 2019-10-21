@@ -50,7 +50,7 @@ router.get('/queryVaccineLowerThreshold',
 router.get('/queryVaccineStorageNum',
     Libs.router(async (ctx, next) => {
         let result = await Domain.services.vaccine.queryVaccineStorageNum(ctx.request.query);
-        let _result = result.rs.map(item => {
+        /*let _result = result.rs.map(item => {
             delete item._id;
             item.device = mongoose.Types.ObjectId(result.device.device)
             item.deviceType = result.device.deviceType
@@ -73,7 +73,7 @@ router.get('/queryVaccineStorageNum',
         if (ctx.request.query.type == 2) {
             await Domain.services.summary.saveSummary(_result);
             // 清零疫苗数量
-        }
+        }*/
         return result;
     })
 );
@@ -87,14 +87,29 @@ router.get('/queryVaccineStorageNum',
  * @apiParam {String} device 设备id
  * @apiSuccess {OBject}  json  操作返回数据
  */
-router.post('/clearVacineTotal',
+router.post('/clearVaccineTotal',
     Libs.router(async (ctx, next) => {
         return await Domain.services.vaccine.clearVaccineTotal(ctx.request.body);
     })
 );
 
 /**
- * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗数量信息
+ * @api {POST} /vaccine/modifyVaccine  更新抽屉内疫苗信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 更新抽屉内疫苗信息
+ * @apiParam {Array} ids 疫苗ids
+ * @apiParam {Array} totals 入库后抽屉内疫苗数组
+ * @apiSuccess {OBject}  json  操作返回数据
+ */
+router.post('/modifyVaccine',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+    })
+);
+
+/**
+ * @api {POST} /vaccine/modifyVaccineNum  更新抽屉内疫苗数量信息
  * @apiGroup Vaccine
  * @apiVersion 1.0.0
  * @apiDescription 更新抽屉内疫苗数量信息
@@ -102,9 +117,24 @@ router.post('/clearVacineTotal',
  * @apiParam {Array} totals 入库后抽屉内疫苗数量数组
  * @apiSuccess {OBject}  json  操作返回数据
  */
-router.post('/modifyVaccine',
+router.post('/modifyVaccineNum',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.vaccine.modifyVaccine(ctx.request.body);
+        return await Domain.services.vaccine.modifyVaccineNum(ctx.request.body);
+    })
+);
+
+/**
+ * @api {GET} /vaccine/queryVaccineByCondition  按指定条件查询疫苗信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 按指定条件查询疫苗信息
+ * @apiParam {String} device 设备id
+ * @apiParam {String} code 疫苗编码
+ * @apiSuccess {Array}  rs  查询疫苗信息
+ */
+router.get('/queryVaccineByCondition',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.queryVaccineByCondition(ctx.request.query);
     })
 );
 

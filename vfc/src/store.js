@@ -1,5 +1,5 @@
 /**
- * Created by Administrator on 2017/10/11.
+ * Created by Administrator on 2019/10/11.
  */
 import Vuex from "vuex"
 import Vue from "vue"
@@ -7,34 +7,34 @@ import Vue from "vue"
  const store = {
     state: {
         user: null,
-        currentMenu: {}//当前菜单
+        device: null, //当前设备
     },
 
     getters: {
         user: state => {
             return state.user;
         },
-        currentMenu: state => {
-            return state.currentMenu;
-        }
+        device: state => {
+            return state.device;
+        },
     },
 
     mutations: {
         ['SAVE_USER']: (state, action) => {
             state.user = action;
         },
-        ['CURRENT_MENU']: (state, action) => {
-            state.currentMenu = action;
-        }
+        ['SAVE_DEVICE']: (state, action) => {
+            state.device = action;
+        },
     },
 
     actions: {
         saveUser({commit}, user){
             commit('SAVE_USER', user);
         },
-        setCurrentMenu({commit}, currentMenu){
-            commit('CURRENT_MENU', currentMenu);
-        }
+        saveDevice({ commit }, device) {
+            commit('SAVE_DEVICE', device);
+        },
     }
 }
 

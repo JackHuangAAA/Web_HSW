@@ -25,8 +25,11 @@ router.post('/saveInouts',
  * @apiVersion 1.0.0
  * @apiDescription 查询出入库信息
  * @apiParam {String} [deviceId] 设备id
+ *  @apiParam {Number} [type] 出入库类别2出库，1入库
  * @apiParam {String} [code] 疫苗编号
  * @apiParam {String} [name] 疫苗名称
+ * @apiParam {String} [unitName] 单位名称
+ * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} begin 开始时间
  * @apiParam {String} end 结束时间
  * @apiParam {String} size 每页显示数目

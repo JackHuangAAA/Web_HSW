@@ -1,163 +1,82 @@
 <template>
-    <div class="layout">
-        <!-- 导航头部 -->
-        <header class="layout-nav">
-            <div class="layout-nav-wrap">
-                <div class="layout-logo">
-                    <img src="/static/img/logo.png"/>
-                </div>
-                <div class="layout-menu">
-                    <div v-for="(menu, index) in menus" :key="index" @click="selectMenu(menu)" class="layout-menu-button" :class="currentPath == menu.url? 'active':''">
-                        <div>
-                            <img :src="'/static/img/' + menu.icon +'.png'">
-                        </div>
-                        <span>{{menu.name}}</span>
+        <div class="layout">
+            <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
+            <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
+                    <img class="menuListLogo" src="/static/img/logo.png">
+                    <p class="logoDes">{{device && device.unitName || ''}}</p>
+                    <div class="local">{{device && device.address && device.address.countyName || ''}}</div>
+                    <p class="menuListP"></p>
+                    <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
+                        <img class="menuImg" :src="item.img">
+                        {{item.name}}
                     </div>
                 </div>
-
-                <div class="layout-nav-profile">
-                    <div class="layout-welcome">
-                        欢迎，【{{ user ? user.name : ''}}】
+            <div class="head">
+                <div class="menu" @click="openCloseMenu()">
+                    <div class="menuContent">
+                        <img :src="imgMenu">
+                        {{menuStatus}}
                     </div>
-                    <Dropdown>
-                        <div class="layout-avatar">
-                            <img src="/static/img/user_head.png" />
-                        </div>
-                    <DropdownMenu slot="list" style="width:110px;">
-                        <DropdownItem @click.native="setting">
-                            <div style="display: inline-block;vertical-align: middle;"><img src="/static/img/passwd.png" ></img></div>
-                            <div style="display: inline-block;margin-left: 12px;margin-right: 4px;">修改密码</div>
-                        </DropdownItem>
-                        <DropdownItem @click.native="logout">
-                            <div style="display: inline-block;vertical-align: middle;"><img src="/static/img/logout.png" ></img></div>
-                            <div style="display: inline-block;margin-left: 12px;margin-right: 4px;">退出登录</div>
-                        </DropdownItem>
-                    </DropdownMenu>
-                    </Dropdown>
+                </div>
+                <div class="pageName">{{pageName}}</div>
+                <div class="code">{{device &&device.cabinetNo || ''}}</div>
+                <div class="user">
+                    <p>{{user.name}}</p>
+                    <img src="/static/img/userph1.png">
+                </div>
+                <div class="out">
+                    <span @click="logout()" style="cursor: pointer;z-index:99">退出</span>
                 </div>
             </div>
-        </header>
-
-        <div class="layout-nav-divider"></div>
-        <div class="layout-main">
-            <router-view ref="contentView" class="layout-main-page"></router-view>
-            <Spin fix v-show="loading">
-                <Icon type="load-c" size=18 class="demo-spin-icon-load"></Icon>
-                <div>加载中...</div>
-            </Spin>
+            <div class="main">
+                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
+            </div>
+            <div class="footer"><p class="dateTime">{{nowdate}}</p></div>
         </div>
-        <!--设置-->
-        <Modal ref="settingModal" title="密码修改" :width="534" :height="300" :closable="false" :mask-closable="false" :footerHide="true">
-            <Form ref="frmSetting" :model="frmSetting" :rules="ruleValidate" :label-width="100" slot="content">
-                <FormItem label="请输入旧密码" prop="password">
-                    <Input type="password" v-model="frmSetting.password" placeholder=""></Input>
-                </FormItem>
-                <FormItem label="请输入新密码" prop="newpassword">
-                    <Input type="password" v-model="frmSetting.newpassword" placeholder=""></Input>
-                </FormItem>
-                <FormItem label="请确认新密码" prop="newpassword1">
-                    <Input type="password" v-model="frmSetting.newpassword1" placeholder=""></Input>
-                </FormItem>
-            </Form>
-            <div slot="footer">
-                <Button @click="cancelSetting('frmSetting')" style="margin-right:10px; height: 36px; width:88px;">取 消</Button>
-                <Button type="primary" @click="saveSetting('frmSetting')" style="height: 36px; width:88px;">保 存</Button>
-            </div>
-        </Modal>
+        </div>
     </div>
 </template>
 <script>
-    import {mapGetters, mapActions, mapState} from 'vuex'
-    import md5 from 'js-md5'
-    import routerConfig from '@/router'
+import { mapGetters, mapActions, mapState } from 'vuex'
+import md5 from 'js-md5'
+import routerConfig from '@/router'
+import moment from 'moment';
+moment.locale('zh-cn');
+global.moment = moment;
 
     export default {
-
+        name: "datetime",
         data () {
-            const checkOldPwd = (rule, value, callback, source, options) => {
-                if(value == '') {
-                    return callback(new Error('请输入密码'));
-                } else if(md5(value).toUpperCase() != this.user.password) {
-                    return callback(new Error('输入旧密码不正确!'));
-                } else {
-                    callback();
-                }
-            };
-            const checkPwd = (rule, value, callback, source, options) => {
-                if(value == '') {
-                    return callback(new Error('请再次输入密码'));
-                } else if(value != this.frmSetting.newpassword) {
-                    return callback(new Error('两次密码不一致'));
-                } else {
-                    callback();
-                }
-            };
             return {
-                currentPath: null,
                 version: this.$config.version,
-                showSet:false,
-                loading: false,
-                menus: [],
                 title: this.$config.appName,
-                userPic: 'tuichu',
-                //activeMenu: null,
-                frmSetting: {
-                    name: '',
-                    phone: '',
-                    password: '',
-                    newpassword: '',
-                    newpassword1: ''
-                },
-                ruleValidate: {
-                    name: [
-                        { required: true, message: '用户名称不能为空', trigger: 'blur'}
-                    ],
-                    phone: [
-                        {required: true, message: '移动电话不能为空', trigger: 'blur'},
-                        {min: 11, message: '移动电话号超短', trigger: 'blur'},
-                        {max: 11, message: '移动电话号超长', trigger: 'blur'},
-                        {
-                            validator(rule, value, callback, source, options) {
-                                var errors = [];
-                                if (!/^[0-9]{11}$/.test(value)) {
-                                    callback('手机号输入错误');
-                                }
-                                callback(errors);
-                            }
-                        }
-                    ],
-                    password: [
-                        { required: true, message: '请输入旧密码', trigger: 'blur'},
-                        { validator: checkOldPwd}
-                    ],
-                    newpassword: [
-                        { required: true, message: '请输入新密码', trigger: 'blur'},
-                        { min: 6, message:'请输入最少6位'}
-                    ],
-                    newpassword1:  [
-                        { required: true, message: '请再次输入密码', trigger: 'blur'},
-                        { min: 6, message:'请输入最少6位'},
-                        { validator: checkPwd}
-                    ]
+                nowdate: null,
+                imgMenu: '/static/img/menuopen.png',
+                pageName: '主页',
+                menu: [
+                    {name:'主页',img:'/static/img/home.png'},
+                    {name:'库存',img:'/static/img/inventory.png'},
+                    {name:'报警',img:'/static/img/alarm.png'},
+                    {name:'设置',img:'/static/img/setting.png'}
+                ],
+                isactive: 0,
+                ifShowMenu: false ,
+                menuStatus: '展开菜单'
                 }
-            }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                currentMenu: 'currentMenu'
+                device: 'device'
             })
         },
-        components:{},
-        watch:{
-            '$route.path':function(n,o){
-                this.currentPath = n
-            }
+        created() {
+            this.dateint();
         },
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
-                setCurrentMenu: 'setCurrentMenu'
+                saveDevice: 'saveDevice'
             }),
             logout: function () {
                 this.$api.get('/user/logout').then(()=>{
@@ -165,52 +84,86 @@
                     window.location.href="/";
                 });
             },
-            //菜单切换
-            selectMenu: function (item) {
-                this.$router.push(item.url)
+            dateint() {
+                setInterval(() => {
+                    let nowdate = moment().format("YYYY-MM-DD HH:mm:ss dddd");
+                    this.nowdate = nowdate;
+                }, 500);
             },
-            setting: function () {
-                this.frmSetting = {
-                    password: '',
-                    newpassword: '',
-                    newpassword1: ''
-                };
-                this.$refs.settingModal.show();
-            },
-            saveSetting: function (name) {
-                let me = this;
-                let sets = {id:me.user._id};
-                sets.name = '超级管理员';
-                sets.password = md5(me.frmSetting.newpassword).toUpperCase();
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$api.post('/user/updatePassword', sets).then(rsp => {
-                            //修改密碼后重新存入緩存currentUser
-                            this.$Message.success('修改密码成功！');
-                            this.logout();
-                            this.$refs[name].resetFields();
-                            this.$refs.settingModal.close();
-                        });
-                    }
-                })
-            },
-            cancelSetting: function (name) {
-                this.$refs[name].resetFields();
-                this.$refs.settingModal.close();
-            }
-        },
-
-        updated() {
-            this.$nextTick(()=> {
-                if(this.$refs.menuView){
-                    this.$refs.menuView.updateOpened();
+            changeMenu: function(index){
+                this.isactive = index;
+                if(index==0){
+                    this.pageName = "主页";
+                    this.$router.push('/main');
                 }
-            });
+                if(index==1){
+                    this.pageName = "库存";
+                    this.$router.push('/stock/stock');
+                }
+                if(index==2){
+                    this.pageName = "报警";
+                    this.$router.push('/alarm/alarm');
+                }
+                if(index==3){
+                    this.pageName = "设置";
+                    this.$router.push('/setting/setting');
+                }
+            },
+            openCloseMenu: function(){
+                this.ifShowMenu = !this.ifShowMenu;
+                if(this.ifShowMenu == true){
+                    this.imgMenu = '/static/img/menuclose.png';
+                    this.menuStatus = '折叠菜单'
+                }else{
+                    this.imgMenu = '/static/img/menuopen.png';
+                    this.menuStatus = '展开菜单'
+                }
+            },
+            //接收温度信息
+            receiveTemperature(){
+                //this.$device.subscribe('TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE');
+                    let temp = '', val= 8;//data.data;
+                    if(val>5 || val<0){
+                        this.temperatureDes = '异常';
+                        if(val>5){
+                            temp = '高于正常温度5℃';
+                        }else {
+                            temp = '低于正常温度0℃';
+                        }
+                        this.$api.post("/alarm/saveAlarm", {
+                            device: this.device._id,
+                            deviceType: 1, //1:接种柜;
+                            unitCode: this.device.unitCode,
+                            unitName: this.device.unitName,
+                            type: 1,       //1:温度异常
+                            reason: `当前温度${val},${temp}`
+                        })
+                    }else{
+                        this.temperatureDes = '正常';
+                    }
+                    this.temperature = val;
+                    //保存温度到设备记录
+                    this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
+                //});
+            }
         },
         mounted(){
-            if(this.$route.path == '/'){
-                this.$router.push('/main');
-            }
+            //获取设备信息
+            this.$device.getDeviceCode().then(res => {
+                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
+                    this.saveDevice(res.data[0]);
+                    if(this.$route.path == '/'){
+                        this.$router.push('/main');
+                    }
+                });
+            });
+            //接收温度信息 todo
+            this.receiveTemperature();
         }
-    }
+}
 </script>
+<style lang="less" scoped>
+@import "~@/style/home.less";
+</style>
