@@ -138,13 +138,13 @@ export default {
                 this.formBasic.alias = this.device.alias;
                 this.formBasic.cabinetNo = this.device.cabinetNo;
                 this.formBasic.unitCode = this.device.unitCode;
-                //this.formBasic.unitName = this.device.unitName;
+                this.formBasic.unitName = this.device.unitName;
                 this.formBasic.address.provinceCode = this.device.address.provinceCode;
                 this.formBasic.address.cityCode = this.device.address.cityCode;
                 this.formBasic.address.countyCode = this.device.address.countyCode;
-                //this.formBasic.address.provinceName = this.device.address.provinceName;
-                //this.formBasic.address.cityName = this.device.address.cityName;
-                //this.formBasic.address.countyName = this.device.address.countyName;
+                this.formBasic.address.provinceName = this.device.address.provinceName;
+                this.formBasic.address.cityName = this.device.address.cityName;
+                this.formBasic.address.countyName = this.device.address.countyName;
             }
             await this.queryDistrict();
             await this.queryCabinetNo();

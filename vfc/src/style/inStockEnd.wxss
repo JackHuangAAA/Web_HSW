@@ -258,5 +258,20 @@ div {
 }
 .inStockTitleP {
   width: 100%;
-  height: ;
+}
+.back {
+  position: absolute;
+  left: 40rem;
+  width: 8.9rem;
+}
+.backHomeP {
+  font-size: 1rem;
+  position: absolute;
+  left: 41rem;
+  height: 1rem;
+  line-height: 1rem;
+  top: 50%;
+  margin-top: -0.5rem;
+  font-weight: bold;
+  color: #2A7AFF;
 }

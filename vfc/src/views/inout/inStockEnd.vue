@@ -2,8 +2,10 @@
     <div style="position:relative">
         <div class="container">
             <div class="inStockTitle">
+                    <img src="/static/img/backHome.png" class="back">
                     <img src="/static/img/succeed.png" class="succeed">
                     <p class="headP">疫苗入库完成</p>
+                    <p class="backHomeP" @click="returnMain()">返回主页</p>
             </div>
             <div class="main">
                 <div class="title">
@@ -67,6 +69,9 @@
         methods: {
             back(){
                 this.$router.push('/inout/inStock');
+            },
+            returnMain: function(){
+                this.$router.push('/main');
             },
             selectVaccine: function(index){
                 this.clickIndex = index;
