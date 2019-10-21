@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="table">
-                    <div v-for="(item,index) in tableDatas" @click="selectVaccine(index)" class="tableData" :class="{clicked: clickIndex==index}">
+                    <div v-for="(item,index) in tableDatas" @click="selectVaccine(index)" class="tableData">
                         <div class="index">
                             <span v-if="index>8">{{index+1}}</span>
                             <span v-if="index<8 || index ==8">0{{index+1}}</span>
@@ -103,7 +103,7 @@
             },
             selectVaccine(index){
                 this.clickIndex = index;
-                this.ifTip = true;
+                // this.ifTip = true;
             },
             async modifyDrawerById(params){
                 await this.$api.post("/drawer/modifyDrawerById", params);
