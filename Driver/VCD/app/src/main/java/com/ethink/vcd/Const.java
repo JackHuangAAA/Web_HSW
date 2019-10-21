@@ -24,7 +24,7 @@ public class Const {
         byte[]bytes=bStream.toByteArray();
         return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
-    public Bitmap stringToBitmap(String string) {
+    public static Bitmap stringToBitmap(String string) {
         // 将字符串转换成Bitmap类型
         Bitmap bitmap = null;
         try {

@@ -1,4 +1,4 @@
-package com.ethink.vcd.finger;
+package com.ethink.vcd.controller;
 import android.content.Context;
 import android.os.SystemClock;
 
@@ -749,7 +749,7 @@ public class FingerCommon {
     }
 
     private short MAKEWORD(byte low, byte high) {
-        short s = (short)(high << 8 & '\uff00' | low & 255);
+        short s = (short)(high << 8 & '\uff00' | low & 0xFF);
         return s;
     }
 
