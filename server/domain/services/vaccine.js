@@ -133,6 +133,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({ "name": requestBody.name });
         }
+        if (!_.isEmpty(requestBody.batchNo)) {
+            query.push({ "batchNo": requestBody.batchNo });
+        }
         if (requestBody.surplusIsNotZero) {
             query.push({ "surplus": {'$gt':0}});
         }
@@ -167,6 +170,15 @@ module.exports = {
         return {rs: result.docs, total: result.total};
     },
 
+    /**
+     * 删除疫苗信息
+     * @param requestBody
+     * @returns {Promise.<void>}
+     */
+    removeVaccineById: async function(requestBody) {
+        logger.debug(`removeVaccineById param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.vaccine.remove({_id: id});
+    }
 
 
 };

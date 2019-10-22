@@ -115,7 +115,7 @@ router.post('/modifyVaccine',
  * @apiDescription 更新抽屉内疫苗数量信息
  * @apiParam {Array} ids 疫苗ids
  * @apiParam {Array} totals 入库后抽屉内疫苗数量数组
- * @apiSuccess {OBject}  json  操作返回数据
+ * @apiSuccess {Object}  json  操作返回数据
  */
 router.post('/modifyVaccineNum',
     Libs.router(async (ctx, next) => {
@@ -152,5 +152,18 @@ router.get('/queryVaccineNum',
     })
 );
 
+/**
+ * @api {POST} /vaccine/removeVaccineById  删除疫苗信息
+ * @apiGroup Vaccine
+ * @apiVersion 1.0.0
+ * @apiDescription 删除疫苗信息
+ * @apiParam ObjectId id 疫苗ids
+ * @apiSuccess {Object}  json  操作状态数据
+ */
+router.post('/removeVaccineById',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.vaccine.removeVaccineById(ctx.request.body);
+    })
+);
 
 module.exports = router;

@@ -13,8 +13,7 @@ const routers = [{
         { path: '/inout/inStockCount', component: (resolve) => require(['@/views/inout/inStockCount.vue'], resolve) },
         { path: '/inout/inStockEnd', component: (resolve) => require(['@/views/inout/inStockEnd.vue'], resolve) },
         { path: '/inout/outStock', component: (resolve) => require(['@/views/inout/outStock.vue'], resolve) },
-        { path: '/inout/detail', component: (resolve) => require(['@/views/inout/detail.vue'], resolve) },
-        { path: '/inout/scanTip', component: (resolve) => require(['@/views/inout/scanTip.vue'], resolve) }
+        { path: '/inout/outStockEnd', component: (resolve) => require(['@/views/inout/outStockEnd.vue'], resolve) }
     ]
 }, {
     path: '/login',
