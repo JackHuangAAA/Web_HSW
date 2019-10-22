@@ -19,7 +19,7 @@
             <div class="inStockTitle">
                 <img src="/static/img/back.png" class="back" @click="back()">
                 <p class="headP">请将出库疫苗扫码</p>
-                <img src="/static/img/vaccineInTwo.png" class="vaccineIn">
+                <img src="/static/img/outCabineSetp1.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="title">
@@ -32,7 +32,7 @@
                     <div class="code">
                         批次号
                     </div>
-                    <div class="code">
+                    <div class="code2">
                         有效期
                     </div>
                     <div class="coordinate">
@@ -54,14 +54,14 @@
                         <div class="code">
                             {{item.batchNo}}
                         </div>
-                        <div class="code">
+                        <div class="code2">
                             {{item.expiry}}
                         </div>
                         <div class="coordinate">
-                            {{item.invalid}}
+                            {{item.invalid=='异常'?'异常':'正常'}}
                         </div>
                         <div class="count">
-                            <input type="text" class="countInput" v-model="item.count">
+                            <input type="text" class="countInput" readonly="readonly" v-model="item.count">
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
 <script>
     import {mapGetters} from 'vuex';
     import uuid from 'uuid/v1';
-
+    import moment from 'moment'
     export default {
         data() {
             return {
@@ -99,7 +99,7 @@
         components:{},
         methods: {
             back(){
-                this.$router.push('/inout/inStock');
+                this.$router.push('/main');
             },
             closeTip(){
                 this.ifTip = false;
@@ -146,6 +146,7 @@
                     'code': result.code,
                     'batchNo': result.batchNo
                 });
+                
                 //查询抽屉信息
                 let drawer= await this.queryDrawerByCondition({'vaccineCode':vaccine._id});
                 //使用1支，若剩余数量=0，从抽屉删除并删除疫苗记录
@@ -165,6 +166,7 @@
                 }
                 //页面数据更新
                 await this.freshTableDatas(vaccine);
+                
                 //增加出库记录
                 await this.saveInout({
                     batchId: this.batchId,
@@ -179,6 +181,7 @@
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
+                obj.expiry=moment(obj.expiry).format('YYYY-MM-DD HH:mm:ss')
                 for(let z=0;z<array.length;z++){
                     if(obj.code == array[z].code && obj.batchNo == array[z].batchNo){
                         array[z].count = array.count+1;
@@ -197,7 +200,7 @@
             },
             finish(){
                 this.$router.push({ path: '/inout/outStockEnd', query: { datas: this.tableDatas }});
-            }
+            },
         },
         mounted() {
             //监听扫描枪事件

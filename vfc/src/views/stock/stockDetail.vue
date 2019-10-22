@@ -3,8 +3,7 @@
 <div>
     <Row class="inoculate-head">
         <div class="goHome" @click="goHome()">
-            <img src="/static/img/backHome.png" class="backHomeImg"/>
-            <div>回到主页</div>
+            <img src="/static/img/goHome.png" class="backHomeImg"/>
         </div>
     </Row>
     <div class="inoculate card">

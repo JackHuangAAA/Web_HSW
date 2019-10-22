@@ -18,7 +18,7 @@
                     <div class="code">
                         批次号
                     </div>
-                    <div class="coordinate">
+                    <div class="code2">
                         有效期
                     </div>
                     <div class="coordinate">
@@ -40,11 +40,11 @@
                         <div class="code">
                             {{item.batchNo}}
                         </div>
-                        <div class="coordinate">
+                        <div class="code2">
                             {{item.expiry}}
                         </div>
                         <div class="coordinate">
-                            {{item.invalid}}
+                            {{item.invalid=='异常'?'异常':'正常'}}
                         </div>
                         <div class="count">
                             <p class="countInput">{{item.count}}</p>
