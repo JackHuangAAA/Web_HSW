@@ -1,8 +1,8 @@
 @import '~@/style/color.less';
 .inoculate{
-    margin: 20px 18px 0 23px;
-    width: ~'calc(100% - 41px)';
-    height: ~'calc(100% - 80px)';
+    margin: 0px 0px 0 0px;
+    width: 100%;
+    height: ~'calc(100% - 60px)';
     background: @white;
     font-family:Microsoft YaHei;
     font-weight:bold;
@@ -11,15 +11,13 @@
     padding-left: 2.75rem;
     padding-right: 2.75rem;
     position: relative;
-    border-radius: 10px;
 }
-.inoculate-title{
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-}
+// .inoculate-title{
+//     font-size: 1.125rem;
+//     margin-bottom: 1rem;
+// }
 .inoculate-table-row{
-    margin-bottom: .625rem;
-    height: 2.75rem;
+    margin-bottom: .375rem;
     width: 100%;
     text-align: center;
     line-height: 2.75rem;
@@ -27,20 +25,27 @@
 }
 .row-bg{
     background: @gray;
+    font-size: .9375rem;
+    color: @dark;
 }
-.goback{
-    width: 11rem;
-    height: 3.25rem;
-    text-align: center;
-    line-height: 3.25rem;
-    position: absolute;
-    bottom: 2.875rem;
-    right: 2.75rem;
-    background: @blue;
-    color: @white;
+.inoculate-head{
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.goHome{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    right: 1rem;
+    top: 0;
+}
+.backHomeImg{
+    width: 100%;
+    height: 77%;
     cursor: pointer;
-    font-size: 1.125rem;
-    font-weight:400;
 }
 
 //detail.vue
@@ -75,13 +80,4 @@
     background: @gray;
     font-size: 1rem;
     margin-bottom: .5rem;
-}
-.goHome{
-    background: url('/static/img/assets/gohome.png') no-repeat left center;
-    width: 9rem;
-    height: 3.75rem;
-    cursor: pointer;
-    position: absolute;
-    right: 1.4rem;
-    top: 1.5rem;
 }

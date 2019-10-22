@@ -58,7 +58,7 @@ module.exports = {
         pathRewrite: { "^/api": "" }
       },
       "/socket.io": {
-        target: "http://localhost:9990",
+        target: "http://localhost:9999",
         secure: false,
         changeOrigin: true,
         ws: true

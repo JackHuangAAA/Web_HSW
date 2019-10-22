@@ -20,6 +20,9 @@ import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
 import com.ethink.vcd.server.VCDService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ConfigActivity extends AppCompatActivity {
-
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     private static final String[] REQUIRED_PERMISSION_LIST = new String[]{
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.RECORD_AUDIO,
@@ -53,7 +56,7 @@ public class ConfigActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String url = SPUtils.getSharedStringData(this, Const.CONFIG_URL);
         String socketUrl = SPUtils.getSharedStringData(this, Const.SOCKET_IO_URL);
-        String serial= PhoneUtils.getSerial();
+        String serial = PhoneUtils.getSerial();
         //自动上报的地址
         if (url.isEmpty()) {
             etUrl.setText("http://192.168.0.162:8080");
@@ -62,7 +65,7 @@ public class ConfigActivity extends AppCompatActivity {
         } else {
             etUrl.setText(url);
         }
-        if(!StringUtils.isEmpty(serial)){
+        if (!StringUtils.isEmpty(serial)) {
             etSerial.setText(serial);
         }
         if (socketUrl.isEmpty()) {
@@ -124,7 +127,7 @@ public class ConfigActivity extends AppCompatActivity {
     public void onBtnOkClick() {
         String url = etUrl.getText().toString();
         String socketUrl = edSocket.getText().toString();
-        String serial=etSerial.getText().toString();
+        String serial = etSerial.getText().toString();
         if (!url.isEmpty()) {
             SPUtils.setSharedStringData(getApplication(), Const.CONFIG_URL, url);
         } else {
@@ -137,9 +140,9 @@ public class ConfigActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入socket.io地址", Toast.LENGTH_LONG).show();
             return;
         }
-        if(!StringUtils.isEmpty(serial)){
+        if (!StringUtils.isEmpty(serial)) {
             SPUtils.setSharedStringData(getApplication(), Const.SERIAL_NO, serial);
-        }else{
+        } else {
             Toast.makeText(this, "请输入设备序列号", Toast.LENGTH_LONG).show();
             return;
         }

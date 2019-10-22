@@ -12,7 +12,7 @@ import api from '@/api'
 import iView from 'iview'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import config from '@/config'
-
+global._ = lodash
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
 

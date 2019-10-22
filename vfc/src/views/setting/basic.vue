@@ -30,7 +30,7 @@
                 </FormItem>
                 </Col>
             </Row>
-            <Row class="bs-row" align="middle" type="flex">
+            <!-- <Row class="bs-row" align="middle" type="flex">
                 <Col span="4" justify="end">
                 <p class="bs-title">
                     所在接种台
@@ -43,7 +43,7 @@
                     </Select>
                 </FormItem>
                 </Col>
-            </Row>
+            </Row> -->
             <Row class="bs-row" align="middle" type="flex">
                 <Col span="4" justify="end">
                 <p class="bs-title">
