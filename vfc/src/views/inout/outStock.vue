@@ -132,14 +132,6 @@
                 //this.$device.subscribe('SCAN_REDUCE_VACCINE', (data) => {
                 console.log('SERVER_PUSH==>SCAN_REDUCE_VACCINE');
                 let result= {code: '1',name:'y1',batchNo:'1'};// 模拟扫描枪返回结果 todo
-                //检查是否异常疫苗
-                let ex = await this.queryExceptionVaccine();
-                if(result.batchNo == ex.batchNo){
-                    this.exName = result.name;
-                    this.exReason = "报废或失效"; // todo
-                    this.ifTip = true;
-                    return false;
-                }
                 //查询疫苗数据
                 let vaccine = await this.queryVaccineByCondition({
                     'device': this.device._id,
@@ -151,7 +143,7 @@
                 let drawer= await this.queryDrawerByCondition({'vaccineCode':vaccine._id});
                 //使用1支，若剩余数量=0，从抽屉删除并删除疫苗记录
                 if(vaccine.surplus-1 == 0){
-                    //从抽屉删除
+                    //从抽屉删除，并删除疫苗记录
                     await this.modifyDrawerByIdDec({
                         id: drawer._id,
                         vaccineId: vaccine._id
@@ -164,9 +156,6 @@
                         surplus: -1
                     });
                 }
-                //页面数据更新
-                await this.freshTableDatas(vaccine);
-                
                 //增加出库记录
                 await this.saveInout({
                     batchId: this.batchId,
@@ -177,25 +166,46 @@
                     surplus:vaccine.surplus-1,
                     use: 1
                 });
+                vaccine.invalid='正常';
+                //检查是否异常疫苗
+                let ex = await this.queryExceptionVaccine();
+                //检查异常条件待接口完善后，需要修改 todo
+                if(result.batchNo == ex.batchNo){
+                    this.exName = result.name;
+                    this.exReason = "报废或失效"; // todo
+                    vaccine.invalid='异常';
+                    this.ifTip = true; //提示框显示
+                }
+                //判断有效期是否过期
+                if(moment().isAfter(vaccine.expiry)){
+                    vaccine.invalid='异常';
+                }
+                //页面数据更新
+                await this.freshTableDatas(vaccine);
                 //});
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
-                obj.expiry=moment(obj.expiry).format('YYYY-MM-DD HH:mm:ss')
-                for(let z=0;z<array.length;z++){
-                    if(obj.code == array[z].code && obj.batchNo == array[z].batchNo){
-                        array[z].count = array.count+1;
-                        array[z].clickIndex = z;
-                        flag = false;
-                        break;
-                    }else{
-                        array[i].clickIndex = null;
-                    }
-                }
-                if(flag){
+                if(_.isEmpty(array)){
                     obj.count = 1;
                     obj.clickIndex = 0;
-                    array.unshift(obj);
+                    array.push(obj);
+                }else{
+                    for(let z=0;z<array.length;z++){
+                        if(obj.code == array[z].code && obj.batchNo == array[z].batchNo && obj.invalid == array[z].invalid){
+                            array[z].count = parseInt(array[z].count)+1;
+                            array[z].clickIndex = z;
+                            flag = false;
+                            break;
+                        }else{
+                            array[z].clickIndex = null;
+                        }
+                    }
+                    if(flag){
+                        obj.count = 1;
+                        obj.clickIndex = 0;
+                        array.unshift(obj);
+                    }
                 }
             },
             finish(){

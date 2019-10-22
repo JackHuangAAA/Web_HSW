@@ -4,7 +4,7 @@
             <div class="title">
                 <img class="bg1" src="/static/img/loginp1.png">
                 <img class="logo" src="/static/img/logo.png">
-                <p class="logoP">银信疫苗接种平台</p>
+                <p class="logoP">银信疫苗冷藏柜</p>
                 <p class="logoE">welcome to login system</p>
             </div>
             <div class="loginContent">
