@@ -61,7 +61,6 @@ public class SocketPlugin extends BasePlugin {
                 logger.info("PushService push");
                 if (args.length > 0) {
                     logger.info("PushService push 定时数据timedData" + args[0]);
-                    logger.info("PushService disconnect");
                     EventMessage eventMessage = new EventMessage("SOCKET_DATA");
                     eventMessage.setString("data", args[0].toString());
                     pluginManager.post(eventMessage);

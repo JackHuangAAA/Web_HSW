@@ -3,15 +3,14 @@ package com.ethink.vcd.plugin;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
+import com.blankj.utilcode.util.StringUtils;
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
 import com.ethink.vcd.event.FingerPushMessage;
-import com.ethink.vcd.finger.FingerCommon;
-import com.ethink.vcd.finger.FingerUtil;
+import com.ethink.vcd.controller.FingerUtil;
 import com.ethink.vcd.service.api.RxManager;
-import com.ethink.vcd.utils.ResponseUtil;
 
 
 /**
@@ -59,7 +58,17 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
                 fingerUtil.register();
                 break;
             case "VERIFY":
-                fingerUtil.verify();
+                String num=pluginMessage.getString("number");
+                if(StringUtils.isEmpty(num)){
+                    logger.info("请输入指纹序号！");
+                }else{
+                    try {
+                        int id=Integer.parseInt(num);
+                        fingerUtil.verify(id);
+                    }catch (NumberFormatException e){
+                        logger.info("序号格式不正确",e);
+                    }
+                }
                 break;
             case "DEL_TEMPLATE_ALL":
                 fingerUtil.delTemplateAll();
@@ -102,6 +111,11 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
         eventMessage.setString("number", number);
         logger.info("pushData 推送消息：" + JSON.toJSONString(eventMessage));
         pluginManager.post(eventMessage);
+    }
+
+    @Override
+    public void upload(String path, String finger) {
+
     }
 
 

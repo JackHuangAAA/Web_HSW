@@ -10,8 +10,23 @@ yarn-error.log*
 *.suo
 *.ntvs*
 *.njsproj
+*.iml
+.gradle
+.idea/
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+build/
+/captures
+.externalNativeBuild
+/app/release
 
-
+target/
 .idea/
 .project
 dist
@@ -37,3 +52,7 @@ vcc/测试版本-默认login3.rar
 /UI/疫苗接种柜Ui设计html1.6
 /UI/疫苗接种后台系统UI设计html1.0
 vcc/dist.rar
+/Driver/VCD/.gradle
+/Driver/VCD/*.iml
+/Driver/VCD/local.properties
+/fps/fps.db

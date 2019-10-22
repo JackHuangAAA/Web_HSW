@@ -1,11 +1,10 @@
-package com.ethink.vcd.finger;
+package com.ethink.vcd.controller;
 
 import android.content.Context;
 
 import com.ethink.tools.serialport.SerialPort;
 import com.ethink.tools.serialport.SerialPortManager;
 import com.ethink.tools.serialport.SerialPortSetting;
-import com.ethink.tools.serialport.UsbSerialPortSetting;
 import com.ethink.tools.serialport.usb.util.HexDump;
 
 import org.slf4j.Logger;

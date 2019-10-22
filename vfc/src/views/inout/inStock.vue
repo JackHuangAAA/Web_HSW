@@ -1,30 +1,11 @@
 <!--入库-->
 <template>
     <div style="position:relative">
-        <div class="black" v-if="addForm">
-            <div class="addForm">
-                <img src="/static/img/close.png" @click="cancel()">
-                <div class="vaccineAddOne" v-if="addVaccineOne">
-                    <p class="vaccineAddName">{{addVaccineOne}}:</p>
-                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
-                </div>
-                <div class="vaccineAddTwo" v-if="addVaccineTwo">
-                    <p class="vaccineAddName">{{addVaccineTwo}}:</p>
-                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
-                </div>
-                <div class="cancel" @click="cancel()">
-                    取消
-                </div>
-                <div class="addYes" @click="inStock()">
-                    确定
-                </div>
-            </div>
-        </div>
         <div class="container">
             <div class="inStockTitle">
                     <img src="/static/img/back.png" class="back" @click="back()">
-                    <p class="headP">请选择疫苗入库的抽屉</p>
-                    <img src="/static/img/vaccineIn.png" class="vaccineIn">
+                    <p class="headP">请将入库疫苗扫码</p>
+                    <img src="/static/img/vaccineInTip.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="mainTop">
@@ -45,23 +26,37 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="addVaccine(index)">
+                            <div class="cabine" v-for="(item,index) in cabineDatas">
+                                <Radio v-model="item.single" class="checkBox" @on-change="changeRadio(index)" v-if="item.nameOne"></Radio >
                                 <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
-                                    <p class="vaccineOneCount">{{item.countOne||0}}支</p>
                                 </div>
                                 <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                    <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
+                                </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                </div>
+                                <div class="cabineLeft" v-if="item.nameFive">
+                                    <p class="vaccineOneName">{{item.nameFive}}</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameSix">
+                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="finish">
-                        <div class="finishButton" @click="finishInStock">
-                            完成
-                        </div>
+                </div>
+                <div class="finish">
+                    <div class="yes" @click="next()">
+                        确定
                     </div>
+                    <!-- <div class="cancel" @click="back()">
+                        取消
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -72,29 +67,16 @@
     export default {
         data() {
             return {
-                commonData: null,
                 cabineDatas: [],
                 index: '1',
-                row: 5,
-                addForm: false, //添加弹窗是否显示
-                addVaccineOne: '', //抽屉1号格疫苗名称
-                vaccineOneCode: '',//抽屉1号格疫苗编号
-                addVaccineTwo: '',//抽屉2号格疫苗名称
-                vaccineTwoCode: '',//抽屉2号格疫苗编号
-                vaccineOneCount: 0,//抽屉1号格疫苗数量
-                vaccineTwoCount: 0,//抽屉2号格疫苗数量
-                vaccineOneId: '',//抽屉1号格疫苗id
-                vaccineTwoId: '',//抽屉2号格疫苗id
-                vaccineOneX: '',//抽屉1号格疫苗X
-                vaccineTwoX: '',//抽屉2号格疫苗X
-                vaccineOneY: '',//抽屉1号格疫苗Y
-                vaccineTwoY: '',//抽屉2号格疫苗Y
+                row: 6,
+                checkDrawerId:''
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         components:{},
@@ -105,31 +87,21 @@
                     device: this.device._id
                 });
                 let array = res.data;
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 12; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.x = array[i].x;
-                    temp.y = array[i].y;
+                    temp.id = array[i]._id;
+                    temp.single = false;
                     if (num > 0) {
                         for (let k = 0; k < num; k++) {
-
-                            if (k == 0) {
-                                temp.nameOne = vaccine[k].name;
-                                temp.countOne = vaccine[k].surplus;
-                                temp.idOne = vaccine[k]._id;
-                                temp.codeOne = vaccine[k].code;
-                            }
-                            if (k == 1) {
-                                temp.nameTwo = vaccine[k].name;
-                                temp.countTwo = vaccine[k].surplus;
-                                temp.idTwo = vaccine[k]._id;
-                                temp.codeTwo = vaccine[k].code;
-                            }
+                            if (k == 0) {temp.nameOne = vaccine[k].name;}
+                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
+                            if (k == 2) {temp.nameThree = vaccine[k].name;}
+                            if (k == 3) {temp.nameFour = vaccine[k].name;}
+                            if (k == 4) {temp.nameFive = vaccine[k].name;}
+                            if (k == 5) {temp.nameSix = vaccine[k].name;}
                         }
                     } else {
                         temp.nameOne = '';
-                        temp.countOne = '';
-                        temp.nameTwo = '';
-                        temp.countTwo = '';
                     }
                     this.cabineDatas.push(temp);
                 }
@@ -137,30 +109,21 @@
             back(){
                 this.$router.push('/main');
             },
-            addVaccine(index){
-                this.addVaccineOne = this.cabineDatas[index].nameOne;
-                this.addVaccineTwo = this.cabineDatas[index].nameTwo;
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
-                this.vaccineOneId = this.cabineDatas[index].idOne;
-                this.vaccineTwoId = this.cabineDatas[index].idTwo;
-                this.vaccineOneCode = this.cabineDatas[index].codeOne;
-                this.vaccineTwoCode = this.cabineDatas[index].codeTwo;
-                this.vaccineOneX = this.cabineDatas[index].x;
-                this.vaccineTwoX = this.cabineDatas[index].x;
-                this.vaccineOneY = this.cabineDatas[index].y;
-                this.vaccineTwoY = this.cabineDatas[index].y;
-                if(this.addVaccineOne || this.addVaccineTwo){
-                    this.addForm = true;
-                }
+            changeRadio(index){
+                let i=0;
+                this.cabineDatas.forEach(item =>{
+                    if(index != i){
+                        item.single = false;
+                    }else{
+                        //选中抽屉id
+                        this.checkDrawerId = item.id;
+                    }
+                    i++;
+                })
             },
-            cancel(){
-                this.addVaccineOne = '';
-                this.addVaccineTwo = '';
-                this.vaccineOneCount = 0;
-                this.vaccineTwoCount = 0;
-                this.addForm = false;
-            },
+            next(){
+                this.$router.push({ path: '/inout/inStockCount', query: { drawerId: this.checkDrawerId }});
+            }/*,
             async modifyVaccineNum(params){
                 await this.$api.post("/vaccine/modifyVaccineNum", params);
             },
@@ -207,17 +170,9 @@
             },
             finishInStock(){
                 this.$router.push({ path: '/inout/detail', query: { action: 'in'} });
-            }
+            }*/
         },
         mounted() {
-            this.commonData = {
-                type: 1, //1:入库
-                user: this.user._id,
-                device: this.device._id,
-                deviceType: 1, //1:接种柜
-                unitCode: this.device.unitCode,
-                unitName: this.device.unitName
-            };
             this.queryDrawerByCondition();
         }
     };
