@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="table">
-                    <div v-for="(item,index) in tableDatas" @click="selectVaccine(index)" class="tableData">
+                    <div v-for="(item,index) in tableDatas" class="tableData" :class="{clicked: clickIndex==index}">
                         <div class="index">
                             <span v-if="index>8">{{index+1}}</span>
                             <span v-if="index<8 || index ==8">0{{index+1}}</span>
@@ -103,10 +103,6 @@
             closeTip(){
                 this.ifTip = false;
             },
-            selectVaccine(index){
-                this.clickIndex = index;
-                // this.ifTip = true;
-            },
             async modifyDrawerById(params){
                 await this.$api.post("/drawer/modifyDrawerById", params);
             },
@@ -134,7 +130,7 @@
                     temp.name = vaccines[k].name;
                     temp.batchNo = vaccines[k].batchNo;
                     temp.x = array[0].x;
-                    temp.y = array[0].y;console.log('kk===='+vaccines[k].code+'-'+vaccines[k].batchNo)
+                    temp.y = array[0].y;
                     this.map.set(vaccines[k].code+'-'+vaccines[k].batchNo,temp); //缓存本抽屉疫苗数据，在变更数量时使用
                 }
             },
@@ -164,7 +160,7 @@
             async scanSave(){
                 //this.$device.subscribe('SCAN_ADD_VACCINE', (data) => {
                     console.log('SERVER_PUSH==>SCAN_ADD_VACCINE');
-                    let result= {code: '1',name:'y1',batchNo:'1'};// 模拟扫描枪返回结果 todo
+                    let result= {code: '1',name:'y1',batchNo:'1',expiry: new Date()};// 模拟扫描枪返回结果 todo
                     //检查是否异常疫苗
                     let ex = await this.queryExceptionVaccine();
                     if(result.batchNo == ex.batchNo){
@@ -184,6 +180,7 @@
                                 code: result.code,   //疫苗编号
                                 name: result.name,   //疫苗名称
                                 batchNo: result.batchNo, //疫苗批次
+                                expiry: result.expiry, //有效期
                                 total: 1,    //数量(入库总数)
                                 surplus:1    //剩余数量
                             }});
@@ -231,7 +228,6 @@
                         if(arr[i].code==code || arr[i].batchNo==batchNo){
                             arr[i].count = arr[i].count + 1;
                             arr[i].clickIndex = i;//行颜色选中
-                            break;
                         }else{
                             arr[i].clickIndex = null;
                         }

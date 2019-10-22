@@ -176,7 +176,7 @@
                 this.$router.push('/inout/outStock');
             }
         },
-        mounted() {console.log('this.device-----%',this.device)
+        mounted() {
             //查询首页数据
             this.queryDrawerByCondition();
             this.queryAlarmByByCondition();

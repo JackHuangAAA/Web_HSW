@@ -2,10 +2,10 @@
     <div style="position:relative">
         <div class="container">
             <div class="inStockTitle">
-                    <img src="/static/img/backHome.png" class="back">
-                    <img src="/static/img/succeed.png" class="succeed">
-                    <p class="headP">疫苗入库完成</p>
-                    <p class="backHomeP" @click="returnMain()">返回主页</p>
+                <img src="/static/img/backHome.png" class="back">
+                <img src="/static/img/succeed.png" class="succeed">
+                <p class="headP">疫苗出库完成</p>
+                <p class="backHomeP" @click="returnMain()">返回主页</p>
             </div>
             <div class="main">
                 <div class="title">
@@ -19,10 +19,13 @@
                         批次号
                     </div>
                     <div class="coordinate">
-                        位置信息
+                        有效期
+                    </div>
+                    <div class="coordinate">
+                        是否失效
                     </div>
                     <div class="count">
-                        入库数量
+                        出库数量
                     </div>
                 </div>
                 <div class="table">
@@ -38,7 +41,10 @@
                             {{item.batchNo}}
                         </div>
                         <div class="coordinate">
-                            ({{item.x}},{{item.x}})
+                            {{item.expiry}}
+                        </div>
+                        <div class="coordinate">
+                            {{item.invalid}}
                         </div>
                         <div class="count">
                             <p class="countInput">{{item.count}}</p>
@@ -65,9 +71,6 @@
         },
         components:{},
         methods: {
-            back(){
-                this.$router.push('/inout/inStock');
-            },
             returnMain: function(){
                 this.$router.push('/main');
             }
@@ -78,5 +81,5 @@
     };
 </script>
 <style lang="less" scoped>
-    @import "~@/style/inStockEnd.less";
+    @import "~@/style/outStockEnd.less";
 </style>

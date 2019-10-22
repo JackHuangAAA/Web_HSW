@@ -47,7 +47,7 @@
     export default {
         data() {
             return {
-                row: 0,
+                row: 6,
                 cabineData: [{},{},{},{},{},{},{},{}],
                 cityList: [{value:22,label:22},{value:33,label:33}],
                 added: [{name: '麻疹疫苗',ifShow:false},{name: '麻疹疫苗1',ifShow:false},{name: '麻疹疫苗2',ifShow:false},
@@ -63,6 +63,31 @@
             })
         },
         methods: {
+            async queryDrawerByCondition(){
+                this.cabineDatas = [];
+                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
+                    device: this.device._id
+                });
+                let array = res.data;
+                for (let i = 0; i < 12; i++) {
+                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
+                    temp.id = array[i]._id;
+                    temp.single = false;
+                    if (num > 0) {
+                        for (let k = 0; k < num; k++) {
+                            if (k == 0) {temp.nameOne = vaccine[k].name;}
+                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
+                            if (k == 2) {temp.nameThree = vaccine[k].name;}
+                            if (k == 3) {temp.nameFour = vaccine[k].name;}
+                            if (k == 4) {temp.nameFive = vaccine[k].name;}
+                            if (k == 5) {temp.nameSix = vaccine[k].name;}
+                        }
+                    } else {
+                        temp.nameOne = '';
+                    }
+                    this.cabineDatas.push(temp);
+                }
+            },
             add: function(index,mainIndex){
                 if(index == 5 && this.cabineData[mainIndex].select[5].ifAdd){
                     this.cabineData[mainIndex].select[0].ifShow = true;
@@ -151,7 +176,8 @@
                 item.select = [{ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},
                 {ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},{ifShow:true,ifAdd:false,value: ''}];
             })
-            this.row = this.cabineData.length/2;
+            //this.row = this.cabineData.length/2;
+            this.queryDrawerByCondition();
         },
     };
 </script>
