@@ -4,7 +4,7 @@
         <div class="fingerprint-add" @click="addFinger()">新增</div>
         <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
         <div align="center">
-            <Button type="primary" @click="register">register</Button>
+            <!-- <Button type="primary" @click="register">register</Button> -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <Button type="dashed" @click="verify">verify</Button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -79,13 +79,7 @@
                     console.log('delFinger2----'+JSON.stringify(res));
                 })
             },
-            register(){
-                console.log('register000000000000----');
-                this.$device.fingerRegister('REGISTER').then(res => {
-                    console.log('register1----'+JSON.stringify(res));
-                    console.log('register2----'+JSON.stringify(res));
-                })
-            },
+            
             verify(){
                 console.log('verify000000000000----');
                 this.$device.fingerVerify('VERIFY').then(res => {

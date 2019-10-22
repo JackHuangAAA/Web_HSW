@@ -22,14 +22,19 @@ export default {
         
     },
     //注册指纹
-    fingerRegister(){
+    fingerRegister(params){
         console.log('FINGER===>REGISTER');
-        return $d.invoke('FINGER', 'REGISTER');
+        return $d.invoke('FINGER', 'REGISTER',params);
     },
     //校验指纹
     fingerVerify(){
         console.log('FINGER===>VERIFY');
         return $d.invoke('FINGER', 'VERIFY');
+    },
+    //指纹查找
+    fingerSearch(){
+        console.log('FINGER===>SEARCH')
+        return $d.invoke('FINGER', 'SEARCH');
     },
     //删除全部指纹
     fingerDelAll(){
