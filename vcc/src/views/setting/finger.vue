@@ -1,6 +1,7 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
+        <div class="fingerprint-add" @click="addFinger()">新增</div>
         <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
         <div align="center">
             <Button type="primary" @click="register">register</Button>
@@ -60,6 +61,9 @@
             })
         },
         methods: {
+            addFinger(){
+                this.$emit('add',false)
+            },
             getFingerInfo() {
                 let data = [];
                 for (let f of this.user.finger) {

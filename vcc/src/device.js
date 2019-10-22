@@ -42,3 +42,21 @@ export default {
         return $d.invoke('FINGER', 'TEMPLATE_TOTAL');
     }
 };
+
+
+// 与硬件交互
+
+// export default {
+//     subscribe(eventName, callback){
+//         return $d.subscribe(eventName, callback)
+//     },
+    
+    // checkDeviceModule(){
+    //     return $d.invoke('DRIVER', 'CheckAll')
+    // },
+    // startHandleRecipe(params){
+    //     return $d.invoke('DRIVER', 'ProcessRecipe', params)
+    // }
+
+
+// };
