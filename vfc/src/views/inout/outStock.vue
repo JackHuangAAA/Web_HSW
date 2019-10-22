@@ -182,13 +182,11 @@
                 }
                 //页面数据更新
                 await this.freshTableDatas(vaccine);
-                console.log('this.tableDatas---%j',this.tableDatas)
                 //});
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
                 if(_.isEmpty(array)){
-
                     obj.count = 1;
                     obj.clickIndex = 0;
                     array.push(obj);
