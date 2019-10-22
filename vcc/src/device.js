@@ -9,11 +9,11 @@ export default {
     },
     async getDeviceCode() {
         if (config.env == 'development'){
-            return { deviceId: 'DT0001' };
+            return 'DT0001';
         } else {
-            let deviceid = await $d.invoke('SERVER', 'GetDeviceId');
-            console.log('getDeviceCode===>' + JSON.stringify(deviceid));
-            return deviceid.res;
+            let rsp = await $d.invoke('SERVER', 'GetDeviceId');
+            console.log('getDeviceCode===>' + JSON.stringify(rsp));
+            return rsp.deviceId;
         }
     },
     //打开抽屉

@@ -13,16 +13,16 @@ const RSP_CODE = {
 
 const commonResponseHandler = (response,resolve,reject)=>{
     if(config.env == 'development'){
-        console.log(`<= ${response.config.url}`,response.data);
+        console.log(`<= `,response.data);
     }
-    if (response.data.code == RSP_CODE.NO_LOGIN) {
-
+    console.log('shif: '+ JSON.stringify(response));
+    if (response.code == RSP_CODE.NO_LOGIN) {
         router.push('/login');
-    } else if (response.data.code == '9999') {
-        Message.error({content:response.data.message,closable: true,duration: 0});
+    } else if (response.code == '9999') {
+        Message.error({content:response.message,closable: true,duration: 0});
     } else {
-        if(response.data){
-            resolve(response.data);
+        if(response){
+            resolve(response);
         }
     }
 };
@@ -36,13 +36,15 @@ const errorHandler = (err)=>{
 
 export default {
     get: function (url, data) {
+        console.log('shif : get '+ url)
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
             axios.defaults.headers.common['deviceid'] = 'TD0001'; //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.get(`/vcc${url}?t=${new Date().getTime()}`, {params: data})
                     .then(response =>{
-                        commonResponseHandler(response,resolve,reject)
+                        console.log(response)
+                        commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
             });
         }else{
@@ -51,26 +53,31 @@ export default {
                 param+= `${key}=${value}&`;
             });
             url= url+param.substr(0,param.length-1);
-            return $d.invoke('SERVER', 'Get', {path: `/vcc${url}`}).then((res)=>{
-                return Promise.resolve(JSON.parse(res.rsp))
-            }).catch(errorHandler)
+            return new Promise((resolve,reject)=>{
+                $d.invoke('SERVER', 'Get', {path: `/vcc${url}`}).then((res)=>{
+                    commonResponseHandler(JSON.parse(res.rsp),resolve,reject)
+                }).catch(errorHandler)
+            });
         }
     },
 
     post: function (url, data) {
+        console.log('shif : post '+ url)
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
             axios.defaults.headers.common['deviceid'] = 'TD0001';  //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.post(`/vcc${url}?t=${new Date().getTime()}`, data)
                     .then(response =>{
-                        commonResponseHandler(response,resolve,reject)
+                        commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
             });
         }else{
-            return $d.invoke('SERVER', 'Post', {path: `/vcc${url}?t=${new Date().getTime()}`, data : JSON.stringify(data) }).then((res)=>{
-                return Promise.resolve(JSON.parse(res.rsp))
-            }).catch(errorHandler)
+            return new Promise((resolve,reject)=>{
+                $d.invoke('SERVER', 'Post', {path: `/vcc${url}?t=${new Date().getTime()}`, data : JSON.stringify(data)}).then((res)=>{
+                    commonResponseHandler(JSON.parse(res.rsp),resolve,reject)
+                }).catch(errorHandler)
+            });
         }
     }
 };
