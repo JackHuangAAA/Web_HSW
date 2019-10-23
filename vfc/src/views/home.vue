@@ -108,6 +108,7 @@ global.moment = moment;
                     this.pageName = "设置";
                     this.$router.push('/setting/setting');
                 }
+                this.ifShowMenu = false;
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;

@@ -35,7 +35,7 @@
                 <p class="yj">预警</p>
             </div>
             <div class="vaccineContent">
-                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow" 
+                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow"
                 v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,
                 tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10,
                 noData:item.vaccineOneCount == ""&&item.vaccineOneCount !== 0}'>
@@ -67,13 +67,13 @@
             </div>
         </div>
         <div class="button">
-                <div class="buttonLeft">
-                    <div class="ymrk" @click="vaccineIn()">疫苗入库</div>
-                </div>
-                <div class="buttonRight">
-                    <div class="ymck" @click="vaccineOut()">疫苗出库</div>
-                </div>
+            <div class="buttonLeft">
+                <div class="ymrk" @click="vaccineIn()">疫苗入库</div>
             </div>
+            <div class="buttonRight">
+                    <div class="ymck" @click="vaccineOut()">疫苗出库</div>
+            </div>
+        </div>
     </div>
 </template>
 
