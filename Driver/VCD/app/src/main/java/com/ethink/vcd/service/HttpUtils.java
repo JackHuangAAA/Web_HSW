@@ -1,5 +1,7 @@
 package com.ethink.vcd.service;
 
+import com.ethink.vcd.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +16,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 
 public class HttpUtils {
 
-    private static Map<String,List<Cookie>> cookieStore = new ConcurrentHashMap<String,List<Cookie>>();
+    private static Map<String, List<Cookie>> cookieStore = new ConcurrentHashMap<String, List<Cookie>>();
 
     public static OkHttpClient getOkHttpClient() {
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
@@ -35,9 +37,11 @@ public class HttpUtils {
                         return cookies != null ? cookies : new ArrayList<Cookie>();
                     }
                 })
-                .addInterceptor(logInterceptor)
                 .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new LoggerInterceptor());
+        if (BuildConfig.DEBUG) {
+            builder.addInterceptor(logInterceptor);
+        }
         return builder.build();
     }
 

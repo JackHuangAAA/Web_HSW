@@ -43,6 +43,7 @@ public class FingerUtil {
      **/
     private void cancel() {
         m_bCancel = true;
+        m_bCancel=false;
     }
 
 
@@ -120,7 +121,6 @@ public class FingerUtil {
     //验证指定指纹
     public void verify(int id) {
         cancel();
-        m_bCancel = false;
         if (id > (m_nMaxFpCount) || id < 1) {
             fingerPushMessage.message(1, String.format("id范围请保持在1到%s之间", m_nMaxFpCount));
             return;
@@ -201,10 +201,10 @@ public class FingerUtil {
         if (re != FingerCommon.ERR_SUCCESS) {
             logger.info(GetErrorMsg(re));
             //显示错误信息
+            m_bCancel=false;
             fingerPushMessage.message(1, GetErrorMsg(re));
             return;
         }
-        m_bCancel = false;
         executorService.execute(() -> {
             int w_nUserID, result, w_nEnrollStep = 0, w_nGenCount = 3;
             int[] w_nDupID = new int[1];
@@ -248,7 +248,6 @@ public class FingerUtil {
             }
             logger.info("run: --------------------执行完毕");
             //. Merge Template
-            cancel();
 //            result = fingerCommon.Run_Merge(0, w_nGenCount);
 //            if (result != FingerCommon.ERR_SUCCESS) {
 //                fingerPushMessage.message(1,GetErrorMsg(result));
@@ -292,10 +291,10 @@ public class FingerUtil {
         cancel();
         int[] w_nWidth = new int[1];
         int[] w_nHeight = new int[1];
-        m_bCancel = false;
         int re = fingerCommon.Run_TestConnection();
         if (re != FingerCommon.ERR_SUCCESS) {
             logger.info("连接错误：" + GetErrorMsg(re));
+            m_bCancel=false;
             fingerPushMessage.message(1, "设备连接错误！");
             return;
         }
@@ -326,7 +325,6 @@ public class FingerUtil {
 
     public void search() {
         cancel();
-        m_bCancel = false;
         executorService.execute(() -> {
             int[] w_nID = new int[1];
             int[] w_nLearned = new int[1];
@@ -400,7 +398,6 @@ public class FingerUtil {
             fingerPushMessage.message(1, "Template is already exist");
             return;
         }
-        m_bCancel = false;
         executorService.execute(() -> {
             int w_nUserID, result, w_nEnrollStep = 0, w_nGenCount = 3;
             int[] w_nDupID = new int[1];

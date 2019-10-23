@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class ArkController {
     private SerialPort serialPort;
@@ -37,16 +39,16 @@ public class ArkController {
 
 
     /**
-     * 构建开门数据包
+     * 打开抽屉
      **/
-    public String openDoorData(List<Integer> list) {
+    public String openDrawer(Set<Integer> set) {
         ByteBuffer buffer1 = ByteBuffer.allocate(8);
         ByteBuffer buffer2 = ByteBuffer.allocate(8);
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i) > 8) {
-                buffer2.put((byte) (0x00000001 << (list.get(i) - 9)));
+        for (Integer door:set){
+            if (door > 8) {
+                buffer2.put((byte) (0x00000001 << (door - 9)));
             } else {
-                buffer1.put((byte) (0x00000001 << (list.get(i) - 1)));
+                buffer1.put((byte) (0x00000001 << (door- 1)));
             }
         }
         byte[] da1 = buffer1.array();
@@ -135,12 +137,12 @@ public class ArkController {
     /**
      * 读取温度传感器
      **/
-    public List<Double> temperature(List<Integer> list) {
-        logger.info("查询的传感器："+list);
+    public List<Double> temperature(Set<Integer> set) {
+        logger.info("查询的传感器："+set);
         List<Double> list1 = new ArrayList<>();
         ByteBuffer da1 = ByteBuffer.allocate(6);
-        for (int i = list.size() - 1; i >= 0; i--) {
-            da1.put((byte) (1 << (list.get(i) - 1)));
+        for (Integer s:set) {
+            da1.put((byte) (1 << (s - 1)));
         }
         byte[] b_data = da1.array();
         byte t = por(b_data, 1, b_data.length, b_data[0]);
