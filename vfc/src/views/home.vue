@@ -122,7 +122,7 @@ global.moment = moment;
             },
             //接收温度信息
             receiveTemperature(){
-                //this.$device.subscribe('TEMPERATURE', (data) => {
+                this.$device.subscribe('TEMPERATURE', (data) => {
                     console.log('SERVER_PUSH==>TEMPERATURE');
                     let temp = '', val= 8;//data.data;
                     if(val>5 || val<0){
@@ -146,7 +146,7 @@ global.moment = moment;
                     this.temperature = val;
                     //保存温度到设备记录
                     this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
-                //});
+                });
             }
         },
         mounted(){

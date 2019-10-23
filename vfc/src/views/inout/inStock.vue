@@ -17,9 +17,9 @@
         </div>
         <div class="container">
             <div class="inStockTitle">
-                <img src="/static/img/back.png" class="back" @click="back()">
-                <p class="headP">请将出库疫苗扫码</p>
-                <img src="/static/img/outCabineSetp1.png" class="vaccineIn">
+                <!--<img src="/static/img/back.png" class="back" @click="back()">-->
+                <p class="headP">请将入库疫苗扫码</p>
+                <img src="/static/img/inCabinet1.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="title">
@@ -92,9 +92,6 @@
         },
         components:{},
         methods: {
-            back(){
-                this.$router.push('/main');
-            },
             closeTip(){
                 this.ifTip = false;
             },

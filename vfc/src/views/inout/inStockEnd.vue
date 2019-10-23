@@ -2,7 +2,7 @@
     <div style="position:relative">
         <div class="container">
             <div class="inStockTitle">
-                    <img src="/static/img/backHome.png" class="back">
+                    <img src="/static/img/backHome.png" @click="returnMain()" class="back">
                     <img src="/static/img/succeed.png" class="succeed">
                     <p class="headP">疫苗入库完成</p>
                     <p class="backHomeP" @click="returnMain()">返回主页</p>
