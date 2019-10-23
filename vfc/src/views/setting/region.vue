@@ -16,19 +16,19 @@
                     </div>
                     <div class="mainBottomRight">
                         <div class="index">
-                                <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
+                            <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
                             <div class="cabine" v-for="(main,mainIndex) in cabineData">
                                 <div class = "added" v-for="(item,index) in main.added" v-if="item.ifShow">
                                     {{item.name}}
-                                    <div class="cut" @click="cut(index,mainIndex)"></div>
+                                    <div class="cut" @click="delKind(index,mainIndex)"></div>
                                 </div>
-                                <div class="selectBlock" v-for="(item,index) in main.select" v-if="item.ifShow" :class="{select1: index == 0,select2: index ==1,select3: index ==2,select4: index ==3,select5: index ==4,select6: index ==5}">
-                                    <Select v-model="item.value" style="width:calc(100% - 20px)" @on-change="changedAdd(index,mainIndex)">
-                                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                <div class="selectBlock" v-for="(item,index) in main.select"  v-if="item.ifShow" :class="{select1: index == 0,select2: index ==1,select3: index ==2,select4: index ==3,select5: index ==4,select6: index ==5}">
+                                    <Select v-model="item.code" style="width:calc(100% - 20px)" :label-in-value="true" @on-change="changedAdd(index,mainIndex,$event)">
+                                        <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
                                     </Select>
-                                    <img src="/static/img/add.png" class="addImg" @click="add(index,mainIndex)">
+                                    <img src="/static/img/add.png" class="addImg" @click="addKind(index,mainIndex)">
                                 </div>
                             </div>
                         </div>
@@ -44,17 +44,14 @@
 
 <script>
     import { mapGetters } from "vuex";
+
     export default {
         data() {
             return {
                 row: 6,
-                cabineData: [{},{},{},{},{},{},{},{}],
-                cityList: [{value:22,label:22},{value:33,label:33}],
-                added: [{name: '麻疹疫苗',ifShow:false},{name: '麻疹疫苗1',ifShow:false},{name: '麻疹疫苗2',ifShow:false},
-                {name: '麻疹疫苗3',ifShow:false},{name: '麻疹疫苗4',ifShow:false},{name: '麻疹疫苗5',ifShow:false}],
-                cityList: [{value:1,label:2}],
-                select:[{ifShow:false},{ifShow:false},{ifShow:false},{ifShow:false},{ifShow:false},{ifShow:true}],
-                model1: ''
+                cabineData: [],
+                kindList: [],
+                vaccineName:''
             };
         },
         computed: {
@@ -64,119 +61,120 @@
         },
         methods: {
             async queryDrawerByCondition(){
-                this.cabineDatas = [];
+                this.cabineData = [];
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
                 let array = res.data;
                 for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.id = array[i]._id;
-                    temp.single = false;
+                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, added=[],select = [];
                     if (num > 0) {
                         for (let k = 0; k < num; k++) {
-                            if (k == 0) {temp.nameOne = vaccine[k].name;}
-                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
-                            if (k == 2) {temp.nameThree = vaccine[k].name;}
-                            if (k == 3) {temp.nameFour = vaccine[k].name;}
-                            if (k == 4) {temp.nameFive = vaccine[k].name;}
-                            if (k == 5) {temp.nameSix = vaccine[k].name;}
+                            let obj = {};
+                            //obj.drawerId = array[i]._id; //抽屉id
+                            obj.vaccineId = vaccine[k]._id; //疫苗id
+                            obj.name = vaccine[k].name;
+                            obj.code = vaccine[k].code;
+                            obj.surplus = vaccine[k].surplus;
+                            obj.ifShow = true;
+                            added.push(obj);
                         }
-                    } else {
-                        temp.nameOne = '';
+                        //select显示规则：
+                        //1个值，显示第0个select；2个值，显示第1个select
+                        //2个值，显示第2个select；4个值，显示第3个select
+                        //3个值，显示第4个select；最多显示6个值
+                        for(let x=0;x<6;x++){
+                            if(x==(num-1) && num!=6){
+                                select.push({ifShow:true,ifAdd:false,value: ''});
+                            }else{
+                                select.push({ifShow:false,ifAdd:false,value: ''});
+                            }
+                        }
+                        array[i].added = added;
+                        array[i].select = select;
+                    }else{
+                        for(let k=0;k<6;k++){
+                            added.push({ifShow:false});
+                            if(k==5){
+                                //无数据显示最后一个select（第5个）
+                                select.push({ifShow:true,ifAdd:false,value: ''}); //显示select
+                            }else{
+                                select.push({ifShow:false,ifAdd:false,value: ''});//不显示select
+                            }
+                        }
+                        array[i].added = added;
+                        array[i].select = select;
                     }
-                    this.cabineDatas.push(temp);
+                    this.cabineData.push(array[i]);
                 }
             },
-            add: function(index,mainIndex){
-                if(index == 5 && this.cabineData[mainIndex].select[5].ifAdd){
-                    this.cabineData[mainIndex].select[0].ifShow = true;
-                    this.cabineData[mainIndex].select[5].ifShow = false;
-                    this.cabineData[mainIndex].added[0].ifShow = true;
-                }
-                if(index == 0 && this.cabineData[mainIndex].select[0].ifAdd){
-                    this.cabineData[mainIndex].select[1].ifShow = true;
-                    this.cabineData[mainIndex].select[0].ifShow = false;
-                    this.cabineData[mainIndex].added[1].ifShow = true;
-                }
-                if(index == 1 && this.cabineData[mainIndex].select[1].ifAdd){
-                    this.cabineData[mainIndex].select[2].ifShow = true;
-                    this.cabineData[mainIndex].select[1].ifShow = false;
-                    this.cabineData[mainIndex].added[2].ifShow = true;
-                }
-                if(index == 2 && this.cabineData[mainIndex].select[2].ifAdd){
-                    this.cabineData[mainIndex].select[3].ifShow = true;
-                    this.cabineData[mainIndex].select[2].ifShow = false;
-                    this.cabineData[mainIndex].added[3].ifShow = true;
-                }
-                if(index == 3 && this.cabineData[mainIndex].select[3].ifAdd){
-                    this.cabineData[mainIndex].select[4].ifShow = true;
-                    this.cabineData[mainIndex].select[3].ifShow = false;
-                    this.cabineData[mainIndex].added[4].ifShow = true;
-                }
-                if(index == 4 && this.cabineData[mainIndex].select[4].ifAdd){
-                    this.cabineData[mainIndex].select[4].ifShow = false;
-                    this.cabineData[mainIndex].added[5].ifShow = true;
-                }
-                this.$forceUpdate()
+            async queryVaccineKinds(){
+                let res = await this.$api.get("/zcy/queryVaccineKinds");
+                this.kindList = res.data;
             },
-            cut: function(index,mainIndex){
-                if(index == 5){
-                    this.cabineData[mainIndex].select[4].ifShow = true;
-                    this.cabineData[mainIndex].added[5].ifShow = false;
-                }
-                if(index == 4 && this.cabineData[mainIndex].select[4].ifShow == true){
-                    this.cabineData[mainIndex].select[4].ifShow = false;
-                    this.cabineData[mainIndex].select[3].ifShow = true;
-                    this.cabineData[mainIndex].added[4].ifShow = false;
-                }
-                if(index == 3 && this.cabineData[mainIndex].select[3].ifShow == true){
-                    this.cabineData[mainIndex].select[3].ifShow = false;
-                    this.cabineData[mainIndex].select[2].ifShow = true;
-                    this.cabineData[mainIndex].added[3].ifShow = false;
-                }
-                if(index == 2 && this.cabineData[mainIndex].select[2].ifShow == true){
-                    this.cabineData[mainIndex].select[2].ifShow = false;
-                    this.cabineData[mainIndex].select[1].ifShow = true;
-                    this.cabineData[mainIndex].added[2].ifShow = false;
-                }
-                if(index == 1 && this.cabineData[mainIndex].select[1].ifShow == true){
-                    this.cabineData[mainIndex].select[1].ifShow = false;
-                    this.cabineData[mainIndex].select[0].ifShow = true;
-                    this.cabineData[mainIndex].added[1].ifShow = false;
-                }
-                if(index == 0 && this.cabineData[mainIndex].select[0].ifShow == true){
-                    this.cabineData[mainIndex].select[0].ifShow = false;
-                    this.cabineData[mainIndex].select[5].ifShow = true;
-                    this.cabineData[mainIndex].added[0].ifShow = false;
-                }
-                this.cabineData[mainIndex].select[index].value = "";
-                if(index == 0){
-                    this.cabineData[mainIndex].select[5].value = "";
-                    this.cabineData[mainIndex].select[5].ifAdd = false;
-                }else{
-                    this.cabineData[mainIndex].select[index-1].value = "";
-                    this.cabineData[mainIndex].select[index-1].ifAdd = false;
-                }
-                this.$forceUpdate()
-            },
-            changedAdd: function(index,mainIndex){
-                    this.cabineData[mainIndex].select.forEach(item =>{
-                        item.ifAdd = false;
+            async addKind(index,mainIndex){
+                if(this.cabineData[mainIndex].select[index].ifAdd){
+                    let drawer = this.cabineData[mainIndex];
+                    //判断同抽屉是否已经存在要增加的疫苗
+                    let types = drawer.added;
+                    for(let r=0;r<types.length;r++){
+                        if(types[r].code == drawer.select[index].code){
+                            this.$Message.info({
+                                top: 300,
+                                content: '该疫苗在抽屉已经存在',
+                                duration: 10,
+                                closable: true
+                            });
+                            drawer.select[index].code = '';
+                            this.vaccineName='';
+                            return false;
+                        }
+                    }
+                    //增加疫苗信息到DB
+                    await this.$api.post("/drawer/modifyDrawerById", {
+                        id: drawer._id,
+                        vaccine: {
+                            device: this.device._id,   //设备
+                            code: drawer.select[index].code,   //疫苗编号
+                            name: this.vaccineName  //疫苗名称
+                        }
                     });
-                    this.cabineData[mainIndex].select[index].ifAdd = true;
+                    this.queryDrawerByCondition();
+                }
+                this.$forceUpdate();
+            },
+            async delKind(index,mainIndex){
+                //删除疫苗信息从DB
+                let drawer = this.cabineData[mainIndex];
+                let surplus = drawer.added[index].surplus;
+                if(surplus>0){
+                    this.$Message.info({
+                        top: 300,
+                        content: '该疫苗库存大于0，不允许删除',
+                        duration: 10,
+                        closable: true
+                    });
+                    return false;
+                }else{
+                    await this.$api.post("/drawer/modifyDrawerByIdDec", {
+                        id: drawer._id,
+                        vaccineId:  drawer.added[index].vaccineId //疫苗id
+                    });
+                    this.queryDrawerByCondition();
+                    this.$forceUpdate();
+                }
+            },
+            changedAdd: function(index,mainIndex,event){
+                if(event==undefined){ return false;}//删除时，阻止异常报错
+                this.vaccineName = event.label;//新选择的疫苗名称
+                this.cabineData[mainIndex].select.forEach(item =>{
+                    item.ifAdd = false;
+                });
+                this.cabineData[mainIndex].select[index].ifAdd = true;
             }
         },
         mounted() {
-            this.cabineData.forEach(item =>{
-                // item.ifShowAdded = false;
-                // item.ifShowSelect = false;
-                item.added = [{name: '麻疹疫苗',ifShow:false},{name: '麻疹疫苗1',ifShow:false},{name: '麻疹疫苗2',ifShow:false},
-                {name: '麻疹疫苗3',ifShow:false},{name: '麻疹疫苗4',ifShow:false},{name: '麻疹疫苗5',ifShow:false}];
-                item.select = [{ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},
-                {ifShow:false,ifAdd:false,value: ''},{ifShow:false,ifAdd:false,value: ''},{ifShow:true,ifAdd:false,value: ''}];
-            })
-            //this.row = this.cabineData.length/2;
+            this.queryVaccineKinds();
             this.queryDrawerByCondition();
         },
     };

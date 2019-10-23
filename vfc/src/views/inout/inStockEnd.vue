@@ -19,7 +19,7 @@
                         批次号
                     </div>
                     <div class="coordinate">
-                        位置信息
+                        有效期
                     </div>
                     <div class="count">
                         入库数量
@@ -38,7 +38,7 @@
                             {{item.batchNo}}
                         </div>
                         <div class="coordinate">
-                            ({{item.x}},{{item.x}})
+                            {{dateformat(item.expiry)}}
                         </div>
                         <div class="count">
                             <p class="countInput">{{item.count}}</p>
@@ -50,7 +50,9 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -65,8 +67,8 @@
         },
         components:{},
         methods: {
-            back(){
-                this.$router.push('/inout/inStock');
+            dateformat(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
             },
             returnMain: function(){
                 this.$router.push('/main');
