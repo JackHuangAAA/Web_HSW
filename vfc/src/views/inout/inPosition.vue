@@ -4,7 +4,7 @@
         <div class="container">
             <div class="inStockTitle">
                 <p class="headP">请将疫苗放入对应位置</p>
-                <img src="/static/img/vaccineInTip.png" class="vaccineIn">
+                <img src="/static/img/inCabinet2.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="mainTop">
