@@ -77,7 +77,8 @@
 <script>
     import {mapGetters} from 'vuex';
     import uuid from 'uuid/v1';
-    import moment from 'moment'
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -182,13 +183,11 @@
                 }
                 //页面数据更新
                 await this.freshTableDatas(vaccine);
-                console.log('this.tableDatas---%j',this.tableDatas)
                 //});
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
                 if(_.isEmpty(array)){
-
                     obj.count = 1;
                     obj.clickIndex = 0;
                     array.push(obj);
@@ -216,9 +215,6 @@
         },
         mounted() {
             //监听扫描枪事件
-            /*setInterval(() => {
-                this.scanOut();
-            }, 5000);*/
             this.scanOut();
             this.batchId = uuid();
             this.commonData = {

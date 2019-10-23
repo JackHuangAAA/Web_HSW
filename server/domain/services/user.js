@@ -45,13 +45,12 @@ module.exports = {
     logger.debug(`queryUserByCondition param: ${JSON.stringify(requestBody)}`);
     let query = [];
     if (!_.isEmpty(requestBody.code)) {
-      query.push({ code: requestBody.code })
+      query.push({ code: requestBody.code });
     }
     if (!_.isEmpty(requestBody.name)) {
-      query.push({ name: requestBody.name })
+      query.push({ name: requestBody.name });
     }
-    query =
-      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
     return Domain.models.user.find(query)
   },
 
@@ -106,12 +105,11 @@ module.exports = {
    * @returns {Promise.<*>}
    */
   login: async function (code, password) {
-    logger.debug(`login param code: ${code}, password: ${password}`)
-    let op = await Domain.models.user.findOne({ code: code })
-    logger.debug(op, code)
+    logger.debug(`login param code: ${code}, password: ${password}`);
+    let op = await Domain.models.user.findOne({ code: code });
     if (op != null) {
       if (op.password == password) {
-        let token = null
+        let token = null;
         if (
           moment().diff(moment(op.lastLogin), 'minutes') <= 30 &&
           !_.isEmpty(op.token)
@@ -123,13 +121,13 @@ module.exports = {
             .toString('hex')
             .toUpperCase()
         }
-        await this.updateUserToken(code, token)
+        await this.updateUserToken(code, token);
         return token
       } else {
-        throw Libs.error('0003', '密码错误') //密码错误
+        throw Libs.error('0003', '密码错误'); //密码错误
       }
     } else {
-      throw Libs.error('0002', `用户${code}不存在`) //用户${code}不存在
+      throw Libs.error('0002', `用户${code}不存在`); //用户${code}不存在
     }
   },
 
@@ -154,7 +152,7 @@ module.exports = {
    * @returns {*}
    */
   refreshLastLogin: function (code) {
-    logger.debug(`refreshLastLogin param code: ${code}`)
+    logger.debug(`refreshLastLogin param code: ${code}`);
     return Domain.models.user.update(
       { code: code },
       { $set: { lastLogin: new Date() } }
@@ -167,22 +165,21 @@ module.exports = {
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   queryUsers: async function (requestBody) {
-    logger.debug(`queryUsers param: ${json.stringify(requestBody)}`)
-    let query = []
+    logger.debug(`queryUsers param: ${json.stringify(requestBody)}`);
+    let query = [];
     if (!_.isEmpty(requestBody.code)) {
-      query.push({ code: new RegExp(requestBody.code) })
+      query.push({ code: new RegExp(requestBody.code) });
     }
     if (!_.isEmpty(requestBody.name)) {
-      query.push({ name: new RegExp(requestBody.name) })
+      query.push({ name: new RegExp(requestBody.name) });
     }
-    query =
-      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {}
+    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
     let result = await Domain.models.user.paginate(query, {
       sort: { _id: -1 },
       page: requestBody.page,
       limit: parseInt(requestBody.size),
       lean: true
-    })
+    });
     return { rs: result.docs, total: result.total }
   },
 
@@ -193,7 +190,7 @@ module.exports = {
    */
   saveUser: async function (requestBody) {
     logger.debug(`saveUser param: ${JSON.stringify(requestBody)}`);
-    return Domain.models.user.create(requestBody)
+    return Domain.models.user.create(requestBody);
   },
 
   /**
@@ -218,7 +215,7 @@ module.exports = {
    */
   removeUserById: function (requestBody) {
     logger.debug(`removeUserById param: ${JSON.stringify(requestBody)}`);
-    return Domain.models.user.findOneAndRemove({ _id: requestBody.id })
+    return Domain.models.user.findOneAndRemove({ _id: requestBody.id });
   },
 
   /**
@@ -251,8 +248,7 @@ module.exports = {
         $push: {
           "finger": requestBody.code_new
         }
-      }
-    );
-
+      });
   }
+
 }

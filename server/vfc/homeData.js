@@ -49,17 +49,14 @@ async function execute() {
          let vaccineLowerThreshold = await Domain.services.vaccine.queryVaccineLowerThreshold({ device: deviceData[0]._id});
         // 空余药柜
          let drawerEmptyArr = await Domain.services.drawer.queryDrawerEmpty({ device: deviceData[0]._id });
-        // 接种顾客
-         let customerNum = await Domain.services.vaccination.queryVaccinationByCustomerCode({ device: deviceData[0]._id});
          let timedData = {
              alarmData: alarmData,
              vaccineNum: vaccineNum,
              vaccineLowerThreshold: vaccineLowerThreshold,
              drawerEmptyArr: drawerEmptyArr,
-             customerNum: customerNum,
          };
         value.emit( Domain.enum.TIMEDATA, timedData);
-        value.emit( 'test2', '再一次');
+        //value.emit( 'test2', '再一次');
     });
 }
 

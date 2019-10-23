@@ -17,7 +17,7 @@
                 <Row span="22" style="width:100%">
                     <Col span="11" class="alarm-card-pd">
                         <div class="alarm-card-title">报警类型:</div>
-                        <div class="alarm-card-info">{{item.type}}</div>
+                        <div class="alarm-card-info">{{item.type==1?'温度异常':'库存不足'}}</div>
                     </Col>
                     <Col span="13" class="alarm-card-pd">
                         <div class="alarm-card-title">报警原因:</div>

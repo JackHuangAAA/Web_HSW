@@ -1,11 +1,10 @@
-<!--出库-->
+<!--入库对应位置展示-->
 <template>
     <div style="position:relative">
         <div class="container">
             <div class="inStockTitle">
-                    <img src="/static/img/back.png" class="back" @click="back()">
-                    <p class="headP">请将抽屉中疫苗全部取出</p>
-                    <img src="/static/img/outCabineSetp1.png" class="vaccineIn">
+                <p class="headP">请将疫苗放入对应位置</p>
+                <img src="/static/img/inCabinet2.png" class="vaccineIn">
             </div>
             <div class="main">
                 <div class="mainTop">
@@ -23,26 +22,35 @@
                     </div>
                     <div class="mainBottomRight">
                         <div class="index">
-                                <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
+                            <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
                             <div class="cabine" v-for="(item,index) in cabineDatas">
-                                <Checkbox v-model="item.single" class="checkBox" v-if="item.nameOne"></Checkbox>
                                 <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
-                                    <p class="vaccineOneCount">{{item.countOne||0}}支</p>
                                 </div>
                                 <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                    <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
+                                </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                </div>
+                                <div class="cabineLeft" v-if="item.nameFive">
+                                    <p class="vaccineOneName">{{item.nameFive}}</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameSix">
+                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="finish">
-                        <div class="finishButton" @click="openDrawer">
-                            完成
-                        </div>
+                </div>
+                <div class="finish">
+                    <div class="yes" @click="next()">
+                        入库完成
                     </div>
                 </div>
             </div>
@@ -50,18 +58,15 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex';
-
+    import {mapGetters} from 'vuex'
     export default {
         data() {
             return {
                 cabineDatas: [],
                 index: '1',
-                row: 5,
-                addVaccineOne: '',
-                addVaccineTwo: '',
-                vaccineOneCount: "",
-                vaccineTwoCount: ""
+                row: 6,
+                checkDrawerId:'',
+                datas: null
             }
         },
         computed: {
@@ -78,61 +83,37 @@
                     device: this.device._id
                 });
                 let array = res.data;
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 12; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.drawerId = array[i]._id;
-                    temp.x = array[i].x;
-                    temp.y = array[i].y;
+                    temp.id = array[i]._id;
+                    temp.single = false;
                     if (num > 0) {
                         for (let k = 0; k < num; k++) {
-                            temp.single = true;
-                            if (k == 0) {
-                                temp.nameOne = vaccine[k].name;
-                                temp.countOne = vaccine[k].surplus;
-                                temp.idOne = vaccine[k]._id;
-                                temp.codeOne = vaccine[k].code;
-                            }
-                            if (k == 1) {
-                                temp.nameTwo = vaccine[k].name;
-                                temp.countTwo = vaccine[k].surplus;
-                                temp.idTwo = vaccine[k]._id;
-                                temp.codeTwo = vaccine[k].code;
-                            }
+                            if (k == 0) {temp.nameOne = vaccine[k].name;}
+                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
+                            if (k == 2) {temp.nameThree = vaccine[k].name;}
+                            if (k == 3) {temp.nameFour = vaccine[k].name;}
+                            if (k == 4) {temp.nameFive = vaccine[k].name;}
+                            if (k == 5) {temp.nameSix = vaccine[k].name;}
                         }
                     } else {
                         temp.nameOne = '';
-                        temp.countOne = '';
-                        temp.nameTwo = '';
-                        temp.countTwo = '';
                     }
                     this.cabineDatas.push(temp);
                 }
             },
-            back: function(){
-                this.$router.push('/main');
-            },
-            //打开指定抽屉
-            openDrawer(){
-                //获取选中的的抽屉
-                let ids = [], array = this.cabineDatas;
-                for(let n=0;n<array.length;n++) {
-                    if(array[n].single){
-                        ids.push(array[n].drawerId);
-                    }
-                }
-                //调用Android接口，打开抽屉  todo
-
-                console.log('33--------->%j',ids)
-                this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+            next(){
+                this.$router.push({ path: '/inout/inStockEnd', query: { datas: this.datas }});
             }
         },
         mounted() {
+            this.datas = this.$route.query.datas;
             this.queryDrawerByCondition();
         }
     };
 </script>
 <style lang="less" scoped>
-    @import "~@/style/outStock.less";
+    @import "~@/style/inPosition.less";
 </style>
 <style>
     .ivu-input{

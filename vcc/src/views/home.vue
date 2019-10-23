@@ -114,6 +114,7 @@ global.moment = moment;
                     this.pageName = "设置";
                     this.$router.push('/setting/setting');
                 }
+                this.ifShowMenu = false;
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;
@@ -166,7 +167,9 @@ global.moment = moment;
         mounted(){
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
-                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                console.log('shif: getDeviceCode rsp' + JSON.stringify(res));
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
+                    console.log('shif: queryDeviceByCondition rsp');
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
