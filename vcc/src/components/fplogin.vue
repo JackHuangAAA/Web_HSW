@@ -38,18 +38,20 @@ export default {
       }else if(data.type==2){
         //data.msg.tag为id
         this.$Message.info("登录成功")
-        console.log("登录成功============================>"+JSON.parse(data.msg).tag)
         let _id=JSON.parse(data.msg).tag
+        console.log("登录成功============================>"+_id)
+       
         if(this.user._id){
-          if(this.user_id==_id){
+          if(this.user._id==_id){
             this.$router.push('/main')
           }else{
             //指纹用户id和设备用户id不同
           }
         }else{
           //根据id查询用户信息，存储用户信息
-          let user = this.$api.post("/user/modifyUserByCode", {_id});
+          let user = this.$api.get("/user/queryUserByCondition", {_id:_id});
           this.saveUser(user.data)
+          this.$router.push('/main')
         }
       }else if(data.type==3){
         this.$Message.info(data.msg)
