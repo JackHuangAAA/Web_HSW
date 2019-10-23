@@ -28,7 +28,9 @@ router.post(
  * @apiGroup User
  * @apiVersion 1.0.0
  * @apiDescription 按指定条件查询用户信息
- * @apiParam {String} code 用户code
+ * @apiParam {String} [code] 用户code
+ * @apiParam {String} [name]
+ * @apiParam {String} [_id]
  * @apiSuccess {Array} data 操作返回数据数组
  */
 router.get(

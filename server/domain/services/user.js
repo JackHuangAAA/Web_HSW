@@ -50,8 +50,11 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: requestBody.name })
     }
+    if (!_.isEmpty(requestBody._id)) {
+      query.push({_id: requestBody._id })
+    }
     query =
-      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+      query.length >1 ? { $and: query } : query.length == 1 ? query[0] : {};
     return Domain.models.user.find(query)
   },
 
@@ -172,11 +175,14 @@ module.exports = {
     if (!_.isEmpty(requestBody.code)) {
       query.push({ code: new RegExp(requestBody.code) })
     }
+    if (!_.isEmpty(requestBody._id)) {
+      query.push({ code: new RegExp(requestBody._id) })
+    }
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) })
     }
     query =
-      query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {}
+      query.length >1 ? { $and: query } : query.length == 1 ? query[0] : {}
     let result = await Domain.models.user.paginate(query, {
       sort: { _id: -1 },
       page: requestBody.page,
