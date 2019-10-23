@@ -122,6 +122,8 @@
                     surplusIsNotZero: true,
                     code: '002'  //val.vaccineCode
                 });
+                console.log(vaccine);
+            console.log('-----------');
                 let drawer = await this.$api.get(`/drawer/queryDrawerByCondition`,{
                     device: this.device._id,
                     vaccineCode: vaccine.data[0]._id

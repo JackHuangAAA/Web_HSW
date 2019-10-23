@@ -4,7 +4,7 @@
             <div class="title">
                 <img class="bg1" src="/static/img/loginp1.png">
                 <img class="logo" src="/static/img/logo.png">
-                <p class="logoP">银信疫苗接种平台</p>
+                <p class="logoP">银信疫苗冷藏柜</p>
                 <p class="logoE">welcome to login system</p>
             </div>
             <div class="loginContent">
@@ -14,7 +14,7 @@
                 </div>
                 <div class="loginForm" :class="{'loginFormChange':!show}">
                     <fplogin v-if="show" @click="test()"></fplogin>
-                    <loginform v-if="!show" @Submit="userLogin"></loginform>
+                    <loginform v-if="!show" :state="state" @Submit="userLogin"></loginform>
                 </div>
             </div>
                 <img class="bg2" src="/static/img/loginp2.png">
@@ -34,7 +34,8 @@ export default {
     },
     data() {
         return {
-            show: true
+            show: true,
+            state:true
         };
     },
     computed: {
@@ -74,6 +75,8 @@ export default {
                 });
                 await this.saveUser(user.data);
                 this.$router.push('/');
+            }else{
+                this.state=false
             }
         },
         fingerLogin() {

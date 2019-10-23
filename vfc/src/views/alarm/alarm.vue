@@ -11,25 +11,28 @@
         </div>
         <div class="alarm-main">
             <Row v-for="(item, index) in datas" class="alarm-card">
-                <Col span="1" class="alarm-card-id">
+                <Col span="2" class="alarm-card-id">
                     <div>{{index+1}}</div>
                 </Col>
-                <Col span="3" class="alarm-card-pd">
-                    <div class="alarm-card-title">报警类型:</div>
-                    <div class="alarm-card-info">{{item.type}}</div>
-                </Col>
-                <Col span="5" class="alarm-card-pd">
-                    <div class="alarm-card-title">报警时间:</div>
-                    <div class="alarm-card-info">{{getAlarmDate(item.createDate)}}</div>
-                </Col>
-                <Col span="7" class="alarm-card-pd">
-                    <div class="alarm-card-title">报警原因:</div>
-                    <div class="alarm-card-info">{{item.reason}}</div>
-                </Col>
-                <Col span="8" class="alarm-card-pd">
-                    <div class="alarm-card-title">解决情况:</div>
-                    <div class="alarm-card-info">{{item.solution}}</div>
-                </Col>
+                <Row span="22" style="width:100%">
+                    <Col span="11" class="alarm-card-pd">
+                        <div class="alarm-card-title">报警类型:</div>
+                        <div class="alarm-card-info">{{item.type}}</div>
+                    </Col>
+                    <Col span="13" class="alarm-card-pd">
+                        <div class="alarm-card-title">报警原因:</div>
+                        <div class="alarm-card-info">{{item.reason}}</div>
+                    </Col>
+                    <Col span="11" class="alarm-card-pd row2">
+                        <div class="alarm-card-title">报警时间:</div>
+                        <div class="alarm-card-info">{{getAlarmDate(item.createDate)}}</div>
+                    </Col>
+                    
+                    <Col span="13" class="alarm-card-pd row2">
+                        <div class="alarm-card-title">解决情况:</div>
+                        <div class="alarm-card-info">{{item.solution}}</div>
+                    </Col>
+                </Row>                
             </Row>
             <div v-if="nullData" style="width:100%;text-align:center;font-size: 20px;">暂无数据</div>
         </div>
