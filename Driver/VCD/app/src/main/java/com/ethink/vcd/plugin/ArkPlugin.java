@@ -33,10 +33,11 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         if (pluginMessage == null) return pluginMessage;
         logger.info("pluginName " + pluginMessage.getFunctionName());
         String functionName = pluginMessage.getFunctionName();
-        pluginMessage.changeToResponse();
+
         switch (functionName) {
             case "OPEN":
                 String a = pluginMessage.getString("num");
+                pluginMessage.changeToResponse();
                 if (!StringUtils.isEmpty(a)) {
                     try {
                         int num = Integer.parseInt(a);
@@ -44,7 +45,6 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                       //  ResponseUtil.success(pluginMessage, re, null);
                     } catch (NumberFormatException e) {
                         logger.info("序号格式化错误", e);
-                        ResponseUtil.fail(pluginMessage, "错误：" + e.getMessage());
                     }
                 }
                 break;
@@ -54,23 +54,20 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                     try {
                         int num = Integer.parseInt(b);
                          double re = arkController.temperature(num);
-                        ResponseUtil.success(pluginMessage, "成功", ResponseUtil.data("temp", String.valueOf(re)));
+                      //  ResponseUtil.success(pluginMessage, "成功", ResponseUtil.data("temp", String.valueOf(re)));
                     } catch (NumberFormatException e) {
                         logger.info("序号格式化错误", e);
-                        ResponseUtil.fail(pluginMessage, "错误：" + e.getMessage());
                     }
                 }
                 break;
             case "ARK_STATUS":
                 if (arkController.arkStatus() == 1) {
-                    ResponseUtil.success(pluginMessage, "状态正常", null);
-                } else {
-                    ResponseUtil.fail(pluginMessage, "状态异常");
+                 //   ResponseUtil.success(pluginMessage, "状态正常", null);
                 }
                 break;
             case "SYS_VALUES":
                 arkController.sysValue();
-                ResponseUtil.success(pluginMessage, "系统信息", null);
+               // ResponseUtil.success(pluginMessage, "系统信息", null);
                 break;
             case "SWITCH_STATUS":
                 arkController.switchStatus();

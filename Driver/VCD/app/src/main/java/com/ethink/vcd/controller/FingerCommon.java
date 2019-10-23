@@ -605,7 +605,7 @@ public class FingerCommon {
         }
     }
 
-    private boolean SendPacket(short wCMD) {
+    private boolean  SendPacket(short wCMD) {
         byte[] btCDB = new byte[8];
         Arrays.fill(btCDB, (byte)0);
         btCDB[0] = -17;

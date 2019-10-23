@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.StringUtils;
+import com.ethink.vcd.App;
 import com.ethink.vcd.Const;
 import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
@@ -56,10 +57,10 @@ public class ConfigActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         String url = SPUtils.getSharedStringData(this, Const.CONFIG_URL);
         String socketUrl = SPUtils.getSharedStringData(this, Const.SOCKET_IO_URL);
-        String serial = PhoneUtils.getSerial();
+        String serial = SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://192.168.0.162:8080");
+            etUrl.setText("http://192.168.0.160:8080");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
 
         } else {
@@ -68,8 +69,11 @@ public class ConfigActivity extends AppCompatActivity {
         if (!StringUtils.isEmpty(serial)) {
             etSerial.setText(serial);
         }
+        else{
+            etSerial.setText(""+PhoneUtils.getSerial());
+        }
         if (socketUrl.isEmpty()) {
-            edSocket.setText("http://192.168.0.162:9996");
+            edSocket.setText("http://192.168.0.160:9996");
         } else {
             edSocket.setText(socketUrl);
         }
