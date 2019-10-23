@@ -67,7 +67,7 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         components:{},
@@ -128,10 +128,6 @@
         },
         mounted() {
             this.queryDrawerByCondition();
-            //给数组添加checkbox 来判断是否选中 选中为true 未选中为false
-            /*this.cabineDatas.forEach(item => {
-                item.single = false;
-            });*/
         }
     };
 </script>

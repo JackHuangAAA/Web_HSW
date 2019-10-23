@@ -9,17 +9,14 @@
                 <p class="yj">预警</p>
             </div>
             <div class="vaccineContent">
-                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow" 
-                v-bind:class='{warning:item.vaccineOneCount == 0 || item.vaccineTwoCount == 0,
-                tips:item.vaccineOneCount <10 || item.vaccineTwoCount < 10,
-                noData:item.vaccineOneCount == ""&&item.vaccineOneCount !== 0}'>
+                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow">
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
-                        <p class="vaccineOneName">{{item.vaccineOneName}}</p>
-                        <p class="vaccineOneCount">{{item.vaccineOneCount || 0}}支</p>
+                        <p class="vaccineOneName" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneName}}</p>
+                        <p class="vaccineOneCount" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneCount || 0}}支</p>
                     </div>
                     <div class="vaccineRight" v-if="item.vaccineTwoName">
-                        <p class="vaccineTwoName">{{item.vaccineTwoName}}</p>
-                        <p class="vaccineTwoCount">{{item.vaccineTwoCount || 0}}支</p>
+                        <p class="vaccineTwoName" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoName}}</p>
+                        <p class="vaccineTwoCount" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoCount || 0}}支</p>
                     </div>
                 </div>
             </div>

@@ -96,7 +96,7 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         components:{},
