@@ -1,179 +1,217 @@
-<!--入库-->
 <template>
     <div style="position:relative">
+        <div class="block" v-if="ifTip">
+            <div class="tips" v-if="ifTip">
+                <img src="/static/img/close.png" class="close" @click="closeTip()">
+                <div class="tipsTitle">
+                    <img src="/static/img/info.png" class="info">
+                    <p class="tipsTitleP">{{exName}}</p>
+                </div>
+                <div class="tipP">
+                    {{exReason}}
+                </div>
+                <div class="tipsYes" @click="closeTip()">
+                    确定
+                </div>
+            </div>
+        </div>
         <div class="container">
             <div class="inStockTitle">
-                    <img src="/static/img/back.png" class="back" @click="back()">
-                    <p class="headP">请将入库疫苗扫码</p>
-                    <img src="/static/img/vaccineInTip.png" class="vaccineIn">
+                <!--<img src="/static/img/back.png" class="back" @click="back()">-->
+                <p class="headP">请将入库疫苗扫码</p>
+                <img src="/static/img/inCabinet1.png" class="vaccineIn">
             </div>
             <div class="main">
-                <div class="mainTop">
-                    <p class="ctOne">抽屉1</p>
-                    <p class="ctLeft">左</p>
-                    <img src="/static/img/l-r.png" class="l_r">
-                    <p class="ctRight">右</p>
-                    <p class="ctTwo">抽屉2</p>
-                </div>
-                <div class="mainBottom">
-                    <div class="mainBottomLeft">
-                        <p class="ctTop">上</p>
-                        <img src="/static/img/t-b.png" class="t_b">
-                        <p class="ctBottom">下</p>
+                <div class="title">
+                    <div class="index">
+                        序号
                     </div>
-                    <div class="mainBottomRight">
+                    <div class="vaccineName">
+                        疫苗名称
+                    </div>
+                    <div class="code">
+                        批次号
+                    </div>
+                    <div class="code2">
+                        有效期
+                    </div>
+                    <div class="count">
+                        入库数量
+                    </div>
+                </div>
+                <div class="table">
+                    <div v-for="(item,index) in tableDatas" class="tableData" :class="{clicked: clickIndex==index}">
                         <div class="index">
-                                <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
+                            <span v-if="index>8">{{index+1}}</span>
+                            <span v-if="index<8 || index ==8">0{{index+1}}</span>
                         </div>
-                        <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas">
-                                <Radio v-model="item.single" class="checkBox" @on-change="changeRadio(index)" v-if="item.nameOne"></Radio >
-                                <div class="cabineLeft" v-if="item.nameOne">
-                                    <p class="vaccineOneName">{{item.nameOne}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameTwo">
-                                    <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameThree">
-                                    <p class="vaccineOneName">{{item.nameThree}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameFour">
-                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameFive">
-                                    <p class="vaccineOneName">{{item.nameFive}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameSix">
-                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
-                                </div>
-                            </div>
+                        <div class="vaccineName">
+                            {{item.name}}
+                        </div>
+                        <div class="code">
+                            {{item.batchNo}}
+                        </div>
+                        <div class="code2">
+                            {{dateformat(item.expiry)}}
+                        </div>
+                        <div class="count">
+                            <input type="text" class="countInput" readonly="readonly" v-model="item.count">
                         </div>
                     </div>
                 </div>
-                <div class="finish">
-                    <div class="yes" @click="next()">
-                        确定
+                <div class="button">
+                    <div class="finish" @click="finish()">
+                        出库完成
                     </div>
-                    <!-- <div class="cancel" @click="back()">
-                        取消
-                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
+    import uuid from 'uuid/v1';
+    import moment from 'moment'
     export default {
         data() {
             return {
-                cabineDatas: [],
-                index: '1',
-                row: 6,
-                checkDrawerId:''
+                tableDatas: [],
+                clickIndex: 0,
+                ifTip: false,
+                commonData: null,
+                batchId:'',
+                exName: '',
+                exReason:''
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device'
+                device: 'device',
             })
         },
         components:{},
         methods: {
-            async queryDrawerByCondition(){
-                this.cabineDatas = [];
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
-                });
-                let array = res.data;
-                for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.id = array[i]._id;
-                    temp.single = false;
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-                            if (k == 0) {temp.nameOne = vaccine[k].name;}
-                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
-                            if (k == 2) {temp.nameThree = vaccine[k].name;}
-                            if (k == 3) {temp.nameFour = vaccine[k].name;}
-                            if (k == 4) {temp.nameFive = vaccine[k].name;}
-                            if (k == 5) {temp.nameSix = vaccine[k].name;}
-                        }
-                    } else {
-                        temp.nameOne = '';
-                    }
-                    this.cabineDatas.push(temp);
-                }
+            closeTip(){
+                this.ifTip = false;
             },
-            back(){
-                this.$router.push('/main');
+            async queryVaccineByCondition(param){
+                let res = await this.$api.get("/vaccine/queryVaccineByCondition",param);
+                return res.data[0];
             },
-            changeRadio(index){
-                let i=0;
-                this.cabineDatas.forEach(item =>{
-                    if(index != i){
-                        item.single = false;
-                    }else{
-                        //选中抽屉id
-                        this.checkDrawerId = item.id;
-                    }
-                    i++;
-                })
-            },
-            next(){
-                this.$router.push({ path: '/inout/inStockCount', query: { drawerId: this.checkDrawerId }});
-            }/*,
             async modifyVaccineNum(params){
                 await this.$api.post("/vaccine/modifyVaccineNum", params);
             },
             async saveInout(params){
                 await this.$api.post("/inout/saveInout", params);
             },
-            async inStock(){
-                //抽屉1号格
-                if(this.vaccineOneId){
-                    await this.modifyVaccineNum({
-                        id: this.vaccineOneId,
-                        total: this.vaccineOneCount,
-                        surplus: this.vaccineOneCount
-                    });
-                    await this.saveInout({
-                        ...this.commonData,
-                        x: this.vaccineOneX,
-                        y: this.vaccineOneY,
-                        code: this.vaccineOneCode,
-                        name: this.addVaccineOne,
-                        total: this.vaccineOneCount,
-                        surplus: this.vaccineOneCount
-                    });
-                }
-                //抽屉2号格
-                if(this.vaccineTwoId){
-                    await this.modifyVaccineNum({
-                        id: this.vaccineTwoId,
-                        total: this.vaccineTwoCount,
-                        surplus: this.vaccineTwoCount
-                    });
-                    await this.saveInout({
-                        ...this.commonData,
-                        x: this.vaccineTwoX,
-                        y: this.vaccineTwoY,
-                        code: this.vaccineTwoCode,
-                        name: this.addVaccineTwo,
-                        total: this.vaccineTwoCount,
-                        surplus: this.vaccineTwoCount
-                    });
-                }
-                this.queryDrawerByCondition();
-                this.addForm = false;
+            async queryExceptionVaccine(){
+                return await this.$api.get("/zcy/queryExceptionVaccine");
             },
-            finishInStock(){
-                this.$router.push({ path: '/inout/detail', query: { action: 'in'} });
-            }*/
+            //扫描枪扫码数量增加后，自动保存
+            async scanIn(){
+                //this.$device.subscribe('SCAN_ADD_VACCINE', (data) => {
+                console.log('SERVER_PUSH==>SCAN_ADD_VACCINE');
+                let result= {code: '1',name:'y1',batchNo:'1', expiry:new Date()};// 模拟扫描枪返回结果 todo
+                //检查是否异常疫苗
+                await this.checkException(result);
+                //数据入库
+                //查询疫苗数据
+                let vaccine = await this.queryVaccineByCondition({
+                    'device': this.device._id,
+                    'code': result.code,
+                    'batchNo': result.batchNo
+                });
+                //若没找到疫苗信息，提示去区域划分增加疫苗类型
+                if(_.isEmpty(vaccine)){
+                    this.$Message.info({
+                        top: 300,
+                        content: '该疫苗在冷藏柜中未找到对应的位置，请到区域划分设置',
+                        duration: 10,
+                        closable: true
+                    });
+                    return false;
+                }else{
+                    //疫苗数量增加
+                    await this.modifyVaccineNum({
+                        id: vaccine._id,
+                        total: 1,
+                        surplus: 1
+                    });
+                }
+                //增加入库记录
+                await this.saveInout({
+                    batchId: this.batchId,
+                    ...this.commonData,
+                    code: result.code,
+                    name: result.name,
+                    total: vaccine.total+1,
+                    surplus:vaccine.surplus+1
+                });
+                //页面数据更新
+                await this.freshTableDatas(vaccine);
+                //});
+            },
+            async checkException(result){
+                //判断有效期是否过期
+                if(moment().isAfter(result.expiry)){
+                    this.exReason = "过期失效"; // todo
+                    this.exName = result.name;
+                    this.ifTip = true; //提示框显示
+                    return false;
+                }
+                let ex = await this.queryExceptionVaccine();
+                //检查异常条件待接口完善后，需要修改 todo
+                if(result.batchNo == ex.batchNo){
+                    this.exReason = "报废失效"; // todo
+                    this.exName = result.name;
+                    this.ifTip = true; //提示框显示
+                    return false;
+                }
+            },
+            freshTableDatas(obj){
+                let array = this.tableDatas, flag = true;
+                if(_.isEmpty(array)){
+                    obj.count = 1;
+                    obj.clickIndex = 0;
+                    array.push(obj);
+                }else{
+                    for(let z=0;z<array.length;z++){
+                        if(obj.code == array[z].code && obj.batchNo == array[z].batchNo && obj.invalid == array[z].invalid){
+                            array[z].count = parseInt(array[z].count)+1;
+                            array[z].clickIndex = z;
+                            flag = false;
+                            break;
+                        }else{
+                            array[z].clickIndex = null;
+                        }
+                    }
+                    if(flag){
+                        obj.count = 1;
+                        obj.clickIndex = 0;
+                        array.unshift(obj);
+                    }
+                }
+            },
+            dateformat(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            finish(){
+                this.$router.push({ path: '/inout/inPosition', query: { datas: this.tableDatas }});
+            },
         },
         mounted() {
-            this.queryDrawerByCondition();
+            //监听扫描枪事件
+            this.scanIn();
+            this.batchId = uuid();
+            this.commonData = {
+                type: 1, //1:入库
+                user: this.user._id,
+                device: this.device._id,
+                deviceType: 2, //2:冷藏柜
+                unitCode: this.device.unitCode,
+                unitName: this.device.unitName
+            };
         }
     };
 </script>

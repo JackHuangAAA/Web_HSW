@@ -50,7 +50,7 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finger);
         ButterKnife.bind(this);
-        fingerUtil = new FingerUtil(this, new FingerCommon(this, "/dev/ttyS1", 115200));
+   //  fingerUtil = new FingerUtil(this, new FingerCommon(this, "/dev/ttyS1", 115200));
 
     }
 
@@ -111,7 +111,8 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
             case R.id.remote_register:
                 //注册并上传
                 executorService.execute(()->{
-                    fingerUtil.remoteRegister();
+                    String uid="pppp255";
+                    fingerUtil.remoteRegister(uid);
                 });
 
                 break;
@@ -128,25 +129,17 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
     }
 
     @Override
-    public void message(String msg) {
+    public void message(int type,String msg) {
         EventMessage eventMessage = new EventMessage("FINGER_MESSAGE");
         eventMessage.setString("msg", msg);
         eventMessage.setString("type", "1");
         logger.info("推送消息：" + JSON.toJSONString(eventMessage));
     }
 
-    @Override
-    public void pushData(String msg, String data, String number) {
-        EventMessage eventMessage = new EventMessage("FINGER_MESSAGE");
-        eventMessage.setString("msg", msg);
-        eventMessage.setString("type", "2");
-        eventMessage.setString("data", data);
-        eventMessage.setString("number", number);
-        logger.info("pushData 推送消息：" + JSON.toJSONString(eventMessage));
-    }
+
 
     @Override
-    public void upload(String path, String finger) {
+    public String upload(String path, String finger) {
         runOnUiThread(()->{
             imageView.setImageBitmap(Const.stringToBitmap(finger));
         });
@@ -166,6 +159,7 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
 }

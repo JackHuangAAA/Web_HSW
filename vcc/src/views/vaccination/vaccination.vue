@@ -9,22 +9,22 @@
                 <div class="inoculate-info">
                     <div class="inoculate-info-column">
                         <div class="inoculate-content human-info">
-                            <div>{{info.customer? info.customer.code:''}}号</div>
-                            <div>{{info.customer?info.customer.name: ''}}</div>
+                            <div>{{vaccinationData.customer? vaccinationData.customer.code:''}}号</div>
+                            <div>{{vaccinationData.customer?vaccinationData.customer.name: ''}}</div>
                         </div>
                         <div class="inoculate-content">
                             <div>接种疫苗：</div>
-                            <div class="blue">{{info.customer?info.customer.vaccineName: ''}}</div>
+                            <div class="blue">{{vaccinationData.customer?vaccinationData.customer.vaccineName: ''}}</div>
                         </div>
                     </div>
                     <div class="inoculate-info-column">
                         <div class="inoculate-content">
                             <div>年龄：</div>
-                            <div>{{info.customer?info.customer.age:''}}</div>
+                            <div>{{vaccinationData.customer?vaccinationData.customer.age:''}}</div>
                         </div>                        
                         <div class="inoculate-content">
                             <div>接种支数：</div>
-                            <div>{{info.customer?info.customer.vaccineNum:''}}</div>
+                            <div>{{vaccinationData.customer?vaccinationData.customer.vaccineNum:''}}</div>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     <div class="inoculate-info-column">
                         <div class="inoculate-content">
                             <div>批次号：</div>
-                            <div>{{vaccine.supervisionCode}}</div>
+                            <div>{{vaccine.batchNo}}</div>
                         </div>                        
                         <div class="inoculate-content">
                             <div>生产企业：</div>
@@ -75,38 +75,72 @@
         data() {
             return {
                 progress:0,
-                vaccinationData:'', //接种信息
-                info: '',
-                vaccine: ''
+                batchId: uuid(),
+                commonData: null,
+                queryVaccine: null,  //查询的本地疫苗信息
+                vaccinationData: {
+                    'customer':{
+                        'code': '089',
+                        'name': '李义',
+                        'age': 4,
+                        'vaccineCode': 'ym20190920134508999',
+                        'vaccineName': '脊髓灰质炎疫苗',
+                        'vaccineNum': 1
+                    }
+                }, //接种信息
+                vaccine: {
+                    'vaccineName': '脊髓灰质炎疫苗',
+                    expiry: new Date(),
+                    batchNo:'b-99',
+                    producer:'rrr'
+                } //疫苗扫码信息
             };
         },
         computed: {
             ...mapGetters({
-                device: 'device',
+                user: 'user',
+                device: 'device'
             })
         },
         methods: {
-            //测试使用
-            async getCustomer() {
-                let res = await this.$api.post("/zcy/reciveVaccination");
-                this.info = res.data;console.log('99------%j',this.info)
-            },
-            //测试使用
-            async queryVaccine() {
-                let res = await this.$api.get(`/zcy/queryVaccine`);
-                this.vaccine = res.data;console.log('100-------------%',this.vaccine)
-            },
             //比对疫苗信息
-            async matchInfo(obj){
-
-                //疫苗数量减少1
-
-                //比对成功，增加出库信息和接种信息
-                await this.saveInout({type:0});
-                await this.saveVaccination({});
+            async matchInfo(){
+                //接收疫苗
+                this.$device.subscribe('VACCINATION_SCAN', (data) => {
+                    this.vaccine = data.data;
+                    //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
+                    if(this.vaccine.name == this.vaccinationData.name){
+                        this.progress = 1;
+                        //比对成功，疫苗数量减少1、增加出库信息、保存接种信息
+                        //疫苗数量减少1
+                        this.modifyVaccineNum({
+                            id: this.queryVaccine._id,
+                            total: 0,
+                            surplus: -1
+                        });
+                        //增加出库信息
+                        this.saveInout({
+                            batchId: batchId,
+                            ...this.commonData,
+                            x: this.vaccineOneX,
+                            y: this.vaccineOneY,
+                            code: this.vaccineOneCode,
+                            name: this.addVaccineOne,
+                            total: this.vaccineOneCount,
+                            surplus: this.vaccineOneCount
+                        }); //todo
+                        //保存接种信息
+                        this.saveVaccination({}); //todo
+                    }else{
+                        this.progress = 2;
+                    }
+                });
             },
             getExpiryDate(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            async modifyVaccineNum(params){
+                await this.$api.post("/vaccine/modifyVaccineNum", params);
             },
             async saveInout(params){
                 await this.$api.post("/inout/saveInout", params);
@@ -114,45 +148,55 @@
             async saveVaccination(params){
                 await this.$api.post("/vaccination/saveVaccination", params);
             },
-            async openDrawer(val){
+            async queryVaccineByCondition(params){
+                let res = await this.$api.get(`/vaccine/queryVaccineByCondition`, params);
+                this.queryVaccine = res.data[0];
+            },
+            async queryDrawerByCondition(params){
+                return await this.$api.get(`/drawer/queryDrawerByCondition`, params);
+            },
+            async openDrawer(obj){
                 //查询疫苗所在抽屉信息,使用规则：多个柜子满足,按最少优先使用
-                let vaccine = await this.$api.get(`/vaccine/queryVaccineByCondition`,{
+                await this.queryVaccineByCondition({
                     device: this.device._id,
                     sortSurplus: true,
                     surplusIsNotZero: true,
-                    code: '002'  //val.vaccineCode
+                    code: obj.vaccineCode //接种信息中的疫苗code todo
                 });
-                console.log(vaccine);
-            console.log('-----------');
-                let drawer = await this.$api.get(`/drawer/queryDrawerByCondition`,{
+                let drawer = await thisqueryDrawerByCondition({
                     device: this.device._id,
-                    vaccineCode: vaccine.data[0]._id
+                    vaccineCode: this.queryVaccine._id
                 });
                 console.log('drawer===>',drawer)
                 //调用打开抽屉接口
-                this.$device.openDrawer();
+                this.$device.openDrawer();  //todo
             },
             //接收接种状态
-            receiveVaccination(){
+            receiveVaccinationStatus(){
                 this.$device.subscribe('VACCINATION_STATUS', (data) => {
                     console.log('SERVER_PUSH==>VACCINATION_STATUS');
-                    let vaccination = null;
+                    //根据状态，判断是否跳转到首页
 
                     this.$router.push('/main');
                 });
             }
         },
         mounted() {
-            //接收推送的接种信息
-            this.vaccinationData = this.$route.query.vaccination;
+            this.commonData = {
+                type: 0, //0:接种
+                user: this.user._id,
+                device: this.device._id,
+                deviceType: 1, //1:接种柜
+                unitCode: this.device.unitCode,
+                unitName: this.device.unitName
+            };
+            //接收推送的接种信息(home.vue中接收)
+            //this.vaccinationData = this.$route.query.vaccination;
             //打开需要接种的疫苗所在抽屉
-            this.openDrawer(this.vaccinationData);
-            let data = "";
-            this.matchInfo(data);
-            //测试使用
-            this.getCustomer();
-            this.queryVaccine();
-            this.matchInfo(data);
+            //this.openDrawer(this.vaccinationData);
+            this.receiveVaccinationStatus();
+            //接收疫苗扫描后结果，与接种信息比对
+            this.matchInfo();
         }
     };
 </script>

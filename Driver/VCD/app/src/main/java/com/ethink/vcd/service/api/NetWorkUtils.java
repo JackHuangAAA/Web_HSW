@@ -83,7 +83,7 @@ public class NetWorkUtils {
     }
     public static PluginMessage get(final String path, Context context, PluginMessage pluginMessage) {
         try {
-            logger.info("请求地址："+path);
+            logger.info("请求地址：{}",path);
             pluginMessage.changeToResponse();
             Request request = new Request.Builder().url(Const.getUrl(path)).build();
             Response response = HttpUtils.getOkHttpClient().newCall(request).execute();

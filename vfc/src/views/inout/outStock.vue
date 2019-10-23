@@ -77,7 +77,8 @@
 <script>
     import {mapGetters} from 'vuex';
     import uuid from 'uuid/v1';
-    import moment from 'moment'
+    import moment from 'moment';
+
     export default {
         data() {
             return {
@@ -214,9 +215,6 @@
         },
         mounted() {
             //监听扫描枪事件
-            /*setInterval(() => {
-                this.scanOut();
-            }, 5000);*/
             this.scanOut();
             this.batchId = uuid();
             this.commonData = {

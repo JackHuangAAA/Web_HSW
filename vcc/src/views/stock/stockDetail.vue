@@ -20,7 +20,7 @@
             <Col span="4">{{item.total-item.surplus}}</Col>
             <Col span="4">{{item.surplus}}</Col>
         </Row>
-        <div class="goback">返回上一页</div>
+        <div class="goback" @click="back">返回上一页</div>
     </div>
 </template>
 
@@ -40,6 +40,9 @@
             };
         },
         methods: {
+            back(){
+                this.$router.push('/stock/stock');
+            },
             async getDetails(val) {
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {id: val});
                 this.position = res.data[0].x+','+res.data[0].y;

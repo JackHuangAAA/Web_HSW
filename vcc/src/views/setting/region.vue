@@ -84,9 +84,6 @@
                             name: this.vaccineOneName  //疫苗名称
                         }
                     });
-                    //this.cabineData[index].ifOneChoose = false;
-                    //this.cabineData[index].ifVaccineOne = true;
-                    //this.cabineData[index].ifTwoChoose = true;
                     this.queryDrawerByCondition();
                 }
                 //this.$forceUpdate();
@@ -104,8 +101,6 @@
                             name: this.vaccineTwoName  //疫苗名称
                         }
                     });
-                    //this.cabineData[index].ifTwoChoose = false;
-                    //this.cabineData[index].ifVaccineTwo = true;
                     this.queryDrawerByCondition();
                 }
                 //this.$forceUpdate();
@@ -114,15 +109,6 @@
                 this.cabineData[index].ifAdd = false;
                 if(event == undefined){ return false;}//删除时，阻止异常报错
                 if(this.cabineData[index].vaccineOne !== "" && this.cabineData[index].vaccineOne !== undefined){
-                    /*let temp = this.cabineData[index].vaccine;
-                    if(temp[0] == this.cabineData[index].vaccineOne){
-                        this.$Message.info({
-                            content: '同一个抽屉不允许设置相同的疫苗',
-                            duration: 10,
-                            closable: true
-                        });
-                        return false;
-                    }*/
                     this.vaccineOneName = event.label;//新选择的疫苗名称
                     this.cabineData[index].ifAdd = true;
                 }
@@ -145,26 +131,36 @@
                 }
             },
             async delVaccineOne(index){
-                //删除疫苗信息从DB
                 let drawer = this.cabineData[index];
+                if(drawer.surplus>0){
+                    this.$Message.info({
+                        top: 300,
+                        content: '该疫苗数量大于0，不允许删除',
+                        duration: 10,
+                        closable: true
+                    });
+                    return false;
+                }
+                //删除疫苗信息从DB
                 let res = await this.$api.post("/drawer/modifyDrawerByIdDec", {
                         id: drawer._id,
                         vaccineId:  drawer.vaccine[0]._id//疫苗id
                     }
                 );
                 this.queryDrawerByCondition();
-                /*if(this.cabineData[index].ifTwoChoose == true){
-                    this.cabineData[index].ifOneChoose = true;
-                    this.cabineData[index].ifVaccineOne = false;
-                    this.cabineData[index].ifTwoChoose = false;
-                    this.cabineData[index].vaccineOne = "";
-                }
-                this.cabineData[index].ifAdd = false;
-                this.$forceUpdate()*/
             },
             async delVaccineTwo(index){
-                //删除疫苗信息从DB
                 let drawer = this.cabineData[index];
+                if(drawer.surplus>0){
+                    this.$Message.info({
+                        top: 300,
+                        content: '该疫苗数量大于0，不允许删除',
+                        duration: 10,
+                        closable: true
+                    });
+                    return false;
+                }
+                //删除疫苗信息从DB
                 let res = await this.$api.post("/drawer/modifyDrawerByIdDec", {
                         id: drawer._id,
                         vaccineId:  drawer.vaccine[1]._id//疫苗id
@@ -195,6 +191,7 @@
                         //抽屉只有一中疫苗
                         if(vaccine.length ==1){
                             item.vaccineOne = vaccine[0].code;
+                            item.surplus = vaccine[0].surplus;
                             item.vaccineTwo = "";
                             item.ifAdd = false;        //第一个加号不可点击
                             item.ifAddTwo = false;      //第二个加号是可点击
@@ -208,16 +205,18 @@
                             for(let i=0;i<vaccine.length;i++){
                                 if(i=0){
                                     item.vaccineOne = vaccine[i].code;
+                                    item.surplus = vaccine[i].surplus;
                                 }
                                 if(i=1){
                                     item.vaccineTwo = vaccine[i].code;
+                                    item.surplus = vaccine[i].surplus;
                                 }
                                 item.ifAdd = false;        //第一个加号不可点击
                                 item.ifAddTwo = false;     //第二个加号不可点击
-                                item.ifOneChoose = false;   //第一个select不显示
+                                item.ifOneChoose = false;  //第一个select不显示
                                 item.ifTwoChoose = false;  //第二个select不显示
-                                item.ifVaccineOne = true; //第一个已选择疫苗显示
-                                item.ifVaccineTwo = true; //第二个已选择疫苗显示
+                                item.ifVaccineOne = true;  //第一个已选择疫苗显示
+                                item.ifVaccineTwo = true;  //第二个已选择疫苗显示
                             }
                         }
                     }else{
