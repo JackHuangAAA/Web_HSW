@@ -127,9 +127,10 @@ global.moment = moment;
             },
             //接收温度信息
             receiveTemperature(){
-                this.$device.subscribe('TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE');
-                    let temp = '', val= 8;//data.data;
+                this.$device.subscribe('NOW_TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
+                    let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
+                    console.log("设备id，温度，result:"+this.device._id)
                     if(val>5 || val<0){
                         this.temperatureDes = '异常';
                         if(val>5){
@@ -150,7 +151,8 @@ global.moment = moment;
                     }
                     this.temperature = val;
                     //保存温度到设备记录
-                    this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
+                    
+                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
                 });
             },
             //接收接种信息
@@ -166,18 +168,13 @@ global.moment = moment;
         mounted(){
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
-                console.log('shif: getDeviceCode rsp' + JSON.stringify(res));
-                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
-                    console.log('shif: queryDeviceByCondition rsp');
-                    
-                    console.log("home查询出的device结果=====================>")
-                    console.log('******************');
-                    
-                    // let aa = JSON.stringify(res);
-                    // let bb = JSON.parse(aa);
-                    console.log('vuex save device info:'+ JSON.stringify(res.data[0]));
-                    this.saveDevice(res.data[0]);
-                    if(this.$route.path == '/'){
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
+                    console.log(11111);
+                    console.log(res2);
+                    this.saveDevice(res2.data[0]);
+                    console.log(this.device)
+                    console.log('222222');
+                    if(this.$route.path == '/' && this.device){
                         this.$router.push('/main');
                     }
                 });

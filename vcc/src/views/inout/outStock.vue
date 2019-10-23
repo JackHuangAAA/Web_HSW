@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="finish">
-                        <div class="finishButton" @click="openDrawer">
+                        <div class="finishButton" @click="openDrawer()">
                             完成
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                 addVaccineOne: '',
                 addVaccineTwo: '',
                 vaccineOneCount: "",
-                vaccineTwoCount: ""
+                vaccineTwoCount: "",
             }
         },
         computed: {
@@ -99,11 +99,15 @@
                                 temp.codeTwo = vaccine[k].code;
                             }
                         }
+                        temp.x=array[i].x;
+                        temp.y=array[i].y;
                     } else {
                         temp.nameOne = '';
                         temp.countOne = '';
                         temp.nameTwo = '';
                         temp.countTwo = '';
+                        temp.x=array[i].x;
+                        temp.y=array[i].y;
                     }
                     this.cabineDatas.push(temp);
                 }
@@ -114,16 +118,24 @@
             //打开指定抽屉
             openDrawer(){
                 //获取选中的的抽屉
-                let ids = [], array = this.cabineDatas;
+                //打开柜子的参数  num
+                let ids = [], position = '', array = this.cabineDatas;
                 for(let n=0;n<array.length;n++) {
                     if(array[n].single){
                         ids.push(array[n].drawerId);
+                        position+=','+array[n].x+'#'+array[n].y
                     }
                 }
-                //调用Android接口，打开抽屉  todo
+                //position不为空时，调用Android接口，打开抽屉
+                console.log("openDrawer===================>")
+                if(position!=''){
+                    console.log("openDrawer2=====================>")
+                    this.$device.openDrawer({num:position.slice(1)}).then(res=>{
+                        console.log('33--------->%j',ids)
+                        this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+                    });
+                }
 
-                console.log('33--------->%j',ids)
-                this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
             }
         },
         mounted() {

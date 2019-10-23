@@ -1,8 +1,8 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <div class="fingerprint-add"  @click="addFinger()">新增</div><!--v-if="this.user.finger.length<2"-->
-        <div>清除所有</div>
+        <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div><!---->
+        <div class="fingerprint-clear">清除所有</div>
         <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
         <div align="center">
             <!-- <Button type="primary" @click="register">register</Button> -->

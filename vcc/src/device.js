@@ -16,20 +16,20 @@ export default {
             return rsp.deviceId;
         }
     },
+    //温度查询
+    async temperature(params){
+        console.log("CONTROLLER_BOARD===>TEMPERATURE")
+        return await $d.invoke('CONTROLLER_BOARD','TEMPERATURE',params)
+    },
     //打开抽屉
-    openDrawer(val){
-        console.log('DEVICE===>OPEN_DRAWER');
-        
+    async openDrawer(params){
+        console.log('CONTROLLER_BOARD===>OPEN_DRAWER',params);
+        return await $d.invoke('CONTROLLER_BOARD','OPEN_DRAWER',params);
     },
     //注册指纹
     fingerRegister(params){
         console.log('FINGER===>REGISTER');
         return $d.invoke('FINGER', 'REGISTER',params);
-    },
-    //校验指纹
-    fingerVerify(){
-        console.log('FINGER===>VERIFY');
-        return $d.invoke('FINGER', 'VERIFY');
     },
     //指纹查找
     fingerSearch(){
@@ -40,6 +40,12 @@ export default {
     fingerDelAll(){
         console.log('FINGER===>DEL_TEMPLATE_ALL');
         return $d.invoke('FINGER', 'DEL_TEMPLATE_ALL');
+    },
+
+    //校验指纹
+    fingerVerify(){
+        console.log('FINGER===>VERIFY');
+        return $d.invoke('FINGER', 'VERIFY');
     },
     //查询指纹总数
     fingerQuerySum(){
