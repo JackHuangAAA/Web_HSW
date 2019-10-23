@@ -169,7 +169,13 @@ global.moment = moment;
                 console.log('shif: getDeviceCode rsp' + JSON.stringify(res));
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
                     console.log('shif: queryDeviceByCondition rsp');
-                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
+                    
+                    console.log("home查询出的device结果=====================>")
+                    console.log('******************');
+                    
+                    // let aa = JSON.stringify(res);
+                    // let bb = JSON.parse(aa);
+                    console.log('vuex save device info:'+ JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
                         this.$router.push('/main');
