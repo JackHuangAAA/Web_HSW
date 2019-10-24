@@ -39,7 +39,7 @@ body {
   margin: 0 auto;
 }
 .pageName {
-  width: 8%;
+  width: 15%;
   height: 100%;
   float: left;
   font-size: 1.125rem;
@@ -49,7 +49,7 @@ body {
   text-align: center;
 }
 .code {
-  width: 39.5%;
+  width: 32.5%;
   height: 100%;
   float: left;
   color: #2A7AFF;
@@ -57,6 +57,7 @@ body {
   font-weight: bold;
   font-size: 1.125rem;
   text-align: right;
+  padding-right: 2rem;
 }
 .user {
   height: 100%;

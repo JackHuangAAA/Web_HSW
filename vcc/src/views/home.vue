@@ -30,7 +30,7 @@
                 <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
-                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
         </div>
@@ -63,8 +63,12 @@ global.moment = moment;
                 ],
                 isactive: 0,
                 ifShowMenu: false ,
-                menuStatus: '展开菜单'
+                menuStatus: '展开菜单',
+                temperature:5,
+                temperatureDes:'正常',
+                state:false,
                 }
+                
         },
         computed: {
             ...mapGetters({
@@ -128,12 +132,12 @@ global.moment = moment;
             },
             //接收温度信息
             receiveTemperature(){
-                this.$device.subscribe('TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE');
-                    let temp = '', val= 8;//data.data;
-                    if(val>5 || val<0){
+                this.$device.subscribe('NOW_TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
+                    let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
+                    if(val>8 || val<2){
                         this.temperatureDes = '异常';
-                        if(val>5){
+                        if(val>8){
                             temp = '高于正常温度5℃';
                         }else {
                             temp = '低于正常温度0℃';
@@ -150,36 +154,41 @@ global.moment = moment;
                         this.temperatureDes = '正常';
                     }
                     this.temperature = val;
+                    // __app.emit("NOW_TEMPERATURE",val);
                     //保存温度到设备记录
-                    this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
+                    
+                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
                 });
             },
             //接收接种信息
             receiveVaccination(){
-                this.$device.subscribe('VACCINATION', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION');
-                    let vaccination = null;
-
-                    this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state=true){
+                        console.log('SOCKET_DATA====> result:'+JSON.stringify(data));
+                        let vaccination = null;
+                        this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+                    }
                 });
             }
         },
+        //离开页面时阻止消息推送页面跳转
+        destroyed(){
+            this.state=false
+        },
         mounted(){
+            this.state=true
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
-                console.log('shif: getDeviceCode rsp' + JSON.stringify(res));
-                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
-                    console.log('shif: queryDeviceByCondition rsp');
-                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
-                    this.saveDevice(res.data[0]);
-                    if(this.$route.path == '/'){
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
+                    this.saveDevice(res2.data[0]);
+                    if(this.$route.path == '/' && this.device){
                         this.$router.push('/main');
                     }
                 });
             });
-            //接收温度信息 todo
+            //接收温度信息
             this.receiveTemperature();
-            //接收接种信息 todo
+            //接收接种信息
             this.receiveVaccination();
 
         }

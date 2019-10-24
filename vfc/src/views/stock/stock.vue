@@ -1,66 +1,52 @@
 <!--库存-->
 <template>
-    <div class="container">
-        <div class="main">
-                <div class="mainTop">
-                    <p class="tip">提示：点击疫苗所在抽屉，查看库存详情</p>
-                    <p class="ctOne">抽屉1</p>
-                    <p class="ctLeft">左</p>
-                    <img src="/static/img/l-r.png" class="l_r">
-                    <p class="ctRight">右</p>
-                    <p class="ctTwo">抽屉2</p>
-                </div>
-                <div class="mainBottom">
-                    <div class="mainBottomLeft">
-                        <p class="ctTop">上</p>
-                        <img src="/static/img/t-b.png" class="t_b">
-                        <p class="ctBottom">下</p>
-                    </div>
-                    <div class="mainBottomRight">
-                        <div class="index">
-                                <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
-                        </div>
-                        <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id)">
-                                <div class="cabineLeft" v-if="item.nameOne">
-                                    <p class="vaccineOneName">{{item.nameOne}}</p>
-                                    <p class="vaccineOneCount">{{item.countOne||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameTwo">
-                                    <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                    <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameThree">
-                                    <p class="vaccineOneName">{{item.nameThree}}</p>
-                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameFour">
-                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
-                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameFive">
-                                    <p class="vaccineOneName">{{item.nameFive}}</p>
-                                    <p class="vaccineOneCount">{{item.countFive||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameSix">
-                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
-                                    <p class="vaccineTwoCount">{{item.countSix||0}}支</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div>
+    <Row class="inoculate-head">
+        <div class="history">
+            缺少库存<span style="color:rgb(255,96,19);margin-left:5px">11种</span>
         </div>
+        <div class="type">
+            疫苗名称:
+            <Select v-model="model1" style="width:70%">
+                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+        </div>
+        <div class="date">
+            产地:<Select v-model="model1" style="width:70%">
+                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+        </div>
+    </Row>
+    <div class="inoculate card">
+        <!-- <Row class="inoculate-title">
+            <Col span="24">详情页面</Col>
+        </Row> -->
+        <Row class="inoculate-table-row">
+            <Col span="4">疫苗名称</Col>
+            <Col span="7">生产厂家</Col>
+            <Col span="4">唯一号</Col>
+            <Col span="6">截止有效期</Col>
+            <Col span="3">出库数量</Col>
+        </Row>
+        <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
+            <Col span="4">{{item.name||'--'}}</Col>
+            <Col span="7">{{item.produce||'--'}}</Col>
+            <Col span="4">{{item.code||'--'}}</Col>
+            <Col span="6">{{item.date||'--'}}</Col>
+            <Col span="3">{{item.count||'--'}}</Col>
+        </Row>
     </div>
+</div>
 </template>
 <script>
     import {mapGetters} from 'vuex';
     export default {
         data() {
             return {
-                cabineDatas: [],
-                index: '1',
-                row: 6
+                cityList:[{label:'1',value:'1'}],
+                model1: '',
+                date:'',
+                datas:[{name: '乙型肝炎疫苗',produce: '北京科生生物制品有限公司',code: 'yHUG-7U940',date: '2019-09-18 12:30:28',count: '3'},{},{}]
             }
         },
         computed: {
@@ -70,72 +56,9 @@
         },
         components:{},
         methods: {
-            async queryDrawerByCondition(){
-                this.cabineDatas = [];
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
-                });
-                let array = res.data;
-                for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.id = array[i]._id;
-                    temp.x = array[i].x;
-                    temp.y = array[i].y;
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-
-                            if (k == 0) {
-                                temp.nameOne = vaccine[k].name;
-                                temp.countOne = vaccine[k].surplus;
-                                temp.idOne = vaccine[k]._id;
-                                temp.codeOne = vaccine[k].code;
-                            }
-                            if (k == 1) {
-                                temp.nameTwo = vaccine[k].name;
-                                temp.countTwo = vaccine[k].surplus;
-                                temp.idTwo = vaccine[k]._id;
-                                temp.codeTwo = vaccine[k].code;
-                            }
-                            if (k == 2) {
-                                temp.nameThree = vaccine[k].name;
-                                temp.countThree = vaccine[k].surplus;
-                                temp.idThree = vaccine[k]._id;
-                                temp.codeThree = vaccine[k].code;
-                            }
-                            if (k == 3) {
-                                temp.nameFour = vaccine[k].name;
-                                temp.countFour = vaccine[k].surplus;
-                                temp.idFour = vaccine[k]._id;
-                                temp.codeFour = vaccine[k].code;
-                            }
-                            if (k == 4) {
-                                temp.nameFive = vaccine[k].name;
-                                temp.countFive = vaccine[k].surplus;
-                                temp.idFive = vaccine[k]._id;
-                                temp.codeFive = vaccine[k].code;
-                            }
-                            if (k == 5) {
-                                temp.nameSix = vaccine[k].name;
-                                temp.countSix = vaccine[k].surplus;
-                                temp.idSix = vaccine[k]._id;
-                                temp.codeSix = vaccine[k].code;
-                            }
-                        }
-                    } else {
-                        temp.nameOne = '';
-                        temp.countOne = '';
-                        temp.nameTwo = '';
-                        temp.countTwo = '';
-                    }
-                    this.cabineDatas.push(temp);
-                }
-            },
-            detail(drawerId){
-                this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
-            }
         },
         mounted() {
-            this.queryDrawerByCondition();
+
         }
     };
 </script>

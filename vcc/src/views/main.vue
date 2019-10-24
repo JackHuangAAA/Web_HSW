@@ -66,9 +66,9 @@
             return {
                 alarmNumber: 0,
                 customerNumber:0,
-                temperature: 0,
-                temperatureDes:'正常',
-                vaccineData:[]
+                // temperature: 0,
+                // temperatureDes:'正常',
+                vaccineData:[],
             }
         },
         computed: {
@@ -76,6 +76,16 @@
                 user: 'user',
                 device: 'device',
             })
+        },
+        props:{
+            temperature:{
+                type:Number,
+                default:5
+            },
+            temperatureDes:{
+                type:String,
+                default:'正常'
+            }
         },
         components:{},
         methods: {
@@ -133,9 +143,14 @@
         },
         mounted() {
             //查询首页数据
-            this.queryDrawerByCondition();
-            this.queryAlarmByByCondition();
-            this.queryVaccinationDailyInfo();
+            // __app.on("NOW_TEMPERATURE",(data)=>{
+            //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
+            // });
+            if(this.device){
+                this.queryDrawerByCondition();
+                this.queryAlarmByByCondition();
+                this.queryVaccinationDailyInfo();
+            }
         }
     }
 </script>

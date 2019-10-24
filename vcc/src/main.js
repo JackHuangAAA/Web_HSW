@@ -35,7 +35,6 @@ if (config.env == 'development') {
         });
     };
 }
-
 Vue.prototype.$cookies = Cookies;
 Vue.prototype.$api = api;
 Vue.prototype.$config = config;
