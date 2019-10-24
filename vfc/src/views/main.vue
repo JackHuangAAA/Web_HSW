@@ -28,14 +28,36 @@
 
         <div class="vaccineStatus">
             <div class="vaccineStatusTitle">
-                <span class="vaccineStatusTitleTip">疫苗库存状态</span>
-                <div class="redBlock"></div>
+                <span class="vaccineStatusTitleTip"><img src="/static/img/tip.png" style="margin-right:1rem;">缺少库存疫苗<span style="color:#FF5500;margin-left:1.5rem;">11种</span></span>
+                <!-- <div class="redBlock"></div>
                 <p class="bj">报警</p>
                 <div class="yellowBlock"></div>
-                <p class="yj">预警</p>
+                <p class="yj">预警</p> -->
             </div>
             <div class="vaccineContent">
-                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow">
+                <div class="vaccineContentTitle">
+                    <div class="vaccineName">
+                        疫苗名称
+                    </div>
+                    <div class="vaccineAllowance">
+                        剩余库存量
+                    </div>
+                    <div class="allowanceStatus">
+                        库存状态
+                    </div>
+                </div>
+                <div class="vaccineContentContent" v-for="(item,index) in 5">
+                    <div class="vaccineName">
+                        百白破疫苗
+                    </div>
+                    <div class="vaccineAllowance">
+                        22
+                    </div>
+                    <div class="allowanceStatus">
+                        缺少库存
+                    </div>
+                </div>
+                <!-- <div v-for="(item,index) in vaccineData" class="vaccineStatusShow">
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
                         <p class="vaccineOneName" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneName}}</p>
                         <p class="vaccineOneCount" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneCount || 0}}支</p>
@@ -60,7 +82,7 @@
                         <p class="vaccineTwoName" :class="{warning:item.vaccineSixCount == 0,tips:item.vaccineSixCount <10}">{{item.vaccineSixName}}</p>
                         <p class="vaccineTwoCount" :class="{warning:item.vaccineSixCount == 0,tips:item.vaccineSixCount <10}">{{item.vaccineSixCount || 0}}支</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="button">

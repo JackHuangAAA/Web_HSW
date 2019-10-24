@@ -1,20 +1,17 @@
-<!--库存-->
 <template>
     <div>
     <Row class="inoculate-head">
         <div class="history">
-            缺少库存<span style="color:rgb(255,96,19);margin-left:5px">11种</span>
+            历史记录
         </div>
         <div class="type">
-            疫苗名称:
+            类型:
             <Select v-model="model1" style="width:70%">
                 <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
         </div>
         <div class="date">
-            产地:<Select v-model="model1" style="width:70%">
-                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            日期:<DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="date"></DatePicker>
         </div>
     </Row>
     <div class="inoculate card">
@@ -40,6 +37,7 @@
 </template>
 <script>
     import {mapGetters} from 'vuex';
+    import moment from 'moment'
     export default {
         data() {
             return {
@@ -51,17 +49,19 @@
         },
         computed: {
             ...mapGetters({
+                user: 'user',
                 device: 'device',
             })
         },
         components:{},
         methods: {
+            
         },
         mounted() {
-
+           
         }
     };
 </script>
 <style lang="less" scoped>
-    @import "~@/style/stock.less";
+    @import "~@/style/flowing.less";
 </style>

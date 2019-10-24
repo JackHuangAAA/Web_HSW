@@ -56,6 +56,7 @@ global.moment = moment;
                 menu: [
                     {name:'主页',img:'/static/img/home.png'},
                     {name:'库存',img:'/static/img/inventory.png'},
+                    {name:'出入库',img:'/static/img/inout.png'},
                     {name:'报警',img:'/static/img/alarm.png'},
                     {name:'设置',img:'/static/img/setting.png'}
                 ],
@@ -103,10 +104,14 @@ global.moment = moment;
                     this.$router.push('/stock/stock');
                 }
                 if(index==2){
+                    this.pageName = "出入库";
+                    this.$router.push('/inout/flowing');
+                }
+                if(index==3){
                     this.pageName = "报警";
                     this.$router.push('/alarm/alarm');
                 }
-                if(index==3){
+                if(index==4){
                     this.pageName = "设置";
                     this.$router.push('/setting/setting');
                 }
