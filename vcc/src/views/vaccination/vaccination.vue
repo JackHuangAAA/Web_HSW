@@ -37,7 +37,7 @@
                             <p class="getVaccineCount">{{item.num}}支</p>
                         </div>
                         <div class="personInfStatus">
-                            <p class="getVaccineOne">状态:</p>
+                            <p class="getVaccineOne">状态</p>
                             <p class="getVaccineCount">
                                 <img src="/static/img/succeed.png" class="succeed" v-if="item.status"><span v-if="item.status" class="tipInf" style="color:#1AA95E">信息匹配</span>
                                 <img src="/static/img/error.png" class="succeed" v-if="!item.status"><span v-if="!item.status" class="tipInf" style="color:#F42954">信息不匹配</span>
