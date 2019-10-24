@@ -1,95 +1,348 @@
-@import '~@/style/color.less';
-.inoculate{
-    margin-top: 20px;
-    margin-left: 20px;
-    width: calc(100% - 40px)!important;
-    height: ~'calc(100% - 40px)'!important;
-    background: @white;
-    border-radius: 10px;
-    padding: 2.125rem 2.625rem;
-}
-.inoculate-row{
-    color: @black;
-    font-size: 1.5rem;
-    font-family:Microsoft YaHei;
-    font-weight:bold;
-    margin-bottom: 3.5625rem;
-}
-.inoculate-info{
-    display: flex;
-    margin-top: 1.125rem;
-}
-.inoculate-info-column{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: 2rem;
+// @import '~@/style/color.less';
+// .inoculate{
+//     margin-top: 20px;
+//     margin-left: 20px;
+//     width: calc(100% - 40px)!important;
+//     height: ~'calc(100% - 40px)'!important;
+//     background: @white;
+//     border-radius: 10px;
+//     padding: 2.125rem 2.625rem;
+// }
+// .inoculate-row{
+//     color: @black;
+//     font-size: 1.5rem;
+//     font-family:Microsoft YaHei;
+//     font-weight:bold;
+//     margin-bottom: 3.5625rem;
+// }
+// .inoculate-info{
+//     display: flex;
+//     margin-top: 1.125rem;
+// }
+// .inoculate-info-column{
+//     width: 50%;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: flex-start;
+//     justify-content: center;
+//     margin-left: 2rem;
+//     position: relative;
+// }
+// .inoculate-content{
+//     margin-top: 1.25rem;
+//     margin-left: 1.875rem;
+// }
+// .inoculate-content div{
+//     font-size: 1.25rem;
+//     font-weight:bold;
+// }
+// .inoculate-content div:nth-child(1){
+//     font-size: 1.125rem;
+// }
+// .inoculate-content div:nth-child(2){
+//     font-size: 1.25rem;
+//     margin-top: 1.125rem;
+// }
+// .title-center{
+//     text-align: center;
+// }
+// .human-info{
+//     display: flex;
+//     justify-content: center;
+//     align-items: flex-end;
+//     line-height: 1;
+//     margin-bottom: 1rem;
+// }
+// .human-info div:nth-child(1){
+//     font-size: 1.75rem;
+//     font-weight: 400;
+// }
+// .human-info div:nth-child(2){
+//     font-size:2.5rem;
+//     font-weight:400;
+//     color:rgba(255,120,0,1);
+// }
+// .blue{
+//     color: @blue;
+// }
+// .inoculate-notice{
+//     padding: 3.375rem 2.125rem 4.125rem 2.125rem;
+//     font-size: 1.875rem;
+//     border:2px dashed rgba(202,222,255,1);
+// }
+// .inoculate-notice-rs{
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+// }
+// .inoculate-notice-rs img{
+//     margin-right: 20px;
+// }
+// .leftBcg{
+//     width: 49%;
+//     height: 15rem;
+//     background-color: #F4F7FC;
+//     position: absolute;
+//     top: 3rem;
+// }
+// .rightBcg{
+//     width: 49%;
+//     height: 15rem;
+//     background-color: #F4F7FC;
+//     position: absolute;
+//     top: 3rem;
+//     left: 51%;
+// }
+.container{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(236, 240, 248);
     position: relative;
 }
-.inoculate-content{
-    margin-top: 1.25rem;
-    margin-left: 1.875rem;
+.containerBody{
+    width: 96.8%;
+    position: absolute;
+    height: calc(100% - 40px);
+    top: 20px;
+    left: 1.6%;
 }
-.inoculate-content div{
-    font-size: 1.25rem;
-    font-weight:bold;
+.title{
+    width: 100%;
+    height: 76px;
+    background-color: white;
 }
-.inoculate-content div:nth-child(1){
-    font-size: 1.125rem;
+.content{
+    width: 100%;
+    height: calc(100% - 76px);
+    background-color: white;
 }
-.inoculate-content div:nth-child(2){
-    font-size: 1.25rem;
-    margin-top: 1.125rem;
-}
-.title-center{
+.titleLeft{
+    width: 50%;
+    height: 100%;
+    float: left;
+    line-height: 76px;
     text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #3E4955;
 }
-.human-info{
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    line-height: 1;
-    margin-bottom: 1rem;
+.titleRight{
+    width: 50%;
+    height: 100%;
+    float: left;
+    line-height: 76px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #3E4955;
 }
-.human-info div:nth-child(1){
+.left{
+    width: 46%;
+    height: 98%;
+    float: left;
+    margin-left: 4%;
+    background-color: rgba(244,247,252,1);
+}
+.right{
+    width: 46%;
+    height: 98%;
+    background-color: rgb(236,240,248);
+    float: left;
+    overflow: auto;
+}
+.leftTop{
+    width: 100%;
+    height: 32%;
+    background-color: rgba(244,247,252,1);
+}
+.leftTopLeft{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.leftTopRight{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.code{
+    width: 45%;
+    height: 1.5625rem;
+    position: absolute;
+    top: 50%;
+    margin-top: -0.3125rem;
+    line-height: 1.5625rem;
+    text-align: right;
     font-size: 1.75rem;
-    font-weight: 400;
+    color: #3E4955;
 }
-.human-info div:nth-child(2){
-    font-size:2.5rem;
-    font-weight:400;
-    color:rgba(255,120,0,1);
-}
-.blue{
-    color: @blue;
-}
-.inoculate-notice{
-    padding: 3.375rem 2.125rem 4.125rem 2.125rem;
-    font-size: 1.875rem;
-    border:2px dashed rgba(202,222,255,1);
-}
-.inoculate-notice-rs{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.inoculate-notice-rs img{
-    margin-right: 20px;
-}
-.leftBcg{
-    width: 49%;
-    height: 15rem;
-    background-color: #F4F7FC;
+.name{
+    width: 50%;
+    top: 50%;
     position: absolute;
-    top: 3rem;
+    left: 50%;
+    height: 2.5rem;
+    margin-top: -1.25rem;
+    line-height: 2.5rem;
+    text-align: left;
+    font-size: 2.5rem;
+    color: #FF7800;
 }
-.rightBcg{
-    width: 49%;
-    height: 15rem;
-    background-color: #F4F7FC;
+.age{
     position: absolute;
-    top: 3rem;
-    left: 51%;
+    width: 80%;
+    height: 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.25rem;
+    top: 35%;
+    margin-top: -0.625rem;
+    left: 20%;
+    color: #3E4955;
+    font-weight: bold;
+}
+.ageCount{
+    position: absolute;
+    width: 80%;
+    height: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    left: 20%;
+    font-weight: bold;
+    top: calc(35% - 0.625rem + 1.5rem + 1.125rem);
+}
+.leftBottom{
+    width: 100%;
+    max-height: 68%;
+    overflow: auto;
+}
+.personInf{
+    width: 100%;
+    height: 5rem;
+    margin-top: 4rem;
+}
+.personInf:nth-child(1){
+    margin-top: 0;
+}
+.personInfVaccine{
+    width: 40%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.personInfCount{
+    width: 30%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.personInfStatus{
+    width: 30%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.personInfVaccineP{
+    width: 90%;
+    position: absolute;
+    left: 5%;
+}
+.vaccineOne{
+    top: 0;
+    height: 1.0625rem;
+    font-size: 1.125rem;
+    line-height: 1.0625rem;
+    color: #3E4955;
+}
+.vaccineTwo{
+    top: 2.3125rem;
+    height: 1.25rem;
+    color: #2A7AFF;
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+}
+.vaccineThree{
+    bottom: 0;
+    height: 0.875rem;
+    line-height: 0.875rem;
+    font-size: 0.875rem;
+    color: #3E4955;
+}
+.getVaccineOne{
+    width: 100%;
+    height: 1.1875rem;
+    line-height: 1.1875rem;
+    font-size: 1.1875rem;
+    position: absolute;
+    color: #3E4955;
+}
+.getVaccineCount{
+    width: 100%;
+    height: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.125rem;
+    color: #3E4955;
+    top: 3.25rem;
+    position: absolute;
+    font-weight: bold;
+}
+.vaccineInf{
+    width: 94%;
+    margin-left: 3%;
+    height: 7.5625rem;
+    margin-top: 3.5625rem;
+}
+.vaccine:nth-child(1){
+    margin-top: 2.625rem;
+}
+.vaccineTop{
+    width: 100%;
+    height: 50%;
+}
+.vaccineBottom{
+    width: 100%;
+    height: 50%;
+}
+.vaccineTopLeft{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.vaccineTopRight{
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+.topTip{
+    height: 1.0625rem;
+    font-size: 1.125rem;
+    color: #3E4955;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 1.0625rem;
+}
+.bottomInf{
+    height: 1.125rem;
+    position: absolute;
+    top: 1.875rem;
+    font-size: 1.125rem;
+    color: #2A7AFF;
+    font-weight: bold;
+    line-height: 1.125rem;
+}
+.succeed{
+    width: 1.5rem;
+    height: 1.5rem;
+    float: left;
+}
+.tipInf{
+    display: block;
+    float: left;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    margin-left: 0.5625rem;
 }
