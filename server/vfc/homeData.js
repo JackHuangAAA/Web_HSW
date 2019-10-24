@@ -1,7 +1,7 @@
 /**
  * Created by apple on 2019/9/24.
  */
-const logger = Libs.logger.getLogger('homeData');
+const logger = Libs.logger.getLogger('push');
 let later = require('later');
 let moment = require('moment');
 let path = require('path');
