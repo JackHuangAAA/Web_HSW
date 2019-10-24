@@ -9,9 +9,9 @@
                 <TabPane label="指纹录入">
                     <finger></finger>
                 </TabPane>
-                <TabPane label="疫苗区域划分">
+                <!-- <TabPane label="疫苗区域划分">
                     <region></region>
-                </TabPane>
+                </TabPane> -->
             </Tabs>
         </Col>
     </Row>
