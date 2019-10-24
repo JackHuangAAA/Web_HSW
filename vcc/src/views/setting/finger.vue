@@ -2,8 +2,15 @@
 <template>
     <div class="fingerprint card">
         <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div><!---->
-        <div class="fingerprint-clear" @click="delAll()">清除所有</div>
-        <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
+        <div class="fingerprint-clear" @click="modal1=true">清除所有</div>
+        <!-- <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table> -->
+        <Modal
+            v-model="modal1"
+            title="消息提示"
+            @on-ok="ok"
+            @on-cancel="cancel">
+            <p>是否确认删除所有指纹</p>
+        </Modal>
     </div>
 </template>
 
@@ -12,15 +19,17 @@
     export default {
         data() {
             return {
-                datas: [],
-                cols: [
-                {
-                    type: 'index',
-                    width: 300
-                },{
-                    title: '指纹CODE',
-                    key: 'finger'
-                },
+                modal1:false,
+                fingerState:false,
+                // datas: [],
+                // cols: [
+                // {
+                //     type: 'index',
+                //     width: 300
+                // },{
+                //     title: '指纹CODE',
+                //     key: 'finger'
+                // },
                 // {
                 //     title: '操作',
                 //     width: 145,
@@ -44,37 +53,52 @@
                 //          ]);
                 //     }
                 //   }
-                ],
-                data: []
+                // ],
+                // data: []
             };
         },
         computed: {
             ...mapGetters({
                 user: "user",
-                device: "device"
+                device: "device",
             })
         },
         watch:{
-            '$route'(){
-                this.getFingerInfo()
-            }
         },
         methods: {
             ...mapActions({
                 saveUser: 'saveUser',
             }),
+            ok(){
+                this.delAll()
+            },
+            cancel(){
+                this.modal1=false
+            },
+            //若指纹数小于2 跳到录入页面
             addFinger(){
-                this.$emit('add',false)
-            },
-            getFingerInfo() {
-                let data = [];
-                for (let f of this.user.finger) {
-                    let t = {};
-                    t.finger = f;
-                    data.push(t);
+                if(this.user.finger.length<2){
+                    this.fingerState=true
+                    this.$emit('add',false)
+                }else{
+                    this.fingerState=false
                 }
-                this.datas = data
             },
+            //指纹数小于2 重复录入
+            FingerCountinue(){
+                if(this.fingerState=true){
+                    this.addFinger()
+                }
+            },
+            // getFingerInfo() {
+            //     let data = [];
+            //     for (let f of this.user.finger) {
+            //         let t = {};
+            //         t.finger = f;
+            //         data.push(t);
+            //     }
+            //     this.datas = data
+            // },
             //删除所有指纹
             delAll(){
                 console.log('delAll000000000000----');
@@ -83,7 +107,7 @@
                     if(JSON.parse(res.rsp).code==0){
                     this.queryUserByCondition({id:this.user._id,finger:[]})
                     this.user.finger=[]
-                    this.getFingerInfo()
+                    // this.getFingerInfo()
                 }
                 })
             },
@@ -98,7 +122,8 @@
         },
         mounted() {
             console.log(this.user.finger)
-            this.getFingerInfo();
+            // this.getFingerInfo();
+            this.FingerCountinue()
         }
     };
 </script>

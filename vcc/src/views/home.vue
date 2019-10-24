@@ -30,7 +30,7 @@
                 <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
-                <router-view :temperature="temperature" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
         </div>
@@ -65,7 +65,8 @@ global.moment = moment;
                 ifShowMenu: false ,
                 menuStatus: '展开菜单',
                 temperature:0,
-                temperatureDes:'正常'
+                temperatureDes:'正常',
+                state:false,
                 }
                 
         },
@@ -133,7 +134,6 @@ global.moment = moment;
             receiveTemperature(){
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
                     console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
-                    
                     let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
                     console.log("设备id，温度，result:"+this.device._id)
                     if(val>5 || val<0){
@@ -154,7 +154,7 @@ global.moment = moment;
                     }else{
                         this.temperatureDes = '正常';
                     }
-                    this.temperature = parseFloat(val);
+                    this.temperature = val;
                     // __app.emit("NOW_TEMPERATURE",val);
                     //保存温度到设备记录
                     
@@ -164,14 +164,20 @@ global.moment = moment;
             //接收接种信息
             receiveVaccination(){
                 this.$device.subscribe('SOCKET_DATA', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION');
-                    let vaccination = null;
-
-                    this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+                    if(this.state=true){
+                        console.log('SOCKET_DATA====> result:'+JSON.stringify(data));
+                        let vaccination = null;
+                        this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+                    }
                 });
             }
         },
+        //离开页面时阻止消息推送页面跳转
+        destroyed(){
+            this.state=false
+        },
         mounted(){
+            this.state=true
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{

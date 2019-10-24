@@ -1,8 +1,8 @@
 <template>
   <div @click="test()" style="position:relative;height:100%">
     <img src="/static/img/fplogin.png" class="fpbg">
-    {{message}}
     <P class="fingerTip">使用指纹一键登录</P>
+    <div class="fplogin-message">{{message}}</div>
   </div>
 </template>
 
@@ -91,7 +91,7 @@ export default {
           console.log(JSON.parse(JSON.stringify(this.user))._id)
           console.log("==========================**********************************")
           if(JSON.parse(JSON.stringify(this.user))._id==_id){
-            this.$Message.info("登录成功")
+            this.message='登录成功'
             this.$router.push('/')
           }else{
             //指纹用户id和设备已有的用户id不同
@@ -104,7 +104,7 @@ export default {
           this.login(_id)
         }
       }else if(data.type==3){
-        this.$Message.info(data.msg)
+        this.message=data.msg
         this.fingerLogin()
       }
     })

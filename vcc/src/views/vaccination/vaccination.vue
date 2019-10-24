@@ -97,7 +97,6 @@
     import uuid from 'uuid/v1';
 
     export default {
-
         data() {
             return {
                 test:[{},{},{},{},{},{},{}],
