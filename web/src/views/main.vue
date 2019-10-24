@@ -74,7 +74,7 @@
             </div>
         </Row>
         <!-- table -->
-        <div class="main-table">
+        <div class="main-table main-table-height">
             <Row>
                 <Col span="18" class="main-table-title">各单位设备数量统计</Col>
                 <Col span="6" class="main-table-search">

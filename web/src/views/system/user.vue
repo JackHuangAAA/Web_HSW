@@ -1,7 +1,7 @@
 <template>
     <div>
         <!--用户列表-->
-        <div class="table">
+        <div class="table main-table">
             <div class="header">
                 <Form inline>
                     <FormItem>
