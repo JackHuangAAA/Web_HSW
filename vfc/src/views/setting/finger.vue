@@ -92,19 +92,16 @@
             },
             //指纹数小于2 重复录入
             FingerCountinue(){
-                if(this.fingerState=true){
+                if(this.fingerState==true){
                     this.addFinger()
                 }
             },
             //删除所有指纹
             delAll(){
-                console.log('delAll000000000000----');
-                console.log(JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
                     this.queryUserByCondition({id:this.user._id,finger:[]})
                     this.user.finger=[]
-                    // this.getFingerInfo()
                 }
                 })
             },
@@ -125,43 +122,8 @@
             //     }
             //     this.datas = data
             // },
-            // delFinger(row){
-            //     this.$device.fingerRegister('DEL_ONE_TEMPLATE').then(res => {
-            //         console.log('delFinger1----'+JSON.stringify(res));
-            //         console.log('delFinger2----'+JSON.stringify(res));
-            //     })
-            // },
-            // register(){
-            //     console.log('register000000000000----');
-            //     this.$device.fingerRegister('REGISTER').then(res => {
-            //         console.log('register1----'+JSON.stringify(res));
-            //         console.log('register2----'+JSON.stringify(res));
-            //     })
-            // },
-            // verify(){
-            //     console.log('verify000000000000----');
-            //     this.$device.fingerVerify('VERIFY').then(res => {
-            //         console.log('verify1----'+JSON.stringify(res));
-            //         console.log('verify2----'+JSON.stringify(res));
-            //     })
-            // },
-            // delAll(){
-            //     console.log('delAll000000000000----');
-            //     this.$device.fingerDelAll('VERIFY').then(res => {
-            //         console.log('delAll1----'+JSON.stringify(res));
-            //         console.log('delAll2----'+JSON.stringify(res));
-            //     })
-            // },
-            // totalAll(){
-            //     console.log('totalAll000000000000----');
-            //     this.$device.fingerQuerySum('VERIFY').then(res => {
-            //         console.log('totalAll1----'+JSON.stringify(res));
-            //         console.log('totalAll2----'+JSON.stringify(res));
-            //     })
-            // },
         },
         mounted() {
-            console.log(this.user.finger)
             // this.getFingerInfo();
             this.FingerCountinue()
         }

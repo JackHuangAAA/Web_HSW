@@ -108,13 +108,10 @@
             },
             //查询抽屉疫苗信息
             async queryDrawerByCondition(){
-                console.log(11111111111+'main');
-                console.log("查询抽屉疫苗信息================>"+this.device._id)
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
                 let array = res.data;
-                console.log("拿到抽屉疫苗信息==============>"+JSON.stringify(array))
                 for (let i = 0; i < 10; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
                     if (num > 0) {
@@ -146,8 +143,6 @@
         },
         mounted() {
             //查询首页数据
-            console.log("main================================================>>")
-            console.log(this.device)
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });

@@ -30,10 +30,7 @@ export default {
     },
     // 登录指纹验证
     fingerLogin(){
-      this.$device.fingerSearch().then(res=>{
-        console.log('register1----'+JSON.stringify(res));
-        console.log('register2----'+JSON.stringify(res));
-      })
+      this.$device.fingerSearch()
     },
     //根据id查询用户信息，存储用户信息
     async login(_id){

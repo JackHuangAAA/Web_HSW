@@ -207,8 +207,6 @@
         },
         mounted() {
             //查询首页数据
-            console.log("main================================================>>")
-            console.log(this.device)
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });

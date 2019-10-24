@@ -181,11 +181,7 @@ global.moment = moment;
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
-                    console.log(11111);
-                    console.log(res2);
                     this.saveDevice(res2.data[0]);
-                    console.log(this.device)
-                    console.log('222222');
                     if(this.$route.path == '/' && this.device){
                         this.$router.push('/main');
                     }
