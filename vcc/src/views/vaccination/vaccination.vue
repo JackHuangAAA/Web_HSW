@@ -39,9 +39,9 @@
                         <div class="personInfStatus">
                             <p class="getVaccineOne">状态:</p>
                             <p class="getVaccineCount">
-                                <div v-if="item.status"><img src="/static/img/succeed.png" class="succeed"><span class="tipInf" style="color:#1AA95E">信息匹配</span></div>
-                                <div v-else><img src="/static/img/error.png" class="succeed"><span class="tipInf" style="color:#F42954">信息不匹配</span></div>
-                            </span>
+                                <img src="/static/img/succeed.png" class="succeed" v-if="item.status"><span v-if="item.status" class="tipInf" style="color:#1AA95E">信息匹配</span>
+                                <img src="/static/img/error.png" class="succeed" v-if="!item.status"><span v-if="!item.status" class="tipInf" style="color:#F42954">信息不匹配</span>
+                            </p>
                         </div>
                     </div>
                 </div>
