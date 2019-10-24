@@ -19,7 +19,6 @@
         data() {
             return {
                 modal1:false,
-                fingerState:false,
             };
         },
         computed: {
@@ -40,31 +39,17 @@
             cancel(){
                 this.modal1=false
             },
-            //若指纹数小于2 跳到录入页面
+            //
             addFinger(){
-                if(this.user.finger.length<2){
-                    this.fingerState=true
-                    this.$emit('add',false)
-                }else{
-                    this.fingerState=false
-                }
-            },
-            //指纹数小于2 重复录入
-            FingerCountinue(){
-                if(this.fingerState==true){
-                    this.addFinger()
-                }
+                this.$emit('add',false)
             },
             //删除所有指纹
             delAll(){
-                console.log('delAll000000000000----');
-                console.log(JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                    this.queryUserByCondition({id:this.user._id,finger:[]})
-                    this.user.finger=[]
-                    // this.getFingerInfo()
-                }
+                        this.queryUserByCondition({id:this.user._id,finger:[]})
+                        this.user.finger=[]
+                    }
                 })
             },
             //指纹数据更新
@@ -77,7 +62,6 @@
             }
         },
         mounted() {
-            this.FingerCountinue()
         }
     };
 </script>

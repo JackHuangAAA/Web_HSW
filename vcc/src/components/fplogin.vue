@@ -12,7 +12,7 @@ export default {
   name: "fplogin",
   data() {
     return {
-      message:''
+      message:'',
     };
   },
   computed:{
@@ -48,14 +48,12 @@ export default {
     },
   },
   mounted(){
-    
     // 设备反馈监听
     this.$device.subscribe('FINGER_MESSAGE', (data) => {
       if(data.type==1){//type为1失败2成功3重新调用指纹验证
-         this.message=data.msg;
+        this.message=data.msg;
       }else if(data.type==2){
-        //data.msg.tag为id
-        
+        //data.msg.tag为id        
         let _id=JSON.parse(data.msg).tag
         if(this.user!=null){
           if(JSON.parse(JSON.stringify(this.user))._id==_id){

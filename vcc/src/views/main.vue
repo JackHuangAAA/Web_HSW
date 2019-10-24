@@ -89,6 +89,16 @@
         },
         components:{},
         methods: {
+            SOCKET_VACCINATION_DATA(){
+                this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
+                    console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
+                });
+            },
+            SOCKET_VACCINATION_STATUS_DATA(){
+                this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
+                    console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
+                });
+            },
             //查询温度报警
             async queryAlarmByByCondition(){
                 let res = await this.$api.get("/alarm/queryAlarmByByCondition",{
@@ -150,6 +160,8 @@
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();
                 this.queryVaccinationDailyInfo();
+                this.SOCKET_VACCINATION_DATA();
+                this.SOCKET_VACCINATION_STATUS_DATA();
             }
         }
     }
