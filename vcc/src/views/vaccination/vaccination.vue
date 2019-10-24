@@ -26,35 +26,35 @@
                     </div>
                 </div>
                 <div class="leftBottom">
-                    <div class="personInf" v-for="(item,index) in test">
+                    <div class="personInf" v-for="(item,index) in vaccinationData.vaccine">
                         <div class="personInfVaccine">
                             <p class="personInfVaccineP vaccineOne">接种疫苗</p>
-                            <p class="personInfVaccineP vaccineTwo">脊髓灰质炎疫苗</p>
-                            <p class="personInfVaccineP vaccineThree">北京科兴生物制品有限公司</p>
+                            <p class="personInfVaccineP vaccineTwo">{{item.name}}</p>
+                            <p class="personInfVaccineP vaccineThree">{{item.product}}</p>
                         </div>
                         <div class="personInfCount">
-                            <p class="getVaccineOne">接种支数</p>
-                            <p class="getVaccineCount">{{vaccinationData.customer?vaccinationData.customer.vaccineNum:''}}支</p>
+                            <p class="getVaccineOne">数量</p>
+                            <p class="getVaccineCount">{{item.num}}支</p>
                         </div>
                         <div class="personInfStatus">
                             <p class="getVaccineOne">状态:</p>
                             <p class="getVaccineCount">
-                                <img src="/static/img/succeed.png" class="succeed"><span class="tipInf" style="color:#1AA95E">信息匹配</span>
-                                <!-- <img src="/static/img/error.png" class="succeed"><span class="tipInf" style="color:#F42954">信息不匹配</span> -->
-                            </p>
+                                <div v-if="item.status"><img src="/static/img/succeed.png" class="succeed"><span class="tipInf" style="color:#1AA95E">信息匹配</span></div>
+                                <div v-else><img src="/static/img/error.png" class="succeed"><span class="tipInf" style="color:#F42954">信息不匹配</span></div>
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="right">
-                <div class="vaccineInf" v-for="(item,index) in test2">
+                <div class="vaccineInf" v-for="(item,index) in vaccine">
                     <div class="vaccineTop">
                         <div class="vaccineTopLeft">
                             <div class="topTip">
                                 品名:
                             </div>
                             <div class="bottomInf">
-                                脊髓灰质炎疫苗
+                                {{item.name}}
                             </div>
                         </div>
                         <div class="vaccineTopRight">
@@ -62,7 +62,7 @@
                                 批次号:
                             </div>
                             <div class="bottomInf" style="color:#3E4955">
-                                Y750230-64368
+                                {{item.batchNo}}
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                                 有效期:
                             </div>
                             <div class="bottomInf" style="color:#3E4955;">
-                                脊髓灰质炎疫苗
+                                {{getExpiryDate(item.expiry)}}
                             </div>
                         </div>
                         <div class="vaccineTopRight">
@@ -80,7 +80,7 @@
                                 生产企业:
                             </div>
                             <div class="bottomInf" style="color:#3E4955">
-                                北京科兴生物制品有限公司
+                                {{item.producer}}
                             </div>
                         </div>
                     </div>
@@ -100,8 +100,6 @@
 
         data() {
             return {
-                test:[{},{},{},{},{},{},{}],
-                test2:[{},{},{},{},{},{},{}],
                 progress:0,
                 batchId: uuid(),
                 commonData: null,
@@ -110,18 +108,48 @@
                     'customer':{
                         'code': '089',
                         'name': '李义',
-                        'age': 4,
-                        'vaccineCode': 'ym20190920134508999',
-                        'vaccineName': '脊髓灰质炎疫苗',
-                        'vaccineNum': 1
-                    }
+                        'age': 4
+                    },
+                    'vaccine':[
+                        {
+                            name:'乙肝疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status:true
+                        },{
+                            name:'流感疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status:true
+                        },{
+                            name:'腮腺炎疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status: false
+                        }
+
+                    ]
                 }, //接种信息
-                vaccine: {
-                    'vaccineName': '脊髓灰质炎疫苗',
-                    expiry: new Date(),
-                    batchNo:'b-99',
-                    producer:'rrr'
-                } //疫苗扫码信息
+                vaccine: [
+                    {
+                        'name': '乙肝疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-001',
+                        'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '流感疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-002',
+                        'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '腮腺炎疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-003',
+                        'producer':'长春生物制药'
+                    }
+                ]//疫苗扫码信息
             };
         },
         computed: {
