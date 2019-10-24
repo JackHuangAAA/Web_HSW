@@ -29,10 +29,6 @@
         <div class="vaccineStatus">
             <div class="vaccineStatusTitle">
                 <span class="vaccineStatusTitleTip"><img src="/static/img/tip.png" style="margin-right:1rem;">缺少库存疫苗<span style="color:#FF5500;margin-left:1.5rem;">11种</span></span>
-                <!-- <div class="redBlock"></div>
-                <p class="bj">报警</p>
-                <div class="yellowBlock"></div>
-                <p class="yj">预警</p> -->
             </div>
             <div class="vaccineContent">
                 <div class="vaccineContentTitle">
@@ -57,32 +53,6 @@
                         缺少库存
                     </div>
                 </div>
-                <!-- <div v-for="(item,index) in vaccineData" class="vaccineStatusShow">
-                    <div class="vaccineLeft" v-if="item.vaccineOneName">
-                        <p class="vaccineOneName" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneName}}</p>
-                        <p class="vaccineOneCount" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneCount || 0}}支</p>
-                    </div>
-                    <div class="vaccineRight" v-if="item.vaccineTwoName">
-                        <p class="vaccineTwoName" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoName}}</p>
-                        <p class="vaccineTwoCount" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoCount || 0}}支</p>
-                    </div>
-                    <div class="vaccineLeft" v-if="item.vaccineThreeName">
-                        <p class="vaccineOneName" :class="{warning:item.vaccineThreeCount == 0,tips:item.vaccineThreeCount <10}">{{item.vaccineThreeName}}</p>
-                        <p class="vaccineOneCount" :class="{warning:item.vaccineThreeCount == 0,tips:item.vaccineThreeCount <10}">{{item.vaccineThreeCount || 0}}支</p>
-                    </div>
-                    <div class="vaccineRight" v-if="item.vaccineFourName">
-                        <p class="vaccineTwoName" :class="{warning:item.vaccineFourCount == 0,tips:item.vaccineFourCount <10}">{{item.vaccineFourName}}</p>
-                        <p class="vaccineTwoCount" :class="{warning:item.vaccineFourCount == 0,tips:item.vaccineFourCount <10}">{{item.vaccineFourCount || 0}}支</p>
-                    </div>
-                    <div class="vaccineLeft" v-if="item.vaccineFiveName">
-                        <p class="vaccineOneName" :class="{warning:item.vaccineFiveCount == 0,tips:item.vaccineFiveCount <10}">{{item.vaccineFiveName}}</p>
-                        <p class="vaccineOneCount" :class="{warning:item.vaccineFiveCount == 0,tips:item.vaccineFiveCount <10}">{{item.vaccineFiveCount || 0}}支</p>
-                    </div>
-                    <div class="vaccineRight" v-if="item.vaccineSixName">
-                        <p class="vaccineTwoName" :class="{warning:item.vaccineSixCount == 0,tips:item.vaccineSixCount <10}">{{item.vaccineSixName}}</p>
-                        <p class="vaccineTwoCount" :class="{warning:item.vaccineSixCount == 0,tips:item.vaccineSixCount <10}">{{item.vaccineSixCount || 0}}支</p>
-                    </div>
-                </div> -->
             </div>
         </div>
         <div class="button">

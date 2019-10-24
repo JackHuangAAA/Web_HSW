@@ -127,16 +127,12 @@
                     }
                 }
                 //position不为空时，调用Android接口，打开抽屉
-                console.log("openDrawer===================>")
                 if(position!=''){
-                    console.log("openDrawer2=====================>")
-                    this.$device.openDrawer({num:position.slice(1)}).then(res=>{
-                        console.log('res---------> result:' + JSON.stringify(res))
-                        console.log('33--------->%j' + JSON.stringify(ids))
+                    //this.$device.openDrawer({num:position.slice(1)}).then(res=>{
                         this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
-                    }).catch(err=>{
-                        console.log('shif: '+JSON.stringify(err));
-                    });
+                    //}).catch(err=>{
+                        //console.log('open drawer error: '+err.message());
+                    //});
                 }
             }
         },
