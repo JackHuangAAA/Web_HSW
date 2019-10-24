@@ -8,6 +8,7 @@ import com.ethink.plugin.message.PluginMessage;
 
 public class ResponseUtil {
 
+/*
     public static PluginMessage success(@NonNull PluginMessage pluginMessage, Object msg, Object data) {
         pluginMessage.changeToResponse();
         pluginMessage.setString("code", "0000");
@@ -34,6 +35,7 @@ public class ResponseUtil {
         }
         return object;
     }
+*/
 
 
 }
