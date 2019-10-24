@@ -46,21 +46,24 @@ export default {
             })
         },
         //指纹数据更新
-        async queryUserByCondition(params){
-            let user=await this.$api.post('/user/queryUserByCondition',params)
-            this.saveUser(user.data)
-        }
+        async modifyUserById(params){
+            let user=await this.$api.post('/user/modifyUserById',params)
+            console.log(user)
+            // await this.saveUser(user.data)
+        },
     },
     mounted(){
         // 设备反馈监听
+        console.log(this.user.finger)
         this.$device.subscribe('FINGER_MESSAGE', (data) => {
             console.log("------------------------"+JSON.stringify(data))
             this.notice=data.msg
             console.log("--------------------------------------"+this.notice)
             if(data.type==2){//type=1持续录入2完成
                 this.noticeState=true
-                this.user.finger.push(2)
-                this.queryUserByCondition({id:this.user._id,finger:this.user.finger})
+                let finger=this.user.finger
+                finger.push('2')
+                this.modifyUserById({id:this.user._id,finger:finger})
                 let to=setTimeout(()=>{
                     this.$emit('save',true)
                     clearTimeout(to)
@@ -69,6 +72,7 @@ export default {
                 this.noticeState=false
             }
         });
+        
         // 执行指纹录入方法
         this.register()
     }

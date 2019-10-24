@@ -23,7 +23,7 @@ export default {
     },
     //打开抽屉
     async openDrawer(params){
-        console.log('CONTROLLER_BOARD===>OPEN_DRAWER',params);
+        console.log('CONTROLLER_BOARD===>OPEN_DRAWER ' + JSON.stringify(params));
         return await $d.invoke('CONTROLLER_BOARD','OPEN_DRAWER',params);
     },
     //注册指纹
@@ -37,9 +37,9 @@ export default {
         return $d.invoke('FINGER', 'SEARCH');
     },
     //删除全部指纹
-    fingerDelAll(){
-        console.log('FINGER===>DEL_TEMPLATE_ALL');
-        return $d.invoke('FINGER', 'DEL_TEMPLATE_ALL');
+    fingerDelAll(params){
+        console.log('FINGER===>UN_REGISTER');
+        return $d.invoke('FINGER', 'UN_REGISTER',params);
     },
 
     //校验指纹

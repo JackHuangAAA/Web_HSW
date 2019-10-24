@@ -131,11 +131,13 @@
                 if(position!=''){
                     console.log("openDrawer2=====================>")
                     this.$device.openDrawer({num:position.slice(1)}).then(res=>{
-                        console.log('33--------->%j',ids)
+                        console.log('res---------> result:' + JSON.stringify(res))
+                        console.log('33--------->%j' + JSON.stringify(ids))
                         this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+                    }).catch(err=>{
+                        console.log('shif: '+JSON.stringify(err));
                     });
                 }
-
             }
         },
         mounted() {
