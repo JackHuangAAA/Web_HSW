@@ -7,52 +7,11 @@
                 <img src="/static/img/inCabinet2.png" class="vaccineIn">
             </div>
             <div class="main">
-                <div class="mainTop">
-                    <p class="ctOne">抽屉1</p>
-                    <p class="ctLeft">左</p>
-                    <img src="/static/img/l-r.png" class="l_r">
-                    <p class="ctRight">右</p>
-                    <p class="ctTwo">抽屉2</p>
-                </div>
-                <div class="mainBottom">
-                    <div class="mainBottomLeft">
-                        <p class="ctTop">上</p>
-                        <img src="/static/img/t-b.png" class="t_b">
-                        <p class="ctBottom">下</p>
-                    </div>
-                    <div class="mainBottomRight">
-                        <div class="index">
-                            <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
-                        </div>
-                        <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas">
-                                <div class="cabineLeft" v-if="item.nameOne">
-                                    <p class="vaccineOneName">{{item.nameOne}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameTwo">
-                                    <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameThree">
-                                    <p class="vaccineOneName">{{item.nameThree}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameFour">
-                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameFive">
-                                    <p class="vaccineOneName">{{item.nameFive}}</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameSix">
-                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="finish">
-                    <div class="yes" @click="next()">
+                <img src="/static/img/inPosition.png" class="mainImg">
+                <p class="describe">请将疫苗放入冷藏柜中</p>
+                <div class="yes" @click="next()">
                         入库完成
                     </div>
-                </div>
             </div>
         </div>
     </div>
