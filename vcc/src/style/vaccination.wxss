@@ -1,0 +1,253 @@
+.container {
+  width: 100%;
+  height: 100%;
+  background-color: #ecf0f8;
+  position: relative;
+}
+.containerBody {
+  width: 96.8%;
+  position: absolute;
+  height: calc(60%);
+  top: 20px;
+  left: 1.6%;
+}
+.title {
+  width: 100%;
+  height: 76px;
+  background-color: white;
+}
+.content {
+  width: 100%;
+  height: calc(24%);
+  background-color: white;
+}
+.titleLeft {
+  width: 50%;
+  height: 100%;
+  float: left;
+  line-height: 76px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #3E4955;
+}
+.titleRight {
+  width: 50%;
+  height: 100%;
+  float: left;
+  line-height: 76px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #3E4955;
+}
+.left {
+  width: 46%;
+  height: 98%;
+  float: left;
+  margin-left: 4%;
+  background-color: #f4f7fc;
+}
+.right {
+  width: 46%;
+  height: 98%;
+  background-color: #ecf0f8;
+  float: left;
+  overflow: auto;
+}
+.leftTop {
+  width: 100%;
+  height: 32%;
+  background-color: #f4f7fc;
+}
+.leftTopLeft {
+  width: 50%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.leftTopRight {
+  width: 50%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.code {
+  width: 45%;
+  height: 1.5625rem;
+  position: absolute;
+  top: 50%;
+  margin-top: -0.3125rem;
+  line-height: 1.5625rem;
+  text-align: right;
+  font-size: 1.75rem;
+  color: #3E4955;
+}
+.name {
+  width: 50%;
+  top: 50%;
+  position: absolute;
+  left: 50%;
+  height: 2.5rem;
+  margin-top: -1.25rem;
+  line-height: 2.5rem;
+  text-align: left;
+  font-size: 2.5rem;
+  color: #FF7800;
+}
+.age {
+  position: absolute;
+  width: 80%;
+  height: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  top: 35%;
+  margin-top: -0.625rem;
+  left: 20%;
+  color: #3E4955;
+  font-weight: bold;
+}
+.ageCount {
+  position: absolute;
+  width: 80%;
+  height: 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+  left: 20%;
+  font-weight: bold;
+  top: calc(37%);
+}
+.leftBottom {
+  width: 100%;
+  max-height: 68%;
+  overflow: auto;
+}
+.personInf {
+  width: 100%;
+  height: 5rem;
+  margin-top: 4rem;
+}
+.personInf:nth-child(1) {
+  margin-top: 0;
+}
+.personInfVaccine {
+  width: 40%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.personInfCount {
+  width: 30%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.personInfStatus {
+  width: 30%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.personInfVaccineP {
+  width: 90%;
+  position: absolute;
+  left: 5%;
+}
+.vaccineOne {
+  top: 0;
+  height: 1.0625rem;
+  font-size: 1.125rem;
+  line-height: 1.0625rem;
+  color: #3E4955;
+}
+.vaccineTwo {
+  top: 2.3125rem;
+  height: 1.25rem;
+  color: #2A7AFF;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+}
+.vaccineThree {
+  bottom: 0;
+  height: 0.875rem;
+  line-height: 0.875rem;
+  font-size: 0.875rem;
+  color: #3E4955;
+}
+.getVaccineOne {
+  width: 100%;
+  height: 1.1875rem;
+  line-height: 1.1875rem;
+  font-size: 1.1875rem;
+  position: absolute;
+  color: #3E4955;
+}
+.getVaccineCount {
+  width: 100%;
+  height: 1.5rem;
+  font-size: 1.125rem;
+  line-height: 1.125rem;
+  color: #3E4955;
+  top: 3.25rem;
+  position: absolute;
+  font-weight: bold;
+}
+.vaccineInf {
+  width: 94%;
+  margin-left: 3%;
+  height: 7.5625rem;
+  margin-top: 3.5625rem;
+}
+.vaccine:nth-child(1) {
+  margin-top: 2.625rem;
+}
+.vaccineTop {
+  width: 100%;
+  height: 50%;
+}
+.vaccineBottom {
+  width: 100%;
+  height: 50%;
+}
+.vaccineTopLeft {
+  width: 50%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.vaccineTopRight {
+  width: 50%;
+  height: 100%;
+  float: left;
+  position: relative;
+}
+.topTip {
+  height: 1.0625rem;
+  font-size: 1.125rem;
+  color: #3E4955;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 1.0625rem;
+}
+.bottomInf {
+  height: 1.125rem;
+  position: absolute;
+  top: 1.875rem;
+  font-size: 1.125rem;
+  color: #2A7AFF;
+  font-weight: bold;
+  line-height: 1.125rem;
+}
+.succeed {
+  width: 1.5rem;
+  height: 1.5rem;
+  float: left;
+}
+.tipInf {
+  display: block;
+  float: left;
+  height: 1.5rem;
+  line-height: 1.5rem;
+  margin-left: 0.5625rem;
+}
