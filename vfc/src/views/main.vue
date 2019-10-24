@@ -107,8 +107,8 @@
             return {
                 alarmNumber: 0,
                 vaccineNumber:0,
-                temperature: 0,
-                temperatureDes:'正常',
+                // temperature: 0,
+                // temperatureDes:'正常',
                 vaccineData:[]
             }
         },
@@ -117,6 +117,16 @@
                 user: 'user',
                 device: 'device',
             })
+        },
+        props:{
+            temperature:{
+                type:Number,
+                default:0
+            },
+            temperatureDes:{
+                type:String,
+                default:''
+            }
         },
         components:{},
         methods: {
@@ -197,9 +207,14 @@
         },
         mounted() {
             //查询首页数据
-            this.queryDrawerByCondition();
-            this.queryAlarmByByCondition();
-            this.queryVaccineNum();
+            // __app.on("NOW_TEMPERATURE",(data)=>{
+            //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
+            // });
+            if(this.device){
+                this.queryDrawerByCondition();
+                this.queryAlarmByByCondition();
+                this.queryVaccinationDailyInfo();
+            }
         }
     }
 </script>

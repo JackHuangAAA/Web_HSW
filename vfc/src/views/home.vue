@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="main">
-                <router-view ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
             <div class="footer"><p class="dateTime">{{nowdate}}</p></div>
         </div>
@@ -62,7 +62,9 @@ global.moment = moment;
                 ],
                 isactive: 0,
                 ifShowMenu: false ,
-                menuStatus: '展开菜单'
+                menuStatus: '展开菜单',
+                temperature:0,
+                temperatureDes:'正常',
                 }
         },
         computed: {
@@ -127,9 +129,10 @@ global.moment = moment;
             },
             //接收温度信息
             receiveTemperature(){
-                this.$device.subscribe('TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE');
-                    let temp = '', val= 8;//data.data;
+                this.$device.subscribe('NOW_TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
+                    let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
+                    console.log("设备id，温度，result:"+this.device._id)
                     if(val>5 || val<0){
                         this.temperatureDes = '异常';
                         if(val>5){
@@ -149,10 +152,12 @@ global.moment = moment;
                         this.temperatureDes = '正常';
                     }
                     this.temperature = val;
+                    // __app.emit("NOW_TEMPERATURE",val);
                     //保存温度到设备记录
-                    this.$api.get('/device/modifyDevice',{id:this.device._id, temperature:val})
+                    
+                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
                 });
-            }
+            },
         },
         mounted(){
             //获取设备信息
@@ -165,7 +170,7 @@ global.moment = moment;
                     }
                 });
             });
-            //接收温度信息 todo
+            //接收温度信息
             this.receiveTemperature();
         }
 }

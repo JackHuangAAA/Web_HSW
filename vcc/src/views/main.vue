@@ -66,8 +66,8 @@
             return {
                 alarmNumber: 0,
                 customerNumber:0,
-                temperature: 0,
-                temperatureDes:'正常',
+                // temperature: 0,
+                // temperatureDes:'正常',
                 vaccineData:[],
             }
         },
@@ -76,6 +76,16 @@
                 user: 'user',
                 device: 'device',
             })
+        },
+        props:{
+            temperature:{
+                type:Number,
+                default:0
+            },
+            temperatureDes:{
+                type:String,
+                default:''
+            }
         },
         components:{},
         methods: {
@@ -98,13 +108,10 @@
             },
             //查询抽屉疫苗信息
             async queryDrawerByCondition(){
-                console.log(11111111111+'main');
-                console.log("查询抽屉疫苗信息================>"+this.device._id)
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
                 let array = res.data;
-                console.log("拿到抽屉疫苗信息==============>"+JSON.stringify(array))
                 for (let i = 0; i < 10; i++) {
                     let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
                     if (num > 0) {
@@ -127,13 +134,6 @@
                     this.vaccineData.push(temp);
                 }
             },
-            //设备温度查询
-            device_temperature(){
-                this.$device.temperature({num:[1,2,3,4,5]}).thne(res=>{
-                    console.log("temperature======================>")
-                    console.log(res)
-                })
-            },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
@@ -143,8 +143,9 @@
         },
         mounted() {
             //查询首页数据
-            console.log("main================================================>>")
-            console.log(this.device)
+            // __app.on("NOW_TEMPERATURE",(data)=>{
+            //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
+            // });
             if(this.device){
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();

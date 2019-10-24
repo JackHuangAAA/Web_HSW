@@ -1,5 +1,6 @@
 <template>
     <div class="fingerAdd">
+        <!-- <div class="finger-save" @click="savehandle()">保存</div> -->
         <div class="fingerAdd-conent">
             <div class="fingerAdd-title">放置手指</div>
             <div class="fingerAdd-info">将手指放置在指纹仪上，识别完成后移开，并重复此步骤</div>
@@ -34,6 +35,10 @@ export default {
                 saveUser: 'saveUser',
                 saveDevice: 'saveDevice'
             }),
+        savehandle(){
+            this.register()
+            // this.$emit('save',true)
+        },
         // 指纹录入
         register(){
             this.$device.fingerRegister({userId:this.user._id})
