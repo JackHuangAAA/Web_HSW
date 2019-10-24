@@ -80,11 +80,11 @@
         props:{
             temperature:{
                 type:Number,
-                default:0
+                default:5
             },
             temperatureDes:{
                 type:String,
-                default:''
+                default:'正常'
             }
         },
         components:{},

@@ -2,7 +2,7 @@
 <template>
     <div class="fingerprint card">
         <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div>
-        <div class="fingerprint-clear" @click="modal1=true">清除所有</div>
+        <div class="fingerprint-clear" @click="modal1=true">清除</div>
         <Modal
             v-model="modal1"
             title="消息提示"
@@ -57,8 +57,6 @@
             },
             //删除所有指纹
             delAll(){
-                console.log('delAll000000000000----');
-                console.log(JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
                     this.queryUserByCondition({id:this.user._id,finger:[]})
@@ -69,7 +67,6 @@
             },
             //指纹数据更新
             async queryUserByCondition(params){
-                console.log("entry")
                 let res=await this.$api.post('/user/modifyUserById',params)
                 if(res.data.ok==1){
                     this.user.finger=[]

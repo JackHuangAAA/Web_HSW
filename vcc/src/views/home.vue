@@ -64,7 +64,7 @@ global.moment = moment;
                 isactive: 0,
                 ifShowMenu: false ,
                 menuStatus: '展开菜单',
-                temperature:0,
+                temperature:5,
                 temperatureDes:'正常',
                 state:false,
                 }
@@ -135,10 +135,9 @@ global.moment = moment;
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
                     console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
                     let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
-                    console.log("设备id，温度，result:"+this.device._id)
-                    if(val>5 || val<0){
+                    if(val>8 || val<2){
                         this.temperatureDes = '异常';
-                        if(val>5){
+                        if(val>8){
                             temp = '高于正常温度5℃';
                         }else {
                             temp = '低于正常温度0℃';
@@ -187,9 +186,9 @@ global.moment = moment;
                     }
                 });
             });
-            //接收温度信息 todo
+            //接收温度信息
             this.receiveTemperature();
-            //接收接种信息 todo
+            //接收接种信息
             this.receiveVaccination();
 
         }
