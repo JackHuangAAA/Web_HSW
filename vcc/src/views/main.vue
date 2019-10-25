@@ -68,13 +68,13 @@
                 customerNumber:0,
                 // temperature: 0,
                 // temperatureDes:'正常',
-                vaccineData:[],
+                vaccineData:[]
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         props:{

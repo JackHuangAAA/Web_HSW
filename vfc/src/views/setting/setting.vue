@@ -22,13 +22,11 @@
     import { mapGetters } from "vuex";
     import basic from "./basic";
     import finger from "./finger";
-    import region from "./region";
     import fingerEntry from './fingerEntry';
     export default {
         components: {
             basic,
             finger,
-            region,
             fingerEntry
         },
         data() {

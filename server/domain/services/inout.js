@@ -177,4 +177,33 @@ module.exports = {
         return {rs: result.docs, total: result.total};
     },
 
+    /**
+     * 按指定条件查询出入库信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    queryInoutByCondition: async function(requestBody){
+        logger.debug(`queryInoutByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [], sort=null;
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({ "code": requestBody.code });
+        }
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({ "name": requestBody.name });
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.date)) {
+            let date = moment(requestBody.date);
+            query.push({"createDate": {"$gte": date.startOf('day').toDate()}});
+            query.push({openingTime: {"$lte": date.endOf('day').toDate()}});
+        }
+        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        return await Domain.models.inout.find(query,null, sort);
+    },
+
 };
