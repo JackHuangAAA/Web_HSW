@@ -1,6 +1,5 @@
 <template>
     <div class="fingerAdd">
-        <!-- <div class="finger-save" @click="savehandle()">保存</div> -->
         <div class="fingerAdd-conent">
             <div class="fingerAdd-title">放置手指</div>
             <div class="fingerAdd-info">将手指放置在指纹仪上，识别完成后移开，并重复此步骤</div>
@@ -34,10 +33,6 @@ export default {
                 saveUser: 'saveUser',
                 saveDevice: 'saveDevice'
             }),
-        savehandle(){
-            this.register()
-            // this.$emit('save',true)
-        },
         // 指纹录入
         register(){
             this.$device.fingerRegister({userId:this.user._id})
@@ -45,7 +40,7 @@ export default {
         //指纹数据更新
         async modifyUserById(params){
             let user=await this.$api.post('/user/modifyUserById',params)
-        },
+        }
     },
     mounted(){
         // 设备反馈监听
@@ -55,10 +50,8 @@ export default {
                 this.noticeState=true
                 let finger=this.user.finger
                 finger.push('2')
-                console.log("目前已有的指纹  =======》 result:"+finger)
                 this.modifyUserById({id:this.user._id,finger:finger})
                 if(finger.length<2){
-                    console.log("录入第二次")
                     this.register()
                 }else{
                     let to=setTimeout(()=>{

@@ -32,13 +32,13 @@
             </div>
             <div class="vaccineContent">
                 <div class="vaccineContentTitle">
-                    <div class="vaccineName">
+                    <div class="headName">
                         疫苗名称
                     </div>
-                    <div class="vaccineAllowance">
+                    <div class="headAllowance">
                         剩余库存量
                     </div>
-                    <div class="allowanceStatus">
+                    <div class="headStatus">
                         库存状态
                     </div>
                 </div>

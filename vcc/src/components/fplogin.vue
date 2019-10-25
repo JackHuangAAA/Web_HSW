@@ -1,5 +1,5 @@
 <template>
-  <div @click="test()" style="position:relative;height:100%">
+  <div style="position:relative;height:100%">
     <img src="/static/img/fplogin.png" class="fpbg">
     <P class="fingerTip">使用指纹一键登录</P>
     <div class="fplogin-message">{{message}}</div>
@@ -34,9 +34,9 @@ export default {
     //根据id查询用户信息，存储用户信息
     async login(_id){
       let user =await this.$api.get("/user/queryUserByCondition", {_id:_id});
-      if(!_.isEmpty(JSON.stringify(user))){
-        this.saveUser(JSON.stringify(user.data[0]));
-        await this.$api.post("/user/modifyUserByCode", JSON.parse(JSON.stringify(user)));
+      if(!_.isEmpty(user)){
+        this.saveUser(user.data[0]);
+        await this.$api.post("/user/modifyUserByCode", user);//重点，勿删除
         this.$router.push('/');
       }else{
         this.message = '登陆用户不存在';
@@ -52,8 +52,9 @@ export default {
         //data.msg.tag为id
         let _id=JSON.parse(data.msg).tag
         if(this.user!=null){
-          if(JSON.parse(JSON.stringify(this.user))._id==_id){
+          if(Jthis.user._id==_id){
             this.message='登录成功'
+            this.$api.post("/user/modifyUserByCode", this.user);
             this.$router.push('/')
           }
         }else{

@@ -98,14 +98,14 @@
             },
             //扫描枪扫码数量增加后，自动保存
             async scanIn(){
-                //this.$device.subscribe('SCAN_ADD_VACCINE', (data) => {
-                console.log('SERVER_PUSH==>SCAN_ADD_VACCINE');
+                // this.$device.subscribe('SCANNER_RESULT', (data) => {
+                    // console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                 let result= {code: '6',name:'y6',batchNo:'6', expiry:this.dateformat('2019-12-30'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
                 //检查是否异常疫苗
                 await this.checkException(result);
                 //页面数据更新
                 await this.freshTableDatas(result);
-                //});
+                // });
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;

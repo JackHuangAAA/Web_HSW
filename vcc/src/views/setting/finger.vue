@@ -15,55 +15,58 @@
 
 <script>
     import { mapGetters, mapActions } from "vuex";
+
     export default {
         data() {
             return {
                 modal1:false,
-                fingerCount:0,
+                fingerCount:0
             };
         },
         computed: {
             ...mapGetters({
                 user: "user",
-                device: "device",
+                device: "device"
             })
         },
         watch:{
         },
         methods: {
             ...mapActions({
-                saveUser: 'saveUser',
+                saveUser: 'saveUser'
             }),
             ok(){
-                console.log("清楚指纹数据===>")
                 this.delAll()
             },
             cancel(){
-                this.modal1=false
+                this.modal1=false;
             },
             //
             addFinger(){
-                this.$emit('add',false)
+                this.$emit('add',false);
             },
             //删除所有指纹
             delAll(){
+                console.log("删除指纹前获取的user信息 result:"+JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                        let arr=[]
-                        this.queryUserByCondition({id:this.user._id,finger:arr})
+                        console.log("这里已经监听到删除的动作了")
+                        this.deleteFinger({id:this.user._id,finger:[]});
                     }
                 })
             },
             //指纹数据更新
-            async queryUserByCondition(params){
+            async deleteFinger(params){
                 let res=await this.$api.post('/user/modifyUserById',params)
+                console.log("这里已经监听到更新指纹的动作了 result:"+ JSON.stringify(res))
                 if(res.data.ok==1){
-                    this.user.finger=[]
+                    this.user.finger=[];
+                    this.fingerCount=this.user.finger.length
                 }
             }
         },
         mounted() {
-            this.fingerCount=this.user.finger.length
+            this.fingerCount=this.user.finger.length;
         }
     };
 </script>

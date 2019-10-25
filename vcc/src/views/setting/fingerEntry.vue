@@ -40,39 +40,18 @@ export default {
         //指纹数据更新
         async modifyUserById(params){
             let user=await this.$api.post('/user/modifyUserById',params)
-        },
-        test(){
-            console.log(this.user.finger.length)
-            
-                this.noticeState=true
-                let finger=this.user.finger
-                finger.push('2')
-                this.modifyUserById({id:this.user._id,finger:finger})
-                if(this.user.finger.length<2){
-                    console.log("录入第二次")
-                    // this.register()
-                    this.test()
-                }else{
-                    let to=setTimeout(()=>{
-                        this.$emit('save',true)
-                        clearTimeout(to)
-                    },1500)
-                }
         }
     },
     mounted(){
         // 设备反馈监听
-        console.log("进入指纹打印")
         this.$device.subscribe('FINGER_MESSAGE', (data) => {
             this.notice=data.msg
             if(data.type==2){//type=1持续录入2完成
                 this.noticeState=true
                 let finger=this.user.finger
                 finger.push('2')
-                console.log("目前已有的指纹  =======》 result:"+finger)
                 this.modifyUserById({id:this.user._id,finger:finger})
                 if(finger.length<2){
-                    console.log("录入第二次")
                     this.register()
                 }else{
                     let to=setTimeout(()=>{

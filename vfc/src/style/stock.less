@@ -18,7 +18,7 @@
 // }
 .inoculate-table{
     overflow: auto;
-    height: 88%;
+    height: 92%;
 }
 .inoculate-table-row{
     margin-bottom: .375rem;
@@ -45,7 +45,11 @@
     height: 77%;
     cursor: pointer;
 }
-
+.producer{
+    white-space: nowrap;      /*超出的空白区域不换行*/
+    overflow: hidden;         /*超出隐藏*/
+    text-overflow: ellipsis;  /*文本超出显示省略号*/
+}
 //detail.vue
 .stock-title{
     display: flex;

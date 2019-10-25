@@ -1,7 +1,7 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div><!---->
+        <div class="fingerprint-add" v-if="fingerCount<2" @click="addFinger()">新增</div><!---->
         <div class="fingerprint-clear" @click="modal1=true">清除所有</div>
         <Modal
             v-model="modal1"
@@ -19,6 +19,7 @@
         data() {
             return {
                 modal1:false,
+                fingerCount:0
             };
         },
         computed: {
@@ -35,29 +36,34 @@
                 this.delAll()
             },
             cancel(){
-                this.modal1=false
+                this.modal1=false;
             },
+            //
             addFinger(){
-                this.$emit('add',false)
+                this.$emit('add',false);
             },
             //删除所有指纹
             delAll(){
+                console.log("删除指纹前获取的user信息 result:"+JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                    this.queryUserByCondition({id:this.user._id,finger:[]})
-                    this.user.finger=[]
-                }
+                        console.log("这里已经监听到删除的动作了")
+                        this.deleteFinger({id:this.user._id,finger:[]});
+                    }
                 })
             },
             //指纹数据更新
-            async queryUserByCondition(params){
+            async deleteFinger(params){
                 let res=await this.$api.post('/user/modifyUserById',params)
+                console.log("这里已经监听到更新指纹的动作了 result:"+ JSON.stringify(res))
                 if(res.data.ok==1){
-                    this.user.finger=[]
+                    this.user.finger=[];
+                    this.fingerCount=this.user.finger.length
                 }
             }
         },
         mounted() {
+            this.fingerCount=this.user.finger.length;
         }
     };
 </script>

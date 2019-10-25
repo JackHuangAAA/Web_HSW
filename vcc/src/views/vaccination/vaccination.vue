@@ -161,7 +161,8 @@
             //比对疫苗信息
             async matchInfo(){
                 //接收疫苗
-                this.$device.subscribe('VACCINATION_SCAN', (data) => {
+                this.$device.subscribe('SCANNER_RESULT', (data) => {
+                    console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                     this.vaccine = data.data;
                     //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
                     if(this.vaccine.name == this.vaccinationData.name){
@@ -236,7 +237,7 @@
                         this.$router.push('/main');
                     }                    
                 });
-            }
+            },
         },
         mounted() {
             this.commonData = {
