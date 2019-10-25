@@ -52,7 +52,7 @@ async function execute() {
 }
 
 later.setInterval(execute, later.parse.cron('0/1 * * * * ?'));
-
+//setInterval(execute,6000);
 //监听主题信息
 Domain.redis.pub.on('message', (channel, message) => {
     logger.info('receive sub '+channel+' data; '+message);
@@ -63,7 +63,6 @@ Domain.redis.pub.on('message', (channel, message) => {
     if (value!=undefined){
         value.emit( channel, result);
     }
-
 });
 
 //订阅主题
