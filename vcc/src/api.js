@@ -15,7 +15,6 @@ const commonResponseHandler = (response,resolve,reject)=>{
     if(config.env == 'development'){
         console.log(`<= `,response.data);
     }
-    console.log('shif: '+ JSON.stringify(response));
     if (response.code == RSP_CODE.NO_LOGIN) {
         router.push('/login');
     } else if (response.code == '9999') {
@@ -36,14 +35,12 @@ const errorHandler = (err)=>{
 
 export default {
     get: function (url, data) {
-        console.log('shif : get '+ url)
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
             axios.defaults.headers.common['deviceid'] = 'TD0001'; //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.get(`/vcc${url}?t=${new Date().getTime()}`, {params: data})
                     .then(response =>{
-                        console.log(response)
                         commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
             });
@@ -62,7 +59,6 @@ export default {
     },
 
     post: function (url, data) {
-        console.log('shif : post '+ url)
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
             axios.defaults.headers.common['deviceid'] = 'TD0001';  //todo 测试使用

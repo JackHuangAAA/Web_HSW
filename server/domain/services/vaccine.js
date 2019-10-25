@@ -49,21 +49,27 @@ module.exports = {
     queryVaccineStorageNum: async function (requestBody) {
         logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let query = [];
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({ "code": requestBody.code});
+        }
+        if (!_.isEmpty(requestBody.product)) {
+            query.push({ "product": new RegExp(requestBody.product)});
+        }
         if (!_.isEmpty(requestBody['ids[]'])) {
-
             let temp = _.map(requestBody['ids[]'], item => {
                 return mongoose.Types.ObjectId(item);
             });
             query.push({ "_id": { $in: temp } });
         }
+        if (requestBody.surplusltTen) {
+            query.push({ "surplus": {'$lte':10}});
+        }
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         query.push({device: deviceId});
         let result = await Domain.models.vaccine.aggregate([
             { $match: { "$and": query } },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, updateDate: { "$first": "$updateDate" } } },
-
-            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
-
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, product: { "$first": "$product" },updateDate: { "$first": "$updateDate" } } },
+            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, product:1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
         ]);
         return { rs: result, total: result.length, device: requestBody }
     },
@@ -138,6 +144,9 @@ module.exports = {
         }
         if (requestBody.surplusIsNotZero) {
             query.push({ "surplus": {'$gt':0}});
+        }
+        if (requestBody.surplusltTen) {
+            query.push({ "surplus": {'$lte':10}});
         }
         if (requestBody.sortSurplus) {
             sort = {sort:{surplus: 1}};

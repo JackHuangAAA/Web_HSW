@@ -152,9 +152,7 @@ global.moment = moment;
                         this.temperatureDes = '正常';
                     }
                     this.temperature = val;
-                    // __app.emit("NOW_TEMPERATURE",val);
                     //保存温度到设备记录
-                    
                     this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
                 });
             },

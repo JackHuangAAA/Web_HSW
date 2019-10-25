@@ -7,7 +7,6 @@ const routers = [{
         { path: '/setting/setting', component: (resolve) => require(['@/views/setting/setting.vue'], resolve) },
         { path: '/alarm/alarm', component: (resolve) => require(['@/views/alarm/alarm.vue'], resolve) },
         { path: '/stock/stock', component: (resolve) => require(['@/views/stock/stock.vue'], resolve) },
-        { path: '/stock/stockDetail', component: (resolve) => require(['@/views/stock/stockDetail.vue'], resolve) },
         { path: '/inout/flowing', component: (resolve) => require(['@/views/inout/flowing.vue'], resolve) },
         { path: '/inout/inStock', component: (resolve) => require(['@/views/inout/inStock.vue'], resolve) },
         { path: '/inout/inPosition', component: (resolve) => require(['@/views/inout/inPosition.vue'], resolve) },

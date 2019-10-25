@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const paginate = require('mongoose-paginate');
 
 /**
- * 抽屉信息
+ * 抽屉信息(仅疫苗柜使用抽屉)
  */
 const drawerSchema = mongoose.Schema({
     device: {type:mongoose.Schema.Types.ObjectId, ref:'device'}, //设备
