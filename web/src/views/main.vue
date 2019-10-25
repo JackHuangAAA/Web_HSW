@@ -93,16 +93,19 @@
                 <Col span="3">正常接种柜</Col>
                 <Col span="3">异常接种柜</Col>
             </Row>
-            <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
-                <Col span="2" class="id-center">1</Col>
-                <Col span="4">{{index}}</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-            </Row>
+            <div class="home-table-body">
+                <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
+                    <Col span="2" class="id-center">1</Col>
+                    <Col span="4">{{index}}</Col>
+                    <Col span="3">1</Col>
+                    <Col span="3">1</Col>
+                    <Col span="3">1</Col>
+                    <Col span="3">1</Col>
+                    <Col span="3">1</Col>
+                    <Col span="3">1</Col>
+                </Row>
+            </div>
+            
         </div>
     </div>
 </template>

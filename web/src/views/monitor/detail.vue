@@ -3,11 +3,11 @@
         <Row>
             <Col span="12" class="main-table-title">疫苗柜运行监控</Col>
             <Col span="6" class="main-table-search">
-                <div class="main-table-search-lab">接种单位:</div>                    
+                <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="value1" placeholder="" />
             </Col>
             <Col span="6" class="main-table-box">
-                <div class="main-table-box-lab">疫苗柜类型:</div>                    
+                <div class="main-table-box-lab">类型:</div>                    
                 <Select v-model="value2" class="select">
                     <Option v-for="item in 3" :value="item" :key="item">{{ item }}</Option>
                 </Select>
@@ -22,15 +22,17 @@
             <Col span="3">运行状态</Col>
             <Col span="3">原因</Col>
         </Row>
-        <Row v-for="item of 10" :key="item" class="main-table-body">
-            <Col span="2" class="id-center">{{item}}</Col>
-            <Col span="3">1</Col>
-            <Col span="4">1</Col>
-            <Col span="6">1</Col>
-            <Col span="3" :class="{abnormal:true}">1</Col>
-            <Col span="3" :class="{abnormal:true}">异常</Col>
-            <Col span="3">1</Col>
-        </Row>
+        <div class="table-body">
+            <Row v-for="item of 10" :key="item" class="main-table-body">
+                <Col span="2" class="id-center">{{item}}</Col>
+                <Col span="3">1</Col>
+                <Col span="4">1</Col>
+                <Col span="6">1</Col>
+                <Col span="3" :class="{abnormal:true}">1</Col>
+                <Col span="3" :class="{abnormal:true}">异常</Col>
+                <Col span="3">1</Col>
+            </Row>
+        </div>
         <Row>
             <Page :total="100" show-elevator :current="active"/>
         </Row>        
