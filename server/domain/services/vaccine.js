@@ -9,8 +9,8 @@ module.exports = {
 
     /**
      * 查询设备疫苗类型信息
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineNum: async function (requestBody) {
         logger.debug(`queryVaccineNum param: ${JSON.stringify(requestBody)}`);
@@ -27,8 +27,8 @@ module.exports = {
 
     /**
      *
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineLowerThreshold: async function (requestBody) {
         logger.debug(`queryVaccineLowerThreshold param: ${JSON.stringify(requestBody)}`);
@@ -43,14 +43,14 @@ module.exports = {
 
     /**
      *  按设备id查询，疫苗code分组合计疫苗数量
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineStorageNum: async function (requestBody) {
         logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let query = [];
-        if (!_.isEmpty(requestBody.code)) {
-            query.push({ "code": requestBody.code});
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({ "name": {'$lte':10}});
         }
         if (!_.isEmpty(requestBody.product)) {
             query.push({ "product": new RegExp(requestBody.product)});
@@ -75,8 +75,8 @@ module.exports = {
     },
     /**
      *  出库后 数量、 剩余数量清零
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     clearVaccineTotal: async function (requestBody) {
         logger.debug(`clearVaccineTotal param: ${JSON.stringify(requestBody)}`);
@@ -92,7 +92,7 @@ module.exports = {
     /**
      *  更新抽屉内疫苗信息
      * @param {any} requestBody
-     * @returns 
+     * @returns
      */
     modifyVaccine: async function (requestBody) {
         logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
@@ -186,8 +186,18 @@ module.exports = {
      */
     removeVaccineById: async function(requestBody) {
         logger.debug(`removeVaccineById param: ${JSON.stringify(requestBody)}`);
-        return Domain.models.vaccine.remove({_id: id});
-    }
+        return Domain.models.vaccine.remove({_id: requestBody.id});
+    },
+
+    /**
+     * 批量入库疫苗信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveManyVaccine: async function(requestBody){
+        logger.debug(`saveManyVaccine param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.vaccine.insertMany(requestBody);
+    },
 
 
 };

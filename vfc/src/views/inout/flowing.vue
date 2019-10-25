@@ -64,7 +64,7 @@
                 let res = await this.$api.get("/inout/queryInoutByCondition", {
                     device: this.device._id,
                     type: this.actionType,
-                    //date: this.date
+                    date: this.date
                 });
                 this.inoutDatas = res.data;
             },

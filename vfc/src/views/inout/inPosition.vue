@@ -17,15 +17,15 @@
     </div>
 </template>
 <script>
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
+    import uuid from 'uuid/v1';
+
     export default {
         data() {
             return {
-                cabineDatas: [],
-                index: '1',
-                row: 6,
-                checkDrawerId:'',
-                datas: null
+                datas: null,
+                commonData: null,
+                batchId:''
             }
         },
         computed: {
@@ -36,38 +36,39 @@
         },
         components:{},
         methods: {
-            async queryDrawerByCondition(){
-                this.cabineDatas = [];
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
-                });
-                let array = res.data;
-                for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.id = array[i]._id;
-                    temp.single = false;
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-                            if (k == 0) {temp.nameOne = vaccine[k].name;}
-                            if (k == 1) {temp.nameTwo = vaccine[k].name;}
-                            if (k == 2) {temp.nameThree = vaccine[k].name;}
-                            if (k == 3) {temp.nameFour = vaccine[k].name;}
-                            if (k == 4) {temp.nameFive = vaccine[k].name;}
-                            if (k == 5) {temp.nameSix = vaccine[k].name;}
-                        }
-                    } else {
-                        temp.nameOne = '';
-                    }
-                    this.cabineDatas.push(temp);
-                }
+            async saveVaccine(){
+                let res = await this.$api.post("/vaccine/saveManyVaccine", this.datas);
             },
-            next(){
+            async saveManyInout(params){
+                await this.$api.post("/inout/saveManyInout", params);
+            },
+            async next(){
+                //完成数据入库
+                await this.saveVaccine();
+                //增加入库记录
+                let array = this.datas,result = [];
+                for(let k=0;k<array.length;k++){
+                    let temp = {}; //关键
+                    temp.batchId = this.batchId;
+                    temp = _.assign(temp, this.commonData); //关键
+                    temp = _.assign(temp, array[k]);
+                    result.push(temp);
+                }
+                await this.saveManyInout(result);
                 this.$router.push({ path: '/inout/inStockEnd', query: { datas: this.datas }});
             }
         },
         mounted() {
             this.datas = this.$route.query.datas;
-            this.queryDrawerByCondition();
+            this.batchId = uuid();
+            this.commonData = {
+                type: 1, //1:入库
+                user: this.user._id,
+                device: this.device._id,
+                deviceType: 2, //2:冷藏柜
+                unitCode: this.device.unitCode,
+                unitName: this.device.unitName
+            };
         }
     };
 </script>

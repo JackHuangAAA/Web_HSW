@@ -50,11 +50,13 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: requestBody.name });
     }
+
     if (!_.isEmpty(requestBody._id)) {
       query.push({_id: requestBody._id })
     }
     query =
       query.length >1 ? { $and: query } : query.length == 1 ? query[0] : {};
+
     return Domain.models.user.find(query)
   },
 

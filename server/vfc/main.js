@@ -29,7 +29,9 @@ if (cluster.isMaster) {
     //日志清理
     require('./logsManage');
     require('./devicesOfflineManage');
+    require('./summariesManage');
     require('./homeData');
+
 
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
