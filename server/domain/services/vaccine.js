@@ -52,7 +52,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({ "name": {'$lte':10}});
         }
-        if (_.isEmpty(requestBody.product)) {
+        if (!_.isEmpty(requestBody.product)) {
             query.push({ "product": new RegExp(requestBody.product)});
         }
         if (!_.isEmpty(requestBody['ids[]'])) {
