@@ -166,4 +166,16 @@ router.post('/removeVaccineById',
     })
 );
 
+/**
+ * 批量入库疫苗信息
+ * @param requestBody
+ * @returns {Promise.<requestBody>}
+ */
+router.post('/saveManyVaccine',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.vaccine.saveManyVaccine(ctx.request.body);
+    })
+);
+
+
 module.exports = router;
