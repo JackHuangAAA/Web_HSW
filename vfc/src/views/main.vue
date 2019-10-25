@@ -28,7 +28,7 @@
 
         <div class="vaccineStatus">
             <div class="vaccineStatusTitle">
-                <span class="vaccineStatusTitleTip"><img src="/static/img/tip.png" style="margin-right:1rem;">缺少库存疫苗<span style="color:#FF5500;margin-left:1.5rem;">11种</span></span>
+                <span class="vaccineStatusTitleTip"><img src="/static/img/tip.png" style="margin-right:1rem;">缺少库存疫苗<span style="color:#FF5500;margin-left:1.5rem;">{{lackNumber}}种</span></span>
             </div>
             <div class="vaccineContent">
                 <div class="vaccineContentTitle">
@@ -42,12 +42,12 @@
                         库存状态
                     </div>
                 </div>
-                <div class="vaccineContentContent" v-for="(item,index) in 5">
+                <div class="vaccineContentContent" v-for="(item,index) in vaccineData">
                     <div class="vaccineName">
-                        百白破疫苗
+                        {{item.name}}
                     </div>
                     <div class="vaccineAllowance">
-                        22
+                        {{item.surplus}}
                     </div>
                     <div class="allowanceStatus">
                         缺少库存
@@ -79,7 +79,8 @@
                 vaccineNumber:0,
                 // temperature: 0,
                 // temperatureDes:'正常',
-                vaccineData:[]
+                vaccineData:[],
+                lackNumber:0
             }
         },
         computed: {
@@ -91,11 +92,11 @@
         props:{
             temperature:{
                 type:Number,
-                default:0
+                default:5
             },
             temperatureDes:{
                 type:String,
-                default:''
+                default:'正常'
             }
         },
         components:{},
@@ -116,57 +117,14 @@
                 });
                 this.vaccineNumber = res.data.length;
             },
-            //查询抽屉疫苗信息
-            async queryDrawerByCondition(){
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
+            //查询预警疫苗信息（数量小于等于10）
+            async queryVaccineStorageNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    surplusltTen: true
                 });
-                let array = res.data;
-                for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-                            if (k == 0) {
-                                temp.vaccineOneName = vaccine[k].name;
-                                temp.vaccineOneCount = vaccine[k].surplus;
-                            }
-                            if (k == 1) {
-                                temp.vaccineTwoName = vaccine[k].name;
-                                temp.vaccineTwoCount = vaccine[k].surplus;
-                            }
-                            if (k == 2) {
-                                temp.vaccineThreeName = vaccine[k].name;
-                                temp.vaccineThreeCount = vaccine[k].surplus;
-                            }
-                            if (k == 3) {
-                                temp.vaccineFourName = vaccine[k].name;
-                                temp.vaccineFourCount = vaccine[k].surplus;
-                            }
-                            if (k == 4) {
-                                temp.vaccineFiveName = vaccine[k].name;
-                                temp.vaccineFiveCount = vaccine[k].surplus;
-                            }
-                            if (k == 5) {
-                                temp.vaccineSixName = vaccine[k].name;
-                                temp.vaccineSixCount = vaccine[k].surplus;
-                            }
-                        }
-                    } else {
-                        temp.vaccineOneName = '';
-                        temp.vaccineOneCount = '';
-                        temp.vaccineTwoName = '';
-                        temp.vaccineTwoCount = '';
-                        temp.vaccineThreeName = '';
-                        temp.vaccineThreeCount = '';
-                        temp.vaccineFourName = '';
-                        temp.vaccineFourCount = '';
-                        temp.vaccineFiveName = '';
-                        temp.vaccineFiveCount = '';
-                        temp.vaccineSixName = '';
-                        temp.vaccineSixCount = '';
-                    }
-                    this.vaccineData.push(temp);
-                }
+                this.vaccineData = res.data.rs;
+                this.lackNumber = res.data.total;
             },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
@@ -177,13 +135,10 @@
         },
         mounted() {
             //查询首页数据
-            // __app.on("NOW_TEMPERATURE",(data)=>{
-            //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
-            // });
             if(this.device){
-                this.queryDrawerByCondition();
+                this.queryVaccineNum();
                 this.queryAlarmByByCondition();
-                this.queryVaccinationDailyInfo();
+                this.queryVaccineStorageNum();
             }
         }
     }
