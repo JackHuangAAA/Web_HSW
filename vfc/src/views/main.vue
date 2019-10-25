@@ -42,15 +42,17 @@
                         库存状态
                     </div>
                 </div>
-                <div class="vaccineContentContent" v-for="(item,index) in vaccineData">
-                    <div class="vaccineName">
-                        {{item.name}}
-                    </div>
-                    <div class="vaccineAllowance">
-                        {{item.surplus}}
-                    </div>
-                    <div class="allowanceStatus">
-                        缺少库存
+                <div class="vaccineContentContent-table">
+                    <div class="vaccineContentContent" v-for="(item,index) in vaccineData">
+                        <div class="vaccineName">
+                            {{item.name}}
+                        </div>
+                        <div class="vaccineAllowance">
+                            {{item.surplus}}
+                        </div>
+                        <div class="allowanceStatus" :class="{dangerStatus:item.surplus==0}">
+                            缺少库存
+                        </div>
                     </div>
                 </div>
             </div>

@@ -231,8 +231,10 @@
                 this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
                     console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
                     //根据状态，判断是否跳转到首页
-
-                    // this.$router.push('/main');
+                    let res=JSON.parse(data.data)
+                    if(res.status=='finish'){
+                        this.$router.push('/main');
+                    }                    
                 });
             }
         },
@@ -246,7 +248,7 @@
                 unitName: this.device.unitName
             };
             //接收推送的接种信息(home.vue中接收)
-            //this.vaccinationData = this.$route.query.vaccination;
+            // this.vaccinationData = this.$route.query.vaccination;
             //打开需要接种的疫苗所在抽屉
             //this.openDrawer(this.vaccinationData);
             this.receiveVaccinationStatus();

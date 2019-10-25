@@ -131,9 +131,13 @@
     padding-top: 3px;
     padding-bottom: 3px;
     margin-top: 3%;
-    overflow: auto;
     background-image: url(../../public/static/img/main.png);
     background-size: 100% 100%;
+    position: relative;
+}
+.vaccineContentContent-table{
+    overflow: auto;
+    height: 88%;
 }
 .vaccineStatusShow{
     width: calc(50% - 18px);
@@ -325,7 +329,8 @@
 .vaccineContentTitle{
     width: 94%;
     height: 3.5rem;
-    margin: 0 auto;
+    background: white;
+    margin: 0 3%;
     margin-top: 3%;
     line-height: 3.5rem;
     font-weight: bold;
@@ -348,6 +353,9 @@
     height: 100%;
     float: left;
     color: #f28d00;
+}
+.dangerStatus{
+    color: red;
 }
 .vaccineContentContent{
     width: 94%;

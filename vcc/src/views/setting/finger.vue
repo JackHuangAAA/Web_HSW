@@ -1,7 +1,7 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div>
+        <div class="fingerprint-add" v-if="fingerCount<2" @click="addFinger()">新增</div>
         <div class="fingerprint-clear" @click="modal1=true">清除</div>
         <Modal
             v-model="modal1"
@@ -19,6 +19,7 @@
         data() {
             return {
                 modal1:false,
+                fingerCount:0,
             };
         },
         computed: {
@@ -34,6 +35,7 @@
                 saveUser: 'saveUser',
             }),
             ok(){
+                console.log("清楚指纹数据===>")
                 this.delAll()
             },
             cancel(){
@@ -47,8 +49,8 @@
             delAll(){
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                        this.queryUserByCondition({id:this.user._id,finger:[]})
-                        this.user.finger=[]
+                        let arr=[]
+                        this.queryUserByCondition({id:this.user._id,finger:arr})
                     }
                 })
             },
@@ -61,6 +63,7 @@
             }
         },
         mounted() {
+            this.fingerCount=this.user.finger.length
         }
     };
 </script>

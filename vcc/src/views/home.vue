@@ -163,9 +163,9 @@ global.moment = moment;
             //接收接种信息
             receiveVaccination(){
                 this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
-                    if(this.state=true){
+                    if(this.state==true){
                         console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
-                        let vaccination = null;
+                        let vaccination =data.data;
                         this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
                     }
                 });

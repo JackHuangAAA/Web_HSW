@@ -138,10 +138,9 @@
             receiveSOCKET_DATA(){
                 this.$device.subscribe('SOCKET_DATA', (data) => {
                     if(this.state==true){
-                        console.log('SOCKET_DATA====> result:'+JSON.stringify(data));
-                        // console.log("首页推送的信息 result:"+JSON.parse(data))
-                        let data=JSON.parse(data)
-                        if(data.type=="refresh"){
+                        console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
+                        let res=JSON.parse(data.data)
+                        if(res.type=="refresh"){
                             this.queryDrawerByCondition();
                             this.queryAlarmByByCondition();
                             this.queryVaccinationDailyInfo();

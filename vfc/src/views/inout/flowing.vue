@@ -23,13 +23,15 @@
             <Col span="6">有效期</Col>
             <Col span="3">{{action}}数量</Col>
         </Row>
-        <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
-            <Col span="4">{{item.name||'--'}}</Col>
-            <Col span="7">{{item.product||'--'}}</Col>
-            <Col span="4">{{item.code||'--'}}</Col>
-            <Col span="6">{{item.expiry||'--'}}</Col>
-            <Col span="3">{{item.surplus||'--'}}</Col>
-        </Row>
+        <div class="inoculate-table">
+            <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
+                <Col span="4">{{item.name||'--'}}</Col>
+                <Col span="7">{{item.product||'--'}}</Col>
+                <Col span="4">{{item.code||'--'}}</Col>
+                <Col span="6">{{item.expiry||'--'}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus||'--'}}</Col>
+            </Row>
+        </div>
     </div>
 </div>
 </template>
