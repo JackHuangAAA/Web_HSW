@@ -22,7 +22,6 @@ export default {
         return{
             noticeState:false,//提示信息状态
             notice:'',
-            state:false
         }
     },
     computed:{
@@ -48,27 +47,27 @@ export default {
             let user=await this.$api.post('/user/modifyUserById',params)
         },
     },
-    destroyed(){
-        this.state=false
-    },
     mounted(){
         // 设备反馈监听
-        this.state=true
         this.$device.subscribe('FINGER_MESSAGE', (data) => {
-            if(this.state=true){
-                this.notice=data.msg
-                if(data.type==2){//type=1持续录入2完成
-                    this.noticeState=true
-                    let finger=this.user.finger
-                    finger.push('2')
-                    this.modifyUserById({id:this.user._id,finger:finger})
+            this.notice=data.msg
+            if(data.type==2){//type=1持续录入2完成
+                this.noticeState=true
+                let finger=this.user.finger
+                finger.push('2')
+                console.log("目前已有的指纹  =======》 result:"+finger)
+                this.modifyUserById({id:this.user._id,finger:finger})
+                if(finger.length<2){
+                    console.log("录入第二次")
+                    this.register()
+                }else{
                     let to=setTimeout(()=>{
                         this.$emit('save',true)
                         clearTimeout(to)
                     },1500)
-                }else{
-                    this.noticeState=false
                 }
+            }else{
+                this.noticeState=false
             }
         });
         // 执行指纹录入方法

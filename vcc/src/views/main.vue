@@ -69,6 +69,7 @@
                 // temperature: 0,
                 // temperatureDes:'正常',
                 vaccineData:[],
+                state:false
             }
         },
         computed: {
@@ -89,16 +90,6 @@
         },
         components:{},
         methods: {
-            SOCKET_VACCINATION_DATA(){
-                this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
-                    console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
-                });
-            },
-            SOCKET_VACCINATION_STATUS_DATA(){
-                this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
-                    console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
-                });
-            },
             //查询温度报警
             async queryAlarmByByCondition(){
                 let res = await this.$api.get("/alarm/queryAlarmByByCondition",{
@@ -144,6 +135,20 @@
                     this.vaccineData.push(temp);
                 }
             },
+            receiveSOCKET_DATA(){
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_DATA====> result:'+JSON.stringify(data));
+                        // console.log("首页推送的信息 result:"+JSON.parse(data))
+                        let data=JSON.parse(data)
+                        if(data.type=="refresh"){
+                            this.queryDrawerByCondition();
+                            this.queryAlarmByByCondition();
+                            this.queryVaccinationDailyInfo();
+                        }
+                    }
+                });
+            },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
@@ -151,17 +156,20 @@
                 this.$router.push('/inout/outStock');
             }
         },
+        destroyed(){
+            
+        },
         mounted() {
             //查询首页数据
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });
+            this.state=true
             if(this.device){
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();
                 this.queryVaccinationDailyInfo();
-                this.SOCKET_VACCINATION_DATA();
-                this.SOCKET_VACCINATION_STATUS_DATA();
+                this.receiveSOCKET_DATA();
             }
         }
     }

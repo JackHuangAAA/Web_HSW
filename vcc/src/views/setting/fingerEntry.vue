@@ -21,7 +21,6 @@ export default {
         return{
             noticeState:false,//提示信息状态
             notice:'',
-            state:0
         }
     },
     computed:{

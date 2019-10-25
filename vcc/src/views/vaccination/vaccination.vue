@@ -228,11 +228,11 @@
             },
             //接收接种状态
             receiveVaccinationStatus(){
-                this.$device.subscribe('VACCINATION_STATUS', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION_STATUS');
+                this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
+                    console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
                     //根据状态，判断是否跳转到首页
 
-                    this.$router.push('/main');
+                    // this.$router.push('/main');
                 });
             }
         },
