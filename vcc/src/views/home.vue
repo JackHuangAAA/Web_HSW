@@ -162,13 +162,17 @@ global.moment = moment;
             },
             //接收接种信息
             receiveVaccination(){
-                this.$device.subscribe('SOCKET_DATA', (data) => {
-                    if(this.state=true){
-                        console.log('SOCKET_DATA====> result:'+JSON.stringify(data));
-                        let vaccination = null;
+                this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
+                        let vaccination =data.data;
                         this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
                     }
                 });
+            },
+            //关闭指纹登录的指纹查找方法
+            un_fingerSearch(){
+                this.$device.un_fingerSearch()
             }
         },
         //离开页面时阻止消息推送页面跳转
@@ -177,6 +181,7 @@ global.moment = moment;
         },
         mounted(){
             this.state=true
+            this.un_fingerSearch()
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{

@@ -68,7 +68,8 @@
                 customerNumber:0,
                 // temperature: 0,
                 // temperatureDes:'正常',
-                vaccineData:[]
+                vaccineData:[],
+                state:false
             }
         },
         computed: {
@@ -134,6 +135,19 @@
                     this.vaccineData.push(temp);
                 }
             },
+            receiveSOCKET_DATA(){
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
+                        let res=JSON.parse(data.data)
+                        if(res.type=="refresh"){
+                            this.queryDrawerByCondition();
+                            this.queryAlarmByByCondition();
+                            this.queryVaccinationDailyInfo();
+                        }
+                    }
+                });
+            },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
@@ -141,15 +155,20 @@
                 this.$router.push('/inout/outStock');
             }
         },
+        destroyed(){
+            
+        },
         mounted() {
             //查询首页数据
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });
+            this.state=true
             if(this.device){
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();
                 this.queryVaccinationDailyInfo();
+                this.receiveSOCKET_DATA();
             }
         }
     }

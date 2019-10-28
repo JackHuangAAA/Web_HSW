@@ -161,7 +161,8 @@
             //比对疫苗信息
             async matchInfo(){
                 //接收疫苗
-                this.$device.subscribe('VACCINATION_SCAN', (data) => {
+                this.$device.subscribe('SCANNER_RESULT', (data) => {
+                    console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                     this.vaccine = data.data;
                     //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
                     if(this.vaccine.name == this.vaccinationData.name){
@@ -228,13 +229,15 @@
             },
             //接收接种状态
             receiveVaccinationStatus(){
-                this.$device.subscribe('VACCINATION_STATUS', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION_STATUS');
+                this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
+                    console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
                     //根据状态，判断是否跳转到首页
-
-                    this.$router.push('/main');
+                    let res=JSON.parse(data.data)
+                    if(res.status=='finish'){
+                        this.$router.push('/main');
+                    }                    
                 });
-            }
+            },
         },
         mounted() {
             this.commonData = {
@@ -246,7 +249,7 @@
                 unitName: this.device.unitName
             };
             //接收推送的接种信息(home.vue中接收)
-            //this.vaccinationData = this.$route.query.vaccination;
+            // this.vaccinationData = this.$route.query.vaccination;
             //打开需要接种的疫苗所在抽屉
             //this.openDrawer(this.vaccinationData);
             this.receiveVaccinationStatus();

@@ -56,6 +56,7 @@ export default {
       this.rember = true;
       this.GetUser();
     }*/
+    this.un_fingerSearch(0)
   },
   computed:{
   },
@@ -71,6 +72,10 @@ export default {
     GetUser() {
       //this.user = Storages.GetStorage("user");
       //this.pwd = Storages.GetStorage("password");
+    },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch()
     },
     accountBlur(){
       if(!this.user){

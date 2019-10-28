@@ -1,7 +1,7 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div>
+        <div class="fingerprint-add" v-if="fingerCount<2" @click="addFinger()">新增</div>
         <div class="fingerprint-clear" @click="modal1=true">清除</div>
         <Modal
             v-model="modal1"
@@ -15,66 +15,58 @@
 
 <script>
     import { mapGetters, mapActions } from "vuex";
+
     export default {
         data() {
             return {
                 modal1:false,
-                fingerState:false,
+                fingerCount:0
             };
         },
         computed: {
             ...mapGetters({
                 user: "user",
-                device: "device",
+                device: "device"
             })
         },
         watch:{
         },
         methods: {
             ...mapActions({
-                saveUser: 'saveUser',
+                saveUser: 'saveUser'
             }),
             ok(){
                 this.delAll()
             },
             cancel(){
-                this.modal1=false
+                this.modal1=false;
             },
-            //若指纹数小于2 跳到录入页面
+            //
             addFinger(){
-                if(this.user.finger.length<2){
-                    this.fingerState=true
-                    this.$emit('add',false)
-                }else{
-                    this.fingerState=false
-                }
-            },
-            //指纹数小于2 重复录入
-            FingerCountinue(){
-                if(this.fingerState==true){
-                    this.addFinger()
-                }
+                this.$emit('add',false);
             },
             //删除所有指纹
             delAll(){
+                console.log("删除指纹前获取的user信息 result:"+JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                    this.queryUserByCondition({id:this.user._id,finger:[]})
-                    this.user.finger=[]
-                    // this.getFingerInfo()
-                }
+                        console.log("这里已经监听到删除的动作了")
+                        this.deleteFinger({id:this.user._id,finger:[]});
+                    }
                 })
             },
             //指纹数据更新
-            async queryUserByCondition(params){
+            async deleteFinger(params){
                 let res=await this.$api.post('/user/modifyUserById',params)
+                console.log("这里已经监听到更新指纹的动作了 result:"+ JSON.stringify(res))
                 if(res.data.ok==1){
-                    this.user.finger=[]
+                    this.user.finger=[];
+                    this.fingerCount=this.user.finger.length
                 }
             }
         },
         mounted() {
-            this.FingerCountinue()
+            this.fingerCount=this.user.finger.length;
         }
     };
 </script>

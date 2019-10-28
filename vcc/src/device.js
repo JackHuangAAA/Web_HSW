@@ -36,6 +36,11 @@ export default {
         console.log('FINGER===>SEARCH')
         return $d.invoke('FINGER', 'SEARCH');
     },
+    //关闭指纹查找
+    un_fingerSearch(){
+        console.log('FINGER===>UN_SEARCH')
+        return $d.invoke('FINGER', 'UN_SEARCH');
+    },
     //删除全部指纹
     fingerDelAll(params){
         console.log('FINGER===>UN_REGISTER');

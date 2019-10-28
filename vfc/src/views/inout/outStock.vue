@@ -123,8 +123,8 @@
             },
             //扫描枪扫码数量减少后，自动保存
             async scanOut(){
-                //this.$device.subscribe('SCAN_REDUCE_VACCINE', (data) => {
-                console.log('SERVER_PUSH==>SCAN_REDUCE_VACCINE');
+                // this.$device.subscribe('SCANNER_RESULT', (data) => {
+                    // console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                 let result= {code: '1',name:'y1',batchNo:'1', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
                 //查询疫苗数据
                 let vaccine = await this.queryVaccineByCondition({

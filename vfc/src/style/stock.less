@@ -16,6 +16,10 @@
 //     font-size: 1.125rem;
 //     margin-bottom: 1rem;
 // }
+.inoculate-table{
+    overflow: auto;
+    height: 92%;
+}
 .inoculate-table-row{
     margin-bottom: .375rem;
     width: 100%;
@@ -41,7 +45,11 @@
     height: 77%;
     cursor: pointer;
 }
-
+.producer{
+    white-space: nowrap;      /*超出的空白区域不换行*/
+    overflow: hidden;         /*超出隐藏*/
+    text-overflow: ellipsis;  /*文本超出显示省略号*/
+}
 //detail.vue
 .stock-title{
     display: flex;
@@ -49,6 +57,12 @@
     align-items: center;
     font-size: 1.875rem;
     font-weight:400
+}
+.alarmStatus{
+    color: #f28d00;
+}
+.dangerStatus{
+    color: red;
 }
 .stock-title img{
     margin-right: 1.6875rem;

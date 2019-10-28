@@ -1,19 +1,8 @@
 <!--指纹管理-->
 <template>
     <div class="fingerprint card">
-        <!-- <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table>
-        <div align="center">
-            <Button type="primary" @click="register">register</Button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type="dashed" @click="verify">verify</Button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type="text" @click="delAll">delAll</Button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Button type="success" @click="totalAll">totalAll</Button>
-        </div> -->
-        <div class="fingerprint-add" v-if="this.user.finger.length<2" @click="addFinger()">新增</div><!---->
+        <div class="fingerprint-add" v-if="fingerCount<2" @click="addFinger()">新增</div><!---->
         <div class="fingerprint-clear" @click="modal1=true">清除所有</div>
-        <!-- <Table :columns="cols" :data="datas" size="small" :highlight-row="false" :disabled-hover='false'></Table> -->
         <Modal
             v-model="modal1"
             title="消息提示"
@@ -30,39 +19,7 @@
         data() {
             return {
                 modal1:false,
-                fingerState:false,
-                // datas: [],
-                // cols: [
-                // {
-                //     type: 'index',
-                //     width: 150
-                // },{
-                //     title: '指纹CODE',
-                //     key: 'finger'
-                // },{
-                //     title: '操作',
-                //     width: 145,
-                //     render: (h, params) => {
-                //          return h('div', [
-                //                 h('Button', {
-                //                     props: {
-                //                         size: 'small'
-                //                     },
-                //                     style: {
-                //                         border: '1px solid #3399ff',
-                //                         'font-size': '14px',
-                //                         'margin-right':'10px'
-                //                     },
-                //                     on: {
-                //                         click: () => {
-                //                             this.delFinger(params.row);
-                //                         }
-                //                     }
-                //                 },'删除')
-                //          ]);
-                //     }
-                //     }],
-                // data: []
+                fingerCount:0
             };
         },
         computed: {
@@ -79,53 +36,34 @@
                 this.delAll()
             },
             cancel(){
-                this.modal1=false
+                this.modal1=false;
             },
-            //若指纹数小于2 跳到录入页面
+            //
             addFinger(){
-                if(this.user.finger.length<2){
-                    this.fingerState=true
-                    this.$emit('add',false)
-                }else{
-                    this.fingerState=false
-                }
-            },
-            //指纹数小于2 重复录入
-            FingerCountinue(){
-                if(this.fingerState==true){
-                    this.addFinger()
-                }
+                this.$emit('add',false);
             },
             //删除所有指纹
             delAll(){
+                console.log("删除指纹前获取的user信息 result:"+JSON.stringify(this.user))
                 this.$device.fingerDelAll({userId:this.user._id}).then(res => {
                     if(JSON.parse(res.rsp).code==0){
-                    this.queryUserByCondition({id:this.user._id,finger:[]})
-                    this.user.finger=[]
-                }
+                        console.log("这里已经监听到删除的动作了")
+                        this.deleteFinger({id:this.user._id,finger:[]});
+                    }
                 })
             },
             //指纹数据更新
-            async queryUserByCondition(params){
-                console.log("entry")
+            async deleteFinger(params){
                 let res=await this.$api.post('/user/modifyUserById',params)
+                console.log("这里已经监听到更新指纹的动作了 result:"+ JSON.stringify(res))
                 if(res.data.ok==1){
-                    this.user.finger=[]
+                    this.user.finger=[];
+                    this.fingerCount=this.user.finger.length
                 }
             }
-            // getFingerInfo() {
-            //     let data = [];
-            //     for (let f of this.user.finger) {
-            //         let t = {};
-            //         t.finger = f;
-            //         data.push(t);
-            //     }
-            //     this.datas = data
-            // },
         },
         mounted() {
-            // this.getFingerInfo();
-            this.FingerCountinue()
+            this.fingerCount=this.user.finger.length;
         }
     };
 </script>

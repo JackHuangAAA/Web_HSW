@@ -22,7 +22,7 @@
                         </DropdownMenu>
                     </Dropdown>
                     <div class="layout-welcome">
-                        {{ user ? user.name : '李晓文'}}
+                        {{ user ? user.name : '--'}}
                     </div>
                 </div>
             </div>

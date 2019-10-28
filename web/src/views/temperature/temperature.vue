@@ -3,13 +3,13 @@
         <Row>
             <Col span="9" class="main-table-title">温度运行监控</Col>
             <Col span="5" class="main-table-search">
-                <div class="main-table-search-lab">接种单位:</div>                    
+                <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryTemperatures()"/>
             </Col>
             <Col span="5" class="main-table-box">
-                <div class="main-table-box-lab">疫苗柜类型:</div>                    
-                <Select v-model="select" @on-change="search_queryTemperatures()">
-                    <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
+                <div class="main-table-box-lab">类型:</div>                    
+                <Select v-model="select" clearable @on-change="search_queryTemperatures()">
+                    <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
             <Col span="5" class="main-table-box">
@@ -26,15 +26,17 @@
             <Col span="4">温度状态</Col>
             <Col span="5">时间</Col>
         </Row>
-        <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-            <Col span="2" class="id-center">{{index+1}}</Col>
-            <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-            <Col span="3">{{item.device==null?'--':item.device.alias?item.device.alias:'--'}}</Col><!-- Y750230-64368 -->
-            <Col span="5">{{item.unitName||'--'}}</Col>
-            <Col span="3" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value+'℃'||'不明'}}</Col>
-            <Col span="4" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value>=0 && item.degree[0].value<=5?'正常':'异常'}}</Col>
-            <Col span="5">{{item.createDate}}</Col>
-        </Row>
+        <div class="table-body">
+            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
+                <Col span="2" class="id-center">{{index+1}}</Col>
+                <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
+                <Col span="3">{{item.device==null?'--':item.device.alias?item.device.alias:'--'}}</Col><!-- Y750230-64368 -->
+                <Col span="5">{{item.unitName||'--'}}</Col>
+                <Col span="3" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value+'℃'||'不明'}}</Col>
+                <Col span="4" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value>=0 && item.degree[0].value<=5?'正常':'异常'}}</Col>
+                <Col span="5">{{item.createDate}}</Col>
+            </Row>
+        </div>
         <Row>
             <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
@@ -52,17 +54,16 @@ export default {
             lists:[],
             total:0,
             search_active:1,
-            select_type:{
-                0:{
-                    name:'请选择'
+            select_type:[
+                {
+                    name:'接种柜',
+                    key:1
                 },
-                1:{
-                    name:'接种柜'
-                },
-                2:{
-                    name:'冷藏柜'
+                {
+                    name:'冷藏柜',
+                    key:2
                 }
-            }
+            ]
         }
     },
     methods:{

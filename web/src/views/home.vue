@@ -5,10 +5,19 @@
                 <img src="/static/img/s_logo.png" alt="">
             </div>
             <div class="menu-line"></div>
-            <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
+            <!-- <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
                 <img class="menuImg" :src="item.img">
                 {{item.name}}
-            </div>
+            </div> -->
+            <Collapse v-model="current" accordion @on-change="ToHome">
+                <Panel :name="String(index)" v-for="(item,index) in menus" :key="index" :class="{homepage:index==0,bg:index==isactive}">
+                    <!-- <img class="menuImg" src="/static/img/inout.png"> -->
+                    {{item.title}}
+                    <p slot="content"  v-for="(el,i) in item.children" :key="i" @click="changeMenu(el.url)">
+                        {{el.title}}
+                    </p>
+                </Panel>
+            </Collapse>
             <div class="defind">技术支持：银信博荣</div>
         </div>
         <HeaderComponent></HeaderComponent>
@@ -33,6 +42,7 @@
 
         data() {
             return {
+                current:'1',
                 loading: false,
                 menus: [],
                 menu: [
@@ -48,45 +58,49 @@
         computed: {
             ...mapGetters({
                 user: 'user',
-                // isactive:'isactive'
+                currentMenu:'currentMenu'
             })
         },
         components: {
             HeaderComponent,
         },
         methods: {
-            // ...mapActions({
-            //     CurrentMenu: 'setCurrentMenu',
-            // }),
-            changeMenu(index){
-                this.isactive = index;
-                if(index==0){  this.$router.push('/main'); }
-                if(index==1){  this.$router.push('/monitor'); }
-                if(index==2){  this.$router.push('/stock/stock'); }
-                if(index==3){  this.$router.push('/temperature'); }
-                if(index==4){  this.$router.push('/inout/inout'); }
+            ...mapActions({
+                setCurrentMenu: 'setCurrentMenu',
+                saveUser:'saveUser'
+            }),
+            ToHome(index){
+                if(index=='0'){
+                    this.$router.push('/main')
+                }
+                // this.isactive = index;
+                // this.current=index
+            },
+            //菜单跳转
+            changeMenu(url){
+                this.$router.push({path:url})
             },
         },
         mounted() {
             this.isactive=this.$route.name
-            // this.$api.get('/user/current').then((result) => {console.log("VVV9-----------"+JSON.stringify(result.data));
-            //     this.menus = result.data.permission.children;
-            //     this.menus.unshift({
-            //         expand: true,
-            //         icon: "",
-            //         pid: null,
-            //         sort: 0,
-            //         url:'/homePage',
-            //         title: "首页"
-            //     });
-            //     this.saveUser(result.data);
-            //     this.setCurrentMenu(this.menus);
-            //     sessionStorage.setItem('menus', JSON.stringify( this.menus) );
-            //     sessionStorage.setItem('user', JSON.stringify( result.data) );
-            // });
-            // if (this.$route.path == '/') {
-            //     this.$router.push('/main');
-            // }
+            this.$api.get('/user/current').then((result) => {
+                this.menus = result.data.permission.children;
+                this.menus.unshift({
+                    expand: true,
+                    icon: "",
+                    pid: null,
+                    sort: 0,
+                    url:'/homePage',
+                    title: "首页"
+                });
+                this.saveUser(result.data);
+                this.setCurrentMenu(this.menus);
+                sessionStorage.setItem('menus', JSON.stringify( this.menus) );
+                sessionStorage.setItem('user', JSON.stringify( result.data) );
+            });
+            if (this.$route.path == '/') {
+                this.$router.push('/main');
+            }
         }
     }
 </script>

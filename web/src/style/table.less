@@ -1,15 +1,19 @@
 .main-table{
   width: 100%;
-  height: auto;
-  margin-top: 20px;
+  height: calc(100% - 60px);
+  margin-top: 96px;
   margin-bottom: 20px;
   padding: 0 21px;
   padding-bottom: 20px;
   font-size:18px;
   font-weight: bold;
-  min-height: 500px;
+  min-height: 550px;
   color: @black;
   box-shadow:0px 0px 15px 1px rgba(206,210,218,0.43);
+}
+.main-table-height{
+  height: calc(100% - 360px) !important;
+  margin-top: 20px !important;
 }
 .main-table-head{
   font-size: 16px;
@@ -25,6 +29,14 @@
   color: @dark;
   background: @cyan;
   margin-top: 6px;
+}
+.home-table-body{
+  overflow: auto;
+  height: calc(100% - 140px);
+}
+.table-body{
+  overflow: auto;
+  height: calc(100% - 220px);
 }
 .id-center{
   text-align: center;
@@ -121,7 +133,7 @@
 .ivu-page{
   position: absolute;
   right: 53px;
-  top: 30px;
+  top: 10px;
   font-size: 12px;
 }
 .ivu-page-item-active{

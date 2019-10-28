@@ -8,7 +8,7 @@ html, body{
 
 
 html{
-    overflow: auto;
+    overflow: hidden;
 }
 
 .layout {
@@ -16,6 +16,8 @@ html{
     font-family: 微软雅黑;
     font-size: 14px;
     color: #4f5f6f;
+    overflow-x: hidden;
+    min-width: 1360px;
 }
 
 .layout-nav{
@@ -84,12 +86,13 @@ html{
 .layout-main {
     border: 1px #dcdee2;
     margin-bottom: 20px;
-    position: absolute;
-    left: 0;
+    position: fixed;
+    left: 210px;
     right: 0;
     top: 76px;
     height: calc(100% - 102px);
     min-height: 600px;
+    min-width: 1150px;
     //overflow: auto;
 }
 
@@ -142,24 +145,25 @@ html{
     color: @white;
 }
 
-.layout-main-right {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 210px;
-    right: 0px;
-    background:rgba(255,255,255,1);
-    min-width: 1150px;
-}
+// .layout-main-right {
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     left: 210px;
+//     right: 0px;
+//     background:rgba(255,255,255,1);
+//     min-width: 1150px;
+// }
 
 .layout-content {
-    position: absolute;
+    position: fixed;
     top: 0px;
-    left: 0;
+    left: 210px;
     background: #fff;
     border-radius: 4px;
-    width: 100%;
+    width: calc(100% - 210px);
     height: 100%;
+    min-width: 1150px;
     //overflow: auto;
 }
 
@@ -173,4 +177,37 @@ html{
 
 .ivu-table-wrapper{
     width: 100%!important;
+}
+//侧边栏折叠
+.ivu-collapse{
+    border: 0;
+    background: #181F48;
+    font-size: 16px;
+}
+.ivu-collapse > .ivu-collapse-item > .ivu-collapse-header{
+    border: 0;
+    color: #A9ACBC;
+    height: 58px;
+    width: 210px;
+    line-height: 58px;
+}
+.ivu-collapse > .ivu-collapse-item{
+    border: 0;
+}
+.ivu-collapse > .ivu-collapse-item.ivu-collapse-item-active > .ivu-collapse-header{
+    border: 0;
+}
+.ivu-collapse-content{
+    background: #0F1634;
+    cursor: pointer;
+}
+.ivu-collapse-content +.ivu-collapse-content{
+    border: 1px solid #A9ACBC;
+}
+.ivu-collapse-content > .ivu-collapse-content-box{
+    font-size: 15px;
+    padding-left: 20px;
+}
+.homepage .ivu-collapse-content{
+    display: none !important;
 }

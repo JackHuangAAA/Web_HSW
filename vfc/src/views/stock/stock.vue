@@ -27,13 +27,15 @@
             <Col span="6">有效期</Col>
             <Col span="3">库存数量</Col>
         </Row>
-        <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
-            <Col span="4">{{item.name||'--'}}</Col>
-            <Col span="7">{{item.product||'--'}}</Col>
-            <Col span="4">{{item.code||'--'}}</Col>
-            <Col span="6">{{dateFormat(item.expiry)||'--'}}</Col>
-            <Col span="3">{{item.surplus||'--'}}</Col>
-        </Row>
+        <div class="inoculate-table">
+            <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
+                <Col span="4">{{item.name||'--'}}</Col>
+                <Col span="7" class="producer">{{item.product||'--'}}</Col>
+                <Col span="4">{{item.code||'--'}}</Col>
+                <Col span="6">{{dateFormat(item.expiry)||'--'}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus||'--'}}</Col>
+            </Row>
+        </div>
     </div>
 </div>
 </template>
