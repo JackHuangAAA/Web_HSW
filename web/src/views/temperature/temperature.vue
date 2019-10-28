@@ -38,7 +38,7 @@
             </Row>
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -53,6 +53,7 @@ export default {
             active:1,
             lists:[],
             total:0,
+            search_type:false,
             search_active:1,
             select_type:[
                 {
@@ -68,7 +69,8 @@ export default {
     },
     methods:{
         queryTemperatures(){
-            this.search_active=1
+            this.search_active=1;
+            this.search_type=false;
             this.$api.get('/temperature/queryTemperatures',{page:this.active,size:10,test:0}).then(res=>{
                 let data=res.data.rs
                 for(let i=0;i<data.length;i++){
@@ -80,7 +82,8 @@ export default {
             })
         },
         search_queryTemperatures(){
-            this.active=1
+            this.active=1;
+            this.search_type=true;
             let formdata={
                 page:this.active,
                 size:10,
@@ -97,7 +100,6 @@ export default {
                 }
                 this.lists=data
                 this.total=res.data.total
-                console.log(this.lists)
             })
         },
         indexChange(i){

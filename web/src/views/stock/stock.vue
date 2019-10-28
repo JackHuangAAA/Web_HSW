@@ -38,7 +38,7 @@
             </Row> 
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>
                
     </div>
@@ -54,6 +54,7 @@ export default {
             lists:[],
             total:0,
             search_active:1,
+            search_type:false,
             select_type:[
                 {
                     name:'接种柜',
@@ -68,7 +69,8 @@ export default {
     },
     methods:{
         queryDeviceStock(){
-            this.search_active=1
+            this.search_active=1;
+            this.search_type=false;
             this.$api.get('/device/queryDeviceStock',{page:this.active,size:10,test:0}).then(res=>{
                 let data=res.data
                 for(let i=0;i<data.length;i++){
@@ -80,6 +82,7 @@ export default {
         },
         search_queryDeviceStock(){
             this.active=1
+            this.search_type=true;
             let formdata={
                 page:this.search_active,
                 size:10,
