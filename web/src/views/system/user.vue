@@ -5,8 +5,8 @@
             <div class="header">
                 <Form inline class="user-form">
                     <FormItem>
-                        账号:<Input v-model="search.userCode" placeholder="账号" style="width: 180px;"></Input>
-                        用户名称:<Input v-model="search.userName" placeholder="用户名称" style="width: 180px;"></Input>
+                        <label>账号:</label><Input v-model="search.userCode" placeholder="账号" style="width: 180px;"></Input>
+                        <label>用户名称:</label><Input v-model="search.userName" placeholder="用户名称" style="width: 180px;"></Input>
                         <Button type="primary" icon="search" @click="loadOperators('query')">查询</Button>
                         <Button type="primary" icon="plus" @click="showAddUserWin">新增</Button>
                     </FormItem>

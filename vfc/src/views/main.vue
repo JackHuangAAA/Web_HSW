@@ -82,7 +82,8 @@
                 // temperature: 0,
                 // temperatureDes:'正常',
                 vaccineData:[],
-                lackNumber:0
+                lackNumber:0,
+                state:false
             }
         },
         computed: {
@@ -148,7 +149,11 @@
                 this.$router.push('/inout/outStock');
             }
         },
+        destroyed(){
+            this.state=false
+        },
         mounted() {
+            this.state=true
             //查询首页数据
             if(this.device){
                 this.queryVaccineNum();

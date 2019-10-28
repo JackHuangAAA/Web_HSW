@@ -9,7 +9,8 @@ const excluded = [
     '/zcy/checkUser',
     '/user/modifyUserByCode',
     '/device/queryDeviceByCondition',
-    '/device'
+    '/device',
+    '/user/queryUserByCondition'
 ];
 
 const bindUserFilter = async (ctx,next) => {

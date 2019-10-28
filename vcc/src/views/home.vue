@@ -67,6 +67,7 @@ global.moment = moment;
                 temperature:5,
                 temperatureDes:'正常',
                 state:false,
+                audio:null
                 }
                 
         },
@@ -130,13 +131,43 @@ global.moment = moment;
                     this.menuStatus = '展开菜单'
                 }
             },
+            //第一次主动请求温度信息
+            queryTemperature(){
+                console.log("CONTROLLER_BOARD===>TEMPERATURE");
+                this.$device.temperature({num:"1,2,3,4,5"}).then(res=>{
+                    console.log("第一次主动请求数据 result:"+JSON.stringify(res));
+                    let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    if(val>8 || val<2){
+                        this.audio.play();//异常语音播放
+                        this.temperatureDes = '异常';
+                        if(val>8){
+                            temp = '高于正常温度5℃';
+                        }else {
+                            temp = '低于正常温度0℃';
+                        }
+                        this.$api.post("/alarm/saveAlarm", {
+                            device: this.device._id,
+                            deviceType: 1, //1:接种柜;
+                            unitCode: this.device.unitCode,
+                            unitName: this.device.unitName,
+                            type: 1,       //1:温度异常
+                            reason: `当前温度${val},${temp}`
+                        })
+                    }else{
+                        this.temperatureDes = '正常';
+                    }
+                    this.temperature = val;
+                    //保存温度到设备记录
+                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
+                })
+            },
             //接收温度信息
             receiveTemperature(){
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
-                    let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[0].toFixed(1));
+                    let temp = '', val= JSON.parse(data.res)[0].toFixed(1);
                     if(val>8 || val<2){
-                        <audio src="/static/audio/temperatureAbnormal.mp3" autoplay></audio>
+                        this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
                         if(val>8){
                             temp = '高于正常温度5℃';
@@ -171,6 +202,11 @@ global.moment = moment;
                     }
                 });
             },
+            //温度异常语音
+            controllerAudio(){
+                this.audio = new Audio();
+                this.audio.src = '/static/audio/temperatureAbnormal.mp3';
+            },
             //关闭指纹登录的指纹查找方法
             un_fingerSearch(){
                 this.$device.un_fingerSearch()
@@ -196,6 +232,7 @@ global.moment = moment;
             this.receiveTemperature();
             //接收接种信息
             this.receiveVaccination();
+            this.queryTemperature();
 
         }
 }

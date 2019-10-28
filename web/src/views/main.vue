@@ -76,9 +76,9 @@
         <!-- table -->
         <div class="main-table main-table-height">
             <Row>
-                <Col span="18" class="main-table-title">各单位设备数量统计</Col>
-                <Col span="6" class="main-table-search">
-                    <div class="main-table-search-lab">接种单位:</div>                    
+                <Col span="19" class="main-table-title">各单位设备数量统计</Col>
+                <Col span="5" class="main-table-search">
+                    <div class="main-table-search-lab">单位:</div>                    
                     <input v-model="value1" placeholder="" />
                 </Col>
             </Row>
