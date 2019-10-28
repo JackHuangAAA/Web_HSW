@@ -61,11 +61,6 @@ export default {
             }
         },
         async userLogin(form) {
-            form = {
-                code: 'admin',
-                password: '000000',
-
-            };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
                 let user = await this.$api.post("/user/modifyUserByCode", {
