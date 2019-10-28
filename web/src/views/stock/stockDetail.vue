@@ -60,23 +60,22 @@ export default {
             alias:'',
             position:'',
             list:[],
-            total:0,
+            total:0
         }
     },
     created(){
-        this._id=this.$route.query._id
-        this.type=this.$route.query.type
-        this.alias=this.$route.query.alias
-        this.position=this.$route.query.position
+        this._id=this.$route.query._id;
+        this.type=this.$route.query.type;
+        this.alias=this.$route.query.alias;
+        this.position=this.$route.query.position;
         this.queryDeviceByVaccineStock()
     },
     wathch:{
         '$route.path'(to,from){
-            console.log(to,from+'--------------------------------')
-            this._id=this.$route.query._id
+            this._id=this.$route.query._id;
         },
         _id(){
-            this.queryDeviceByVaccineStock()
+            this.queryDeviceByVaccineStock();
         },
     },
     methods:{
@@ -86,21 +85,21 @@ export default {
             page:this.active,
             size:10,
             test:0}).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 // for(let i=0;i<data.length;i++){
                 //     this.$set(data[i],"isShow",false)
                 // }
-                this.total=res.data.total
-                this.list=data
+                this.total=res.data.total;
+                this.list=data;
             })
         },
         indexChange(i){
-            this.active=i
-            this.queryDeviceByVaccineStock()
+            this.active=i;
+            this.queryDeviceByVaccineStock();
         },
         routerTo(){
-            this.$router.go(-1)
-        },
+            this.$router.go(-1);
+        }
     }
 }
 </script>

@@ -98,7 +98,7 @@ export default {
             })
         },
         indexChange(i){
-            this.active=i
+            this.active=i;
             this.queryInouts()
         },
         dateChange(daterange){

@@ -68,19 +68,18 @@ export default {
     },
     methods:{
         queryTemperatures(){
-            this.search_active=1
+            this.search_active=1;
             this.$api.get('/temperature/queryTemperatures',{page:this.active,size:10,test:0}).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
                 }
-                this.lists=data
-                this.total=res.data.total
-                console.log(this.lists)
+                this.lists=data;
+                this.total=res.data.total;
             })
         },
         search_queryTemperatures(){
-            this.active=1
+            this.active=1;
             let formdata={
                 page:this.active,
                 size:10,
@@ -89,28 +88,28 @@ export default {
                 begin:this.dateTime[0]||'',
                 end:this.dateTime[1]||'',
                 test:0
-            }
+            };
             this.$api.get('/temperature/queryTemperatures',formdata).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
                 }
-                this.lists=data
-                this.total=res.data.total
+                this.lists=data;
+                this.total=res.data.total;
                 console.log(this.lists)
             })
         },
         indexChange(i){
-            this.active=i
+            this.active=i;
             this.queryTemperatures()
         },
         dateChange(daterange){
-            this.dateTime=daterange
-            this.search_queryTemperatures()
+            this.dateTime=daterange;
+            this.search_queryTemperatures();
         }
     },
     created(){
-        this.queryTemperatures()
+        this.queryTemperatures();
     },
     watch:{
 
