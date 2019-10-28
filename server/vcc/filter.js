@@ -1,6 +1,7 @@
 /**
  * Created by Administrator on 2019/9/24.
  */
+
 'use strict';
 
 const logger = Libs.logger.getLogger('filter');
@@ -36,6 +37,7 @@ const bindUserFilter = async (ctx,next) => {
                     ctx.body = Libs.response.error(Libs.error('0001', '未登录'));
                 }
             } else {
+                //保存操作流水
                 await next();
             }
         } else {
@@ -99,13 +101,13 @@ module.exports = {
         return app;
     }
 };
-
+//接种柜动作（1、签到；2、签退;3、入库（包含批量）;4、出库（包含批量）;5、接种出库;6、接种信息）
 const operationlogSave = async (ctx) => {
     let logMap = new Map([
-        ["key_checkIn","/inout/saveInouts?test=0"],
-        ["key_checkOut","/inout/saveInouts?test=0"],
-        ["key_getVaccines","/inout/saveInouts?test=0"],
-        ["key_inoutVcc","/inout/saveInouts"],
+        ["key_checkIn","/user/modifyUserByCode"],
+        ["key_checkOut","/user/logout"],
+        ["key_saveInout","/inout/saveInout"],
+        ["key_saveManyInout","/inout/saveManyInout"],
         ["key_vaccinate","/vaccination/saveVaccination"]
     ]);
     //保存操作记录，正式测试将代码块移至 //保存操作记录！！！处
@@ -113,47 +115,98 @@ const operationlogSave = async (ctx) => {
     let result = new Object();
     result.userCode = "1234567";
     result.userName = "李医生";
-    //接种记录
+    //6接种信息
     if (ctx.url.includes(logMap.get("key_vaccinate"))) {
+        await Domain.services.log.saveLog({
+            userCode:result.userCode,
+            userName: result.userName,
+            device: ctx.request.body.device,
+            deviceType: 1,
+            unitCode: ctx.request.body.unitCode,
+            unitName: ctx.request.body.unitName,
+            action: "6",
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        })
+    }
+    //3,4,5出入库记录
+    if (ctx.url.includes(logMap.get("key_saveInout"))) {
+        //type=0接种，type=1入库，type=2出库
+        let action;
+        if (ctx.request.body.type == 1) {
+            action ="3";
+        } else if(ctx.request.body.type == 2){
+            action ="4";
+        } else {
+            action ="5";
+        }
+
+        let query ={
+            userCode:result.userCode,
+            userName: result.userName,
+            device: ctx.request.body.device,
+            deviceType: 1,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: action,
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        };
+
+        await Domain.services.log.saveLog(query);
+    }
+    //3,4,5出入库记录
+    if (ctx.url.includes(logMap.get("key_saveManyInout"))) {
+        //type=0接种，type=1入库，type=2出库
+        let action;
+        if (ctx.request.body[0].type == 1) {
+            action ="3";
+        } else if(ctx.request.body[0].type == 2){
+            action ="4";
+        } else {
+            action ="5";
+        }
+        let query ={
+            userCode:result.userCode,
+            userName: result.userName,
+            device: ctx.request.body[0].device,
+            deviceType: 1,
+            unitCode: ctx.request.body[0].unitCode,
+            unitName: ctx.request.body[0].unitName,
+            action: action,
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        };
+
+        await Domain.services.log.saveLog(query);
+    }
+
+    //1登录
+    if (ctx.url.includes(logMap.get("key_checkIn"))) {
         await Domain.services.log.saveLog({
             userCode: result.userCode,
             userName: result.userName,
             device: ctx.request.body.device,
-            deviceType: "1",
-            unitCode: ctx.request.body.unitCode,
-            unitName: ctx.request.body.unitName,
-            action: "6",
-            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" + "为" + ctx.request.body.customer.name + "接种了" + ctx.request.body.customer.vaccineName,
-            operatorDte: ctx.request.body.createDate
+            deviceType: 1,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: "1",
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
         })
     }
-    //出入库记录
-    if (ctx.url.includes(logMap.get("key_inoutVcc"))) {
-
-
-        //type=1入库，type=2出库
-        console.log(ctx.request.body.type);
-        console.log(typeof (ctx.request.body.type));
-
-        let action,action_name;
-        if (ctx.request.body.type == 1) {
-            action ="4", action_name = "入库";
-        } else {
-            action ="5", action_name = "出库";
-        }
-        console.log(action);
-        let query ={
+    //退出
+    if (ctx.url.includes(logMap.get("key_checkOut"))) {
+        await Domain.services.log.saveLog({
             userCode: result.userCode,
             userName: result.userName,
             device: ctx.request.body.device,
-            deviceType: "1",
-            unitCode: ctx.request.body.unitCode,
-            unitName: ctx.request.body.unitName,
-            action: action,
-            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" +"("+ctx.request.body.x+","+ctx.request.body.y+")"+ action_name + ctx.request.body.total + "支" + ctx.request.body.vaccineName,
-            operatorDte: ctx.request.body.createDate
-        };
-
-        await Domain.services.log.saveLog(query);
+            deviceType: 1,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: "2",
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        })
     }
 }
