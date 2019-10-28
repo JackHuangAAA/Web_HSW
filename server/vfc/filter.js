@@ -68,20 +68,6 @@ const deviceFilter = async ctx => {
                 code: deviceCode, //设备序列号
                 type: 2 //设备类型(1:接种柜;2:冷藏柜)
             });
-            //初始添加抽屉
-            let darwers = []
-            for (let y = 1; y < 7; y++) {
-                for (let x = 1; x < 3; x++) {
-                    let temp = {
-                        device: device._id,
-                        x: x, //列
-                        y: y, //行
-                        vaccine: []
-                    };
-                    darwers.push(temp);
-                }
-            }
-            await Domain.services.drawer.saveDrawer(darwers);
         }
         //保存心跳时间
         let now = new moment();
