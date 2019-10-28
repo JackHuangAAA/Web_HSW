@@ -63,14 +63,9 @@ export default {
             }
         },
         async userLogin(form) {
-            form = {
-                code: 'admin',
-                password: '000000',
-
-            };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
-                this.state=true
+                this.state=true;
                 let user = await this.$api.post("/user/modifyUserByCode", {
                     code: res.data.code,
                     name: res.data.name,
@@ -79,7 +74,7 @@ export default {
                 await this.saveUser(user.data);
                 this.$router.push('/');
             }else{
-                this.state=false
+                this.state=false;
             }
         },
         fingerLogin() {

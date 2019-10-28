@@ -6,12 +6,13 @@
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryDeviceStock()"/>
             </Col>
-            <Col span="6" class="main-table-box">
+            <Col span="5" class="main-table-box">
                 <div class="main-table-box-lab">类型:</div>                    
                 <Select v-model="select" clearable @on-change="search_queryDeviceStock()">
                     <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
+            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryDeviceStock">搜索</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
@@ -38,7 +39,7 @@
             </Row> 
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>
                
     </div>
@@ -54,6 +55,7 @@ export default {
             lists:[],
             total:0,
             search_active:1,
+            search_type:false,
             select_type:[
                 {
                     name:'接种柜',
@@ -68,18 +70,20 @@ export default {
     },
     methods:{
         queryDeviceStock(){
-            this.search_active=1
+            this.search_active=1;
+            this.search_type=false;
             this.$api.get('/device/queryDeviceStock',{page:this.active,size:10,test:0}).then(res=>{
-                let data=res.data
+                let data=res.data;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
                 }
-                this.total=res.data.total
-                this.lists=data
+                this.total=res.data.total;
+                this.lists=data;
             })
         },
         search_queryDeviceStock(){
-            this.active=1
+            this.active=1;
+            this.search_type=true;
             let formdata={
                 page:this.search_active,
                 size:10,
@@ -88,24 +92,29 @@ export default {
                 test:0
             }
             this.$api.get('/device/queryDeviceStock',formdata).then(res=>{
-                let data=res.data
+                let data=res.data;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
                 }
-                this.total=res.data.total
-                this.lists=data
+                this.total=res.data.total;
+                this.lists=data;
             })
         },
         indexChange(i){
-            this.active=i
-            this.queryDeviceStock()
+            if(!this.search_type){
+                this.active=i;
+                this.queryDeviceStock();
+            }else{
+                this.search_active=i;
+                this.search_queryDeviceStock();
+            }
         },
         routerTo(_id,type,alias,position){
-            this.$router.push({path:'/stock/stockDetail',query:{_id:_id,type,alias,position}})
+            this.$router.push({path:'/stock/stockDetail',query:{_id:_id,type,alias,position}});
         }
     },
-    created(){
-        this.queryDeviceStock()
+    mounted(){
+        this.queryDeviceStock();
     },
 
 }

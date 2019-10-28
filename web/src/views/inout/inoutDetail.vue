@@ -80,39 +80,36 @@ export default {
             lists:[]
         }
     },
-    created(){
-        this._id=this.$route.query._id
-        this.queryInouts()
-    },
     methods:{
         queryInouts(){
             this.search_active=1
             this.$api.get('/inout/queryInouts',{size:10,page:this.active,batchId:this._id,test:0}).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
                 }
-                // for(let i=0;i<data.length;i++){
-                //     this.$set(data[i],"isShow",false)
-                // }
-                this.total=res.data.total
-                this.lists=data
-                this.date=data[0].createDate
-                this.type=data[0].deviceType==1?'接种柜':'冷藏柜'
-                this.alias=data[0].device==null?'--':data[0].device.alias?data[0].device.alias:'--'
-                this.position=data[0].unitName
+                this.total=res.data.total;
+                this.lists=data;
+                this.date=data[0].createDate;
+                this.type=data[0].deviceType==1?'接种柜':'冷藏柜';
+                this.alias=data[0].device==null?'--':data[0].device.alias?data[0].device.alias:'--';
+                this.position=data[0].unitName;
             })
         },
         indexChange(i){
-            this.active=i
-            this.queryInouts()
+            this.active=i;
+            this.queryInouts();
         },
         dateChange(daterange){
             this.dateTime=daterange;
         },
         routerTo(){
-            this.$router.go(-1)
+            this.$router.go(-1);
         },
+    },
+    mounted(){
+        this._id=this.$route.query._id;
+        this.queryInouts();
     }
 }
 </script>

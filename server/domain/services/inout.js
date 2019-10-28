@@ -19,7 +19,7 @@ module.exports = {
             query.push({"device": requestBody.deviceId});
         }
         if (!_.isEmpty(requestBody.type)) {
-            query.push({"type":parseInt(requestBody.type)});
+            query.push({"type": parseInt(requestBody.type)});
         }
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});

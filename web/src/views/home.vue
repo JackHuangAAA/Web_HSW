@@ -71,14 +71,14 @@
             }),
             ToHome(index){
                 if(index=='0'){
-                    this.$router.push('/main')
+                    this.$router.push('/main');
                 }
                 // this.isactive = index;
                 // this.current=index
             },
             //菜单跳转
             changeMenu(url){
-                this.$router.push({path:url})
+                this.$router.push({path:url});
             },
         },
         mounted() {

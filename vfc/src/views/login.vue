@@ -61,11 +61,6 @@ export default {
             }
         },
         async userLogin(form) {
-            form = {
-                code: 'admin',
-                password: '000000',
-
-            };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
                 let user = await this.$api.post("/user/modifyUserByCode", {
@@ -74,6 +69,10 @@ export default {
                     type: 1 //医生
                 });
                 await this.saveUser(user.data);
+                this.$device.openDoor().then(res=>{
+                    console.log("开门结果 result:"+ JSON.stringify(res.rsp));
+                    //结果为true门打开了
+                })
                 this.$router.push('/');
             }else{
                 this.state=false
