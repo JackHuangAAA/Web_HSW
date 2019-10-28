@@ -19,7 +19,7 @@ module.exports = {
             query.push({"device": requestBody.deviceId});
         }
         if (!_.isEmpty(requestBody.type)) {
-            query.push({"type": requestBody.type});
+            query.push({"type":parseInt(requestBody.type)});
         }
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});
@@ -31,7 +31,7 @@ module.exports = {
             query.push({"unitName":  new RegExp(requestBody.unitName)});
         }
         if (!_.isEmpty(requestBody.deviceType)) {
-            query.push({"deviceType": requestBody.deviceType});
+            query.push({"deviceType": parseInt(requestBody.deviceType)});
         }
         if (!_.isEmpty(requestBody.batchId)) {
             query.push({"batchId": requestBody.batchId});
