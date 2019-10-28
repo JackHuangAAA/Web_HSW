@@ -11,7 +11,7 @@ const logSchema = mongoose.Schema({
     deviceType: Number, //设备类型
     unitCode: String,   //所属单位编号
     unitName: String,   //所属单位
-    action: String,     //动作（1、签到；2、签退;3、取疫苗;4、入库;5、出库;6、接种）
+    action: String,     //动作（1、签到；2、签退;3、入库（包含批量）;4、出库（包含批量）;5、接种出库;6、接种信息）
     content: String,    //详细内容
     operatorDate: {type: Date, default: Date.now}  //操作时间
 }, {autoIndex: false});
