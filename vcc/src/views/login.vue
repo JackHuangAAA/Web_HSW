@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             show: true,
-            state:true,
+            state:true
         };
     },
     computed: {
@@ -82,20 +82,11 @@ export default {
         },
         accountLogin() {
             this.show = false;
-        },
-        //接收指纹比对结果
-        checkFinger(){
-            /*this.$device.subscribe("FINGER_RESULT", (res) => {
-                console.log('SERVER_PUSH==>FINGER_RESULT');
-            );*/
         }
     },
     mounted() {
-        //this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
-        //this.$device.subscribe("SOCKET_DATA", this.SOCKET());
-        //指纹登录 todo
-        this.checkFinger();
-    },
+
+    }
 };
 </script>
 
