@@ -50,6 +50,11 @@ module.exports = {
     /**
      * 保存温度信息
      * @param requestBody
+     * @param temperature  温度值
+     * @param device  设备id
+     * @param deviceType  设备类型
+     * @param unitCode  单位编号
+     * @param unitName  单位名称
      * @returns {Promise.<requestBody>}
      */
     saveTemperatures: async function(requestBody){
@@ -57,17 +62,21 @@ module.exports = {
         await Domain.models.device.updateOne({'_id': requestBody.device},
             {
                 $set: {
-                    temperature:requestBody.degree[0].value,
+                    temperature:requestBody.temperature,
                     updateDate: new Date()
                 }
             });
 
-        let query = {device:requestBody.device};
-        let result = await Domain.models.temperature.find(query).sort({ createDate : -1 });
-        let time_now = new Date();
+        let query = [{"device":requestBody.device}];
+        let today = moment();
+        let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
+        query.push({ "createDate": dailyInfo });
+        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        let result = await Domain.models.temperature.find(query);
+
         //判断温度是否在安全区间，不是则插入alarm
         let enum_js = require("../enum.js");
-        if(requestBody.degree[0].value>enum_js.TEMPERATURE_REGION.MAX){
+        if(requestBody.temperature>enum_js.TEMPERATURE_REGION.MAX){
             await Domain.models.alarm.create({
                 device:requestBody.device,
                 deviceType:requestBody.deviceType,
@@ -75,9 +84,9 @@ module.exports = {
                 unitName:requestBody.unitName,
                 type:1,
                 reason:'温度过高',
-                createDate:requestBody.createDate
+                createDate:new Date()
             });
-        }else if(requestBody.degree[0].value<enum_js.TEMPERATURE_REGION.MIN){
+        }else if(requestBody.temperature<enum_js.TEMPERATURE_REGION.MIN){
             await Domain.models.alarm.create({
                 device:requestBody.device,
                 deviceType:requestBody.deviceType,
@@ -85,30 +94,34 @@ module.exports = {
                 unitName:requestBody.unitName,
                 type:1,
                 reason:'温度过低',
-                createDate:requestBody.createDate
+                createDate:new Date()
             });
         };
 
         //若存在当天的时间记录，则将温度信息插入已有记录的温度数组
-        time_now_end = time_now.setHours(23,59,59,999);
-        time_now_start = time_now.setHours(0,0,0,0);
 
-        if((result !=null)&&((result[0].createDate.toString().substr(0,10))==(time_now.toString().substr(0,10)))){
+        if(!_.isEmpty(result)){
             return await Domain.models.temperature.updateOne(
-                { device: requestBody.device,
-                  createDate:{$gte:time_now_start,$lte:time_now_end}
-                },
+                query,
                 {
                     $push:{
-                        "degree":requestBody.degree
+                        "degree":{
+                            time: new Date(),
+                            value: requestBody.temperature
+                        }
                     }
-                }
-            );
+                });
         }else{
-            return await Domain.models.temperature.create(requestBody);
+            return await Domain.models.temperature.create({
+                device: requestBody.device,
+                deviceType: requestBody.deviceType,
+                unitCode: requestBody.unitCode,
+                unitName: requestBody.unitName,
+                degree: [{
+                time: new Date(),
+                value: requestBody.temperature
+            }],
+                createDate: new Date()})
         }
-        return Domain.models.temperature.create(requestBody);
-
     }
-
 };
