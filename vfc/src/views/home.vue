@@ -62,7 +62,7 @@ global.moment = moment;
                 isactive: 0,
                 ifShowMenu: false ,
                 menuStatus: '展开菜单',
-                temperature:0,
+                temperature:5,
                 temperatureDes:'正常',
                 audio:null
                 }
@@ -121,10 +121,10 @@ global.moment = moment;
                 this.ifShowMenu = !this.ifShowMenu;
                 if(this.ifShowMenu == true){
                     this.imgMenu = '/static/img/menuclose.png';
-                    this.menuStatus = '折叠菜单'
+                    this.menuStatus = '折叠菜单';
                 }else{
                     this.imgMenu = '/static/img/menuopen.png';
-                    this.menuStatus = '展开菜单'
+                    this.menuStatus = '展开菜单';
                 }
             },
             //第一次主动请求温度信息
@@ -185,7 +185,7 @@ global.moment = moment;
                     // __app.emit("NOW_TEMPERATURE",val);
                     //保存温度到设备记录
                     
-                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
+                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val});
                 });
             },
             //温度异常语音
@@ -195,12 +195,12 @@ global.moment = moment;
             },
             //关闭指纹登录的指纹查找方法
             un_fingerSearch(){
-                this.$device.un_fingerSearch()
+                this.$device.un_fingerSearch();
             }
         },
         mounted(){
             //获取设备信息
-            this.un_fingerSearch()
+            this.un_fingerSearch();
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));

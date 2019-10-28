@@ -51,13 +51,6 @@ export default {
       }
     },
   },
-  mounted() {
-    /*if (Storages.GetStorage("user") != null) {
-      this.rember = true;
-      this.GetUser();
-    }*/
-    this.un_fingerSearch(0)
-  },
   computed:{
   },
   methods: {
@@ -112,6 +105,13 @@ export default {
       };
       this.$emit("Submit", form);
     }
+  },
+  mounted() {
+    /*if (Storages.GetStorage("user") != null) {
+      this.rember = true;
+      this.GetUser();
+    }*/
+    this.un_fingerSearch()
   }
 };
 </script>
