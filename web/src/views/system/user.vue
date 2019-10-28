@@ -3,7 +3,7 @@
         <!--用户列表-->
         <div class="table main-table">
             <div class="header">
-                <Form inline>
+                <Form inline class="user-form">
                     <FormItem>
                         账号:<Input v-model="search.userCode" placeholder="账号" style="width: 180px;"></Input>
                         用户名称:<Input v-model="search.userName" placeholder="用户名称" style="width: 180px;"></Input>
@@ -333,3 +333,6 @@
         }
     }
 </script>
+<style lang="less" scoped>
+@import '~@/style/user.less';
+</style>

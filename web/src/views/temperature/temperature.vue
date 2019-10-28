@@ -1,7 +1,7 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="9" class="main-table-title">温度运行监控</Col>
+            <Col span="8" class="main-table-title">温度运行监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryTemperatures()"/>
@@ -14,8 +14,9 @@
             </Col>
             <Col span="5" class="main-table-box">
                 <div class="main-table-box-time">时间:</div>
-                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="Select date"></DatePicker>
+                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="请选择日期"></DatePicker>
             </Col>
+            <Col span="1"><Button type="primary" class="search_btn">搜索</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
@@ -72,50 +73,51 @@ export default {
             this.search_active=1;
             this.search_type=false;
             this.$api.get('/temperature/queryTemperatures',{page:this.active,size:10,test:0}).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
                 }
-                this.lists=data
-                this.total=res.data.total
-                console.log(this.lists)
+                this.lists=data;
+                this.total=res.data.total;
             })
         },
         search_queryTemperatures(){
             this.active=1;
             this.search_type=true;
             let formdata={
-                page:this.active,
+                page:this.search_active,
                 size:10,
                 deviceType:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName,
                 begin:this.dateTime[0]||'',
                 end:this.dateTime[1]||'',
                 test:0
-            }
+            };
             this.$api.get('/temperature/queryTemperatures',formdata).then(res=>{
-                let data=res.data.rs
+                let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
+                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
                 }
-                this.lists=data
-                this.total=res.data.total
+                this.lists=data;
+                this.total=res.data.total;
             })
         },
         indexChange(i){
-            this.active=i
-            this.queryTemperatures()
+            if(!this.search_type){
+                this.active=i;
+                this.queryTemperatures();
+            }else{
+                this.search_active=i;
+                this.search_queryTemperatures();
+            }
         },
         dateChange(daterange){
-            this.dateTime=daterange
-            this.search_queryTemperatures()
+            this.dateTime=daterange;
+            this.search_queryTemperatures();
         }
     },
-    created(){
-        this.queryTemperatures()
-    },
-    watch:{
-
+    mounted(){
+        this.queryTemperatures();
     }
 }
 </script>

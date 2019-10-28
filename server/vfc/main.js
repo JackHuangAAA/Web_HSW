@@ -30,7 +30,7 @@ if (cluster.isMaster) {
     require('./logsManage');
     require('./devicesOfflineManage');
     require('./summariesManage');
-    require('./homeData');
+    //require('./homeData');
 
 
     for (let i = 0; i < numCPUs; i++) {

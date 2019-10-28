@@ -133,6 +133,7 @@ global.moment = moment;
                     console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
                     let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
                     if(val>8 || val<2){
+                        <audio src="/static/audio/temperatureAbnormal.mp3" autoplay></audio>
                         this.temperatureDes = '异常';
                         if(val>8){
                             temp = '高于正常温度5℃';

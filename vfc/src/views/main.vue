@@ -128,6 +128,19 @@
                 this.vaccineData = res.data.rs;
                 this.lackNumber = res.data.total;
             },
+            receiveSocketData(){
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
+                        let res=JSON.parse(data.data)
+                        if(res.type=="refresh"){
+                            this.queryVaccineNum();
+                            this.queryAlarmByByCondition();
+                            this.queryVaccineStorageNum();
+                        }
+                    }
+                });
+            },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
@@ -141,6 +154,7 @@
                 this.queryVaccineNum();
                 this.queryAlarmByByCondition();
                 this.queryVaccineStorageNum();
+                this.receiveSocketData();
             }
         }
     }

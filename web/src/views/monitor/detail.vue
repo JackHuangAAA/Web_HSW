@@ -1,17 +1,18 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="12" class="main-table-title">疫苗柜运行监控</Col>
-            <Col span="6" class="main-table-search">
+            <Col span="13" class="main-table-title">疫苗柜运行监控</Col>
+            <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="value1" placeholder="" />
             </Col>
-            <Col span="6" class="main-table-box">
+            <Col span="5" class="main-table-box">
                 <div class="main-table-box-lab">类型:</div>                    
                 <Select v-model="value2" class="select">
                     <Option v-for="item in 3" :value="item" :key="item">{{ item }}</Option>
                 </Select>
             </Col>
+            <Col span="1"><Button type="primary" class="search_btn">搜索</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
