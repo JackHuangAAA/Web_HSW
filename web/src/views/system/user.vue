@@ -7,8 +7,8 @@
                     <FormItem>
                         <label>账号:</label><Input v-model="search.userCode" placeholder="账号" style="width: 180px;"></Input>
                         <label>用户名称:</label><Input v-model="search.userName" placeholder="用户名称" style="width: 180px;"></Input>
-                        <Button type="primary" icon="search" @click="loadOperators('query')">查询</Button>
-                        <Button type="primary" icon="plus" @click="showAddUserWin">新增</Button>
+                        <Button type="primary" @click="loadOperators('query')">查询</Button>
+                        <Button type="primary" @click="showAddUserWin">新增</Button>
                     </FormItem>
                 </Form>
             </div>
@@ -246,7 +246,7 @@
                 this.editModalWin = true;
             },
             queryUsers: function (val) {
-                this.$api.get('/user/qyeryUsers', {
+                this.$api.get('/user/queryUsers', {
                     name: this.search.userName,
                     code: this.search.userCode,
                     page: val ? 1 : this.page,

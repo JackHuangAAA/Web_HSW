@@ -51,12 +51,6 @@ export default {
       }
     }
   },
-  mounted() {
-    /*if (Storages.GetStorage("user") != null) {
-      this.rember = true;
-      this.GetUser();
-    }*/
-  },
   methods: {
     SaveUser() {
       //Storages.SaveStorage("user", this.user);
@@ -69,6 +63,10 @@ export default {
     GetUser() {
       //this.user = Storages.GetStorage("user");
       //this.pwd = Storages.GetStorage("password");
+    },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch()
     },
     accountBlur(){
       if(!this.user){
@@ -105,6 +103,13 @@ export default {
       };
       this.$emit("Submit", form);
     }
+  },
+  mounted() {
+    /*if (Storages.GetStorage("user") != null) {
+      this.rember = true;
+      this.GetUser();
+    }*/
+    this.un_fingerSearch();
   }
 };
 </script>

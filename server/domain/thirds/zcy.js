@@ -146,11 +146,13 @@ module.exports = {
     queryVaccine: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = {
+
             code: 'ym991',
             name: '卡介苗',
             supervisionCode: 'jg20190920001',
             expiry: new Date(),
             producer: '上海生物'
+
         };
         return result;
     },
