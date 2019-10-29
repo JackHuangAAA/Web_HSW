@@ -102,7 +102,14 @@
             this.outVaccineIds = this.$route.query.ids;
             this.action = this.$route.query.action;
             this.setAction(this.action);
-            this.getDetails();
+            if(this.action=='入库'){
+                this.leftDatas = _.slice(this.$route.query.inStockDate,0,10);
+                this.rightDatas = _.slice(this.$route.query.inStockDate,10);
+                console.log(this.$route.query.inStockDate)
+            }else{
+                this.getDetails();
+            }
+            
         }
     };
 </script>

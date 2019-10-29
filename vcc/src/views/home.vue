@@ -120,6 +120,8 @@ global.moment = moment;
                     this.$router.push('/setting/setting');
                 }
                 this.ifShowMenu = false;
+                this.imgMenu = '/static/img/menuopen.png';
+                this.menuStatus = '展开菜单'
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;

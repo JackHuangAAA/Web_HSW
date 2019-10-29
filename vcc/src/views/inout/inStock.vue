@@ -125,7 +125,8 @@
                 vaccineThreeX: '',//抽屉3号格疫苗X
                 vaccineFourX: '',//抽屉4号格疫苗X
                 vaccineThreeY: '',//抽屉3号格疫苗Y
-                vaccineFourY: ''//抽屉4号格疫苗Y
+                vaccineFourY: '',//抽屉4号格疫苗Y
+                endData:[]//完成的数据
             }
         },
         computed: {
@@ -215,6 +216,7 @@
                 this.vaccineFourX = this.cabineDatas[index].x;
                 this.vaccineThreeY = this.cabineDatas[index].y;
                 this.vaccineFourY = this.cabineDatas[index].y;
+
                 if(this.addVaccineOne || this.addVaccineTwo || this.addVaccineThree || this.addVaccineFour){
                     this.addForm = true;
                 }
@@ -313,14 +315,36 @@
                         surplus: this.vaccineFourCount
                     });
                 }
+                //入库的数据
+                if(this.addVaccineOne){
+                    this.endData.push({name:this.addVaccineOne,
+                    surplus:this.vaccineOneCount
+                    });
+                }
+                if(this.addVaccineTwo){
+                    this.endData.push( {name:this.addVaccineTwo,
+                    surplus:this.vaccineTwoCount
+                    },);
+                }
+                if(this.addVaccineThree){
+                    this.endData.push({name:this.addVaccineThree,
+                    surplus:this.vaccineThreeCount
+                    },);
+                }
+                if(this.addVaccineFour){
+                    this.endData.push({name:this.addVaccineFour,
+                    surplus:this.vaccineFourCount
+                    });
+                }
                 this.queryDrawerByCondition();
                 this.addForm = false;
             },
             finishInStock(){
-                this.$router.push({ path: '/inout/detail', query: { action: 'in'} });
+                this.$router.push({ path: '/inout/detail', query: { action: 'in', inStockDate:this.endData} });
             }
         },
         mounted() {
+            this.endData=[];
             this.commonData = {
                 type: 1, //1:入库
                 user: this.user._id,

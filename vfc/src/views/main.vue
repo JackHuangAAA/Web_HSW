@@ -118,7 +118,8 @@
                 let res = await this.$api.get("/vaccine/queryVaccineNum",{
                     device: this.device._id
                 });
-                this.vaccineNumber = res.data.length;
+                console.log("result:"+JSON.stringify(res))
+                this.vaccineNumber = res.data.rs.length;
             },
             //查询预警疫苗信息（数量小于等于10）
             async queryVaccineStorageNum(){
