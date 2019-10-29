@@ -146,7 +146,7 @@ module.exports = {
       queryVaccine: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = {
-          code: 'ym20190920134508999',
+          code: 'ym0939',
           name: '脊髓灰质炎疫苗',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
@@ -163,46 +163,46 @@ module.exports = {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = [
           {
-          code: 'ym20190920134508991',
-          name: '脊髓灰质炎疫苗',
+          code: 'ym999',
+          name: '卡介苗',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '上海生物'
         },
           {
-          code: 'ym20190920134508992',
-          name: '麻疹疫苗',
+          code: 'ym992',
+          name: '免费乙肝',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '大连汉信'
         },
           {
-          code: 'ym20190920134508993',
-          name: '乙肝疫苗',
+          code: 'ym993',
+          name: '脊灰灭活疫苗',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '医科院'
         },
           {
-          code: 'ym20190920134508994',
-          name: '水痘',
+          code: 'ym994',
+          name: '百白破',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '武汉生物'
         },
         {
-          code: 'ym20190920134508995',
-          name: '流感疫苗',
+          code: 'ym995',
+          name: '麻风',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '北京天坛'
         },
         {
-          code: 'ym20190920134508996',
-          name: '腮腺炎疫苗',
+          code: 'ym996',
+          name: '麻腮风',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '上海生物'
         }
       ];
         return result;
@@ -220,8 +220,8 @@ module.exports = {
                 code: '089',
                 name: '李义',
                 age: 4,
-                vaccineCode: 'ym20190920134508999',
-                vaccineName: '脊髓灰质炎疫苗',
+                vaccineCode: 'ym991',
+                vaccineName: '卡介苗',
                 vaccineNum: 1
             },
             cabinetNo:"1100002"
