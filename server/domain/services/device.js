@@ -159,9 +159,15 @@ module.exports = {
             query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
         }
         query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
-        //查询疫苗不足的设备信息
+        //查询设备库存信息
+        let result = await Domain.models.device.paginate(query, {
+            sort: {"_id": -1},
+            page: requestBody.page,
+            limit: parseInt(requestBody.size)
+        });
+        return {rs: result.docs, total: result.total};
 
-        return await  Domain.models.device.aggregate([
+/*        return await  Domain.models.device.aggregate([
 
             {$match:query},
             {
@@ -172,44 +178,7 @@ module.exports = {
                     as:"stockdocs"
                 }
             },
-        ]);
-
-        /*let result = await Domain.models.vaccine.find({surplus:0});
-        let deviceId_array = [];
-        for (let index in result){//生成疫苗不足的设备ID数组
-            deviceId_array.push(result[index].device.toString());
-        };
-
-        let result_device = await Domain.models.device.paginate(query, {
-            sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size)
-        });
-
-        let result_objarray=[];
-        for(let i=0; i<result_device.docs.length;i++)
-        {
-            let newObj = {
-                _id:result_device.docs[i]._id,
-                code:result_device.docs[i].code,
-                alias:result_device.docs[i].alias,
-                type:result_device.docs[i].type,
-                status:result_device.docs[i].address,
-                cabinetNo:result_device.docs[i].cabinetNo,
-                unitCode:result_device.docs[i].unitCode,
-                unitName:result_device.docs[i].unitName,
-                notes:result_device.docs[i].notes,
-                createDate:result_device.docs[i].createDate,
-                updateDate:result_device.docs[i].updateDate,
-                flag:1 //1库存正常，0库存不足
-            };
-            if(deviceId_array.includes(result_device.docs[i]._id.toString())){
-                newObj.flag=0;
-            }
-            result_objarray.push(newObj)
-        };
-        return {rs:result_objarray,total:result_device.total};*/
-
+        ]);*/
     },
 
     /**
@@ -219,12 +188,27 @@ module.exports = {
      */
     queryDeviceByVaccineStock: async function(requestBody){
         logger.debug(`queryDeviceByVaccineStock param: ${JSON.stringify(requestBody)}`);
-        let query={device:requestBody.deviceId};
-        let result = await Domain.models.vaccine.paginate(query, {
-            sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size)
-        });
-        return {rs: result.docs, total: result.total};
+        let query={device:mongoose.Types.ObjectId(requestBody.deviceId)};
+        let total,docs;
+        docs = await Domain.models.vaccine.aggregate([{$match:query},{$group:{
+                _id:{
+                    "code":"$code"
+                },
+                count:{$sum:"$surplus"},
+            }}]);
+        total=docs.length;
+
+        docs = await Domain.models.vaccine.aggregate([{$match:query},
+            {$group:{
+                    _id:{
+                        "code":"$code"
+                    },
+                    count:{$sum:"$surplus"},
+                }},
+            {$skip:(requestBody.page-1)*requestBody.size},
+            {$limit:parseInt(requestBody.size)}
+        ]);
+
+        return {rs: docs, total: total};
     },
 };
