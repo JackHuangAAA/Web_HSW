@@ -8,6 +8,7 @@
 
 <script>
 import {mapGetters,mapActions} from 'vuex'
+import config from "@/config";
 export default {
   data() {
     return {
@@ -37,11 +38,16 @@ export default {
       if(!_.isEmpty(user)){
         this.saveUser(user.data[0]);
         await this.$api.post("/user/modifyUserByCode", user);//重点，勿删除
+        this.un_fingerSearch();
         this.$router.push('/');
       }else{
         this.message = '登陆用户不存在';
       }
     },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch();
+    }
   },
   mounted(){
     // 设备反馈监听
@@ -50,23 +56,26 @@ export default {
         this.message=data.msg;
       }else if(data.type==2){
         //data.msg.tag为id
-        let _id=JSON.parse(data.msg).tag
+        let _id=JSON.parse(data.msg).tag;
         if(this.user!=null){
           if(this.user._id==_id){
-            this.message='登录成功'
+            this.message='登录成功';
             this.$api.post("/user/modifyUserByCode", this.user);
-            this.$router.push('/')
+            this.un_fingerSearch();
+            this.$router.push('/');
           }
         }else{
-          this.login(_id)
+          this.login(_id);
         }
       }else if(data.type==3){
         this.message=data.msg;
-        this.fingerLogin()
+        this.fingerLogin();
       }
     });
     //激活指纹模块
-    this.fingerLogin()
+    if(config.env != 'development'){
+      this.fingerLogin();
+    }
   },
 };
 </script>

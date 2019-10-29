@@ -26,6 +26,7 @@
 
 <script>
 //import { Storages } from "@/libs/util.js";
+import config from "@/config";
 export default {
   name: "loginform",
   data() {
@@ -68,32 +69,32 @@ export default {
     },
     //关闭指纹登录的指纹查找方法
     un_fingerSearch(){
-      this.$device.un_fingerSearch()
+      this.$device.un_fingerSearch();
     },
     accountBlur(){
       if(!this.user){
-        this.account=false
+        this.account=false;
       }else{
-        this.account=true
+        this.account=true;
       }
     },
     passwordBlur(){
       if(!this.pwd){
-        this.password=false
+        this.password=false;
       }else{
-        this.password=true
+        this.password=true;
       }
     },
     handleSubmit() {
       if(!this.user && !this.pwd){
-        this.account=false
-        this.password=false
+        this.account=false;
+        this.password=false;
         return
       }else if(!this.user){
-        this.account=false
+        this.account=false;
         return
       }else if(!this.pwd){
-        this.password=false
+        this.password=false;
         return
       }
       if (this.rember) {
@@ -111,7 +112,9 @@ export default {
       this.rember = true;
       this.GetUser();
     }*/
-    this.un_fingerSearch()
+    if(config.env != 'development'){
+      this.un_fingerSearch();
+    }
   }
 };
 </script>
