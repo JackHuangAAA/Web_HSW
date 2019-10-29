@@ -146,11 +146,11 @@ module.exports = {
       queryVaccine: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = {
-          code: 'ym0939',
-          name: '脊髓灰质炎疫苗',
+          code: 'ym991',
+          name: '卡介苗',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
-          producer: '长春生物制药'
+          producer: '上海生物'
         };
         return result;
       },
@@ -163,7 +163,7 @@ module.exports = {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let result = [
           {
-          code: 'ym999',
+          code: 'ym991',
           name: '卡介苗',
           supervisionCode: 'jg20190920001',
           expiry: new Date(),
