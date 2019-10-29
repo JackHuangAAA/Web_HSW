@@ -75,8 +75,8 @@ module.exports = {
         let result = await Domain.models.temperature.find(query);
 
         //判断温度是否在安全区间，不是则插入alarm
-        let enum_js = require("../enum.js");
-        if(requestBody.temperature>enum_js.TEMPERATURE_REGION.MAX){
+
+        if(requestBody.temperature>Domain.enum.TEMPERATURE_REGION.MAX){
             await Domain.models.alarm.create({
                 device:requestBody.device,
                 deviceType:requestBody.deviceType,
@@ -86,7 +86,7 @@ module.exports = {
                 reason:'温度过高',
                 createDate:new Date()
             });
-        }else if(requestBody.temperature<enum_js.TEMPERATURE_REGION.MIN){
+        }else if(requestBody.temperature<Domain.enum.TEMPERATURE_REGION.MIN){
             await Domain.models.alarm.create({
                 device:requestBody.device,
                 deviceType:requestBody.deviceType,
