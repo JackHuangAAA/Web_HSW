@@ -135,7 +135,7 @@
                     this.vaccineData.push(temp);
                 }
             },
-            receiveSOCKET_DATA(){
+            receiveSocketData(){
                 this.$device.subscribe('SOCKET_DATA', (data) => {
                     if(this.state==true){
                         console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
@@ -168,7 +168,7 @@
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();
                 this.queryVaccinationDailyInfo();
-                this.receiveSOCKET_DATA();
+                this.receiveSocketData();
             }
         }
     }

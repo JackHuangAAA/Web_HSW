@@ -1,21 +1,22 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="7" class="main-table-title">出入库记录查询</Col>
+            <Col span="8" class="main-table-title">出入库记录查询</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryInouts()"/>
             </Col>
-            <Col span="6" class="main-table-box">
-                <div class="main-table-box-lab" style="padding-right:5px">类型:</div>                    
+            <Col span="5" class="main-table-box">
+                <div class="main-table-box-lab">类型:</div>                    
                 <Select v-model="select" clearable @on-change="search_queryInouts()">
                     <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
-            <Col span="6" class="main-table-box">
+            <Col span="5" class="main-table-box">
                 <div class="main-table-box-time">时间:</div>
-                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
+                <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="请选择日期" ></DatePicker>
             </Col>
+            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryInouts">搜索</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="1" class="id-center">序号</Col>
@@ -40,7 +41,7 @@
             </Row>
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -55,6 +56,7 @@ export default {
             active:1,
             lists:[],
             total:0,
+            search_type:false,
             search_active:1,
             select_type:[
                 {
@@ -70,18 +72,17 @@ export default {
     },
     methods:{
         queryInouts(){
-            this.search_active=1
+            this.search_active=1;
+            this.search_type=false;
             this.$api.get('/inout/queryInoutsBybatchId',{size:10,page:this.active,test:0}).then(res=>{
-                let data=res.data.rs
-                // for(let i=0;i<data.length;i++){
-                //     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss')
-                // }
-                this.total=res.data.total
-                this.lists=data
+                let data=res.data.rs;
+                this.total=res.data.total;
+                this.lists=data;
             })
         },
         search_queryInouts(){
-            this.active=1
+            this.active=1;
+            this.search_type=true;
             let formdata={
                 size:10,
                 page:this.search_active,
@@ -92,25 +93,31 @@ export default {
                 test:0
             }
             this.$api.get('/inout/queryInoutsBybatchId',formdata).then(res=>{
-                let data=res.data.rs
-                this.total=res.data.total
-                this.lists=data
+                let data=res.data.rs;
+                this.total=res.data.total;
+                this.lists=data;
             })
         },
         indexChange(i){
-            this.active=i;
-            this.queryInouts()
+            if(!this.search_type){
+                this.active=i;
+                this.queryInouts();
+            }else{
+                this.search_active=i;
+                this.search_queryInouts();
+            }
+            
         },
         dateChange(daterange){
             this.dateTime=daterange;
-            this.search_queryInouts()
+            this.search_queryInouts();
         },
         routerTo(_id){
-            this.$router.push({path:'/inout/inoutDetail',query:{_id:_id}})
+            this.$router.push({path:'/inout/inoutDetail',query:{_id:_id}});
         },
     },
-    created(){
-        this.queryInouts()
+    mounted(){
+        this.queryInouts();
     },
 }
 </script>

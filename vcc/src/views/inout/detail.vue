@@ -41,6 +41,7 @@
             </Row>
             </Col>
         </Row>
+        <audio :src="action==='出库'?'/static/audio/outStockEnd.mp3':'/static/audio/inStockEnd.mp3'" autoplay></audio>
     </div>
 </template>
 

@@ -53,6 +53,7 @@
                 </div>
             </div>
         </div>
+        <audio src="/static/audio/outStockEnd.mp3" autoplay></audio>
     </div>
 </template>
 <script>

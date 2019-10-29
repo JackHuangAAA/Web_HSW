@@ -65,6 +65,7 @@
                 </div>
             </div>
         </div>
+        <audio src="/static/audio/inputInStockCount.mp3" autoplay></audio>
     </div>
 </template>
 <script>

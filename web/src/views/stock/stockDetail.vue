@@ -2,10 +2,10 @@
     <div class="main-table main-tb">
         <Row>
             <Col span="19" class="stockDetail-table-title">{{alias}}<span>{{type}}</span><i>{{position}}</i></Col>
-            <Col span="5" class="main-table-search">
+            <!-- <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">疫苗名称:</div>                    
                 <input v-model="value1" placeholder="" />
-            </Col>
+            </Col> -->
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
@@ -63,13 +63,6 @@ export default {
             total:0
         }
     },
-    created(){
-        this._id=this.$route.query._id;
-        this.type=this.$route.query.type;
-        this.alias=this.$route.query.alias;
-        this.position=this.$route.query.position;
-        this.queryDeviceByVaccineStock()
-    },
     wathch:{
         '$route.path'(to,from){
             this._id=this.$route.query._id;
@@ -86,9 +79,6 @@ export default {
             size:10,
             test:0}).then(res=>{
                 let data=res.data.rs;
-                // for(let i=0;i<data.length;i++){
-                //     this.$set(data[i],"isShow",false)
-                // }
                 this.total=res.data.total;
                 this.list=data;
             })
@@ -100,6 +90,13 @@ export default {
         routerTo(){
             this.$router.go(-1);
         }
+    },
+    mounted(){
+        this._id=this.$route.query._id;
+        this.type=this.$route.query.type;
+        this.alias=this.$route.query.alias;
+        this.position=this.$route.query.position;
+        this.queryDeviceByVaccineStock();
     }
 }
 </script>

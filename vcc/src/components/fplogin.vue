@@ -52,7 +52,7 @@ export default {
         //data.msg.tag为id
         let _id=JSON.parse(data.msg).tag
         if(this.user!=null){
-          if(Jthis.user._id==_id){
+          if(this.user._id==_id){
             this.message='登录成功'
             this.$api.post("/user/modifyUserByCode", this.user);
             this.$router.push('/')
