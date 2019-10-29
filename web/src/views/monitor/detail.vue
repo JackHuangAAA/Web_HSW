@@ -4,7 +4,7 @@
             <Col span="13" class="main-table-title">疫苗柜运行监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
-                <input v-model="unitName" placeholder="" />
+                <input v-model="unitName" placeholder="" @keyup.enter="search_queryDevice()" />
             </Col>
             <Col span="5" class="main-table-box">
                 <div class="main-table-box-lab">类型:</div>                    
@@ -12,7 +12,7 @@
                     <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn">搜索</Button></Col>
+            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryDevice()">搜索</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
