@@ -171,7 +171,7 @@ module.exports = {
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   queryUsers: async function (requestBody) {
-    logger.debug(`queryUsers param: ${json.stringify(requestBody)}`);
+    logger.debug(`queryUsers param: ${JSON.stringify(requestBody)}`);
     let query = [];
     if (!_.isEmpty(requestBody.code)) {
       query.push({ code: new RegExp(requestBody.code) });

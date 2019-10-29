@@ -246,7 +246,7 @@
                 this.editModalWin = true;
             },
             queryUsers: function (val) {
-                this.$api.get('/user/qyeryUsers', {
+                this.$api.get('/user/queryUsers', {
                     name: this.search.userName,
                     code: this.search.userCode,
                     page: val ? 1 : this.page,
