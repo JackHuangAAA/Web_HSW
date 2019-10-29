@@ -15,8 +15,6 @@ const excluded = [
 
 const bindUserFilter = async (ctx,next) => {
     try {
-        //绕过用户判断进行操作流水保存，正式测试时将该函数放在下方//保存操作记录！！！
-        await operationlogSave(ctx);
         //检查设备是否已经接入平台
         let result = await deviceFilter(ctx);
         if(result){
@@ -31,11 +29,15 @@ const bindUserFilter = async (ctx,next) => {
                 if (!_.isEmpty(token)) {
                     let result = await Domain.services.user.checkToken(token);
                     ctx.currentUser = result;
+                    //操作流水保存
+                    await operationlogSave(ctx);
                     await next();
                 } else {
                     ctx.body = Libs.response.error(Libs.error('0001', '未登录'));
                 }
             } else {
+                //操作流水保存
+                //await operationlogSave(ctx);
                 await next();
             }
         } else {
@@ -95,11 +97,17 @@ const operationlogSave = async (ctx) => {
         ["key_saveManyInout","/inout/saveManyInout"],
         ["key_vaccinate","/vaccination/saveVaccination"]
     ]);
-    //保存操作记录，正式测试将代码块移至 //保存操作记录！！！处
-    //测试定义登录账户信息//直接获取当前登录账号信息//直接获取当前登录账号信息
-    let result = new Object();
-    result.userCode = "1234567";
-    result.userName = "李医生";
+
+    let userCode,userName;
+    userCode = ctx.currentUser.code;
+    userName = ctx.currentUser.name;
+    let deviceCode = ctx.header['deviceid'];
+    let device = await Domain.services.device.queryDeviceByCondition({
+        code: deviceCode
+    });
+    let unitCode=device[0].unitCode;
+    let unitName=device[0].unitName;
+    let deviceId=device[0]._id;
     //3,4出入库记录
     if (ctx.url.includes(logMap.get("key_saveInout"))) {
         //type=0接种，type=1入库，type=2出库
@@ -111,8 +119,8 @@ const operationlogSave = async (ctx) => {
         }
 
         let query ={
-            userCode:result.userCode,
-            userName: result.userName,
+            userCode:userCode,
+            userName:userName,
             device: ctx.request.body.device,
             deviceType: 2,
             unitCode: unitCode,
@@ -124,9 +132,9 @@ const operationlogSave = async (ctx) => {
 
         await Domain.services.log.saveLog(query);
     }
-    //3,4,5出入库记录
+    //3,4出入库记录
     if (ctx.url.includes(logMap.get("key_saveManyInout"))) {
-        //type=0接种，type=1入库，type=2出库
+        //type=1入库，type=2出库
         let action;
         if (ctx.request.body[0].type == 1) {
             action ="3";
@@ -134,12 +142,12 @@ const operationlogSave = async (ctx) => {
             action ="4";
         }
         let query ={
-            userCode:result.userCode,
-            userName: result.userName,
+            userCode:userCode,
+            userName: userName,
             device: ctx.request.body[0].device,
             deviceType: 2,
-            unitCode: ctx.request.body[0].unitCode,
-            unitName: ctx.request.body[0].unitName,
+            unitCode: unitCode,
+            unitName: unitName,
             action: action,
             content:JSON.stringify(ctx.request.body),
             operatorDte: new Date()
@@ -148,12 +156,12 @@ const operationlogSave = async (ctx) => {
         await Domain.services.log.saveLog(query);
     }
 
-    //1登录
-    if (ctx.url.includes(logMap.get("key_checkIn"))) {
+    //1登录  保存方法写在vcc-routes-user
+    /*if (ctx.url.includes(logMap.get("key_checkIn"))) {
         await Domain.services.log.saveLog({
-            userCode: result.userCode,
-            userName: result.userName,
-            device: ctx.request.body.device,
+            userCode: userCode,
+            userName: userName,
+            device: deviceId,
             deviceType: 2,
             unitCode: unitCode,
             unitName: unitName,
@@ -161,13 +169,13 @@ const operationlogSave = async (ctx) => {
             content:JSON.stringify(ctx.request.body),
             operatorDte: new Date()
         })
-    }
+    }*/
     //退出
     if (ctx.url.includes(logMap.get("key_checkOut"))) {
         await Domain.services.log.saveLog({
-            userCode: result.userCode,
-            userName: result.userName,
-            device: ctx.request.body.device,
+            userCode: userCode,
+            userName: userName,
+            device: deviceId,
             deviceType: 2,
             unitCode: unitCode,
             unitName: unitName,
