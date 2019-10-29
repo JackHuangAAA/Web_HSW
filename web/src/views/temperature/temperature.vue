@@ -16,7 +16,7 @@
                 <div class="main-table-box-time">时间:</div>
                 <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="请选择日期"></DatePicker>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryTemperatures">搜索</Button></Col>
+            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryTemperatures">查询</Button></Col>
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
