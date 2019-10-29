@@ -20,7 +20,7 @@
         </Row>      
         <Row class="main-table-head">
             <Col span="1" class="id-center">序号</Col>
-            <Col span="3">疫苗柜类型</Col>
+            <Col span="3">设备类型</Col>
             <Col span="3">所在单位</Col>
             <Col span="8">操作批次号</Col>
             <Col span="3">疫苗数量</Col>

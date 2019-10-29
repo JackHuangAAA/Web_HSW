@@ -16,8 +16,8 @@
         </Row>      
         <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
-            <Col span="3">疫苗柜类型</Col>
-            <Col span="4">疫苗柜编号</Col>
+            <Col span="3">设备类型</Col>
+            <Col span="4">设备编号</Col>
             <Col span="5">所在单位</Col>
             <Col span="3">所在接种台</Col>
             <Col span="4">库存状态</Col>
