@@ -51,7 +51,7 @@
                             {{item.surplus}}
                         </div>
                         <div class="allowanceStatus" :class="{dangerStatus:item.surplus==0}">
-                            缺少库存
+                            {{item.surplus==0?'库存为零':'缺少库存'}}
                         </div>
                     </div>
                 </div>
