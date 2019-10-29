@@ -125,7 +125,7 @@
             async scanOut(){
                 // this.$device.subscribe('SCANNER_RESULT', (data) => {
                 //     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data));
-                    let result= {code: '1',name:'y1',batchNo:'1', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
+                    let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20191001', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'上海生物制药有限公司'};// 模拟扫描枪返回结果 todo
                     //查询疫苗数据
                     let vaccine = await this.queryVaccineByCondition({
                         'device': this.device._id,

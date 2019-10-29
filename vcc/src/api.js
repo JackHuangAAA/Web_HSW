@@ -37,7 +37,7 @@ export default {
     get: function (url, data) {
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
-            axios.defaults.headers.common['deviceid'] = 'TD0001'; //todo 测试使用
+            axios.defaults.headers.common['deviceid'] = 'DT0001'; //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.get(`/vcc${url}?t=${new Date().getTime()}`, {params: data})
                     .then(response =>{
@@ -61,7 +61,7 @@ export default {
     post: function (url, data) {
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
-            axios.defaults.headers.common['deviceid'] = 'TD0001';  //todo 测试使用
+            axios.defaults.headers.common['deviceid'] = 'DT0001';  //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.post(`/vcc${url}?t=${new Date().getTime()}`, data)
                     .then(response =>{

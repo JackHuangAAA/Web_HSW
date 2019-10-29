@@ -91,7 +91,7 @@
                 vaccineOneX: '',//抽屉1号格疫苗X
                 vaccineTwoX: '',//抽屉2号格疫苗X
                 vaccineOneY: '',//抽屉1号格疫苗Y
-                vaccineTwoY: '',//抽屉2号格疫苗Y
+                vaccineTwoY: ''//抽屉2号格疫苗Y
             }
         },
         computed: {

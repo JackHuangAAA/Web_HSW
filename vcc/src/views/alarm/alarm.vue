@@ -16,7 +16,7 @@
                 </Col>
                 <Col span="3" class="alarm-card-pd">
                     <div class="alarm-card-title">报警类型:</div>
-                    <div class="alarm-card-info">{{item.type}}</div>
+                    <div class="alarm-card-info">{{item.type==1?'温度异常':'库存不足'}}</div>
                 </Col>
                 <Col span="5" class="alarm-card-pd">
                     <div class="alarm-card-title">报警时间:</div>

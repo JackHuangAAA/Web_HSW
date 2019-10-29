@@ -57,12 +57,12 @@ module.exports = {
         secure: false,
         pathRewrite: { "^/api": "" }
       },
-      "/socket.io": {
+      /*"/socket.io": {
         target: "http://localhost:9999",
         secure: false,
         changeOrigin: true,
         ws: true
-      }
+      }*/
     }
   },
   css: {
