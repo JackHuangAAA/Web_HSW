@@ -2,8 +2,8 @@
  * Created by Administrator on 2019/9/24.
  */
 'use strict'
-const router = require('koa-router')()
-const logger = Libs.logger.getLogger('user')
+const router = require('koa-router')();
+const logger = Libs.logger.getLogger('user');
 
 /**
  * @api {POST} /user/modifyUserByCode  按用户code更新用户信息，不存在时插入，存在时修改用户名
@@ -14,9 +14,7 @@ const logger = Libs.logger.getLogger('user')
  * @apiParam {String} name 用户名称
  * @apiSuccess {Object} data 操作返回数据
  */
-router.post(
-    '/modifyUserByCode',
-    Libs.router(async (ctx, next) => {
+router.post('/modifyUserByCode', Libs.router(async (ctx, next) => {
         let user = await Domain.services.user.modifyUserByCode(ctx.request.body);
         ctx.cookies.set('token', user.token);
         //登录操作保存至流水日志
@@ -35,7 +33,7 @@ router.post(
             action: "1",
             content:JSON.stringify(ctx.request.body),
             operatorDte: new Date()
-        })
+        });
         return user;
     })
 );
@@ -49,12 +47,10 @@ router.post(
  * @apiParam {String} code 用户code
  * @apiSuccess {Array} data 操作返回数据数组
  */
-router.get(
-  '/queryUserByCondition',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.queryUserByCondition(ctx.request.query)
+router.get('/queryUserByCondition', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.queryUserByCondition(ctx.request.query);
   })
-)
+);
 
 /**
  * @api {POST} /user/queryUserByCondition  按用户id更新指纹信息
@@ -65,22 +61,18 @@ router.get(
  * @apiParam {Array} finger 用户指纹数组
  * @apiSuccess {Object}  data 操作返回数据
  */
-router.post(
-  '/modifyUserById',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.modifyUserById(ctx.request.body)
+router.post('/modifyUserById', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.modifyUserById(ctx.request.body);
   })
-)
+);
 
 /**
  * 当前用户
  */
-router.get(
-  '/current',
-  Libs.router(async (ctx, next) => {
-    return ctx.currentUser
+router.get('/current', Libs.router(async (ctx, next) => {
+    return ctx.currentUser;
   })
-)
+);
 
 /**
  * 登陆
@@ -95,53 +87,43 @@ router.get(
 /**
  * 登出
  */
-router.get(
-  '/logout',
-  Libs.router(async (ctx, next) => {
-    ctx.cookies.set('token', null)
-    ctx.currentUser = null
+router.get('/logout', Libs.router(async (ctx, next) => {
+    ctx.cookies.set('token', null);
+    ctx.currentUser = null;
   })
-)
+);
 
 /**
  * 查询用户信息
  */
-router.get(
-  '/queryUsers',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.queryUsers(ctx.request.query)
+router.get('/queryUsers', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.queryUsers(ctx.request.query);
   })
-)
+);
 
 /**
  * 增加用户信息
  */
-router.post(
-  '/saveUser',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.saveUser(ctx.request.body)
+router.post('/saveUser', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.saveUser(ctx.request.body);
   })
-)
+);
 
 /**
  * 修改用户信息
  */
-router.post(
-  '/modifyUser',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.modifyUser(ctx.request.body)
+router.post('/modifyUser', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.modifyUser(ctx.request.body);
   })
-)
+);
 
 /**
  * 删除用户信息
  */
-router.post(
-  '/removeUserById',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.user.removeUserById(ctx.request.body)
+router.post('/removeUserById', Libs.router(async (ctx, next) => {
+    return await Domain.services.user.removeUserById(ctx.request.body);
   })
-)
+);
 
 /**
  * 删除指纹信息
@@ -149,9 +131,7 @@ router.post(
  * @apiParam {String} deviceid 设备ID
  * @apiParam {String} code_delete 要删除的指纹代码
  */
-router.post(
-    '/deleteFinger',
-    Libs.router(async (ctx, next) => {
+router.post('/deleteFinger', Libs.router(async (ctx, next) => {
         return await Domain.services.user.deleteFinger(ctx.request.body);
     })
 );
@@ -162,9 +142,7 @@ router.post(
  *  * @apiParam {String} deviceid 设备ID
  * @apiParam {String} code_new 新指纹代码
  */
-router.post(
-    '/saveFinger',
-    Libs.router(async (ctx, next) => {
+router.post('/saveFinger', Libs.router(async (ctx, next) => {
         return await Domain.services.user.saveFinger(ctx.request.body);
     })
 );
