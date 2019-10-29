@@ -26,6 +26,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({"unitCode": requestBody.unitCode});
         }
+        if (!_.isEmpty(requestBody.unitName)) {
+            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
+        }
         if (!_.isEmpty(requestBody.status)) {
             query.push({"status": requestBody.status});
         }

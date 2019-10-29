@@ -19,6 +19,23 @@ router.post(
   Libs.router(async (ctx, next) => {
     let user = await Domain.services.user.modifyUserByCode(ctx.request.body);
     ctx.cookies.set('token', user.token);
+    //登录操作保存至流水日志
+    let device = await Domain.models.device.find({code:ctx.header.deviceid});
+    let deviceId = device[0]._id;
+    let unitCode = device[0].unitCode;
+    let unitName = device[0].unitName;
+    let type = device[0].type;
+    await Domain.services.log.saveLog({
+        userCode: user.code,
+        userName: user.name,
+        device: deviceId,
+        deviceType: type,
+        unitCode: unitCode,
+        unitName: unitName,
+        action: "1",
+        content:JSON.stringify(ctx.request.body),
+        operatorDte: new Date()
+      })
     return user;
   })
 );
