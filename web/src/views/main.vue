@@ -97,15 +97,14 @@
                 <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
                     <Col span="2" class="id-center">{{index+1}}</Col>
                     <Col span="4">{{index%2==0?'望江':'武林'}}</Col>
-                    <Col span="3">1</Col>
-                    <Col span="3">1</Col>
-                    <Col span="3">1</Col>
-                    <Col span="3">1</Col>
-                    <Col span="3">1</Col>
-                    <Col span="3">1</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
                 </Row>
             </div>
-            
         </div>
     </div>
 </template>

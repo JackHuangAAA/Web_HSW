@@ -35,7 +35,7 @@
             </Row>
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -50,6 +50,7 @@ export default {
             search_active:1,
             search_type:false,
             total:0,
+            pageSize:10,
             lists:[],
             select_type:[
                 {
@@ -67,7 +68,7 @@ export default {
         queryDevice(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get("device/queryDevices",{page:this.active,size:10}).then(res=>{
+            this.$api.get("device/queryDevices",{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
                 this.lists=data;
@@ -78,7 +79,7 @@ export default {
             this.search_type=true;
             let formdata={
                 page:this.search_active,
-                size:10,
+                size:this.pageSize,
                 type:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName
             };
@@ -97,6 +98,9 @@ export default {
                 this.search_queryDevice();
             }
         },
+        pageSizeChange(i){
+            this.pageSize=i;
+        }
     },
     mounted(){
         this.queryDevice();

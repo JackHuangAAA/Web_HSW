@@ -5,12 +5,8 @@
                 <img src="/static/img/s_logo.png" alt="">
             </div>
             <div class="menu-line"></div>
-            <!-- <div class="menuBlock" v-for="(item,index) in menu" @click="changeMenu(index)" v-bind:class='{bg:index==isactive}'>
-                <img class="menuImg" :src="item.img">
-                {{item.name}}
-            </div> -->
             <Collapse v-model="current" accordion @on-change="ToHome">
-                <Panel :name="String(index)" v-for="(item,index) in menus" :key="index" :class="{homepage:index==0,bg:index==isactive}">
+                <Panel :name="String(index)" v-for="(item,index) in menus" :key="index" :class="{homepage:index==0}">
                     <!-- <img class="menuImg" src="/static/img/inout.png"> -->
                     {{item.title}}
                     <p slot="content"  v-for="(el,i) in item.children" :key="i" @click="changeMenu(el.url)">
@@ -45,13 +41,6 @@
                 current:'1',
                 loading: false,
                 menus: [],
-                menu: [
-                    {name:'首页',img:'/static/img/home.png'},
-                    {name:'疫苗柜运行监控',img:'/static/img/monitor.png'},
-                    {name:'疫苗柜库存监控',img:'/static/img/stock.png'},
-                    {name:'上报温度查询',img:'/static/img/alarm.png'},
-                    {name:'出入库记录',img:'/static/img/inout.png'}
-                ],
                 isactive:0
             }
         },
@@ -82,7 +71,6 @@
             },
         },
         mounted() {
-            this.isactive=this.$route.name
             this.$api.get('/user/current').then((result) => {
                 this.menus = result.data.permission.children;
                 this.menus.unshift({

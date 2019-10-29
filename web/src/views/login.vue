@@ -115,9 +115,11 @@
                     //if (valid) {
                         this.$api.post('/user/login',{code: this.loginFrm.user,password: md5(this.loginFrm.password).toUpperCase()}).then((result)=>{
                             if(result.code == '0002'){
-                                this.$Message.error(`用户${data.user}不存在`);
+                                this.usererror = `用户${data.user}不存在`;
+                                this.userErrShow = true;
                             }else if(result.code == '0003'){
-                                this.$Message.error(`密码错误`);
+                                this.pwderror = `密码错误`;
+                                this.pwdErrShow = true;
                             }else if(result.code == '0000'){
                                 this.$router.push('/');
                             }

@@ -41,7 +41,7 @@
             </Row>
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -56,6 +56,7 @@ export default {
             active:1,
             lists:[],
             total:0,
+            pageSize:10,
             search_type:false,
             search_active:1,
             select_type:[
@@ -74,7 +75,7 @@ export default {
         queryInouts(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get('/inout/queryInoutsBybatchId',{size:10,page:this.active,test:0}).then(res=>{
+            this.$api.get('/inout/queryInoutsBybatchId',{size:this.pageSize,page:this.active,test:0}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
                 this.lists=data;
@@ -84,7 +85,7 @@ export default {
             this.active=1;
             this.search_type=true;
             let formdata={
-                size:10,
+                size:this.pageSize,
                 page:this.search_active,
                 deviceType:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName,
@@ -115,6 +116,10 @@ export default {
         routerTo(_id){
             this.$router.push({path:'/inout/inoutDetail',query:{_id:_id}});
         },
+        pageSizeChange(i){
+            this.pageSize=i;
+            this.search_queryInouts();
+        }
     },
     mounted(){
         this.queryInouts();
