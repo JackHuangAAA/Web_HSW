@@ -47,6 +47,7 @@
                 </div>
             </div>
         </div>
+        <audio src="/static/audio/inStockEnd.mp3" autoplay></audio>
     </div>
 </template>
 <script>

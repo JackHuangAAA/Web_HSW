@@ -76,9 +76,9 @@
         <!-- table -->
         <div class="main-table main-table-height">
             <Row>
-                <Col span="18" class="main-table-title">各单位设备数量统计</Col>
-                <Col span="6" class="main-table-search">
-                    <div class="main-table-search-lab">接种单位:</div>                    
+                <Col span="19" class="main-table-title">各单位设备数量统计</Col>
+                <Col span="5" class="main-table-search">
+                    <div class="main-table-search-lab">单位:</div>                    
                     <input v-model="value1" placeholder="" />
                 </Col>
             </Row>
@@ -152,13 +152,13 @@
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
-                            this.i_normalCount=data[i].count
+                            this.i_normalCount=data[i].count;
                         }
                         if(data[i]._id.status==2){
-                            this.i_abnormalCount+=data[i].count
+                            this.i_abnormalCount+=data[i].count;
                         }
                         if(data[i]._id.status==0){
-                            this.i_abnormalCount+=data[i].count
+                            this.i_abnormalCount+=data[i].count;
                         }
                     }
                 })
@@ -166,13 +166,13 @@
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
-                            this.f_normalCount=data[i].count
+                            this.f_normalCount=data[i].count;
                         }
                         if(data[i]._id.status==2){
-                            this.f_abnormalCount+=data[i].count
+                            this.f_abnormalCount+=data[i].count;
                         }
                         if(data[i]._id.status==0){
-                            this.f_abnormalCount+=data[i].count
+                            this.f_abnormalCount+=data[i].count;
                         }
                     }
                 })
@@ -182,9 +182,9 @@
             },
             queryAlarmDailyInfo(){
                 this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
-                    let data=res.data
-                    data=data.slice(0,4)
-                    this.alarmList=data
+                    let data=res.data;
+                    data=data.slice(0,4);
+                    this.alarmList=data;
                 })
             },
 

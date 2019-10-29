@@ -41,6 +41,7 @@ export default {
             return new Promise((resolve,reject)=>{
                 axios.get(`/vfc${url}?t=${new Date().getTime()}`, {params: data})
                     .then(response =>{
+                        console.log(response)
                         commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
             });

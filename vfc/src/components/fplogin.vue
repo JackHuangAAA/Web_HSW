@@ -38,11 +38,15 @@ export default {
       if(!_.isEmpty(user)){
         this.saveUser(user.data[0]);
         await this.$api.post("/user/modifyUserByCode", user);//重点，勿删除
+        this.$device.openDoor().then(res=>{
+          console.log("开门结果 result:"+ JSON.stringify(res.rsp));
+          //结果为true门打开了
+        })
         this.$router.push('/');
       }else{
         this.message = '登陆用户不存在';
       }
-    },
+    }
   },
   mounted(){
     // 设备反馈监听
@@ -53,9 +57,12 @@ export default {
         //data.msg.tag为id
         let _id=JSON.parse(data.msg).tag
         if(this.user!=null){
-          if(Jthis.user._id==_id){
+          if(this.user._id==_id){
             this.message='登录成功'
             this.$api.post("/user/modifyUserByCode", this.user);
+            this.$device.openDoor().then(res=>{
+              console.log("开门结果 result:"+ JSON.stringify(res.rsp));
+            });
             this.$router.push('/')
           }
         }else{

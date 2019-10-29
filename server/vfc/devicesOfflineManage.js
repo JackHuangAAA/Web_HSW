@@ -23,9 +23,9 @@ async function updateDeviceStatus() {
             let time_now = new Date();
 
             if((time_now-timestamp_dev)<(1000*60*3)){
-                status = 1;
-            }else{
                 status = 0;
+            }else{
+                status = 1;
             };
 
             await Domain.models.device.updateOne(

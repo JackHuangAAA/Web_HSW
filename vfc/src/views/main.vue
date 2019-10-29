@@ -82,7 +82,8 @@
                 // temperature: 0,
                 // temperatureDes:'正常',
                 vaccineData:[],
-                lackNumber:0
+                lackNumber:0,
+                state:false
             }
         },
         computed: {
@@ -128,6 +129,19 @@
                 this.vaccineData = res.data.rs;
                 this.lackNumber = res.data.total;
             },
+            receiveSocketData(){
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
+                        let res=JSON.parse(data.data)
+                        if(res.type=="refresh"){
+                            this.queryVaccineNum();
+                            this.queryAlarmByByCondition();
+                            this.queryVaccineStorageNum();
+                        }
+                    }
+                });
+            },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
@@ -135,12 +149,17 @@
                 this.$router.push('/inout/outStock');
             }
         },
+        destroyed(){
+            this.state=false
+        },
         mounted() {
+            this.state=true
             //查询首页数据
             if(this.device){
                 this.queryVaccineNum();
                 this.queryAlarmByByCondition();
                 this.queryVaccineStorageNum();
+                this.receiveSocketData();
             }
         }
     }

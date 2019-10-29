@@ -37,7 +37,7 @@ export default {
     data() {
         return {
             show: true,
-            state:true,
+            state:true
         };
     },
     computed: {
@@ -63,14 +63,9 @@ export default {
             }
         },
         async userLogin(form) {
-            form = {
-                code: 'admin',
-                password: '000000',
-
-            };
             let res = await this.$api.get("/zcy/checkUser", form);
             if (res.data.check) {
-                this.state=true
+                this.state=true;
                 let user = await this.$api.post("/user/modifyUserByCode", {
                     code: res.data.code,
                     name: res.data.name,
@@ -79,7 +74,7 @@ export default {
                 await this.saveUser(user.data);
                 this.$router.push('/');
             }else{
-                this.state=false
+                this.state=false;
             }
         },
         fingerLogin() {
@@ -87,20 +82,11 @@ export default {
         },
         accountLogin() {
             this.show = false;
-        },
-        //接收指纹比对结果
-        checkFinger(){
-            /*this.$device.subscribe("FINGER_RESULT", (res) => {
-                console.log('SERVER_PUSH==>FINGER_RESULT');
-            );*/
         }
     },
     mounted() {
-        //this.$device.subscribe("SCANNER_RESULT", this.SCANNER());
-        //this.$device.subscribe("SOCKET_DATA", this.SOCKET());
-        //指纹登录 todo
-        this.checkFinger();
-    },
+
+    }
 };
 </script>
 
