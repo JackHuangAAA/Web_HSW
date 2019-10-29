@@ -21,7 +21,7 @@
                         <div class="cabines">
                             <div class="cabine" v-for="(item,index) in cabineData">
                                 <!-- <Input v-model="value" placeholder="选择疫苗名称" class="chooseVaccine"/> -->
-                                <div class="noVaccine" v-show=item.ifOneChoose>
+                                 <!-- <div class="noVaccine" v-show=item.ifOneChoose>
                                     <Select v-model="item.vaccineOne" class="chooseVaccine" :label-in-value="true" @on-change="selectOne(index,$event)">
                                         <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
                                     </Select>
@@ -41,7 +41,22 @@
                                 <img src="/static/img/add.png" class="addImg2" v-show="item.ifTwoChoose" @click="addVaccineTwo(index)">
                                 <img src="/static/img/del.png" class="delImg" v-show="item.ifVaccineOne" @click="delVaccineOne(index)">
                                 <img src="/static/img/del.png" class="delImgTwo" v-show="item.ifVaccineTwo" @click="delVaccineTwo(index)">
-                            </div>
+                                -->
+                                <div class="vaccineBox">
+                                    <div class="vaccineBox-list" v-for="(item,index) of 4">
+                                        <div>asdasd</div>
+                                        <div>
+                                            <img src="/static/img/del.png">
+                                        </div>
+                                        
+                                    </div>
+                                    <Select class="chooseVaccine" :label-in-value="true" @on-change="selectOne(index,$event)">
+                                        <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
+                                    </Select>
+                                    <img src="/static/img/add.png" class="boxAdd" @click="addVaccine(index)">
+                                    
+                                </div>
+                            </div> 
                         </div>
                     </div>
                     <!--<div class="finish">
@@ -182,55 +197,57 @@
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
-                this.cabineData = res.data;
-                //初始化区域信息
-                this.cabineData.forEach(item =>{
-                    let vaccine = item.vaccine;
-                    //vaccine有值时，控制显示内容
-                    if(vaccine.length>0){
-                        //抽屉只有一中疫苗
-                        if(vaccine.length ==1){
-                            item.vaccineOne = vaccine[0].code;
-                            item.surplus = vaccine[0].surplus;
-                            item.vaccineTwo = "";
-                            item.ifAdd = false;        //第一个加号不可点击
-                            item.ifAddTwo = false;      //第二个加号是可点击
-                            item.ifOneChoose = false;  //第一个select不显示
-                            item.ifTwoChoose = true;  //第二个select显示
-                            item.ifVaccineOne = true; //第一个已选择疫苗显示
-                            item.ifVaccineTwo = false; //第二个已选择疫苗不显示
-                        }
-                        //抽屉只有2中疫苗
-                        if(vaccine.length ==2){
-                            for(let i=0;i<vaccine.length;i++){
-                                if(i=0){
-                                    item.vaccineOne = vaccine[i].code;
-                                    item.surplus = vaccine[i].surplus;
-                                }
-                                if(i=1){
-                                    item.vaccineTwo = vaccine[i].code;
-                                    item.surplus = vaccine[i].surplus;
-                                }
-                                item.ifAdd = false;        //第一个加号不可点击
-                                item.ifAddTwo = false;     //第二个加号不可点击
-                                item.ifOneChoose = false;  //第一个select不显示
-                                item.ifTwoChoose = false;  //第二个select不显示
-                                item.ifVaccineOne = true;  //第一个已选择疫苗显示
-                                item.ifVaccineTwo = true;  //第二个已选择疫苗显示
-                            }
-                        }
-                    }else{
-                        //原始初始化
-                        item.vaccineOne = "";
-                        item.vaccineTwo = "";
-                        item.ifAdd = false;        //第一个加号是否可点击
-                        item.ifAddTwo = false;     //第二个加号是否可点击
-                        item.ifOneChoose = true;   //第一个select是否显示
-                        item.ifTwoChoose = false;  //第二个select是否显示
-                        item.ifVaccineOne = false; //第一个已选择疫苗是否显示
-                        item.ifVaccineTwo = false; //第二个已选择疫苗是否显示
-                    }
-                });
+                console.log(res)
+                this.cabineData=res.data
+                // this.cabineData = res.data;
+                // //初始化区域信息
+                // this.cabineData.forEach(item =>{
+                //     let vaccine = item.vaccine;
+                //     //vaccine有值时，控制显示内容
+                //     if(vaccine.length>0){
+                //         //抽屉只有一中疫苗
+                //         if(vaccine.length ==1){
+                //             item.vaccineOne = vaccine[0].code;
+                //             item.surplus = vaccine[0].surplus;
+                //             item.vaccineTwo = "";
+                //             item.ifAdd = false;        //第一个加号不可点击
+                //             item.ifAddTwo = false;      //第二个加号是可点击
+                //             item.ifOneChoose = false;  //第一个select不显示
+                //             item.ifTwoChoose = true;  //第二个select显示
+                //             item.ifVaccineOne = true; //第一个已选择疫苗显示
+                //             item.ifVaccineTwo = false; //第二个已选择疫苗不显示
+                //         }
+                //         //抽屉只有2中疫苗
+                //         if(vaccine.length ==2){
+                //             for(let i=0;i<vaccine.length;i++){
+                //                 if(i=0){
+                //                     item.vaccineOne = vaccine[i].code;
+                //                     item.surplus = vaccine[i].surplus;
+                //                 }
+                //                 if(i=1){
+                //                     item.vaccineTwo = vaccine[i].code;
+                //                     item.surplus = vaccine[i].surplus;
+                //                 }
+                //                 item.ifAdd = false;        //第一个加号不可点击
+                //                 item.ifAddTwo = false;     //第二个加号不可点击
+                //                 item.ifOneChoose = false;  //第一个select不显示
+                //                 item.ifTwoChoose = false;  //第二个select不显示
+                //                 item.ifVaccineOne = true;  //第一个已选择疫苗显示
+                //                 item.ifVaccineTwo = true;  //第二个已选择疫苗显示
+                //             }
+                //         }
+                //     }else{
+                //         //原始初始化
+                //         item.vaccineOne = "";
+                //         item.vaccineTwo = "";
+                //         item.ifAdd = false;        //第一个加号是否可点击
+                //         item.ifAddTwo = false;     //第二个加号是否可点击
+                //         item.ifOneChoose = true;   //第一个select是否显示
+                //         item.ifTwoChoose = false;  //第二个select是否显示
+                //         item.ifVaccineOne = false; //第一个已选择疫苗是否显示
+                //         item.ifVaccineTwo = false; //第二个已选择疫苗是否显示
+                //     }
+                // });
             }
         },
         mounted() {
