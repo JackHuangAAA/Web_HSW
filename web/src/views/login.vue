@@ -24,8 +24,8 @@
                         <img src="/static/img/pwd.png" slot="suffix" class="login-icon" />
                     </Input>
                     <div class="errortip" v-if="pwdErrShow"><span>{{pwderror}}</span></div>
-                    <Checkbox style="padding: 23px 0px 0px 0px; font-size:19px" v-model="rember" @on-change="save()">记住密码</Checkbox>
                 </FormItem>
+                <Checkbox style="padding: 13px 0px; font-size:19px" v-model="rember" @on-change="save()">记住密码</Checkbox>
             </Form>
             <Button type="primary" class="btn" @click="login(loginFrm)" @on-enter="login(loginFrm)" >登录</Button>
         </div>
