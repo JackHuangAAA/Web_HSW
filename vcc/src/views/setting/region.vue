@@ -124,6 +124,7 @@
                     this.$set(data[i],'name','');
                 }
                 this.cabineData=data
+                this.row=this.cabineData.length/2
             }
         },
         mounted() {
