@@ -39,21 +39,21 @@ router.get('/queryAlarm',
 );
 
 /**
- * @api {GET} /alarm/queryAlarmDailyInfo  查询今日报警信息
- * @apiGroup alarm
+ * @api {GET} /alarm/queryAlarmByCondition  查询当天报警次数及报警信息
+ * @apiGroup Alarm
  * @apiVersion 1.0.0
- * @apiDescription 查询报警信息
- * @apiParam {String} [ifToday] 是否查询今日信息，若无则查询所有时间
- * @apiParam {String} [device] 设备
+ * @apiDescription 查询当天报警次数及报警信息
+ * @apiParam {String} [device] 设备id
+ * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足,不传查询全部)
  * @apiParam {Number} [deviceType] 设备类型
  * @apiParam {String} [unitCode] 所属单位编号
- ** @apiParam {String} [unitName] 所属单位名称
- * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足)
- * @apiSuccess {JSON}  Object  inout model 数组
+ * @apiParam {Date} [ifToday] 是否当日 当日：today；非当日：不使用改参数
+ * @apiSuccess {Array}  rs  当天报警次数信息数组
+ * @apiSuccess {Number}  total 当天报警次数
  */
-router.get('/queryAlarmDailyInfo',
-    Libs.router( async (ctx, next) => {
-        return await Domain.services.alarm.queryAlarmDailyInfo(ctx.request.query);
+router.get('/queryAlarmByCondition',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.alarm.queryAlarmByCondition(ctx.request.query);
     })
 );
 module.exports = router;
