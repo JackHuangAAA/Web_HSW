@@ -316,26 +316,111 @@
                     });
                 }
                 //入库的数据
-                if(this.addVaccineOne){
-                    this.endData.push({name:this.addVaccineOne,
-                    surplus:this.vaccineOneCount
-                    });
+                let flag=true,i_index=0;
+                if(_.isEmpty(this.endData)){
+                    if(this.addVaccineOne){
+                        this.endData.push({name:this.addVaccineOne,
+                        surplus:this.vaccineOneCount
+                        });
+                    }
+                    if(this.addVaccineTwo){
+                        this.endData.push( {name:this.addVaccineTwo,
+                        surplus:this.vaccineTwoCount
+                        },);
+                    }
+                    if(this.addVaccineThree){
+                        this.endData.push({name:this.addVaccineThree,
+                        surplus:this.vaccineThreeCount
+                        },);
+                    }
+                    if(this.addVaccineFour){
+                        this.endData.push({name:this.addVaccineFour,
+                        surplus:this.vaccineFourCount
+                        });
+                    }
+                }else{
+                    if(this.addVaccineOne){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineOne){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineOne,
+                                surplus:this.vaccineOneCount
+                            });
+                        }else{
+                            if(this.vaccineOneCount!=null){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineOneCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineTwo){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineTwo){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push( {name:this.addVaccineTwo,
+                                surplus:this.vaccineTwoCount
+                            });
+                        }else{
+                            if(this.vaccineTwoCount!=null){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineTwoCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineThree){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineThree){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineThree,
+                            surplus:this.vaccineThreeCount
+                            });
+                        }else{
+                            if(this.vaccineThreeCount){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineThreeCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineFour){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineFour){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineFour,
+                            surplus:this.vaccineFourCount
+                            });
+                        }else{
+                            if(this.vaccineFourCount){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineFourCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
                 }
-                if(this.addVaccineTwo){
-                    this.endData.push( {name:this.addVaccineTwo,
-                    surplus:this.vaccineTwoCount
-                    },);
-                }
-                if(this.addVaccineThree){
-                    this.endData.push({name:this.addVaccineThree,
-                    surplus:this.vaccineThreeCount
-                    },);
-                }
-                if(this.addVaccineFour){
-                    this.endData.push({name:this.addVaccineFour,
-                    surplus:this.vaccineFourCount
-                    });
-                }
+                console.log(this.endData);
                 this.queryDrawerByCondition();
                 this.addForm = false;
             },
