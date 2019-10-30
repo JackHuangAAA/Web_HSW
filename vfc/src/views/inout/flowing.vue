@@ -6,12 +6,12 @@
         </div>
         <div class="type">
             类型:
-            <Select v-model="actionType" style="width:70%" clearable @on-change="contextChange">
+            <Select v-model="actionType" style="width:70%;" class="inoculate-select" size="large" clearable @on-change="contextChange">
                 <Option v-for="item in types" :value="item.key" :key="item.key">{{ item.label }}</Option>
             </Select>
         </div>
         <div class="date">
-            日期:<DatePicker type="date" v-model="date" style="width: 200px" clearable @on-change="contextChange"></DatePicker>
+            日期:<DatePicker type="date" size="large" v-model="date" style="width: 200px" placeholder="请选择日期" clearable @on-change="contextChange"></DatePicker>
         </div>
     </Row>
     <div class="inoculate card">
@@ -26,7 +26,7 @@
         <div class="inoculate-table">
             <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
                 <Col span="4">{{item.name}}</Col>
-                <Col span="7" class="producer">{{item.product}}</Col>
+                <Col span="7" class="producer">{{item.product||'--'}}</Col>
                 <Col span="4">{{item.code}}</Col>
                 <Col span="6">{{dateFormat(item.expiry)}}</Col>
                 <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus}}</Col>

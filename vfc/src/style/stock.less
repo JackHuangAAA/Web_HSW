@@ -103,7 +103,7 @@
     left: 0;
     line-height: 80px;
     text-indent: 2rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
 }
 .type{
@@ -112,7 +112,7 @@
     position: absolute;
     left: 25.5%;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 80px;
 }
 .date{
@@ -121,6 +121,40 @@
     position: absolute;
     left: 63.5%;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 80px;
+}
+/deep/.ivu-select-single .ivu-select-selection{
+    height: 40px;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px;
+    line-height: 40px;
+    color: @dark;
+    font-size: 14px;
+}
+/deep/.ivu-input{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+/deep/.ivu-input-icon{
+    height: 40px;
+    line-height: 40px;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px !important;
+    line-height: 40px !important;
+}
+/deep/input::-webkit-input-placeholder { /* WebKit browsers */
+    color: @black;
+    }
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @black;
+    }
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @black;
+    }
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @black;
 }
