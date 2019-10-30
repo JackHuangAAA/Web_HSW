@@ -9,6 +9,7 @@
                     <Option v-for="(item,index) in select_type" :value="index" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col> -->
+            <div class="comeback" @click="routerTo()">返回</div>
         </Row>      
         <Row class="main-table-head">
             <Col span="3" class="id-center">序号</Col>
@@ -19,38 +20,40 @@
             <Col span="3">疫苗数量</Col>
             <!-- <Col span="3">操作</Col> -->
         </Row>
-        <Row  v-for="(item,index) of lists" :key="index">
-            <Row class="main-table-body">
-                <Col span="3" class="id-center">{{index+1}}</Col>
-                <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
-                <Col span="4">{{item.user==null?'--':item.user.name?item.user.name:'--'}}</Col>
-                <Col span="5">{{item.name}}</Col>
-                <Col span="6">{{item.createDate}}</Col>
-                <Col span="3" :class="{abnormal:true}">{{item.type==1?item.total:item.total-item.surplus}}</Col>
-                <!-- <Col span="3" class="open-detail"><div @click="()=>{$set(item,'isShow',!item.isShow)}">{{item.isShow==false?'展开详情':'收起'}}</div></Col> -->
+        <div class="table-body">
+            <Row  v-for="(item,index) of lists" :key="index">
+                <Row class="main-table-body">
+                    <Col span="3" class="id-center">{{index+1}}</Col>
+                    <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
+                    <Col span="4">{{item.user==null?'--':item.user.name?item.user.name:'--'}}</Col>
+                    <Col span="5">{{item.name}}</Col>
+                    <Col span="6">{{item.createDate}}</Col>
+                    <Col span="3">{{item.type==1?item.total:item.total-item.surplus}}</Col>
+                    <!-- <Col span="3" class="open-detail"><div @click="()=>{$set(item,'isShow',!item.isShow)}">{{item.isShow==false?'展开详情':'收起'}}</div></Col> -->
+                </Row>
+                <!-- <Row span="24" class="show" :class="{none:!item.isShow,}">
+                    <Row class="detail-table-head">
+                        <Col span="3" class="id-center">序号</Col>
+                        <Col span="3">疫苗名称</Col>
+                        <Col span="4">批次号</Col>
+                        <Col span="6">生产厂家</Col>
+                        <Col span="5">有效期</Col>
+                        <Col span="3">入库数量</Col>
+                    </Row>
+                    <Row v-for="item of 6" :key="item" class="detail-table-body">
+                        <Col span="3" class="id-center">{{item}}</Col>
+                        <Col span="3">百白破疫苗</Col>
+                        <Col span="4">Y750230-64368</Col>
+                        <Col span="6">北京天坛生物制品股份有限公司</Col>
+                        <Col span="5">2019-09-18 12:30:28</Col>
+                        <Col span="3">80</Col>
+                    </Row>
+                </Row> -->
             </Row>
-            <!-- <Row span="24" class="show" :class="{none:!item.isShow,}">
-                <Row class="detail-table-head">
-                    <Col span="3" class="id-center">序号</Col>
-                    <Col span="3">疫苗名称</Col>
-                    <Col span="4">批次号</Col>
-                    <Col span="6">生产厂家</Col>
-                    <Col span="5">有效期</Col>
-                    <Col span="3">入库数量</Col>
-                </Row>
-                <Row v-for="item of 6" :key="item" class="detail-table-body">
-                    <Col span="3" class="id-center">{{item}}</Col>
-                    <Col span="3">百白破疫苗</Col>
-                    <Col span="4">Y750230-64368</Col>
-                    <Col span="6">北京天坛生物制品股份有限公司</Col>
-                    <Col span="5">2019-09-18 12:30:28</Col>
-                    <Col span="3">80</Col>
-                </Row>
-            </Row> -->
-        </Row>
+        </div>
+        
         <Row>
-            <div class="comeback" @click="routerTo()">返回</div>
-            <Page :total="total" show-elevator :current="active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
     </div>
 </template>
@@ -66,6 +69,7 @@ export default {
             type:'',
             position:'',
             alias:'',
+            pageSize:10,
             select_type:{
                 0:{
                     name:'请选择'
@@ -106,6 +110,10 @@ export default {
         routerTo(){
             this.$router.go(-1);
         },
+        pageSizeChange(i){
+            this.pageSize=i;
+            this.queryInouts();
+        }
     },
     mounted(){
         this._id=this.$route.query._id;
@@ -114,4 +122,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+@import '~@/style/color.less';
+@import '~@/style/inoutDetail.less';
 </style>

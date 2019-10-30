@@ -39,7 +39,7 @@
             </Row> 
         </div>
         <Row>
-            <Page :total="total" show-elevator :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
+            <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>
                
     </div>
@@ -54,6 +54,7 @@ export default {
             active:1,
             lists:[],
             total:0,
+            pageSize:10,
             search_active:1,
             search_type:false,
             select_type:[
@@ -72,7 +73,7 @@ export default {
         queryDeviceStock(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get('/device/queryDeviceStock',{page:this.active,size:10,test:0}).then(res=>{
+            this.$api.get('/device/queryDeviceStock',{page:this.active,size:this.pageSize,test:0}).then(res=>{
                 let data=res.data;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
@@ -86,7 +87,7 @@ export default {
             this.search_type=true;
             let formdata={
                 page:this.search_active,
-                size:10,
+                size:this.pageSize,
                 type:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName,
                 test:0
@@ -111,6 +112,10 @@ export default {
         },
         routerTo(_id,type,alias,position){
             this.$router.push({path:'/stock/stockDetail',query:{_id:_id,type,alias,position}});
+        },
+        pageSizeChange(i){
+            this.pageSize=i;
+            this.search_queryDeviceStock();
         }
     },
     mounted(){

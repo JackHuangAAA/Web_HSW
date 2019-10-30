@@ -41,7 +41,7 @@
                     </div>
                     <div class="finish">
                         <div class="finishButton" @click="openDrawer()">
-                            完成
+                            确定
                         </div>
                     </div>
                 </div>

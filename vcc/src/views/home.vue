@@ -120,6 +120,8 @@ global.moment = moment;
                     this.$router.push('/setting/setting');
                 }
                 this.ifShowMenu = false;
+                this.imgMenu = '/static/img/menuopen.png';
+                this.menuStatus = '展开菜单'
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;
@@ -206,10 +208,6 @@ global.moment = moment;
             controllerAudio(){
                 this.audio = new Audio();
                 this.audio.src = '/static/audio/temperatureAbnormal.mp3';
-            },
-            //关闭指纹登录的指纹查找方法
-            un_fingerSearch(){
-                this.$device.un_fingerSearch()
             }
         },
         //离开页面时阻止消息推送页面跳转
@@ -218,7 +216,6 @@ global.moment = moment;
         },
         mounted(){
             this.state=true
-            this.un_fingerSearch()
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
@@ -233,7 +230,6 @@ global.moment = moment;
             //接收接种信息
             this.receiveVaccination();
             this.queryTemperature();
-
         }
 }
 </script>
