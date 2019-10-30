@@ -3,7 +3,7 @@
     <div class="fingerprint card">
         <div class="fingerprint-info" v-if="fingerCount==2">指纹信息已采集</div>
         <div class="fingerprint-add" v-if="fingerCount<2" @click="addFinger()">新增</div><!---->
-        <div class="fingerprint-clear" @click="modal1=true">清除所有</div>
+        <div class="fingerprint-clear" @click="modal1=true">清除</div>
         <Modal
             v-model="modal1"
             title="消息提示"
