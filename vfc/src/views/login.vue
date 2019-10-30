@@ -17,7 +17,7 @@
                     <loginform v-if="!show" :state="state" @Submit="userLogin"></loginform>
                 </div>
             </div>
-                <img class="bg2" src="/static/img/loginp2.png">
+            <img class="bg2" src="/static/img/loginp2.png">
         </div>
     </div>
 </template>

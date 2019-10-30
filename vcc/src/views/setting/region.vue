@@ -60,11 +60,6 @@
             async addVaccine(index){
                 let drawer = this.cabineData[index];
                 if(drawer.name=="" || drawer.code==""){
-                    this.$Message.error({
-                        content: '请选择疫苗',
-                        duration: 10,
-                        closable: true
-                    });
                     return false;
                 }
                 if(this.cabineData[index].vaccine !== "" && this.cabineData[index].vaccine !== undefined){

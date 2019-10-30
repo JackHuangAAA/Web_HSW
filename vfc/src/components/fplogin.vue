@@ -8,6 +8,7 @@
 
 <script>
 import {mapGetters,mapActions} from 'vuex'
+import config from "@/config";
 export default {
   name: "fplogin",
   data() {
@@ -42,10 +43,15 @@ export default {
           console.log("开门结果 result:"+ JSON.stringify(res.rsp));
           //结果为true门打开了
         })
+        this.un_fingerSearch();
         this.$router.push('/');
       }else{
         this.message = '登陆用户不存在';
       }
+    },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch();
     }
   },
   mounted(){
@@ -60,6 +66,7 @@ export default {
           if(this.user._id==_id){
             this.message='登录成功'
             this.$api.post("/user/modifyUserByCode", this.user);
+            this.un_fingerSearch();
             this.$device.openDoor().then(res=>{
               console.log("开门结果 result:"+ JSON.stringify(res.rsp));
             });
@@ -74,7 +81,9 @@ export default {
       }
     });
     //激活指纹模块
-    this.fingerLogin()
+    if(config.env != 'development'){
+      this.fingerLogin();
+    }
   },
 };
 </script>

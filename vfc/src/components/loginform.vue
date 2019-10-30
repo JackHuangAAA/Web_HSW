@@ -26,6 +26,7 @@
 
 <script>
 //import { Storages } from "@/libs/util.js";
+import config from "@/config";
 export default {
   name: "loginform",
   data() {
@@ -109,7 +110,9 @@ export default {
       this.rember = true;
       this.GetUser();
     }*/
-    this.un_fingerSearch();
+    if(config.env != 'development'){
+      this.un_fingerSearch();
+    }
   }
 };
 </script>
