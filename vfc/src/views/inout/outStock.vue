@@ -131,6 +131,7 @@
                         'device': this.device._id,
                         'code': result.code
                     });
+                    console.log(vaccine)
                     //使用1支，若剩余数量=0，从删除疫苗记录
                     if(vaccine.surplus-1 == 0){
                         //删除疫苗记录
@@ -153,6 +154,7 @@
                         name: result.name,
                         total: vaccine.total,
                         surplus:vaccine.surplus-1,
+                        product:vaccine.product,
                         use: 1
                     });
                     vaccine.invalid='正常';

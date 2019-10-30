@@ -100,7 +100,7 @@
         methods: {
             //查询温度报警
             async queryAlarmByByCondition(){
-                let res = await this.$api.get("/alarm/queryAlarmByByCondition",{
+                let res = await this.$api.get("/alarm/queryAlarmByCondition",{
                     device: this.device._id,
                     type:1,
                     ifToday:'today'
