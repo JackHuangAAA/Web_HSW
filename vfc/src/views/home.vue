@@ -194,15 +194,10 @@ global.moment = moment;
             controllerAudio(){
                 this.audio = new Audio();
                 this.audio.src = '/static/audio/temperatureAbnormal.mp3';
-            },
-            //关闭指纹登录的指纹查找方法
-            un_fingerSearch(){
-                this.$device.un_fingerSearch();
             }
         },
         mounted(){
             //获取设备信息
-            this.un_fingerSearch();
             this.$device.getDeviceCode().then(res => {
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));

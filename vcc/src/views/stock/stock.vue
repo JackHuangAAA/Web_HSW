@@ -21,7 +21,7 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id)">
+                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id,item.nameOne)">
                                 <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
                                     <p class="vaccineOneCount">{{item.countOne||0}}支</p>
@@ -114,8 +114,10 @@
                     this.cabineDatas.push(temp);
                 }
             },
-            detail(drawerId){
-                this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
+            detail(drawerId,name){
+                if(!_.isEmpty(name)){
+                    this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
+                }
             }
         },
         mounted() {
