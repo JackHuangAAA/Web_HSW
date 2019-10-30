@@ -6,21 +6,21 @@
             <div>{{action}}人员：{{user.name}}</div>
             <div>{{action}}时间：{{now}}</div>
         </div>
-        <div class="goHome" @click="goHome()"></div>
+        <div class="goHome" @click="goHome()" style="margin-right:0.73%"></div>
         <!--head-->
         <Row>
             <Col span="12" class="column-pd">
                 <Row class=" row-center">
                     <Col span="6">#</Col>
-                    <Col span="9">疫苗名称</Col>
-                    <Col span="9">{{action}}数量</Col>
+                    <Col span="11">疫苗名称</Col>
+                    <Col span="7">{{action}}数量</Col>
                 </Row>
             </Col>
             <Col span="12" class="column-pd">
                 <Row class=" row-center">
                     <Col span="6">#</Col>
-                    <Col span="9">疫苗名称</Col>
-                    <Col span="9">{{action}}数量</Col>
+                    <Col span="11">疫苗名称</Col>
+                    <Col span="7">{{action}}数量</Col>
                 </Row>
             </Col>
         </Row>
@@ -29,15 +29,15 @@
             <Col span="12" class="column-pd">
             <Row v-for="(item, index) in leftDatas" class="stock-row row-center">
                 <Col span="6">{{index+1}}</Col>
-                <Col span="9">{{item.name}}</Col>
-                <Col span="9">{{item.surplus}}</Col>
+                <Col span="11">{{item.name}}</Col>
+                <Col span="7">{{item.surplus}}</Col>
             </Row>
             </Col>
             <Col span="12" class="column-pd">
             <Row v-for="(item, index) in rightDatas" class="stock-row row-center">
                 <Col span="6">{{index+10}}</Col>
-                <Col span="9">{{item.name}}</Col>
-                <Col span="9">{{item.surplus}}</Col>
+                <Col span="11">{{item.name}}</Col>
+                <Col span="7">{{item.surplus}}</Col>
             </Row>
             </Col>
         </Row>

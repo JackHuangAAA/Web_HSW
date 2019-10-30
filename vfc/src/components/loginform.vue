@@ -8,7 +8,7 @@
       <div class="loginform-notice" :class="{'loginform-notice-hide':account}">账户不能为空</div>
     </Row>
     
-    <Row style="padding-top:24px;" class="loginform-row">
+    <Row style="padding-top:40px;" class="loginform-row">
       <Input v-model="pwd" type="password" autocomplete="off" placeholder="密码" @on-blur="passwordBlur">
         <img src="/static/img/pwd.png" class="icon" slot="suffix">
       </Input>
@@ -18,7 +18,7 @@
     <!--<Row style="padding-top:19px">
       <Checkbox style="font-size:16px;" v-model="rember">记住密码</Checkbox>
     </Row>-->
-    <Row style="padding-top:34px">
+    <Row style="padding-top:44px">
       <Button style="height:53px;font-size:20px;margin-bottom:7px;" type="primary" @click="handleSubmit()" long>登录</Button>
     </Row>
   </div>

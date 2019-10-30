@@ -104,7 +104,7 @@
     left: 0;
     line-height: 80px;
     text-indent: 2rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
 }
 .type{
@@ -113,7 +113,7 @@
     position: absolute;
     left: 25.5%;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 80px;
 }
 .date{
@@ -124,4 +124,42 @@
     font-weight: bold;
     font-size: 1rem;
     line-height: 80px;
+}
+.ivu-select{
+    height: 40px;
+}
+/deep/ .ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    font-size: 1rem;
+    height: 40px !important;  
+}
+/deep/ .ivu-select-large.ivu-select-single .ivu-select-selection{
+    height: 40px !important;
+}
+/deep/ .ivu-select-single .ivu-select-selection .ivu-select-placeholder{
+    color: @black !important;
+    line-height: 40px !important;
+}
+/deep/ .ivu-date-picker-rel{
+    height: 40px !important;
+    font-size: 1rem;
+}
+/deep/ .ivu-input-wrapper{
+    height: 40px !important;
+}
+/deep/ .ivu-input-with-suffix{
+    height: 40px;
+    line-height: 40px;
+    color: @black !important;
+}
+/deep/input::-webkit-input-placeholder { /* WebKit browsers */
+    color: @black;
+    }
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @black;
+    }
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @black;
+    }
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @black;
 }
