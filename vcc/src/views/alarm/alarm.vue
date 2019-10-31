@@ -56,12 +56,13 @@
         },
         methods: {
             getAlarms() {
-                this.$api.get("alarm/queryAlarmByByCondition", {
+                this.$api.get("alarm/queryAlarmByCondition", {
                         device: this.device._id,
                         ifToday: "today"
                     }).then(res => {
                         this.datas = res.data;
                     });
+
             },
             getAlarmDate(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
