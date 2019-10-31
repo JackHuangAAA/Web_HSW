@@ -152,7 +152,8 @@
                         code: result.code,
                         name: result.name,
                         total: vaccine.total,
-                        surplus:vaccine.surplus-1,
+                        surplus: vaccine.surplus-1,
+                        product: vaccine.product,
                         use: 1
                     });
                     vaccine.invalid='正常';
