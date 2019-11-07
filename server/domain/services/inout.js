@@ -47,7 +47,7 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
 
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let total,docs;
         docs = await Domain.models.inout.aggregate([{$match:query},{$group:{
                 _id:{
@@ -122,7 +122,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.inout.find(query);
     },
 
@@ -166,7 +166,7 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
 
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
             populate:[{path:'user',select:'name'},{path:'device',select:'alias'}],
@@ -202,7 +202,7 @@ module.exports = {
             query.push({"createDate": {"$gte": date.startOf('day').toDate()}});
             query.push({"createDate": {"$lte": date.endOf('day').toDate()}});
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.inout.find(query,null, sort);
     },
 

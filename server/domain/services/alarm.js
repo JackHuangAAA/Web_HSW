@@ -14,7 +14,7 @@ module.exports = {
      * @returns
      */
     queryAlarmByCondition: async function (requestBody) {
-        logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
+        logger.debug(`queryAlarmByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.ifToday)) {
            let today = moment();
@@ -32,7 +32,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.alarm.find(query);
         return result;
     },
@@ -54,7 +54,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.alarm.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page || 1,

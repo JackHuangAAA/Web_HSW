@@ -36,7 +36,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
-        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccine.find(query)
         return { rs: result, total: result.length }
     },
@@ -151,7 +151,7 @@ module.exports = {
         if (requestBody.sortSurplus) {
             sort = {sort:{surplus: 1}};
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.vaccine.find(query,null, sort);
     },
 
@@ -169,7 +169,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({"name": requestBody.name});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccine.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,

@@ -212,7 +212,7 @@ module.exports = {
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
-        $set: requestBody
+        $set: {...requestBody}
       }
     )
   },
