@@ -47,7 +47,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.summary.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,

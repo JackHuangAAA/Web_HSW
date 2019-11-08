@@ -35,7 +35,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.cabinetNo)) {
             query.push({"cabinetNo": requestBody.cabinetNo});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.device.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,
@@ -100,7 +100,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.type)) {
             query.push({"type": requestBody.type});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.device.find(query);
     },
 
@@ -123,7 +123,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.type)) {
             query.push({"type": parseInt(requestBody.type)});
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         if(requestBody.flag=="1"){
 
             return await Domain.models.device.aggregate([{$group:{
@@ -158,7 +158,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitName)) {
             query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         //查询设备库存信息
         let result = await Domain.models.device.paginate(query, {
             sort: {"_id": -1},

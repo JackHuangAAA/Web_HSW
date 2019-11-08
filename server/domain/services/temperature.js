@@ -36,7 +36,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.temperature.paginate(query, {
             sort: {"_id": -1},
             populate:[{path:'device',select:'code alias'}],
@@ -71,7 +71,7 @@ module.exports = {
         let today = moment();
         let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
         query.push({ "createDate": dailyInfo });
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.temperature.find(query);
 
         //判断温度是否在安全区间，不是则插入alarm
