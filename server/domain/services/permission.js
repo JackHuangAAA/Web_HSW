@@ -101,62 +101,53 @@ module.exports = {
     createPermissionTree: async function (menuData) {
         logger.debug('createPermissionTree:' + JSON.stringify(menuData));
         const allMenu = await Domain.models.menu.find({}, null);
-        const newMenu=[];
-        newMenu=allMenu.map(function(item,index){
-            let newItem={};
-            if(item.title==menuData[index].title){
-                newItem=item;
-                
+        let allMenuMap = new Map();
+        allMenu.forEach(item => {
+            allMenuMap.set(item._id.toString(), item)
+        });
+        let newMenu = [];
+        let itemParent = {};
+        let allParentArray = []
+        // 获取所有可能出现的菜单父类
+        menuData.forEach(item => {
+            if (!item.children || item.children.length == 0) {
+                if (allMenuMap.get(item.pid)) {
+                    itemParent = allMenuMap.get(item.pid);
+                    itemParent.children.push(item);
+                    allParentArray.push(itemParent)
+                }
             }
-            return 
-        })
-        // let allMenuMap = new Map();
-        // allMenu.forEach(item => {
-        //     allMenuMap.set(item._id.toString(), item)
-        // });
-        // let newMenu = [];
-        // let itemParent = {};
-        // let allParentArray = []
-        // // 获取所有可能出现的菜单父类
-        // menuData.forEach(item => {
-        //     if (!item.children || item.children.length == 0) {
-        //         if (allMenuMap.get(item.pid)) {
-        //             itemParent = allMenuMap.get(item.pid);
-        //             itemParent.children.push(item);
-        //             allParentArray.push(itemParent)
-        //         }
-        //     }
-        //     else {
-        //         newMenu.push(item)
-        //     }
-        // });
-        // // 删除重复出现的父菜单
-        // let _allParentArray = [];
-        // var temp = []; //一个新的临时数组
-        // allParentArray.forEach((item, index) => {
-        //     if (temp.indexOf(allParentArray[index]['_id'].toString()) == -1) {
-        //         temp.push(allParentArray[index]['_id'].toString());
-        //         _allParentArray.push(allParentArray[index])
-        //     }
-        // });
-        // // 筛选出需要删减子菜单的父菜单（勾选了父菜单下的某几个子菜单）
-        // menuData.forEach(ele => {
-        //     if (allMenuMap.get(ele._id)) {
-        //         _allParentArray.forEach((ele2, index2) => {
-        //             if (ele._id == ele2._id) {
-        //                 _allParentArray.splice(index2, 1)
-        //             }
-        //         })
-        //     }
-        // });
-        // // 从所有子菜单中筛选出勾选的子菜单
-        // _allParentArray.forEach(ele => {
-        //     let _ele = JSON.parse(JSON.stringify(ele));
-        //     _ele.children = [];
-        //     this.filterArray(ele.children, _ele.children );
-        //     newMenu.push(_ele);
-        // });
-        // return newMenu;
+            else {
+                newMenu.push(item)
+            }
+        });
+        // 删除重复出现的父菜单
+        let _allParentArray = [];
+        var temp = []; //一个新的临时数组
+        allParentArray.forEach((item, index) => {
+            if (temp.indexOf(allParentArray[index]['_id'].toString()) == -1) {
+                temp.push(allParentArray[index]['_id'].toString());
+                _allParentArray.push(allParentArray[index])
+            }
+        });
+        // 筛选出需要删减子菜单的父菜单（勾选了父菜单下的某几个子菜单）
+        menuData.forEach(ele => {
+            if (allMenuMap.get(ele._id)) {
+                _allParentArray.forEach((ele2, index2) => {
+                    if (ele._id == ele2._id) {
+                        _allParentArray.splice(index2, 1)
+                    }
+                })
+            }
+        });
+        // 从所有子菜单中筛选出勾选的子菜单
+        _allParentArray.forEach(ele => {
+            let _ele = JSON.parse(JSON.stringify(ele));
+            _ele.children = [];
+            this.filterArray(ele.children, _ele.children );
+            newMenu.push(_ele);
+        });
+        return newMenu;
     },
 
     /**
