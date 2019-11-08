@@ -2,7 +2,11 @@
 const router=require('koa-router')();
 
 /**
- * 查询用户权限分配菜单
+ * @api {GET} /menu/queryMenus  查询用户权限分配菜单
+ * @apiGroup menu
+ * @apiVersion 1.0.0
+ * @apiDescription 查询用户权限分配菜单
+ * @apiSuccess {JSON}  Object 
  */
 router.get('/queryMenus',
     Libs.router( async (ctx, next) => {
