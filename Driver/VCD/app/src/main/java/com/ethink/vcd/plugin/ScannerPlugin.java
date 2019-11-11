@@ -42,7 +42,7 @@ private static final String TAG="ScannerPlugin";
             SerialPortSetting setting = new SerialPortSetting(
                     115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
             setting.setReadTimeout(0);
-            scanner = SerialPortManager.getSerialPort("/dev/ttyS3", setting);
+            scanner = SerialPortManager.getSerialPort("/dev/ttyS4", setting);
             logger.info("--------连接扫码-----------");
             thread = new Thread(this);
             thread.start();

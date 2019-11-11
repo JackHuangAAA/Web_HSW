@@ -1,4 +1,4 @@
-package com.ethink.vcd.utils;
+package com.ethink.vfd.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

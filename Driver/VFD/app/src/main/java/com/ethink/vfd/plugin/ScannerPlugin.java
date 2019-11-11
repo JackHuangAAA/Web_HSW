@@ -10,7 +10,6 @@ import com.ethink.tools.serialport.SerialPortSetting;
 import com.ethink.vfd.service.api.RxManager;
 
 
-
 /**
  * 扫码枪插件
  */
@@ -31,7 +30,7 @@ private static final String TAG="ScannerPlugin";
     /**
      * 初始化扫码枪
      */
-    public void initSerialPort() {
+    private void initSerialPort() {
         try {
             //USB
 //            UsbSerialPortSetting setting = new UsbSerialPortSetting(UsbSerialPortSetting.PL2303_VENDOR, UsbSerialPortSetting.PL2303_PRODUCT, 0,
@@ -42,7 +41,7 @@ private static final String TAG="ScannerPlugin";
             SerialPortSetting setting = new SerialPortSetting(
                     115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
             setting.setReadTimeout(0);
-            scanner = SerialPortManager.getSerialPort("/dev/ttyS3", setting);
+            scanner = SerialPortManager.getSerialPort("/dev/ttyS4", setting);
             logger.info("--------连接扫码-----------");
             thread = new Thread(this);
             thread.start();
@@ -106,7 +105,14 @@ private static final String TAG="ScannerPlugin";
 //        },15000);
         logger.info("初始化扫码枪----------------");
         initSerialPort();
+
+
+
+
     }
+
+
+
 
     @Override
     public void onStop() throws Throwable {

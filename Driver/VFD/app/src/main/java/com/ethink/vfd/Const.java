@@ -11,6 +11,7 @@ public class Const {
     public static final String SOCKET_IO_URL = "socket_io";
     public static final String SERIAL_NO = "serial_no";
     public static final String COOKIE_PREF = "cookies_prefs";
+    public static final String FINGER_URL = "finger_url";
     public static String getUrl(String path){
         String base=SPUtils.getSharedStringData(App.getAppContext(),CONFIG_URL);
         return base+path;
