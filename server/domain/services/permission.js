@@ -26,9 +26,6 @@ module.exports = {
     queryPermission: async function (requestBody) {
         logger.debug('queryPermission:' + JSON.stringify(requestBody));
         let query = {};
-        // if (!_.isEmpty(requestBody.name)) {
-        //     query = { "title": new RegExp(requestBody.name) };
-        // }
         let result = await Domain.models.permission.paginate(query, {
             sort: { "sort": -1 },
             page: requestBody.page || 1,
