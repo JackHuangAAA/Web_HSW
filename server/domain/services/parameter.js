@@ -36,7 +36,6 @@ module.exports = {
 		await Domain.services.cache.setCacheToString(requestBody.key, requestBody.value);
 		return await Domain.models.parameter.create(requestBody);
 	},
-
     /**
 	 * 修改参数信息
      * @param requestBody
@@ -64,7 +63,6 @@ module.exports = {
 		await Domain.services.cache.del(requestBody.key);
 		return await Domain.models.parameter.findOneAndRemove({ _id: requestBody.id });
 	},
-
 	/**
 	* 根据id停用启用参数信息
 	* @param requestBody
