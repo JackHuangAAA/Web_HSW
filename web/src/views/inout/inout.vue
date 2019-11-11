@@ -75,7 +75,7 @@ export default {
         queryInouts(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get('/inout/queryInoutsBybatchId',{size:this.pageSize,page:this.active,test:0}).then(res=>{
+            this.$api.get('/inout/queryInoutsBybatchId',{size:this.pageSize,page:this.active}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
                 this.lists=data;
@@ -90,8 +90,7 @@ export default {
                 deviceType:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName,
                 begin:this.dateTime[0],
-                end:this.dateTime[1],
-                test:0
+                end:this.dateTime[1]
             }
             this.$api.get('/inout/queryInoutsBybatchId',formdata).then(res=>{
                 let data=res.data.rs;

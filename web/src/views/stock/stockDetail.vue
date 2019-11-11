@@ -78,8 +78,7 @@ export default {
             let rs=await this.$api.get('/device/queryDeviceByVaccineStock',
             {deviceId:this._id,
             page:this.active,
-            size:this.pageSize,
-            test:0}).then(res=>{
+            size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
                 this.list=data;

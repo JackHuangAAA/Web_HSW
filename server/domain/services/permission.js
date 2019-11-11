@@ -26,9 +26,6 @@ module.exports = {
     queryPermission: async function (requestBody) {
         logger.debug('queryPermission:' + JSON.stringify(requestBody));
         let query = {};
-        // if (!_.isEmpty(requestBody.name)) {
-        //     query = { "title": new RegExp(requestBody.name) };
-        // }
         let result = await Domain.models.permission.paginate(query, {
             sort: { "sort": -1 },
             page: requestBody.page || 1,
@@ -99,27 +96,32 @@ module.exports = {
      * @returns newMenu 删选出的新菜单
      */
     createPermissionTree: async function (menuData) {
-        let pid_array=[],cid_array=[];
-        menuData.forEach(item => {
-            if (!item.children || item.children.length == 0) {
-                cid_array.push(item._id);//保存接收数据中的子节点id
-                if(pid_array.indexOf(item.pid)<0){
-                    pid_array.push(item.pid);//不重复保存接收数据中的父节点id
+        logger.debug('createPermissionTree:' + JSON.stringify(menuData));
+        let newMenu=[];
+        let pid_arr=[];
+        let sub_arr=[];
+        //获取唯一父子节点id
+        menuData.forEach((item)=>{
+            if(!item.children || item.children.length==0){
+                sub_arr.push(item._id);
+                if(pid_arr.indexOf(item.pid)==-1){
+                    pid_arr.push(item.pid);
                 }
             }
         });
-        let allMenu = await Domain.models.menu.find({}, null);
-        let newMenu = [];//接收数据中父节点的Map
-        allMenu.forEach(item => {
-            let children_array=[];
-            if(pid_array.indexOf(item._id.toString()) > -1){
-                item.children.forEach(c_item=>{
-                    if(cid_array.indexOf(c_item._id.toString()) > -1){
-                        children_array.push(c_item)
+        
+        const allMenu = await Domain.models.menu.find({}, null);
+        allMenu.forEach((el,i)=>{
+            let arrItem={};
+            //判断是否当前父节点
+            if(pid_arr.indexOf(el._id.toString())>-1){
+                arrItem=el;
+                el.children.forEach((e)=>{
+                    if(sub_arr.indexOf(e._id.toString())>-1){
+                        arrItem.children=e;
                     }
-                })
-                item.children=children_array;
-                newMenu.push(item);
+                });
+                newMenu.push(arrItem);
             }
         });
         return newMenu;

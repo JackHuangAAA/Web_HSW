@@ -258,6 +258,24 @@ module.exports = {
           "finger": requestBody.code_new
         }
       });
-  }
+  },
 
+  /**
+   * 密码初始化
+   * @param requestBody
+   * @returns {Promise.<*>}
+   */
+  resetUser: async function (requestBody) {
+    logger.debug(`resetUser param: ${JSON.stringify(requestBody)}`);
+    let password=crypto.createHash('md5');
+    password.update("000000");
+    password=password.digest('hex').toUpperCase()
+    console.log(password)
+    return await Domain.models.user.updateOne(
+      { _id: requestBody.id },
+      {
+        $set:{password:password}
+      });
+  }
+  
 }
