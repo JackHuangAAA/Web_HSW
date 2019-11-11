@@ -182,13 +182,14 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) });
     }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+    query = query.length >0 ? { $and: query } : {};
     let result = await Domain.models.user.paginate(query, {
       sort: { _id: -1 },
-      page: requestBody.page,
-      limit: parseInt(requestBody.size),
+      page: requestBody.page||1,
+      limit: parseInt(requestBody.size)||10,
       lean: true
     });
+    console.log(result)
     return { rs: result.docs, total: result.total }
   },
 

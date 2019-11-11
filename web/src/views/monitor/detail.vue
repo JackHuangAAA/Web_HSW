@@ -130,6 +130,18 @@ export default {
             this.$api.get('/device/queryDevices',formdata).then(res=>{
                 let data=res.data.rs;
                 this.lists=data;
+                data.forEach(item=>{
+                    item.type=item.type==1?'接种柜':'冷藏柜';
+                    item.status=item.status==0?'在线':item.status==1?'离线':'故障';
+                    item.notes=item.notes||'--';
+                    item.temperature=item.temperature||'--';
+                    item.unitName=item.unitName||'--';
+                    item.alias=item.alias||'--';
+                    if(item.temperature<0 || item.temperature>5){
+                        this.$set(item,'cellClassName',
+                        {temperature:'abnormal',status:'abnormal'});
+                    }
+                })
                 this.total=res.data.total;
             });
         },

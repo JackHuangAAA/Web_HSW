@@ -16,7 +16,8 @@ module.exports = {
 		if(!_.isEmpty(requestBody.key)){
 			query.push({key:new RegExp(requestBody.key)});
 		};
-		query=query.length>0?{"$and":query}:{};
+		query=query.length>0 ? {$and:query} : {};
+		console.log("=====>"+JSON.stringify(query))
 		let result=await Domain.models.parameter.paginate(query,{
 			sort:{'_id':-1},
 			page:requestBody.page||1,
@@ -42,7 +43,7 @@ module.exports = {
      */
 	modifyParameter:async function(requestBody){
 		logger.debug(`modifyParameter params: ${JSON.stringify(requestBody)}`);
-		await Domain.services.cache.setCacheToString(requestBody.key, requestBody.value);
+		await Domain.services.cache.updataParam(requestBody.key, requestBody.value);
 		return await Domain.models.parameter.updateOne({'_id':requestBody.id},{
 			$set:{
 				...requestBody,
