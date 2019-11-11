@@ -94,4 +94,7 @@
 </script>
 <style lang="less" scoped>
     @import "~@/style/layout.less";
+    .ivu-collapse-content-box p {
+        height: 50px !important;
+    }
 </style>
