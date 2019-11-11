@@ -4,11 +4,16 @@
         <div class="table main-table">
             <div class="header">
                 <Form inline class="user-form">
-                    <FormItem>
-                        <label>账号:</label><Input v-model="search.userCode" placeholder="账号" style="width: 180px;"></Input>
-                        <label>用户名称:</label><Input v-model="search.userName" placeholder="用户名称" style="width: 180px;"></Input>
-                        <Button type="primary" @click="loadOperators('query')">查询</Button>
-                        <Button type="primary" @click="showAddUserWin">新增</Button>
+                    <FormItem>                        
+                        <label>用户名称:</label><Input  placeholder="用户名称" style="width: 180px;"></Input>
+                         <label>状态:</label><Select style="width:200px">
+                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                         </Select>                    
+                        <Button type="primary" @click="loadOperators('query')">
+                            <Icon type="ios-search-outline" />查询
+                            </Button>
+                        <Button type="primary" @click="showAddUserWin">
+                           <Icon type="ios-add" />新增</Button>
                     </FormItem>
                 </Form>
             </div>
@@ -56,6 +61,10 @@
                 </div>
             </Form>
         </Modal>
+         <!-- 分页 -->       
+        <Row>
+            <Page :total="total" show-sizer show-total show-elevator @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
+        </Row>  
     </div>
 </template>
 <script>
@@ -95,16 +104,23 @@
                         width: 60,
                         align: 'center'
                     },{
-                        title: '账号',
+                        title: '手机号码',
                         key: 'code',
-                        width: 120,
+                        width: 160,
                         align: 'center'
                     },{
                         title: '用户名',
                         key: 'name',
                         width: 160,
                         align: 'center'
-                    },{
+                    },
+                    {
+                        title: '所属区域',
+                        key: 'region',
+                        width: 160,
+                        align: 'center'
+                    },
+                    {
                         title: '角色',
                         key: 'role',
                         width: 150,
@@ -113,13 +129,13 @@
                             return <div> {params.row.role.name} </div>;
                         }
                     },{
-                        title: '电话',
-                        key: 'phone',
+                        title: '状态',
+                        key: 'status',
                         width: 150,
                         align: 'center'
                     },{
-                        title: '备注',
-                        key: 'remark',
+                        title: '更新时间',
+                        key: 'time',
                         ellipsis:true,
                         width: 350,
                         align: 'center'
@@ -132,7 +148,7 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: 'primary',
+                                        type: 'Large',
                                         size: 'small',
                                         disabled: (params.row.code == 'admin') ? true:false
                                     },
@@ -162,7 +178,7 @@
                                 }, '删除'),
                                 h('Button', {
                                     props: {
-                                        type: 'error',
+                                        type: 'info',
                                         size: 'small',
                                         disabled: (params.row.status == 1) ? true:false
                                     },
@@ -174,7 +190,7 @@
                                             this.resetPwd(params.row)
                                         }
                                     }
-                                }, '密码重置')
+                                }, '密码初始化')
                             ]);
                         }
                     }
@@ -183,9 +199,10 @@
                     id: '',
                     name: '',
                     code: '',
-                    phone: '',
+                    region: '',
                     roles: '',
-                    remark: ''
+                    status: '',
+                    time:''
                 },
                 userValidate: {
                     code : [{

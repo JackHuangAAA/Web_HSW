@@ -10,7 +10,9 @@ const routers = [{
         { path: '/stock/stockDetail', component: (resolve) => require(['@/views/stock/stockDetail.vue'], resolve) },
         { path: '/inout/inout', component: (resolve) => require(['@/views/inout/inout.vue'], resolve) },
         { path: '/inout/inoutDetail', component: (resolve) => require(['@/views/inout/inoutDetail.vue'], resolve) },
-        { path: '/system/user', component: (resolve) => require(['@/views/system/user.vue'], resolve) }
+        { path: '/system/user', component: (resolve) => require(['@/views/system/user.vue'], resolve) },
+        { path: '/system/role', component: (resolve) => require(['@/views/system/role.vue'], resolve) },
+        { path: '/system/param', component: (resolve) => require(['@/views/system/param.vue'], resolve) },
     ]
 }, {
     path: '/login',
