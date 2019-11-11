@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.ethink.tools.serialport.usb.util.HexDump;
 import com.ethink.vfd.R;
 import com.ethink.vfd.controller.PrintController;
@@ -37,7 +38,7 @@ public class PrintActivity extends AppCompatActivity {
         printController=new PrintController("/dev/ttyS0",19200);
     }
 
-    @OnClick({R.id.init,R.id.clean_err,R.id.print_status,R.id.exit,R.id.change,R.id.stop,R.id.paper_status,R.id.print,R.id.inpaper,R.id.measure,R.id.stripe})
+    @OnClick({R.id.init,R.id.clean_err,R.id.print_status,R.id.exit,R.id.province,R.id.city,R.id.stop,R.id.paper_status,R.id.print,R.id.inpaper,R.id.measure,R.id.stripe})
     public void OnClick(View view){
         new Thread(()->{
         switch (view.getId()){
@@ -74,12 +75,17 @@ public class PrintActivity extends AppCompatActivity {
             case R.id.paper_status:
                 printController.paperStatus();
                 break;
-            case R.id.change:
-                String text=editText.getText().toString();
-                byte []b= HexDump.hexStringToByteArray(text);
-                runOnUiThread(()->{
-                    textView.setText("转换之后：\n"+HexDump.toHexString(b));
-                });
+            case R.id.province:
+                String num=editText.getText().toString();
+                //fixme \n换行不会到行首 \r\n回车另起一行
+                if(StringUtils.isEmpty(num))return;
+                printController.zheProvince(Integer.parseInt(num));
+                break;
+            case R.id.city:
+                String n=editText.getText().toString();
+                //fixme \n换行不会到行首 \r\n回车另起一行
+                if(StringUtils.isEmpty(n))return;
+                printController.hangCity(Integer.parseInt(n));
                 break;
         }
         }).start();
