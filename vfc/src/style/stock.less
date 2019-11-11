@@ -1,302 +1,160 @@
-.container{
-  width: 100%;
-  height: 100%;
-  position: relative;
+@import '~@/style/color.less';
+.inoculate{
+    margin: 0px 0px 0 0px;
+    width: 100%;
+    height: ~'calc(100% - 60px)';
+    background: @white;
+    font-family:Microsoft YaHei;
+    font-weight:bold;
+    color: @black;
+    padding-top: 1.4375rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+    position: relative;
 }
-.main{
-  width: 100%;
-  height: 98%;
-  background-color: white;
-  position: absolute;
-  top: 2.5%;
+// .inoculate-title{
+//     font-size: 1.125rem;
+//     margin-bottom: 1rem;
+// }
+.inoculate-table{
+    overflow: auto;
+    height: 92%;
 }
-
-
-.headP{
-  width: 50%;
-  height: 1.875rem;
-  margin-left: 25%;
-  font-size: 1.875rem;
-  color: #3E4955;
-  line-height: 1.875rem;
-  text-align: center;
-  top: calc(50% - 0.9375rem);
-  position: absolute;
+.inoculate-table-row{
+    margin-bottom: .375rem;
+    width: 100%;
+    text-align: center;
+    line-height: 2.75rem;
+    font-size: 1rem;
 }
-.mainTop{
-  width: 100%;
-  height: 12%;
-  position: relative;
+.row-bg{
+    background: @gray;
+    font-size: .9375rem;
+    color: @dark;
 }
-.mainBottom{
-  width: 100%;
-  height: 87%;
+.goHome{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    right: 1rem;
+    top: 0;
 }
-.mainBottomLeft{
-  width: 5%;
-  height: 100%;
-  float: left;
-  position: relative;
+.backHomeImg{
+    width: 100%;
+    height: 77%;
+    cursor: pointer;
 }
-.mainBottomRight{
-  width: 93%;
-  height: 100%;
-  float: left;
-  overflow: auto;
-  margin-left: .8rem;
+.producer{
+    white-space: nowrap;      /*超出的空白区域不换行*/
+    overflow: hidden;         /*超出隐藏*/
+    text-overflow: ellipsis;  /*文本超出显示省略号*/
 }
-.cabines{
-  width: 95%;
-  height: 100%;
-  float: left;
-  padding-top: 3px;
-  padding-left: 3px;
+//detail.vue
+.stock-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.875rem;
+    font-weight:400
 }
-.cabine{
-  width: calc(50% - .625rem);
-  height: 23%;
-  background-color: white;
-  float: left;
-  margin-top: 1rem;
-  margin-right: .625rem;
-  box-shadow:0px 0px 6px 1px rgba(0, 0, 0, 0.19);
+.alarmStatus{
+    color: #f28d00;
 }
-.finish{
-  width: calc(86.6% - 52.25rem);
-  height: 100%;
-  float: left;
-  position: relative;
+.dangerStatus{
+    color: red;
 }
-.cabine:nth-child(1),.cabine:nth-child(2){
-  margin-top: 0;
+.stock-title img{
+    margin-right: 1.6875rem;
 }
-.vaccineIn{
-  position: absolute;
-  right: 1.64%;
-  height: 3.0625rem;
-  width: 18.5%;
-  top: calc(50% - 1.53125rem);
+.stock-menber{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 1.5rem 22rem 1rem 24rem;
 }
-.finishButton{
-  width: 75%;
-  height: 3.25rem;
-  background-color: #2A7AFF;
-  position: absolute;
-  bottom: 3%;
-  left: 12%;
-  font-size: 1.125rem;
-  color: white;
-  text-shadow:0px 5px 5px rgba(0, 0, 0, 0.2);
-  line-height: 3.25rem;
-  text-align: center;
+.row-center{
+    text-align: center;
+    height: 2.75rem;
+    line-height: 2.75rem;
+    font-size: 1rem;
 }
-.ctOne,.ctTwo,.ctLeft,.ctRight{
-  color: #3E4955;
-  font-weight: bold;
-  position: absolute;
+.column-pd{
+    padding: 0 1.2rem;
 }
-.ctOne,.ctTwo{
-  font-size: 0.75rem;
-  top: 75%;
+.stock-row{
+    background: @gray;
+    font-size: 1rem;
+    margin-bottom: .5rem;
 }
-.ctLeft,.ctRight{
-  font-size: .8rem;
-  top: 45%;
+.inoculate-head{
+    height: 80px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
 }
-.ctOne{
-  left: 33.3%;
+.history{
+    width: 22.5%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    line-height: 80px;
+    text-indent: 2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
 }
-.ctTwo{
-  right: 24%;
+.type{
+    width: 35%;
+    height: 100%;
+    position: absolute;
+    left: 25.5%;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 80px;
 }
-.ctLeft{
-  left: 44.5%;
+.date{
+    width: 35%;
+    height: 100%;
+    position: absolute;
+    left: 63.5%;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 80px;
 }
-.ctRight{
-  right: 36.25%;
+/deep/.ivu-select-single .ivu-select-selection{
+    height: 40px;
 }
-.l_r{
-  width: 9%;
-  left: 54%;
-  position: absolute;
-  margin-left: -4.5%;
-  top: 50%;
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px;
+    line-height: 40px;
+    color: @dark;
+    font-size: 14px;
 }
-.ctTop,.ctBottom{
-  font-size: 1rem;
-  font-weight: bold;
-  color: #3E4955;
-  position: absolute;
-  right: 0;
+/deep/.ivu-input{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
 }
-.ctTop{
-  top: 40%;
+/deep/.ivu-input-icon{
+    height: 40px;
+    line-height: 40px;
 }
-.ctBottom{
-  top: 65%;
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px !important;
+    line-height: 40px !important;
 }
-.t_b{
-  width: 1.125rem;
-  height: 18%;
-  right: 0;
-  position: absolute;
-  top: 45%;
-}
-.index{
-  width: 3%;
-  height: 100%;
-  float: left;
-  margin-right: .4rem;
-}
-.indexBlock{
-  width: 100%;
-  height: 23%;
-}
-.indexBlock:nth-child(1){
-  margin-top: 1.2px;
-}
-.indexBlock{
-  margin-top: 1rem;
-  text-align: center;
-  font-weight:bold;
-  color:rgba(62,73,85,1);
-  font-size: 0.75rem;
-  position: relative;
-}
-.indexSpan{
-  display: block;
-  width: 100%;
-  height: 0.75rem;
-  line-height: 0.75rem;
-  position: absolute;
-  top: 50%;
-  margin-top: -1rem;
-  font-size: 1rem;
-  line-height:1.2rem;
-}
-.cabineLeft{
-  width: 50%;
-  height: 30%;
-  float: left;
-  position: relative;
-}
-.cabineRight{
-  width: 50%;
-  height: 30%;
-  float: right;
-  position: relative;
-}
-.vaccineOneName,.vaccineTwoName{
-  font-size: 1.2rem;
-  color: #2D99FF;
-  font-weight: bold;
-  text-align: left;
-  padding-left: 0.9rem;
-  position: absolute;
-  height: 1.125rem;
-  line-height: 1.125rem;
-  top: 40%;
-  margin-top: -0.5625rem;
-  width: 100%;
-}
-.vaccineOneCount,.vaccineTwoCount{
-  font-size: 1.2rem;
-  color: #FF8827;
-  font-weight: bold;
-  text-align: left;
-  padding-left: 0.9rem;
-  position: absolute;
-  height: 0.75rem;
-  line-height: 0.75rem;
-  top: calc(50% + .75rem);
-  margin-top: 0.3rem;
-  width: 100%;
-}
-.black{
-  width: 100%;
-  height: calc(100% + 59px);
-  background-color: rgba(0, 0, 0, 0.2);
-  position: absolute;
-  top: -59px;
-  z-index: 999;
-  position: relative;
-}
-.addForm{
-  width: 34.25rem;
-  height: 18rem;
-  background-color: white;
-  position: absolute;
-  position: relative;
-  left: 50%;
-  top: 30%;
-  margin-left: -17.125rem;
-}
-.addForm img{
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-}
-.vaccineAddOne{
-  width: 100%;
-  height: 2.5rem;
-  position: absolute;
-  top: 3.43rem;
-}
-.vaccineAddTwo{
-  width: 100%;
-  height: 2.5rem;
-  position: absolute;
-  top: 7.1875rem;
-}
-.cancel{
-  width: 9.625rem;
-  height: 2.875rem;
-  background-color: #8C8C8C;
-  border: 1px solid rgba(140,140,140,1);
-  position: absolute;
-  left: 7.0625rem;
-  top: 13.4375rem;
-  line-height: 2.875rem;
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-}
-.addYes{
-  width: 9.625rem;
-  height: 2.875rem;
-  background-color: #2A7AFF;
-  border: 1px solid rgba(140,140,140,1);
-  position: absolute;
-  left: 17.625rem;
-  top: 13.4375rem;
-  line-height: 2.875rem;
-  text-align: center;
-  font-size: 1rem;
-  color: white;
-}
-.addInput{
-  position: absolute;
-  top: 0;
-  left: 11rem;
-  height: 2.5rem;
-}
-.vaccineAddName{
-  font-size: 1rem;
-  font-weight: bold;
-  color: #323A44;
-  line-height: 2.5rem;
-  position: absolute;
-  width: 10.5rem;
-  height: 100%;
-  text-align: right;
-}
-.tip{
-  width: 92%;
-  height: 1.1rem;
-  font-weight: bold;
-  font-size: 0.875rem;
-  line-height: 1rem;
-  position: absolute;
-  left: 1.9375rem;
-  top: 1.5625rem;
+/deep/input::-webkit-input-placeholder { /* WebKit browsers */
+    color: @black;
+    }
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @black;
+    }
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @black;
+    }
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @black;
 }

@@ -6,7 +6,7 @@
 .vaccineStatus{
     width: 100%;
     height: 79%;
-    background-color: white;
+    background-color: rgb(236,240,248);
     margin-top: 1.56%;
     border-radius: 10px;
     float: left;
@@ -75,7 +75,7 @@
 }
 .vaccineStatusTitle{
     width: 100%;
-    height: 5%;
+    height: 3%;
     position: relative;
 }
 .vaccineStatusTitleTip{
@@ -83,7 +83,7 @@
     height: 1rem;
     display: block;
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: bolder;
     color: #3E4955;
     position: absolute;
     bottom: 0;
@@ -125,13 +125,19 @@
 }
 .vaccineContent{
     width: 95%;
-    height: 88%;
+    height: 93%;
     margin: 0 auto;
     padding-left: 3px;
     padding-top: 3px;
     padding-bottom: 3px;
-    margin-top: 5%;
+    margin-top: 1.8%;
+    background-image: url(../../public/static/img/main.png);
+    background-size: 100% 100%;
+    position: relative;
+}
+.vaccineContentContent-table{
     overflow: auto;
+    height: 88%;
 }
 .vaccineStatusShow{
     width: calc(50% - 18px);
@@ -298,7 +304,7 @@
     width: 77%;
     height: 4rem;
     position: absolute;
-    top: 24%;
+    top: -2%;
     right: 0;
     background-image: url(../../public/static/img/vaccine-out.png);
     background-size: 100% 100%;
@@ -311,7 +317,7 @@
     width: 77%;
     height: 4rem;
     position: absolute;
-    top: 24%;
+    top: -2%;
     left: 0;
     background-image: url(../../public/static/img/vaccine-in.png);
     background-size: 100% 100%;
@@ -319,4 +325,62 @@
     line-height: 4rem;
     font-size: 1.125rem;
     color: white;
+}
+.vaccineContentTitle{
+    width: 94%;
+    height: 3.5rem;
+    background: white;
+    margin: 0 3%;
+    margin-top: 3%;
+    line-height: 3.5rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #3E4955;
+}
+.vaccineName{
+    width: 42%;
+    height: 100%;
+    margin-left: 3%;
+    float: left;
+}
+.vaccineAllowance{
+    width: 27.5%;
+    height: 100%;
+    padding-left: 4%;
+    float: left;
+}
+.headName{
+    width: 42%;
+    height: 100%;
+    margin-left: 3%;
+    float: left;
+}
+.headStatus{
+    width: 27.5%;
+    height: 100%;
+    float: left;
+}
+.headAllowance{
+    width: 27.5%;
+    height: 100%;
+    float: left;
+}
+.allowanceStatus{
+    width: 27.5%;
+    height: 100%;
+    float: left;
+    color: #f28d00;
+}
+.dangerStatus{
+    color: red;
+}
+.vaccineContentContent{
+    width: 94%;
+    height: 3.6875rem;
+    margin: 0 auto;
+    line-height: 3.6875rem;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #3E4955;
+    border-bottom: 1px solid #C7CBD5;
 }

@@ -36,12 +36,20 @@
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
                                 </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="finish">
-                        <div class="finishButton" @click="openDrawer">
-                            完成
+                        <div class="finishButton" @click="openDrawer()">
+                            确定
                         </div>
                     </div>
                 </div>
@@ -61,7 +69,11 @@
                 addVaccineOne: '',
                 addVaccineTwo: '',
                 vaccineOneCount: "",
-                vaccineTwoCount: ""
+                vaccineTwoCount: "",
+                addVaccineThree: '',
+                addVaccineFour: '',
+                vaccineThreeCount: "",
+                vaccineFourCount: "",
             }
         },
         computed: {
@@ -98,12 +110,32 @@
                                 temp.idTwo = vaccine[k]._id;
                                 temp.codeTwo = vaccine[k].code;
                             }
+                            if (k == 2) {
+                                temp.nameThree = vaccine[k].name;
+                                temp.countThree = vaccine[k].surplus;
+                                temp.idThree = vaccine[k]._id;
+                                temp.codeThree = vaccine[k].code;
+                            }
+                            if (k == 3) {
+                                temp.nameFour = vaccine[k].name;
+                                temp.countFour = vaccine[k].surplus;
+                                temp.idFour = vaccine[k]._id;
+                                temp.codeFour = vaccine[k].code;
+                            }
                         }
+                        temp.x=array[i].x;
+                        temp.y=array[i].y;
                     } else {
                         temp.nameOne = '';
                         temp.countOne = '';
                         temp.nameTwo = '';
                         temp.countTwo = '';
+                        temp.nameThree = '';
+                        temp.countThree = '';
+                        temp.nameFour = '';
+                        temp.countFour = '';
+                        temp.x=array[i].x;
+                        temp.y=array[i].y;
                     }
                     this.cabineDatas.push(temp);
                 }
@@ -114,16 +146,22 @@
             //打开指定抽屉
             openDrawer(){
                 //获取选中的的抽屉
-                let ids = [], array = this.cabineDatas;
+                //打开柜子的参数  num
+                let ids = [], position = '', array = this.cabineDatas;
                 for(let n=0;n<array.length;n++) {
                     if(array[n].single){
                         ids.push(array[n].drawerId);
+                        position+=','+array[n].x+'#'+array[n].y
                     }
                 }
-                //调用Android接口，打开抽屉  todo
-
-                console.log('33--------->%j',ids)
-                this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+                //position不为空时，调用Android接口，打开抽屉
+                if(position!=''){
+                    //this.$device.openDrawer({num:position.slice(1)}).then(res=>{
+                        this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+                    //}).catch(err=>{
+                        //console.log('open drawer error: '+err.message());
+                    //});
+                }
             }
         },
         mounted() {

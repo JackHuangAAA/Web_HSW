@@ -9,8 +9,8 @@ module.exports = {
 
     /**
      * 查询设备疫苗类型信息
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineNum: async function (requestBody) {
         logger.debug(`queryVaccineNum param: ${JSON.stringify(requestBody)}`);
@@ -27,8 +27,8 @@ module.exports = {
 
     /**
      *
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineLowerThreshold: async function (requestBody) {
         logger.debug(`queryVaccineLowerThreshold param: ${JSON.stringify(requestBody)}`);
@@ -36,41 +36,47 @@ module.exports = {
         if (!_.isEmpty(requestBody.device)) {
             query.push({ "device": requestBody.device });
         }
-        query = query.length == 2 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccine.find(query)
         return { rs: result, total: result.length }
     },
 
     /**
      *  按设备id查询，疫苗code分组合计疫苗数量
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     queryVaccineStorageNum: async function (requestBody) {
         logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let query = [];
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({ "name": {'$lte':10}});
+        }
+        if (!_.isEmpty(requestBody.product)) {
+            query.push({ "product": new RegExp(requestBody.product)});
+        }
         if (!_.isEmpty(requestBody['ids[]'])) {
-
             let temp = _.map(requestBody['ids[]'], item => {
                 return mongoose.Types.ObjectId(item);
             });
             query.push({ "_id": { $in: temp } });
         }
+        if (requestBody.surplusltTen) {
+            query.push({ "surplus": {'$lte':10}});
+        }
         let deviceId = mongoose.Types.ObjectId(requestBody.device);
         query.push({device: deviceId});
         let result = await Domain.models.vaccine.aggregate([
             { $match: { "$and": query } },
-            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, updateDate: { "$first": "$updateDate" } } },
-
-            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
-
+            { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, product: { "$first": "$product" },updateDate: { "$first": "$updateDate" } } },
+            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, product:1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
         ]);
         return { rs: result, total: result.length, device: requestBody }
     },
     /**
      *  出库后 数量、 剩余数量清零
-     * @param {any} requestBody 
-     * @returns 
+     * @param {any} requestBody
+     * @returns
      */
     clearVaccineTotal: async function (requestBody) {
         logger.debug(`clearVaccineTotal param: ${JSON.stringify(requestBody)}`);
@@ -86,7 +92,7 @@ module.exports = {
     /**
      *  更新抽屉内疫苗信息
      * @param {any} requestBody
-     * @returns 
+     * @returns
      */
     modifyVaccine: async function (requestBody) {
         logger.debug(`modifyVaccine param: ${JSON.stringify(requestBody)}`);
@@ -139,10 +145,13 @@ module.exports = {
         if (requestBody.surplusIsNotZero) {
             query.push({ "surplus": {'$gt':0}});
         }
+        if (requestBody.surplusltTen) {
+            query.push({ "surplus": {'$lte':10}});
+        }
         if (requestBody.sortSurplus) {
             sort = {sort:{surplus: 1}};
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.vaccine.find(query,null, sort);
     },
 
@@ -160,7 +169,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.name)) {
             query.push({"name": requestBody.name});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccine.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,
@@ -177,8 +186,18 @@ module.exports = {
      */
     removeVaccineById: async function(requestBody) {
         logger.debug(`removeVaccineById param: ${JSON.stringify(requestBody)}`);
-        return Domain.models.vaccine.remove({_id: id});
-    }
+        return Domain.models.vaccine.remove({_id: requestBody.id});
+    },
+
+    /**
+     * 批量入库疫苗信息
+     * @param requestBody
+     * @returns {Promise.<requestBody>}
+     */
+    saveManyVaccine: async function(requestBody){
+        logger.debug(`saveManyVaccine param: ${JSON.stringify(requestBody)}`);
+        return Domain.models.vaccine.insertMany(requestBody);
+    },
 
 
 };

@@ -1,15 +1,26 @@
 .main-table{
   width: 100%;
-  height: auto;
-  margin-top: 20px;
+  height: calc(100% - 60px);
+  margin-top: 96px;
   margin-bottom: 20px;
   padding: 0 21px;
   padding-bottom: 20px;
   font-size:18px;
   font-weight: bold;
-  min-height: 500px;
+  min-height: 550px;
   color: @black;
   box-shadow:0px 0px 15px 1px rgba(206,210,218,0.43);
+}
+//搜索按钮
+.search_btn{
+  margin-top: 36px;
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 40px;
+}
+.main-table-height{
+  height: calc(100% - 360px) !important;
+  margin-top: 20px !important;
 }
 .main-table-head{
   font-size: 16px;
@@ -26,6 +37,14 @@
   background: @cyan;
   margin-top: 6px;
 }
+.home-table-body{
+  overflow: auto;
+  height: calc(100% - 140px);
+}
+.table-body{
+  overflow: auto;
+  height: calc(100% - 220px);
+}
 .id-center{
   text-align: center;
   padding-right: 10px;
@@ -40,12 +59,13 @@
   font-weight: 400;
   align-items: center;
   margin-top: 36px;
+  padding-left: 10px;
   .main-table-search-lab{
-      padding-right: 5px;
+      width: 40px;
       text-align: end;
   }
   input{
-      width: 74%;
+      width: 100%;
       padding: 0 5px;
       outline: 0;
       border:1px solid rgba(194,194,194,1);
@@ -57,6 +77,7 @@
 }
 .ivu-input-suffix{
   margin: 0 !important;
+  padding: 0;
 }
 .main-table-box-time{
   width: 40px;
@@ -70,7 +91,7 @@
   margin-top: 36px;
   padding-left: 10px;
   .main-table-box-lab{
-    width: 120px;
+    width: 40px;
     text-align: end;
   }
 }
@@ -112,16 +133,19 @@
   height: 38px;
   line-height: 38px;
 }
-// detail 异常
+// 异常
 .abnormal{
   color: @pink;
+}
+.orange{
+  color:@orange;
 }
 
 // 分页
 .ivu-page{
   position: absolute;
   right: 53px;
-  top: 30px;
+  top: 10px;
   font-size: 12px;
 }
 .ivu-page-item-active{
@@ -172,22 +196,9 @@
 .ivu-input{
   height: 40px;
   border-radius: 0;
-  margin-left: 10px;
 }
 .ivu-input-wrapper{
   line-height: 40px;
-}
-.comeback{
-  width: 175px;
-  height: 52px;
-  text-align: center;
-  line-height: 52px;
-  background: @blue;
-  color: @white;
-  cursor: pointer;
-  position: absolute;
-  top: 40px;
-  left: 0;
 }
 
 .ivu-icon-ios-arrow-forward:before{

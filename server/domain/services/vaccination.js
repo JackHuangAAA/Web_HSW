@@ -59,7 +59,7 @@ module.exports = {
             query.push({"device": requestBody.device});
         }
 
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccination.paginate(query, {
             sort: {"_id": -1},
             page: requestBody.page,
@@ -101,7 +101,7 @@ module.exports = {
          if (!_.isEmpty(requestBody.unitName)) {
              query.push({"unitName":  new RegExp(requestBody.unitName)});
          }
-         query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+         query = query.length > 0 ? { "$and": query } : {};
          return await Domain.models.vaccination.find(query);
     },
 
@@ -121,7 +121,7 @@ module.exports = {
             let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
             query.push({ "createDate": dailyInfo });
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.vaccination.aggregate([
                 {
                     $match:query

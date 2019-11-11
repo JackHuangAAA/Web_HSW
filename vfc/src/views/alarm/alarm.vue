@@ -59,7 +59,7 @@
         },
         methods: {
             getAlarms() {
-                this.$api.get("alarm/queryAlarmByByCondition", {
+                this.$api.get("alarm/queryAlarmByCondition", {
                         device: this.device._id,
                         ifToday: "today"
                     }).then(res => {

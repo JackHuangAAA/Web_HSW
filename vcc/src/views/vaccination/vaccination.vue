@@ -1,67 +1,93 @@
 <!--接种页面-->
 <template>
-    <div class="inoculate card">
-        <Row class="inoculate-row">
-            <div class="leftBcg"></div>
-            <div class="rightBcg"></div>
-            <Col span="12">
-                <div class="title-center">接种人信息</div>
-                <div class="inoculate-info">
-                    <div class="inoculate-info-column">
-                        <div class="inoculate-content human-info">
-                            <div>{{vaccinationData.customer? vaccinationData.customer.code:''}}号</div>
-                            <div>{{vaccinationData.customer?vaccinationData.customer.name: ''}}</div>
-                        </div>
-                        <div class="inoculate-content">
-                            <div>接种疫苗：</div>
-                            <div class="blue">{{vaccinationData.customer?vaccinationData.customer.vaccineName: ''}}</div>
-                        </div>
+    <div class="container">
+        <div class="containerBody">
+            <div class="title">
+            <div class="titleLeft">
+                接种人信息
+            </div>
+            <div class="titleRight">
+                疫苗信息
+            </div>
+        </div>
+        <div class="content">
+            <div class="left">
+                <div class="leftTop">
+                    <div class="leftTopLeft">
+                        <span class="code">{{vaccinationData.customer? vaccinationData.customer.code:''}}号</span><span class="name">{{vaccinationData.customer?vaccinationData.customer.name: ''}}</span>
                     </div>
-                    <div class="inoculate-info-column">
-                        <div class="inoculate-content">
-                            <div>年龄：</div>
-                            <div>{{vaccinationData.customer?vaccinationData.customer.age:''}}</div>
-                        </div>                        
-                        <div class="inoculate-content">
-                            <div>接种支数：</div>
-                            <div>{{vaccinationData.customer?vaccinationData.customer.vaccineNum:''}}</div>
+                    <div class="leftTopRight">
+                        <div class="age">
+                            年龄:
+                        </div>
+                        <div class="ageCount">
+                            {{vaccinationData.customer?vaccinationData.customer.age:''}}周岁
                         </div>
                     </div>
                 </div>
-            </Col>
-            <Col span="12" class="inoculate-row">
-                <div class="title-center">疫苗信息</div>
-                <div class="inoculate-info">
-                    <div class="inoculate-info-column">
-                        <div class="inoculate-content">
-                            <div>品名：</div>
-                            <div class="blue">{{vaccine.vaccineName}}</div>
+                <div class="leftBottom">
+                    <div class="personInf" v-for="(item,index) in vaccinationData.vaccine">
+                        <div class="personInfVaccine">
+                            <p class="personInfVaccineP vaccineOne">接种疫苗</p>
+                            <p class="personInfVaccineP vaccineTwo">{{item.name}}</p>
+                            <p class="personInfVaccineP vaccineThree">{{item.product}}</p>
                         </div>
-                        <div class="inoculate-content">
-                            <div>有效期：</div>
-                            <div>{{getExpiryDate(vaccine.expiry)}}</div>
+                        <div class="personInfCount">
+                            <p class="getVaccineOne">数量</p>
+                            <p class="getVaccineCount">{{item.num}}支</p>
+                        </div>
+                        <div class="personInfStatus">
+                            <p class="getVaccineOne">状态</p>
+                            <p class="getVaccineCount">
+                                <img src="/static/img/succeed.png" class="succeed" v-if="item.status"><span v-if="item.status" class="tipInf" style="color:#1AA95E">信息匹配</span>
+                                <img src="/static/img/error.png" class="succeed" v-if="!item.status"><span v-if="!item.status" class="tipInf" style="color:#F42954">信息不匹配</span>
+                            </p>
                         </div>
                     </div>
-                    <div class="inoculate-info-column">
-                        <div class="inoculate-content">
-                            <div>批次号：</div>
-                            <div>{{vaccine.batchNo}}</div>
-                        </div>                        
-                        <div class="inoculate-content">
-                            <div>生产企业：</div>
-                            <div>{{vaccine.producer}}</div>
-                        </div>
-                    </div> 
                 </div>
-            </Col>
-        </Row>
-        <Row class="inoculate-notice">
-            <Col span="24">
-                <div v-if="progress==0" class="inoculate-notice-rs"><img src="/static/img/scan.png"/><div>请扫描疫苗，核对是否正确</div></div>
-                <div v-if="progress==1" class="inoculate-notice-rs"><img src="/static/img/succeed.png"/><div>疫苗接种信息匹配成功</div></div>
-                <div v-if="progress==2" class="inoculate-notice-rs"><img src="/static/img/error.png"/>疫苗接种信息匹配失败</div>
-            </Col>
-        </Row>
+            </div>
+            <div class="right">
+                <div class="vaccineInf" v-for="(item,index) in vaccine">
+                    <div class="vaccineTop">
+                        <div class="vaccineTopLeft">
+                            <div class="topTip">
+                                品名:
+                            </div>
+                            <div class="bottomInf">
+                                {{item.name}}
+                            </div>
+                        </div>
+                        <div class="vaccineTopRight">
+                            <div class="topTip">
+                                批次号:
+                            </div>
+                            <div class="bottomInf" style="color:#3E4955">
+                                {{item.batchNo}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="vaccineBottom">
+                        <div class="vaccineTopLeft">
+                            <div class="topTip">
+                                有效期:
+                            </div>
+                            <div class="bottomInf" style="color:#3E4955;">
+                                {{getExpiryDate(item.expiry)}}
+                            </div>
+                        </div>
+                        <div class="vaccineTopRight">
+                            <div class="topTip">
+                                生产企业:
+                            </div>
+                            <div class="bottomInf" style="color:#3E4955">
+                                {{item.producer}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 
@@ -71,7 +97,6 @@
     import uuid from 'uuid/v1';
 
     export default {
-
         data() {
             return {
                 progress:0,
@@ -82,18 +107,48 @@
                     'customer':{
                         'code': '089',
                         'name': '李义',
-                        'age': 4,
-                        'vaccineCode': 'ym20190920134508999',
-                        'vaccineName': '脊髓灰质炎疫苗',
-                        'vaccineNum': 1
-                    }
+                        'age': 4
+                    },
+                    'vaccine':[
+                        {
+                            name:'乙肝疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status:true
+                        },{
+                            name:'流感疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status:true
+                        },{
+                            name:'腮腺炎疫苗',
+                            product:'长春生物制药',
+                            num:'1',
+                            status: false
+                        }
+
+                    ]
                 }, //接种信息
-                vaccine: {
-                    'vaccineName': '脊髓灰质炎疫苗',
-                    expiry: new Date(),
-                    batchNo:'b-99',
-                    producer:'rrr'
-                } //疫苗扫码信息
+                vaccine: [
+                    {
+                        'name': '乙肝疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-001',
+                        'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '流感疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-002',
+                        'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '腮腺炎疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-003',
+                        'producer':'长春生物制药'
+                    }
+                ]//疫苗扫码信息
             };
         },
         computed: {
@@ -106,7 +161,8 @@
             //比对疫苗信息
             async matchInfo(){
                 //接收疫苗
-                this.$device.subscribe('VACCINATION_SCAN', (data) => {
+                this.$device.subscribe('SCANNER_RESULT', (data) => {
+                    console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                     this.vaccine = data.data;
                     //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
                     if(this.vaccine.name == this.vaccinationData.name){
@@ -173,13 +229,15 @@
             },
             //接收接种状态
             receiveVaccinationStatus(){
-                this.$device.subscribe('VACCINATION_STATUS', (data) => {
-                    console.log('SERVER_PUSH==>VACCINATION_STATUS');
+                this.$device.subscribe('SOCKET_VACCINATION_STATUS_DATA', (data) => {
+                    console.log('SOCKET_VACCINATION_STATUS_DATA====> result:'+JSON.stringify(data));
                     //根据状态，判断是否跳转到首页
-
-                    this.$router.push('/main');
+                    let res=JSON.parse(data.data)
+                    if(res.status=='finish'){
+                        this.$router.push('/main');
+                    }                    
                 });
-            }
+            },
         },
         mounted() {
             this.commonData = {
@@ -191,7 +249,7 @@
                 unitName: this.device.unitName
             };
             //接收推送的接种信息(home.vue中接收)
-            //this.vaccinationData = this.$route.query.vaccination;
+            // this.vaccinationData = this.$route.query.vaccination;
             //打开需要接种的疫苗所在抽屉
             //this.openDrawer(this.vaccinationData);
             this.receiveVaccinationStatus();
@@ -201,6 +259,6 @@
     };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
     @import "~@/style/vaccination.less";
 </style>

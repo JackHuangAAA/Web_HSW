@@ -28,6 +28,7 @@ if (cluster.isMaster) {
     logger.info(`主进程[${process.pid}]启动...`);
     //日志清理
     require('./logsManage');
+    require('./push');
 
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();

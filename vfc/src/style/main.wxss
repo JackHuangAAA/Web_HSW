@@ -5,21 +5,21 @@
 }
 .vaccineStatus {
   width: 100%;
-  height: 75%;
-  background-color: white;
+  height: 79%;
+  background-color: #ecf0f8;
   margin-top: 1.56%;
   border-radius: 10px;
   float: left;
 }
 .cabineStatus {
   width: 98.83%;
-  height: 14.4%;
+  height: 12%;
   float: left;
   margin-top: 1.56%;
   margin-left: 1.17%;
 }
 .temperature {
-  width: 37.3%;
+  width: 40%;
   height: 100%;
   border-radius: 10px;
   position: relative;
@@ -130,12 +130,14 @@
   padding-left: 3px;
   padding-top: 3px;
   padding-bottom: 3px;
-  margin-top: 5%;
+  margin-top: 3%;
   overflow: auto;
+  background-image: url(../../public/static/img/main.png);
+  background-size: 100% 100%;
 }
 .vaccineStatusShow {
   width: calc(32%);
-  height: 40%;
+  height: 30%;
   background-color: white;
   float: left;
   margin-right: 18px;
@@ -188,21 +190,21 @@
 }
 .vaccineLeft {
   width: 50%;
-  height: 33%;
+  height: 30%;
   position: relative;
   float: left;
 }
 .vaccineRight {
   width: 50%;
-  height: 33%;
+  height: 30%;
   position: relative;
   float: left;
 }
 .warning {
-  background-color: #FFE2DF!important;
+  color: #ff3600!important;
 }
 .tips {
-  background-color: #FFF7E9;
+  color: #f28d00;
 }
 .temP {
   position: absolute;
@@ -283,7 +285,7 @@
   background-color: white!important;
 }
 .button {
-  height: 6.4%;
+  height: 4.5%;
   width: 100%;
   float: left;
 }
@@ -325,4 +327,40 @@
   line-height: 4rem;
   font-size: 1.125rem;
   color: white;
+}
+.vaccineContentTitle {
+  width: 94%;
+  height: 3.5rem;
+  margin: 0 auto;
+  margin-top: 3%;
+  line-height: 3.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #3E4955;
+}
+.vaccineName {
+  width: 42%;
+  height: 100%;
+  margin-left: 3%;
+  float: left;
+}
+.vaccineAllowance {
+  width: 27.5%;
+  height: 100%;
+  float: left;
+}
+.allowanceStatus {
+  width: 27.5%;
+  height: 100%;
+  float: left;
+}
+.vaccineContentContent {
+  width: 94%;
+  height: 3.6875rem;
+  margin: 0 auto;
+  line-height: 3.6875rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #3E4955;
+  border-bottom: 1px solid #C7CBD5;
 }

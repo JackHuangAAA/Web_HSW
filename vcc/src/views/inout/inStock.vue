@@ -4,19 +4,33 @@
         <div class="black" v-if="addForm">
             <div class="addForm">
                 <img src="/static/img/close.png" @click="cancel()">
-                <div class="vaccineAddOne" v-if="addVaccineOne">
-                    <p class="vaccineAddName">{{addVaccineOne}}:</p>
-                    <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                <div class="addForm-content">
+
+                
+                    <div class="vaccineAddOne" v-if="addVaccineOne">
+                        <p class="vaccineAddName">{{addVaccineOne}}:</p>
+                        <Input v-model="vaccineOneCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    </div>
+                    <div class="vaccineAddTwo" v-if="addVaccineTwo">
+                        <p class="vaccineAddName">{{addVaccineTwo}}:</p>
+                        <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    </div>
+                    <div class="vaccineAddThree" v-if="addVaccineThree">
+                        <p class="vaccineAddName">{{addVaccineThree}}:</p>
+                        <Input v-model="vaccineThreeCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    </div>
+                    <div class="vaccineAddFour" v-if="addVaccineFour">
+                        <p class="vaccineAddName">{{addVaccineFour}}:</p>
+                        <Input v-model="vaccineFourCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
+                    </div>
                 </div>
-                <div class="vaccineAddTwo" v-if="addVaccineTwo">
-                    <p class="vaccineAddName">{{addVaccineTwo}}:</p>
-                    <Input v-model="vaccineTwoCount" placeholder="请输入入库数量" style="width: 17.5625rem" class="addInput"/>
-                </div>
-                <div class="cancel" @click="cancel()">
-                    取消
-                </div>
-                <div class="addYes" @click="inStock()">
-                    确定
+                <div class="addForm-choose-btn">
+                    <div class="cancel" @click="cancel()">
+                        取消
+                    </div>
+                    <div class="addYes" @click="inStock()">
+                        确定
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +68,14 @@
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
                                 </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -65,6 +87,7 @@
                 </div>
             </div>
         </div>
+        <audio src="/static/audio/inputInStockCount.mp3" autoplay></audio>
     </div>
 </template>
 <script>
@@ -91,6 +114,19 @@
                 vaccineTwoX: '',//抽屉2号格疫苗X
                 vaccineOneY: '',//抽屉1号格疫苗Y
                 vaccineTwoY: '',//抽屉2号格疫苗Y
+                addVaccineThree: '', //抽屉3号格疫苗名称
+                vaccineThreeCode: '',//抽屉3号格疫苗编号
+                addVaccineFour: '',//抽屉4号格疫苗名称
+                vaccineFourCode: '',//抽屉4号格疫苗编号
+                vaccineThreeCount: null,//抽屉3号格疫苗数量
+                vaccineFourCount: null,//抽屉4号格疫苗数量
+                vaccineThreeId: '',//抽屉3号格疫苗id
+                vaccineFourId: '',//抽屉4号格疫苗id
+                vaccineThreeX: '',//抽屉3号格疫苗X
+                vaccineFourX: '',//抽屉4号格疫苗X
+                vaccineThreeY: '',//抽屉3号格疫苗Y
+                vaccineFourY: '',//抽屉4号格疫苗Y
+                endData:[]//完成的数据
             }
         },
         computed: {
@@ -113,7 +149,6 @@
                     temp.y = array[i].y;
                     if (num > 0) {
                         for (let k = 0; k < num; k++) {
-
                             if (k == 0) {
                                 temp.nameOne = vaccine[k].name;
                                 temp.countOne = vaccine[k].surplus;
@@ -126,12 +161,28 @@
                                 temp.idTwo = vaccine[k]._id;
                                 temp.codeTwo = vaccine[k].code;
                             }
+                            if (k == 2) {
+                                temp.nameThree = vaccine[k].name;
+                                temp.countThree = vaccine[k].surplus;
+                                temp.idThree = vaccine[k]._id;
+                                temp.codeThree = vaccine[k].code;
+                            }
+                            if (k == 3) {
+                                temp.nameFour = vaccine[k].name;
+                                temp.countFour = vaccine[k].surplus;
+                                temp.idFour = vaccine[k]._id;
+                                temp.codeFour = vaccine[k].code;
+                            }
                         }
                     } else {
                         temp.nameOne = '';
                         temp.countOne = '';
                         temp.nameTwo = '';
                         temp.countTwo = '';
+                        temp.nameThree = '';
+                        temp.countThree = '';
+                        temp.nameFour = '';
+                        temp.countFour = '';
                     }
                     this.cabineDatas.push(temp);
                 }
@@ -152,7 +203,21 @@
                 this.vaccineTwoX = this.cabineDatas[index].x;
                 this.vaccineOneY = this.cabineDatas[index].y;
                 this.vaccineTwoY = this.cabineDatas[index].y;
-                if(this.addVaccineOne || this.addVaccineTwo){
+
+                this.addVaccineThree = this.cabineDatas[index].nameThree;
+                this.addVaccineFour = this.cabineDatas[index].nameFour;
+                this.vaccineThreeCount = null;
+                this.vaccineFourCount = null;
+                this.vaccineThreeId = this.cabineDatas[index].idThree;
+                this.vaccineFourId = this.cabineDatas[index].idFour;
+                this.vaccineThreeCode = this.cabineDatas[index].codeThree;
+                this.vaccineFourCode = this.cabineDatas[index].codeFour;
+                this.vaccineThreeX = this.cabineDatas[index].x;
+                this.vaccineFourX = this.cabineDatas[index].x;
+                this.vaccineThreeY = this.cabineDatas[index].y;
+                this.vaccineFourY = this.cabineDatas[index].y;
+
+                if(this.addVaccineOne || this.addVaccineTwo || this.addVaccineThree || this.addVaccineFour){
                     this.addForm = true;
                 }
             },
@@ -161,6 +226,10 @@
                 this.addVaccineTwo = '';
                 this.vaccineOneCount = null;
                 this.vaccineTwoCount = null;
+                this.addVaccineThree = '';
+                this.addVaccineFour = '';
+                this.vaccineThreeCount = null;
+                this.vaccineFourCount = null;
                 this.addForm = false;
             },
             async modifyVaccineNum(params){
@@ -209,14 +278,158 @@
                         surplus: this.vaccineTwoCount
                     });
                 }
+                //抽屉3号格
+                if(this.vaccineThreeId && this.vaccineThreeCount>0){
+                    await this.modifyVaccineNum({
+                        id: this.vaccineThreeId,
+                        total: this.vaccineThreeCount,
+                        surplus: this.vaccineThreeCount
+                    });
+                    await this.saveInout({
+                        batchId: batchId,
+                        ...this.commonData,
+                        x: this.vaccineThreeX,
+                        y: this.vaccineThreeY,
+                        code: this.vaccineThreeCode,
+                        name: this.addVaccineThree,
+                        total: this.vaccineThreeCount,
+                        surplus: this.vaccineThreeCount
+                    });
+                }
+                //抽屉4号格
+                if(this.vaccineFourId && this.vaccineFourCount>0){
+                    await this.modifyVaccineNum({
+                        id: this.vaccineFourId,
+                        total: this.vaccineFourCount,
+                        surplus: this.vaccineFourCount
+
+                    });
+                    await this.saveInout({
+                        batchId: batchId,
+                        ...this.commonData,
+                        x: this.vaccineFourX,
+                        y: this.vaccineFourY,
+                        code: this.vaccineFourCode,
+                        name: this.addVaccineFour,
+                        total: this.vaccineFourCount,
+                        surplus: this.vaccineFourCount
+                    });
+                }
+                //入库的数据
+                let flag=true,i_index=0;
+                if(_.isEmpty(this.endData)){
+                    if(this.addVaccineOne){
+                        this.endData.push({name:this.addVaccineOne,
+                        surplus:this.vaccineOneCount
+                        });
+                    }
+                    if(this.addVaccineTwo){
+                        this.endData.push( {name:this.addVaccineTwo,
+                        surplus:this.vaccineTwoCount
+                        },);
+                    }
+                    if(this.addVaccineThree){
+                        this.endData.push({name:this.addVaccineThree,
+                        surplus:this.vaccineThreeCount
+                        },);
+                    }
+                    if(this.addVaccineFour){
+                        this.endData.push({name:this.addVaccineFour,
+                        surplus:this.vaccineFourCount
+                        });
+                    }
+                }else{
+                    if(this.addVaccineOne){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineOne){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineOne,
+                                surplus:this.vaccineOneCount
+                            });
+                        }else{
+                            if(this.vaccineOneCount!=null){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineOneCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineTwo){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineTwo){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push( {name:this.addVaccineTwo,
+                                surplus:this.vaccineTwoCount
+                            });
+                        }else{
+                            if(this.vaccineTwoCount!=null){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineTwoCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineThree){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineThree){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineThree,
+                            surplus:this.vaccineThreeCount
+                            });
+                        }else{
+                            if(this.vaccineThreeCount){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineThreeCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                    if(this.addVaccineFour){
+                        for(let i=0;i<this.endData.length;i++){
+                            if(this.endData[i].name==this.addVaccineFour){
+                                flag=false;
+                                i_index=i;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            this.endData.push({name:this.addVaccineFour,
+                            surplus:this.vaccineFourCount
+                            });
+                        }else{
+                            if(this.vaccineFourCount){
+                                this.endData[i_index].surplus=parseInt(this.endData[i_index].surplus)+parseInt(this.vaccineFourCount);
+                            }
+                            flag=true;
+                            i_index=0;
+                        }
+                    }
+                }
+                console.log(this.endData);
                 this.queryDrawerByCondition();
                 this.addForm = false;
             },
             finishInStock(){
-                this.$router.push({ path: '/inout/detail', query: { action: 'in'} });
+                this.$router.push({ path: '/inout/detail', query: { action: 'in', inStockDate:this.endData} });
             }
         },
         mounted() {
+            this.endData=[];
             this.commonData = {
                 type: 1, //1:入库
                 user: this.user._id,

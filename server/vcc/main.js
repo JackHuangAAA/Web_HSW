@@ -30,7 +30,7 @@ if (cluster.isMaster) {
     require('./logsManage');
     require('./devicesOfflineManage');
     require('./summariesManage');
-    require('./homeData');
+    //require('./push');
 
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
@@ -53,7 +53,6 @@ if (cluster.isMaster) {
     const filter = require('./filter');
     const koaLogger = require('koa-logger');
 
-
     app.use(koaLogger((str, args) => {
             logger.info(...args)
     }));
@@ -74,7 +73,6 @@ if (cluster.isMaster) {
 
         app.listen(Config.vcc.port || 8080, Config.vcc.host || '0.0.0.0');
     };
-
 
     start();
 

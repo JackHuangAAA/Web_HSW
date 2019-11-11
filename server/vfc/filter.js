@@ -9,13 +9,12 @@ const excluded = [
     '/zcy/checkUser',
     '/user/modifyUserByCode',
     '/device/queryDeviceByCondition',
-    '/device'
+    '/device',
+    '/user/queryUserByCondition'
 ];
 
 const bindUserFilter = async (ctx,next) => {
     try {
-        //绕过用户判断进行操作流水保存，正式测试时将该函数放在下方//保存操作记录！！！
-        await operationlogSave(ctx);
         //检查设备是否已经接入平台
         let result = await deviceFilter(ctx);
         if(result){
@@ -30,11 +29,15 @@ const bindUserFilter = async (ctx,next) => {
                 if (!_.isEmpty(token)) {
                     let result = await Domain.services.user.checkToken(token);
                     ctx.currentUser = result;
+                    //操作流水保存
+                    await operationlogSave(ctx);
                     await next();
                 } else {
                     ctx.body = Libs.response.error(Libs.error('0001', '未登录'));
                 }
             } else {
+                //操作流水保存
+                //await operationlogSave(ctx);
                 await next();
             }
         } else {
@@ -65,20 +68,6 @@ const deviceFilter = async ctx => {
                 code: deviceCode, //设备序列号
                 type: 2 //设备类型(1:接种柜;2:冷藏柜)
             });
-            //初始添加抽屉
-            let darwers = []
-            for (let y = 1; y < 7; y++) {
-                for (let x = 1; x < 3; x++) {
-                    let temp = {
-                        device: device._id,
-                        x: x, //列
-                        y: y, //行
-                        vaccine: []
-                    };
-                    darwers.push(temp);
-                }
-            }
-            await Domain.services.drawer.saveDrawer(darwers);
         }
         //保存心跳时间
         let now = new moment();
@@ -99,60 +88,100 @@ module.exports = {
     }
 };
 
+//冷藏柜动作（1、签到；2、签退;3、入库（包含批量）;4、出库（包含批量））
 const operationlogSave = async (ctx) => {
     let logMap = new Map([
-        ["key_checkIn","/inout/saveInouts?test=0"],
-        ["key_checkOut","/inout/saveInouts?test=0"],
-        ["key_getVaccines","/inout/saveInouts?test=0"],
-        ["key_inoutVcc","/inout/saveInouts"],
+        ["key_checkIn","/user/modifyUserByCode"],
+        ["key_checkOut","/user/logout"],
+        ["key_saveInout","/inout/saveInout"],
+        ["key_saveManyInout","/inout/saveManyInout"],
         ["key_vaccinate","/vaccination/saveVaccination"]
     ]);
-    //保存操作记录，正式测试将代码块移至 //保存操作记录！！！处
-    //测试定义登录账户信息//直接获取当前登录账号信息//直接获取当前登录账号信息
-    let result = new Object();
-    result.userCode = "1234567";
-    result.userName = "李医生";
-    //接种记录
-    if (ctx.url.includes(logMap.get("key_vaccinate"))) {
-        await Domain.services.log.saveLog({
-            userCode: result.userCode,
-            userName: result.userName,
-            device: ctx.request.body.device,
-            deviceType: "1",
-            unitCode: ctx.request.body.unitCode,
-            unitName: ctx.request.body.unitName,
-            action: "6",
-            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" + "为" + ctx.request.body.customer.name + "接种了" + ctx.request.body.customer.vaccineName,
-            operatorDte: ctx.request.body.createDate
-        })
-    }
-    //出入库记录
-    if (ctx.url.includes(logMap.get("key_inoutVcc"))) {
 
-
-        //type=1入库，type=2出库
-        console.log(ctx.request.body.type);
-        console.log(typeof (ctx.request.body.type));
-
-        let action,action_name;
+    let userCode,userName;
+    userCode = ctx.currentUser.code;
+    userName = ctx.currentUser.name;
+    let deviceCode = ctx.header['deviceid'];
+    let device = await Domain.services.device.queryDeviceByCondition({
+        code: deviceCode
+    });
+    let unitCode=device[0].unitCode;
+    let unitName=device[0].unitName;
+    let deviceId=device[0]._id;
+    //3,4出入库记录
+    if (ctx.url.includes(logMap.get("key_saveInout"))) {
+        //type=0接种，type=1入库，type=2出库
+        let action;
         if (ctx.request.body.type == 1) {
-            action ="4", action_name = "入库";
-        } else {
-            action ="5", action_name = "出库";
+            action ="3";
+        } else{
+            action ="4";
         }
-        console.log(action);
+
         let query ={
-            userCode: result.userCode,
-            userName: result.userName,
+            userCode:userCode,
+            userName:userName,
             device: ctx.request.body.device,
-            deviceType: "1",
-            unitCode: ctx.request.body.unitCode,
-            unitName: ctx.request.body.unitName,
+            deviceType: 2,
+            unitCode: unitCode,
+            unitName: unitName,
             action: action,
-            content: result.userName + "在编号为" + ctx.request.body.device + "的接种柜" +"("+ctx.request.body.x+","+ctx.request.body.y+")"+ action_name + ctx.request.body.total + "支" + ctx.request.body.vaccineName,
-            operatorDte: ctx.request.body.createDate
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
         };
 
         await Domain.services.log.saveLog(query);
+    }
+    //3,4出入库记录
+    if (ctx.url.includes(logMap.get("key_saveManyInout"))) {
+        //type=1入库，type=2出库
+        let action;
+        if (ctx.request.body[0].type == 1) {
+            action ="3";
+        } else{
+            action ="4";
+        }
+        let query ={
+            userCode:userCode,
+            userName: userName,
+            device: ctx.request.body[0].device,
+            deviceType: 2,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: action,
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        };
+
+        await Domain.services.log.saveLog(query);
+    }
+
+    //1登录  保存方法写在vcc-routes-user
+    /*if (ctx.url.includes(logMap.get("key_checkIn"))) {
+        await Domain.services.log.saveLog({
+            userCode: userCode,
+            userName: userName,
+            device: deviceId,
+            deviceType: 2,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: "1",
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        })
+    }*/
+    //退出
+    if (ctx.url.includes(logMap.get("key_checkOut"))) {
+        await Domain.services.log.saveLog({
+            userCode: userCode,
+            userName: userName,
+            device: deviceId,
+            deviceType: 2,
+            unitCode: unitCode,
+            unitName: unitName,
+            action: "2",
+            content:JSON.stringify(ctx.request.body),
+            operatorDte: new Date()
+        })
     }
 }

@@ -1,66 +1,55 @@
 <!--库存-->
 <template>
-    <div class="container">
-        <div class="main">
-                <div class="mainTop">
-                    <p class="tip">提示：点击疫苗所在抽屉，查看库存详情</p>
-                    <p class="ctOne">抽屉1</p>
-                    <p class="ctLeft">左</p>
-                    <img src="/static/img/l-r.png" class="l_r">
-                    <p class="ctRight">右</p>
-                    <p class="ctTwo">抽屉2</p>
-                </div>
-                <div class="mainBottom">
-                    <div class="mainBottomLeft">
-                        <p class="ctTop">上</p>
-                        <img src="/static/img/t-b.png" class="t_b">
-                        <p class="ctBottom">下</p>
-                    </div>
-                    <div class="mainBottomRight">
-                        <div class="index">
-                                <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
-                        </div>
-                        <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id)">
-                                <div class="cabineLeft" v-if="item.nameOne">
-                                    <p class="vaccineOneName">{{item.nameOne}}</p>
-                                    <p class="vaccineOneCount">{{item.countOne||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameTwo">
-                                    <p class="vaccineTwoName">{{item.nameTwo}}</p>
-                                    <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameThree">
-                                    <p class="vaccineOneName">{{item.nameThree}}</p>
-                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameFour">
-                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
-                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
-                                </div>
-                                <div class="cabineLeft" v-if="item.nameFive">
-                                    <p class="vaccineOneName">{{item.nameFive}}</p>
-                                    <p class="vaccineOneCount">{{item.countFive||0}}支</p>
-                                </div>
-                                <div class="cabineRight" v-if="item.nameSix">
-                                    <p class="vaccineTwoName">{{item.nameSix}}</p>
-                                    <p class="vaccineTwoCount">{{item.countSix||0}}支</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div>
+    <Row class="inoculate-head">
+        <div class="history">
+            缺少库存<span style="color:rgb(255,96,19);margin-left:5px">{{lackNumber}}种</span>
+        </div>
+        <div class="type">
+            疫苗名称:
+            <Select v-model="vaccineCode" style="width:70%" clearable @on-change="contextChange">
+                <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
+            </Select>
+        </div>
+        <div class="date">
+            生产厂家:
+            <Input v-model="product" placeholder="请输入厂家" style="width:70%" clearable @on-change="contextChange"/>
+            <!--<Select v-model="model1" style="width:70%">
+                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>-->
+        </div>
+    </Row>
+    <div class="inoculate card">
+        <Row class="inoculate-table-row">
+            <Col span="4">疫苗名称</Col>
+            <Col span="7">生产厂家</Col>
+            <Col span="4">唯一号</Col>
+            <Col span="6">有效期</Col>
+            <Col span="3">库存数量</Col>
+        </Row>
+        <div class="inoculate-table">
+            <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
+                <Col span="4">{{item.name}}</Col>
+                <Col span="7" class="producer">{{item.product}}</Col>
+                <Col span="4">{{item.code}}</Col>
+                <Col span="6">{{dateFormat(item.expiry)}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus}}</Col>
+            </Row>
         </div>
     </div>
+</div>
 </template>
 <script>
     import {mapGetters} from 'vuex';
     export default {
         data() {
             return {
-                cabineDatas: [],
-                index: '1',
-                row: 6
+                cityList:[{label:'1',value:'1'}],
+                vaccineCode: '',
+                product:'',
+                kindList:[],
+                lackNumber:0,
+                vaccineDatas:[]
             }
         },
         computed: {
@@ -70,72 +59,40 @@
         },
         components:{},
         methods: {
-            async queryDrawerByCondition(){
-                this.cabineDatas = [];
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", {
-                    device: this.device._id
+            //查询疫苗信息
+            async queryVaccineStorageNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    code: this.vaccineCode,
+                    product: this.product
                 });
-                let array = res.data;
-                for (let i = 0; i < 12; i++) {
-                    let num = array[i].vaccine.length, vaccine = array[i].vaccine, temp = {};
-                    temp.id = array[i]._id;
-                    temp.x = array[i].x;
-                    temp.y = array[i].y;
-                    if (num > 0) {
-                        for (let k = 0; k < num; k++) {
-
-                            if (k == 0) {
-                                temp.nameOne = vaccine[k].name;
-                                temp.countOne = vaccine[k].surplus;
-                                temp.idOne = vaccine[k]._id;
-                                temp.codeOne = vaccine[k].code;
-                            }
-                            if (k == 1) {
-                                temp.nameTwo = vaccine[k].name;
-                                temp.countTwo = vaccine[k].surplus;
-                                temp.idTwo = vaccine[k]._id;
-                                temp.codeTwo = vaccine[k].code;
-                            }
-                            if (k == 2) {
-                                temp.nameThree = vaccine[k].name;
-                                temp.countThree = vaccine[k].surplus;
-                                temp.idThree = vaccine[k]._id;
-                                temp.codeThree = vaccine[k].code;
-                            }
-                            if (k == 3) {
-                                temp.nameFour = vaccine[k].name;
-                                temp.countFour = vaccine[k].surplus;
-                                temp.idFour = vaccine[k]._id;
-                                temp.codeFour = vaccine[k].code;
-                            }
-                            if (k == 4) {
-                                temp.nameFive = vaccine[k].name;
-                                temp.countFive = vaccine[k].surplus;
-                                temp.idFive = vaccine[k]._id;
-                                temp.codeFive = vaccine[k].code;
-                            }
-                            if (k == 5) {
-                                temp.nameSix = vaccine[k].name;
-                                temp.countSix = vaccine[k].surplus;
-                                temp.idSix = vaccine[k]._id;
-                                temp.codeSix = vaccine[k].code;
-                            }
-                        }
-                    } else {
-                        temp.nameOne = '';
-                        temp.countOne = '';
-                        temp.nameTwo = '';
-                        temp.countTwo = '';
-                    }
-                    this.cabineDatas.push(temp);
-                }
+                this.vaccineDatas = res.data.rs;
             },
-            detail(drawerId){
-                this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
+            async lackVaccineNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    surplusltTen: true,
+                    code: this.vaccineCode,
+                    product: this.product
+                });
+                this.lackNumber = res.data.total;
+            },
+            async queryVaccineKinds(){
+                let res = await this.$api.get("/zcy/queryVaccineKinds");
+                this.kindList = res.data;
+            },
+            dateFormat(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            contextChange(){
+                this.queryVaccineStorageNum();
+                this.lackVaccineNum();
             }
         },
         mounted() {
-            this.queryDrawerByCondition();
+            this.queryVaccineStorageNum();
+            this.lackVaccineNum();
+            this.queryVaccineKinds();
         }
     };
 </script>

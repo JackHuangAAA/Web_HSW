@@ -26,9 +26,6 @@ module.exports = {
     queryPermission: async function (requestBody) {
         logger.debug('queryPermission:' + JSON.stringify(requestBody));
         let query = {};
-        // if (!_.isEmpty(requestBody.name)) {
-        //     query = { "title": new RegExp(requestBody.name) };
-        // }
         let result = await Domain.models.permission.paginate(query, {
             sort: { "sort": -1 },
             page: requestBody.page || 1,
@@ -100,71 +97,33 @@ module.exports = {
      */
     createPermissionTree: async function (menuData) {
         logger.debug('createPermissionTree:' + JSON.stringify(menuData));
-        const allMenu = await Domain.models.menu.find({}, null);
-        let allMenuMap = new Map();
-        allMenu.forEach(item => {
-            allMenuMap.set(item._id.toString(), item)
-        });
-        let newMenu = [];
-        let itemParent = {};
-        let allParentArray = []
-        // 获取所有可能出现的菜单父类
-        menuData.forEach(item => {
-            if (!item.children || item.children.length == 0) {
-                if (allMenuMap.get(item.pid)) {
-                    itemParent = allMenuMap.get(item.pid);
-                    itemParent.children.push(item);
-                    allParentArray.push(itemParent)
+        let newMenu=[];
+        let pid_arr=[];
+        let sub_arr=[];
+        //获取唯一父子节点id
+        menuData.forEach((item)=>{
+            if(!item.children || item.children.length==0){
+                sub_arr.push(item._id);
+                if(pid_arr.indexOf(item.pid)==-1){
+                    pid_arr.push(item.pid);
                 }
             }
-            else {
-                newMenu.push(item)
-            }
         });
-        // 删除重复出现的父菜单
-        let _allParentArray = [];
-        var temp = []; //一个新的临时数组
-        allParentArray.forEach((item, index) => {
-            if (temp.indexOf(allParentArray[index]['_id'].toString()) == -1) {
-                temp.push(allParentArray[index]['_id'].toString());
-                _allParentArray.push(allParentArray[index])
-            }
-        });
-        // 筛选出需要删减子菜单的父菜单（勾选了父菜单下的某几个子菜单）
-        menuData.forEach(ele => {
-            if (allMenuMap.get(ele._id)) {
-                _allParentArray.forEach((ele2, index2) => {
-                    if (ele._id == ele2._id) {
-                        _allParentArray.splice(index2, 1)
+        
+        const allMenu = await Domain.models.menu.find({}, null);
+        allMenu.forEach((el,i)=>{
+            let arrItem={};
+            //判断是否当前父节点
+            if(pid_arr.indexOf(el._id.toString())>-1){
+                arrItem=el;
+                el.children.forEach((e)=>{
+                    if(sub_arr.indexOf(e._id.toString())>-1){
+                        arrItem.children=e;
                     }
-                })
+                });
+                newMenu.push(arrItem);
             }
-        });
-        // 从所有子菜单中筛选出勾选的子菜单
-        _allParentArray.forEach(ele => {
-            let _ele = JSON.parse(JSON.stringify(ele));
-            _ele.children = [];
-            this.filterArray(ele.children, _ele.children );
-            newMenu.push(_ele);
         });
         return newMenu;
-    },
-
-    /**
-     *
-     * @param {any} allArray 含有重复字段的数组
-     * @param {any} _allArray  将重复字段取出来 组成新的数组
-     */
-    filterArray: function (allArray, _allArray) {
-        logger.debug('filterArray:' + JSON.stringify(allArray));
-        var temp = []; //一个新的临时数组
-        allArray.forEach((item, index) => {
-            if (temp.indexOf(allArray[index]['_id'].toString()) == -1) {
-                temp.push(allArray[index]['_id'].toString())
-            } else {
-                _allArray.push(allArray[index])
-            }
-        })
     }
-
-};
+}

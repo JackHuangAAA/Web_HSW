@@ -74,11 +74,11 @@
             </div>
         </Row>
         <!-- table -->
-        <div class="main-table">
+        <div class="main-table main-table-height">
             <Row>
-                <Col span="18" class="main-table-title">各单位设备数量统计</Col>
-                <Col span="6" class="main-table-search">
-                    <div class="main-table-search-lab">接种单位:</div>                    
+                <Col span="19" class="main-table-title">各单位设备数量统计</Col>
+                <Col span="5" class="main-table-search">
+                    <div class="main-table-search-lab">单位:</div>                    
                     <input v-model="value1" placeholder="" />
                 </Col>
             </Row>
@@ -93,16 +93,18 @@
                 <Col span="3">正常接种柜</Col>
                 <Col span="3">异常接种柜</Col>
             </Row>
-            <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
-                <Col span="2" class="id-center">1</Col>
-                <Col span="4">{{index}}</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-                <Col span="3">1</Col>
-            </Row>
+            <div class="home-table-body">
+                <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
+                    <Col span="2" class="id-center">{{index+1}}</Col>
+                    <Col span="4">{{index%2==0?'望江':'武林'}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                </Row>
+            </div>
         </div>
     </div>
 </template>
@@ -145,31 +147,31 @@
                 // setCurrentMenu: 'setCurrentMenu'
             }),
             queryDeviceByAggregate(){
-                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:1,test:0}).then(res=>{
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:1}).then(res=>{
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
-                            this.i_normalCount=data[i].count
+                            this.i_normalCount=data[i].count;
                         }
                         if(data[i]._id.status==2){
-                            this.i_abnormalCount+=data[i].count
+                            this.i_abnormalCount+=data[i].count;
                         }
                         if(data[i]._id.status==0){
-                            this.i_abnormalCount+=data[i].count
+                            this.i_abnormalCount+=data[i].count;
                         }
                     }
                 })
-                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:2,test:0}).then(res=>{
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:2}).then(res=>{
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
-                            this.f_normalCount=data[i].count
+                            this.f_normalCount=data[i].count;
                         }
                         if(data[i]._id.status==2){
-                            this.f_abnormalCount+=data[i].count
+                            this.f_abnormalCount+=data[i].count;
                         }
                         if(data[i]._id.status==0){
-                            this.f_abnormalCount+=data[i].count
+                            this.f_abnormalCount+=data[i].count;
                         }
                     }
                 })
@@ -178,10 +180,10 @@
                 // })
             },
             queryAlarmDailyInfo(){
-                this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
-                    let data=res.data
-                    data=data.slice(0,4)
-                    this.alarmList=data
+                this.$api.get('/alarm/queryAlarmDailyInfo').then(res=>{
+                    let data=res.data;
+                    data=data.slice(0,4);
+                    this.alarmList=data;
                 })
             },
 

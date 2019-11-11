@@ -7,7 +7,8 @@
                      <basic></basic> 
                 </TabPane>
                 <TabPane label="指纹录入">
-                    <finger></finger>
+                    <finger v-if="fingerType" @add="addhandle"></finger>
+                    <fingerEntry v-else @save="savehandle"></fingerEntry>
                 </TabPane>
                 <TabPane label="疫苗区域划分">
                     <region></region>
@@ -22,14 +23,18 @@
     import basic from "./basic";
     import finger from "./finger";
     import region from "./region";
+    import fingerEntry from './fingerEntry'
     export default {
         components: {
             basic,
             finger,
-            region
+            region,
+            fingerEntry
         },
         data() {
-            return {};
+            return {
+                fingerType:true
+            };
         },
         computed: {
             ...mapGetters({
@@ -38,6 +43,12 @@
             })
         },
         methods: {
+            addhandle(type){
+                this.fingerType=type
+            },
+            savehandle(type){
+                this.fingerType=type
+            }
         },
         mounted() {
 

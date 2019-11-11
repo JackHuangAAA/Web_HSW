@@ -21,7 +21,7 @@
                                 <p class="indexBlock" v-for="(item,index) in row"><span class="indexSpan">第{{index+1}}行</span></p>
                         </div>
                         <div class="cabines">
-                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id)">
+                            <div class="cabine" v-for="(item,index) in cabineDatas" @click="detail(item.id,item.nameOne)">
                                 <div class="cabineLeft" v-if="item.nameOne">
                                     <p class="vaccineOneName">{{item.nameOne}}</p>
                                     <p class="vaccineOneCount">{{item.countOne||0}}支</p>
@@ -29,6 +29,14 @@
                                 <div class="cabineRight" v-if="item.nameTwo">
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
+                                </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
                                 </div>
                             </div>
                         </div>
@@ -80,18 +88,36 @@
                                 temp.idTwo = vaccine[k]._id;
                                 temp.codeTwo = vaccine[k].code;
                             }
+                            if (k == 2) {
+                                temp.nameThree = vaccine[k].name;
+                                temp.countThree = vaccine[k].surplus;
+                                temp.idThree = vaccine[k]._id;
+                                temp.codeThree = vaccine[k].code;
+                            }
+                            if (k == 3) {
+                                temp.nameFour = vaccine[k].name;
+                                temp.countFour = vaccine[k].surplus;
+                                temp.idFour = vaccine[k]._id;
+                                temp.codeFour = vaccine[k].code;
+                            }
                         }
                     } else {
                         temp.nameOne = '';
                         temp.countOne = '';
                         temp.nameTwo = '';
                         temp.countTwo = '';
+                        temp.nameThree = '';
+                        temp.countThree = '';
+                        temp.nameFour = '';
+                        temp.countFour = '';
                     }
                     this.cabineDatas.push(temp);
                 }
             },
-            detail(drawerId){
-                this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
+            detail(drawerId,name){
+                if(!_.isEmpty(name)){
+                    this.$router.push({ path: '/stock/stockDetail', query: { drawerId: drawerId} });
+                }
             }
         },
         mounted() {

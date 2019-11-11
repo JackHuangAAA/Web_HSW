@@ -24,8 +24,8 @@
                         <img src="/static/img/pwd.png" slot="suffix" class="login-icon" />
                     </Input>
                     <div class="errortip" v-if="pwdErrShow"><span>{{pwderror}}</span></div>
-                    <Checkbox style="padding: 23px 0px 0px 0px; font-size:19px" v-model="rember" @on-change="save()">记住密码</Checkbox>
                 </FormItem>
+                <Checkbox style="padding: 13px 0px; font-size:19px" v-model="rember" @on-change="save()">记住密码</Checkbox>
             </Form>
             <Button type="primary" class="btn" @click="login(loginFrm)" @on-enter="login(loginFrm)" >登录</Button>
         </div>
@@ -115,9 +115,11 @@
                     //if (valid) {
                         this.$api.post('/user/login',{code: this.loginFrm.user,password: md5(this.loginFrm.password).toUpperCase()}).then((result)=>{
                             if(result.code == '0002'){
-                                this.$Message.error(`用户${data.user}不存在`);
+                                this.usererror = `用户${data.user}不存在`;
+                                this.userErrShow = true;
                             }else if(result.code == '0003'){
-                                this.$Message.error(`密码错误`);
+                                this.pwderror = `密码错误`;
+                                this.pwdErrShow = true;
                             }else if(result.code == '0000'){
                                 this.$router.push('/');
                             }
