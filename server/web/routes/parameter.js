@@ -65,9 +65,9 @@ router.post('/removeParameterById',
  * @apiParam {JSON} String  _id 
  * @apiSuccess {JSON}  Object 停用启用信息
  */
-router.post('/ableOrDisableParameter',
+router.post('/displayParameter',
     Libs.router(async (ctx,next) => {
-        return await Domain.services.parameter.ableOrDisableParameter(ctx.request.body);
+        return await Domain.services.parameter.displayParameter(ctx.request.body);
     })
 );
 
