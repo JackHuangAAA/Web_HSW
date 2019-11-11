@@ -1,7 +1,7 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="13" class="main-table-title">疫苗柜运行监控</Col>
+            <Col span="12" class="main-table-title">疫苗柜运行监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryDevice()" />
@@ -12,9 +12,10 @@
                     <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryDevice()">查询</Button></Col>
-        </Row>      
-        <Row class="main-table-head">
+            <Col span="2"><Button type="primary" class="search_btn" @click="search_queryDevice()" icon="ios-search">查询</Button></Col>
+        </Row>
+        <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>      
+        <!-- <Row class="main-table-head">
             <Col span="2" class="id-center">序号</Col>
             <Col span="3">设备类型</Col>
             <Col span="5">设备编号</Col>
@@ -33,7 +34,7 @@
                 <Col span="3" :class="{abnormal:item.temperature<0 || item.temperature>5}">{{item.status==0?'在线':item.status==1?'离线':'故障'}}</Col>
                 <Col span="3">{{item.notes||'--'}}</Col>
             </Row>
-        </div>
+        </div> -->
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
@@ -61,7 +62,38 @@ export default {
                     name:'冷藏柜',
                     key:2
                 }
-            ]
+            ],
+            cols: [
+                    {
+                        type: 'index',
+                        align: 'center'
+                    },{
+                        title: '疫苗柜类型',
+                        key: 'type',
+                        align: 'center'
+                    },{
+                        title: '疫苗柜编号',
+                        key: 'alias',
+                        align: 'center'
+                    },{
+                        title: '所在单位',
+                        key: 'unitName',
+                        align: 'center',
+                    },{
+                        title: '当前温度',
+                        key: 'temperature',
+                        align: 'center'
+                    },{
+                        title: '运行状态',
+                        key: 'status',
+                        ellipsis:true,
+                        align: 'center'
+                    },{
+                        title: '原因',
+                        key: 'notes',
+                        align: 'center',
+                    }
+                ],
         }
     },
     methods:{
@@ -71,6 +103,18 @@ export default {
             this.$api.get("device/queryDevices",{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
+                data.forEach(item=>{
+                    item.type=item.type==1?'接种柜':'冷藏柜';
+                    item.status=item.status==0?'在线':item.status==1?'离线':'故障';
+                    item.notes=item.notes||'--';
+                    item.temperature=item.temperature||'--';
+                    item.unitName=item.unitName||'--';
+                    item.alias=item.alias||'--';
+                    if(item.temperature<0 || item.temperature>5){
+                        this.$set(item,'cellClassName',
+                        {temperature:'abnormal',status:'abnormal'});
+                    }
+                })
                 this.lists=data;
             })
         },
