@@ -3,14 +3,28 @@ package com.ethink.vfd.plugin;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.StringUtils;
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.vfd.App;
+import com.ethink.vfd.Const;
+import com.ethink.vfd.SPUtils;
+import com.ethink.vfd.controller.FingerCommon;
 import com.ethink.vfd.event.FingerPushMessage;
 import com.ethink.vfd.controller.FingerUtil;
+import com.ethink.vfd.service.HttpUtils;
+import com.ethink.vfd.service.api.NetWorkUtils;
 import com.ethink.vfd.service.api.RxManager;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -20,20 +34,25 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
     private final RxManager rxManager;
     private Context context;
     private FingerUtil fingerUtil;
+    private String fingerUrl;
 
     public FingerPlugin(Context context) {
         super("FINGER");
         this.context = context;
         rxManager = new RxManager();
         logger.info("--------连接指纹设备-----------");
-        //   fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
+        fingerUrl= SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
+        fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
     }
 
     @Override
     public void onStart() {
         logger.info("FINGER-----------register");
         registerFunction("REGISTER", this);
+        registerFunction("UN_REGISTER", this);
         registerFunction("VERIFY", this);
+        registerFunction("UN_SEARCH", this);
+
         registerFunction("DEL_TEMPLATE_All", this);
         registerFunction("TEMPLATE_TOTAL", this);
         registerFunction("DEL_ONE_TEMPLATE", this);
@@ -52,23 +71,37 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
         if (pluginMessage == null) return pluginMessage;
         logger.info("pluginName " + pluginMessage.getFunctionName());
         String functionName = pluginMessage.getFunctionName();
-        pluginMessage.changeToResponse();
         switch (functionName) {
+            case "OPEN":
+                //   fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
+                break;
             case "REGISTER":
-                fingerUtil.register();
+                String uid = pluginMessage.getString("userId");
+                logger.info("录入指纹 id：{}",uid);
+                fingerUtil.remoteRegister(uid);
+                break;
+            case "UN_REGISTER":
+                //清除指纹
+                String userId= pluginMessage.getString("userId");
+                logger.info("删除指纹 id：{}",userId);
+                pluginMessage = NetWorkUtils.post(fingerUrl+"/unregister?tag="+userId,null ,context, pluginMessage);
                 break;
             case "VERIFY":
-                String num=pluginMessage.getString("number");
-                if(StringUtils.isEmpty(num)){
+                String num = pluginMessage.getString("number");
+                if (StringUtils.isEmpty(num)) {
                     logger.info("请输入指纹序号！");
-                }else{
+                } else {
                     try {
-                        int id=Integer.parseInt(num);
+                        int id = Integer.parseInt(num);
                         fingerUtil.verify(id);
-                    }catch (NumberFormatException e){
-                        logger.info("序号格式不正确",e);
+                    } catch (NumberFormatException e) {
+                        logger.info("序号格式不正确", e);
                     }
                 }
+                break;
+            case "UN_SEARCH":
+                //终止指纹录取
+                fingerUtil.cancel();
                 break;
             case "DEL_TEMPLATE_ALL":
                 fingerUtil.delTemplateAll();
@@ -80,7 +113,7 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
                 fingerUtil.close();
                 break;
             case "SEARCH":
-                fingerUtil.search();
+                fingerUtil.remoteVerify();
                 break;
             case "DOWNLOAD":
                 fingerUtil.download();
@@ -94,29 +127,37 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
     }
 
     @Override
-    public void message(String msg) {
+    public void message(int type,String msg) {
         EventMessage eventMessage = new EventMessage("FINGER_MESSAGE");
         eventMessage.setString("msg", msg);
-        eventMessage.setString("type", "1");
+        eventMessage.setInt("type", type);
         logger.info("推送消息：" + JSON.toJSONString(eventMessage));
         pluginManager.post(eventMessage);
     }
 
-    @Override
-    public void pushData(String msg, String data, String number) {
-        EventMessage eventMessage = new EventMessage("FINGER_MESSAGE");
-        eventMessage.setString("msg", msg);
-        eventMessage.setString("type", "2");
-        eventMessage.setString("data", data);
-        eventMessage.setString("number", number);
-        logger.info("pushData 推送消息：" + JSON.toJSONString(eventMessage));
-        pluginManager.post(eventMessage);
-    }
 
     @Override
-    public void upload(String path, String finger) {
+    public String upload(String path, String finger) {
+        try {
+            RequestBody body = RequestBody.create(MediaType.parse("text/plain"), finger);
+            Request request = new Request.Builder().url(String.format(fingerUrl+"%s", path)).post(body).build();
+            Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
+            if (response.isSuccessful()) {
+                String result = response.body().string();
+                logger.info("指纹上传返回：" + result);
+                JSONObject jsonObject=JSON.parseObject(result);
+                if(jsonObject.getIntValue("code")==0){
+                    //  message(2,jsonObject.getString("data"));
+                    return jsonObject.getString("data");
+                }
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
 
 
 }

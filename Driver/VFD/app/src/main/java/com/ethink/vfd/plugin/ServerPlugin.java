@@ -7,7 +7,9 @@ import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.vfd.App;
 import com.ethink.vfd.Const;
+import com.ethink.vfd.SPUtils;
 import com.ethink.vfd.service.HttpUtils;
 import com.ethink.vfd.service.api.NetWorkUtils;
 import com.ethink.vfd.service.api.RxManager;
@@ -39,28 +41,33 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
 
     @Override
     public PluginMessage onFunction(PluginMessage pluginMessage) {
-        logger.info("OnFunction", " " + (pluginMessage == null));
+        logger.info("OnFunction {} ",pluginMessage == null);
         logger.info("pluginName "+pluginMessage.getFunctionName());
         String functionName = pluginMessage.getFunctionName();
         switch (functionName) {
-            case "Get":
+            case "Get": {
                 String url = pluginMessage.getString("path");
                 //调用请求并返回response
                 pluginMessage = NetWorkUtils.get(url, context, pluginMessage);
                 break;
-            case "Post":
+            }
+            case "Post": {
                 String path = pluginMessage.getString("path");
                 String data = pluginMessage.getString("data");
 //                //调用请求并返回response
                 pluginMessage = NetWorkUtils.post(path, data, context, pluginMessage);
                 break;
-            case "GetDeviceId":
-                ResponseUtil.success(pluginMessage,"成功",ResponseUtil.data("res", PhoneUtils.getSerial()));
+            }
+            case "GetDeviceId": {
+                //ResponseUtil.success(pluginMessage,"成功",ResponseUtil.data("res", PhoneUtils.getSerial()));
+                pluginMessage.changeToResponse();
+                String deviceId= SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
+                pluginMessage.set("deviceId", deviceId);
                 break;
+            }
         }
         return pluginMessage;
     }
-
 
 
     /**

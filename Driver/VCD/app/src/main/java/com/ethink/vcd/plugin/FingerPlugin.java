@@ -9,10 +9,14 @@ import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.vcd.App;
+import com.ethink.vcd.Const;
+import com.ethink.vcd.SPUtils;
 import com.ethink.vcd.controller.FingerCommon;
-import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.controller.FingerUtil;
+import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.service.HttpUtils;
+import com.ethink.vcd.service.api.NetWorkUtils;
 import com.ethink.vcd.service.api.RxManager;
 
 import java.io.IOException;
@@ -30,20 +34,25 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
     private final RxManager rxManager;
     private Context context;
     private FingerUtil fingerUtil;
+    private String fingerUrl;
 
     public FingerPlugin(Context context) {
         super("FINGER");
         this.context = context;
         rxManager = new RxManager();
         logger.info("--------连接指纹设备-----------");
-     fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
+        fingerUrl= SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
+       fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
     }
 
     @Override
     public void onStart() {
         logger.info("FINGER-----------register");
         registerFunction("REGISTER", this);
+        registerFunction("UN_REGISTER", this);
         registerFunction("VERIFY", this);
+        registerFunction("UN_SEARCH", this);
+
         registerFunction("DEL_TEMPLATE_All", this);
         registerFunction("TEMPLATE_TOTAL", this);
         registerFunction("DEL_ONE_TEMPLATE", this);
@@ -68,7 +77,14 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
                 break;
             case "REGISTER":
                 String uid = pluginMessage.getString("userId");
+                logger.info("录入指纹 id：{}",uid);
                 fingerUtil.remoteRegister(uid);
+                break;
+            case "UN_REGISTER":
+                //清除指纹
+                String userId= pluginMessage.getString("userId");
+                logger.info("删除指纹 id：{}",userId);
+                pluginMessage = NetWorkUtils.post(fingerUrl+"/unregister?tag="+userId,null ,context, pluginMessage);
                 break;
             case "VERIFY":
                 String num = pluginMessage.getString("number");
@@ -82,6 +98,10 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
                         logger.info("序号格式不正确", e);
                     }
                 }
+                break;
+            case "UN_SEARCH":
+                //终止指纹录取
+                fingerUtil.cancel();
                 break;
             case "DEL_TEMPLATE_ALL":
                 fingerUtil.delTemplateAll();
@@ -120,7 +140,7 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
     public String upload(String path, String finger) {
         try {
             RequestBody body = RequestBody.create(MediaType.parse("text/plain"), finger);
-            Request request = new Request.Builder().url(String.format("http://192.168.0.65:8080%s", path)).post(body).build();
+            Request request = new Request.Builder().url(String.format(fingerUrl+"%s", path)).post(body).build();
             Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
             if (response.isSuccessful()) {
                 String result = response.body().string();

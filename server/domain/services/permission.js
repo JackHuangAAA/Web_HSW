@@ -185,6 +185,7 @@ module.exports = {
         });
         console.log(newMenu);
         return newMenu;
+<<<<<<< HEAD
     },
 
     /**
@@ -204,3 +205,7 @@ module.exports = {
     },
 
 };
+=======
+    }
+}
+>>>>>>> develop
