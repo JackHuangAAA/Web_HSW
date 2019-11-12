@@ -64,36 +64,52 @@ export default {
                 }
             ],
             cols: [
-                    {
-                        type: 'index',
-                        align: 'center'
-                    },{
-                        title: '疫苗柜类型',
-                        key: 'type',
-                        align: 'center'
-                    },{
-                        title: '疫苗柜编号',
-                        key: 'alias',
-                        align: 'center'
-                    },{
-                        title: '所在单位',
-                        key: 'unitName',
-                        align: 'center',
-                    },{
-                        title: '当前温度',
-                        key: 'temperature',
-                        align: 'center'
-                    },{
-                        title: '运行状态',
-                        key: 'status',
-                        ellipsis:true,
-                        align: 'center'
-                    },{
-                        title: '原因',
-                        key: 'notes',
-                        align: 'center',
+                {
+                    type: 'index',
+                    width:100,
+                    align: 'center'
+                },{
+                    title: '设备类型',
+                    key: 'type',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.type==1?'接种柜':'冷藏柜'
+                        )
                     }
-                ],
+                },{
+                    title: '编号',
+                    key: 'alias'
+                },{
+                    title: '所在单位',
+                    key: 'unitName'
+                },{
+                    title: '当前温度',
+                    key: 'temperature',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.temperature<0 || param.row.temperature>5?'abnormal':''
+                            },
+                            param.row.temperature
+                        )
+                    }
+                },{
+                    title: '运行状态',
+                    key: 'status',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.status==0?'':'abnormal'
+                            },
+                            param.row.status==0?'在线':param.row.status==1?'离线':'故障'
+                        )
+                    }
+                },{
+                    title: '原因',
+                    key: 'notes'
+                }
+            ],
         }
     },
     methods:{
@@ -103,18 +119,6 @@ export default {
             this.$api.get("device/queryDevices",{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 this.total=res.data.total;
-                data.forEach(item=>{
-                    item.type=item.type==1?'接种柜':'冷藏柜';
-                    item.status=item.status==0?'在线':item.status==1?'离线':'故障';
-                    item.notes=item.notes||'--';
-                    item.temperature=item.temperature||'--';
-                    item.unitName=item.unitName||'--';
-                    item.alias=item.alias||'--';
-                    if(item.temperature<0 || item.temperature>5){
-                        this.$set(item,'cellClassName',
-                        {temperature:'abnormal',status:'abnormal'});
-                    }
-                })
                 this.lists=data;
             })
         },
@@ -130,18 +134,6 @@ export default {
             this.$api.get('/device/queryDevices',formdata).then(res=>{
                 let data=res.data.rs;
                 this.lists=data;
-                data.forEach(item=>{
-                    item.type=item.type==1?'接种柜':'冷藏柜';
-                    item.status=item.status==0?'在线':item.status==1?'离线':'故障';
-                    item.notes=item.notes||'--';
-                    item.temperature=item.temperature||'--';
-                    item.unitName=item.unitName||'--';
-                    item.alias=item.alias||'--';
-                    if(item.temperature<0 || item.temperature>5){
-                        this.$set(item,'cellClassName',
-                        {temperature:'abnormal',status:'abnormal'});
-                    }
-                })
                 this.total=res.data.total;
             });
         },

@@ -270,8 +270,7 @@ module.exports = {
     logger.debug(`resetUser param: ${JSON.stringify(requestBody)}`);
     let password=crypto.createHash('md5');
     password.update("000000");
-    password=password.digest('hex').toUpperCase()
-    console.log(password)
+    password=password.digest('hex').toUpperCase();
     return await Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
