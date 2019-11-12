@@ -30,13 +30,14 @@ module.exports={
     modifyCustomer: async function (requestBody) {
         logger.debug('modifyCustomer :' + JSON.stringify(requestBody));
         let user=await this.queryCustomer({_id:requestBody.id});
+        console.log(user.docs[0])
         return await Domain.models.customer.updateOne({_id:requestBody.id},
             {
                 $set:{
                     ...requestBody,
                     previou:{//上一次的疫苗计划
-                        plan:user.next.plan,
-                        date:user.next.date
+                        plan:user.docs[0].next.plan,
+                        date:user.docs[0].next.date
                     },
                     next:{//下一次接种计划
                         plan:requestBody.nexid,
@@ -58,7 +59,7 @@ module.exports={
         if(!_.isEmpty(requestBody.id)){
             query.push({_id:requestBody.id});
         }
-        query=query.length>0?query:{};
+        query=query.length>0?{$and:query}:{};
         return await Domain.models.customer.paginate(query,
             {
                 sort:{"_id":-1},

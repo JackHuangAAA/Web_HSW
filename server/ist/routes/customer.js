@@ -1,6 +1,7 @@
 'use strict';
 const router = require('koa-router')();
-const logger = Libs.logger.getLogger('customer');
+const logger = Libs.logger.getLogger('queue');
+
 
 /**
  * @api {POST} /customer/saveCustomer  增加用户信息
@@ -55,7 +56,7 @@ router.post('/modifyCustomer',
  */
 router.get('/queryCustomer',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.customer.queryCustomer(ctx.request.body);
+        return await Domain.services.customer.queryCustomer(ctx.request.query);
     })
 );
 
@@ -69,6 +70,8 @@ router.get('/queryCustomer',
  */
 router.get('/queryCustomerByCondition',
     Libs.router(async (ctx, next) => {
-        return await Domain.services.customer.queryCustomerByCondition(ctx.request.body);
+        return await Domain.services.customer.queryCustomerByCondition(ctx.request.query);
     })
 );
+
+module.exports=router;
