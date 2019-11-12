@@ -12,6 +12,9 @@ import api from '@/api'
 import iView from 'iview'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import config from '@/config'
+import FastClick from 'fastclick'
+
+FastClick.attach(document.body);
 global._ = lodash
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);

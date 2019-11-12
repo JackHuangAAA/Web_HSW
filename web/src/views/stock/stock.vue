@@ -73,7 +73,7 @@ export default {
         queryDeviceStock(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get('/device/queryDeviceStock',{page:this.active,size:this.pageSize,test:0}).then(res=>{
+            this.$api.get('/device/queryDeviceStock',{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
@@ -89,8 +89,7 @@ export default {
                 page:this.search_active,
                 size:this.pageSize,
                 type:this.select==0?'':this.select,
-                unitName:this.unitName==''?'':this.unitName,
-                test:0
+                unitName:this.unitName==''?'':this.unitName
             }
             this.$api.get('/device/queryDeviceStock',formdata).then(res=>{
                 let data=res.data;

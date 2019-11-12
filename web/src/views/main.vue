@@ -147,7 +147,7 @@
                 // setCurrentMenu: 'setCurrentMenu'
             }),
             queryDeviceByAggregate(){
-                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:1,test:0}).then(res=>{
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:1}).then(res=>{
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
@@ -161,7 +161,7 @@
                         }
                     }
                 })
-                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:2,test:0}).then(res=>{
+                this.$api.get('/device/queryDeviceByAggregate',{flag:0,type:2}).then(res=>{
                     let data=res.data;
                     for(let i=0;i<data.length;i++){
                         if(data[i]._id.status==1){
@@ -180,7 +180,7 @@
                 // })
             },
             queryAlarmDailyInfo(){
-                this.$api.get('/alarm/queryAlarmDailyInfo',{test:0}).then(res=>{
+                this.$api.get('/alarm/queryAlarmDailyInfo').then(res=>{
                     let data=res.data;
                     data=data.slice(0,4);
                     this.alarmList=data;

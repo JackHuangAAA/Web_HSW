@@ -10,22 +10,27 @@ import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
 import com.ethink.vfd.controller.ArkController;
+import com.ethink.vfd.utils.DrawerData;
 import com.ethink.vfd.utils.ResponseUtil;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /***
  * 疫苗柜控制插件
  * 包含温度，锁开关 功能
  * **/
-public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
-    private Context context;
+public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable { private Context context;
     private ArkController arkController;
     //温度实时上送
     private Thread temThread;
 
     public ArkPlugin(Context context) {
         super("CONTROLLER_BOARD");
+        logger.info("--------------------连接主控板--------------------");
         this.context = context;
-     //   this.arkController = new ArkController("/dev/ttyUSB0", 115200);
+        this.arkController = new ArkController("/dev/ttyUSB0", 115200);
     }
 
     @Override
@@ -33,49 +38,58 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         if (pluginMessage == null) return pluginMessage;
         logger.info("pluginName " + pluginMessage.getFunctionName());
         String functionName = pluginMessage.getFunctionName();
-        pluginMessage.changeToResponse();
         switch (functionName) {
-            case "OPEN":
-                String a = pluginMessage.getString("num");
-                if (!StringUtils.isEmpty(a)) {
-                    try {
-                        int num = Integer.parseInt(a);
-                       // boolean re = arkController.openDoorData(num);
-                      //  ResponseUtil.success(pluginMessage, re, null);
-                    } catch (NumberFormatException e) {
-                        logger.info("序号格式化错误", e);
-                        ResponseUtil.fail(pluginMessage, "错误：" + e.getMessage());
-                    }
+            case "OPEN_DRAWER":
+                String n = pluginMessage.getString("num");
+                pluginMessage.changeToResponse();
+                if (StringUtils.isEmpty(n)) {
+                    pluginMessage.set("res", "请输入抽屉编号");
+                    return pluginMessage;
                 }
+                String res = arkController.openDrawer(DrawerData.getDrawerList(n));
+                pluginMessage.set("res", res);
                 break;
             case "TEMPERATURE":
                 String b = pluginMessage.getString("num");
-                if (!StringUtils.isEmpty(b)) {
-                    try {
-                        int num = Integer.parseInt(b);
-                         double re = arkController.temperature(num);
-                        ResponseUtil.success(pluginMessage, "成功", ResponseUtil.data("temp", String.valueOf(re)));
-                    } catch (NumberFormatException e) {
-                        logger.info("序号格式化错误", e);
-                        ResponseUtil.fail(pluginMessage, "错误：" + e.getMessage());
+                pluginMessage.changeToResponse();
+                if (StringUtils.isEmpty(b)) {
+                    pluginMessage.set("res", "请输入硬件编号");
+                    return pluginMessage;
+                }
+                String[] a = b.split(",");
+                Set<Integer> set = new HashSet<>();
+                for (String s : a) {
+                    if (!StringUtils.isEmpty(s)) {
+                        try {
+                            set.add(Integer.parseInt(s));
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                            break;
+                        }
                     }
+                }
+                if (!set.isEmpty()) {
+                    List<Double> list = arkController.temperature(set);
+                    pluginMessage.setString("res", JSON.toJSONString(list));
                 }
                 break;
             case "ARK_STATUS":
                 if (arkController.arkStatus() == 1) {
-                    ResponseUtil.success(pluginMessage, "状态正常", null);
-                } else {
-                    ResponseUtil.fail(pluginMessage, "状态异常");
+                    //   ResponseUtil.success(pluginMessage, "状态正常", null);
                 }
                 break;
             case "SYS_VALUES":
                 arkController.sysValue();
-                ResponseUtil.success(pluginMessage, "系统信息", null);
+                // ResponseUtil.success(pluginMessage, "系统信息", null);
                 break;
             case "SWITCH_STATUS":
                 arkController.switchStatus();
                 break;
-
+            case "OPEN_DOOR":
+                pluginMessage.changeToResponse();
+               boolean re= arkController.openDoor();
+               pluginMessage.setBool("rsp",re);
+                break;
         }
 
         return pluginMessage;
@@ -87,7 +101,10 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         temThread = new Thread(this);
         temThread.start();
         //开锁
-        registerFunction("OPEN", this);
+        registerFunction("OPEN_DRAWER", this);
+        //冷藏柜开门
+        //开锁
+        registerFunction("OPEN_DOOR", this);
         //温度
         registerFunction("TEMPERATURE", this);
         //疫苗柜状态
@@ -105,32 +122,31 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
     @Override
     public void run() {
+        Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(3);
+        set.add(4);
+        set.add(5);
         while (!Thread.interrupted()) {
             try {
-                Thread.sleep(1000 * 6);
+                Thread.sleep(1000 * 60);
                 if (arkController != null) {
                     logger.info("查询温度-----");
                     EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");
-                    JSONObject object = new JSONObject();
-//                    object.put("temp1", arkController.temperature(1));
-//                    object.put("temp2", arkController.temperature(2));
-//                    object.put("temp3", arkController.temperature(3));
-//                    object.put("temp4", arkController.temperature(4));
-//                    object.put("temp5", arkController.temperature(5));
-//                    eventMessage.setString("data", object.toJSONString());
-                    eventMessage.setString("type", "2");
-                    eventMessage.setString("message", "查询成功");
-                    logger.info("温度上报：" + JSON.toJSONString(eventMessage));
+                    List<Double> list = arkController.temperature(set);
+                    eventMessage.setString("res",JSON.toJSONString(list));
+                    eventMessage.setBool("message", true);
+                    logger.info("温度主动上报：" + JSON.toJSONString(list));
                     pluginManager.post(eventMessage);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");
-                eventMessage.setArrayValue("data", "");
-                eventMessage.setString("type", "1");
+                eventMessage.setBool("message", false);
                 eventMessage.setString("message", "查询失败");
                 logger.info("温度查询异常：" + JSON.toJSONString(eventMessage));
-              //  pluginManager.post(eventMessage);
+                //  pluginManager.post(eventMessage);
             }
 
         }

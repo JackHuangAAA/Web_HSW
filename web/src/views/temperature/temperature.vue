@@ -73,7 +73,7 @@ export default {
         queryTemperatures(){
             this.search_active=1;
             this.search_type=false;
-            this.$api.get('/temperature/queryTemperatures',{page:this.active,size:this.pageSize,test:0}).then(res=>{
+            this.$api.get('/temperature/queryTemperatures',{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
@@ -91,8 +91,7 @@ export default {
                 deviceType:this.select==0?'':this.select,
                 unitName:this.unitName==''?'':this.unitName,
                 begin:this.dateTime[0]||'',
-                end:this.dateTime[1]||'',
-                test:0
+                end:this.dateTime[1]||''
             };
             this.$api.get('/temperature/queryTemperatures',formdata).then(res=>{
                 let data=res.data.rs;

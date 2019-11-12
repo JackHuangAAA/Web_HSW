@@ -127,7 +127,7 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         set.add(5);
         while (!Thread.interrupted()) {
             try {
-                Thread.sleep(1000 * 6);
+                Thread.sleep(1000 * 60);
                 if (arkController != null) {
                     logger.info("查询温度-----");
                     EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");

@@ -49,6 +49,8 @@ public class ConfigActivity extends AppCompatActivity {
 
     @BindView(R.id.et_socket)
     EditText edSocket;
+    @BindView(R.id.et_finger)
+    EditText etFinger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,7 @@ public class ConfigActivity extends AppCompatActivity {
         String url = SPUtils.getSharedStringData(this, Const.CONFIG_URL);
         String socketUrl = SPUtils.getSharedStringData(this, Const.SOCKET_IO_URL);
         String serial = SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
+        String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
         //自动上报的地址
         if (url.isEmpty()) {
             etUrl.setText("http://192.168.0.160:8080");
@@ -77,7 +80,11 @@ public class ConfigActivity extends AppCompatActivity {
         } else {
             edSocket.setText(socketUrl);
         }
-
+        if(StringUtils.isEmpty(finger)){
+            etFinger.setText("http://192.168.0.65:8080");
+        }else{
+            etFinger.setText(finger);
+        }
         if (isVersionM()) {
             checkAndRequestPermissions();
         }
@@ -132,6 +139,7 @@ public class ConfigActivity extends AppCompatActivity {
         String url = etUrl.getText().toString();
         String socketUrl = edSocket.getText().toString();
         String serial = etSerial.getText().toString();
+        String finger_url=etFinger.getText().toString();
         if (!url.isEmpty()) {
             SPUtils.setSharedStringData(getApplication(), Const.CONFIG_URL, url);
         } else {
@@ -148,6 +156,12 @@ public class ConfigActivity extends AppCompatActivity {
             SPUtils.setSharedStringData(getApplication(), Const.SERIAL_NO, serial);
         } else {
             Toast.makeText(this, "请输入设备序列号", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!StringUtils.isEmpty(finger_url)){
+            SPUtils.setSharedStringData(getApplication(), Const.FINGER_URL, finger_url);
+        }else {
+            Toast.makeText(this, "请输入指纹服务地址！", Toast.LENGTH_LONG).show();
             return;
         }
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();

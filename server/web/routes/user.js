@@ -79,4 +79,13 @@ router.get('/queryUserByCondition',
     })
 );
 
+/**
+ * 用户密码初始化
+ */
+router.post('/resetUser',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.user.resetUser(ctx.request.body);
+    })
+);
+
 module.exports = router;

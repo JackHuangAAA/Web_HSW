@@ -87,7 +87,7 @@ export default {
     methods:{
         queryInouts(){
             this.search_active=1
-            this.$api.get('/inout/queryInouts',{size:10,page:this.active,batchId:this._id,test:0}).then(res=>{
+            this.$api.get('/inout/queryInouts',{size:10,page:this.active,batchId:this._id}).then(res=>{
                 let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
                     data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');

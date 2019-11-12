@@ -57,7 +57,6 @@ router.post('/removeParameterById',
         return await Domain.services.parameter.removeParameterById(ctx.request.body);
     })
 );
-
 /**
  * @api {POST} /parameter/ableOrDisableParameter  根据id停用启用参数信息
  * @apiGroup parameter

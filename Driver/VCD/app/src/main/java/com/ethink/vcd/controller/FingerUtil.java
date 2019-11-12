@@ -28,7 +28,7 @@ public class FingerUtil {
     private ExecutorService executorService;
     private String testFinger = null;
     private FingerPushMessage fingerPushMessage;
-    private boolean m_bCancel = true;
+    private volatile boolean cancel = true;
     //指纹图片
     private String fingerImage = "";
 
@@ -41,9 +41,11 @@ public class FingerUtil {
     /**
      * 取消掉，可以结束whil循环
      **/
-    private void cancel() {
-        m_bCancel = true;
-        m_bCancel=false;
+    public void cancel() {
+        if (!cancel) {
+            cancel = true;
+            logger.debug("终止录入=====》：m_bCancel  {}", cancel);
+        }
     }
 
 
@@ -175,41 +177,19 @@ public class FingerUtil {
      * ***/
     public void remoteRegister(String uid) {
         cancel();
-        int[] w_nWidth = new int[1];
-        int[] w_nHeight = new int[1];
-        //   int[] w_nState = new int[1];
-        //  int emptyId = getOneEmptyId();
-    /*    if (emptyId < 1) {
-            logger.info("未获取到可用id");
-            fingerPushMessage.message(1,"未获取到可用id");
-            return;
-        }
-        int w_nRet = fingerCommon.Run_GetStatus(emptyId, w_nState);
-        if (w_nRet != FingerCommon.ERR_SUCCESS) {
-            logger.info(GetErrorMsg(w_nRet));
-            //显示错误信息
-            fingerPushMessage.message(1,GetErrorMsg(w_nRet));
-            return;
-        }
-        if (w_nState[0] == FingerCommon.GD_TEMPLATE_NOT_EMPTY) {
-            logger.info("Template is already exist");
-            //显示错误信息
-            fingerPushMessage.message(1,"Template is already exist");
-            return;
-        }*/
-        int re = fingerCommon.Run_TestConnection();
-        if (re != FingerCommon.ERR_SUCCESS) {
-            logger.info(GetErrorMsg(re));
-            //显示错误信息
-            m_bCancel=false;
-            fingerPushMessage.message(1, GetErrorMsg(re));
-            return;
-        }
-        executorService.execute(() -> {
+        new Thread(() -> {
+            int[] w_nWidth = new int[1];
+            int[] w_nHeight = new int[1];
+            int re = fingerCommon.Run_TestConnection();
+            if (re != FingerCommon.ERR_SUCCESS) {
+                //显示错误信息
+                fingerPushMessage.message(1, GetErrorMsg(re));
+                return;
+            }
+            cancel = false;
             int w_nUserID, result, w_nEnrollStep = 0, w_nGenCount = 3;
             int[] w_nDupID = new int[1];
             while (w_nEnrollStep < w_nGenCount) {
-                logger.debug(String.format("请按下手指，第(%s/%s)次!", (w_nEnrollStep + 1), w_nGenCount));
                 fingerPushMessage.message(1, String.format("请按下手指，第(%s/%s)次!", (w_nEnrollStep + 1), w_nGenCount));
                 // Capture
                 if (Capturing() < 0) {
@@ -247,40 +227,8 @@ public class FingerUtil {
 
             }
             logger.info("run: --------------------执行完毕");
-            //. Merge Template
-//            result = fingerCommon.Run_Merge(0, w_nGenCount);
-//            if (result != FingerCommon.ERR_SUCCESS) {
-//                fingerPushMessage.message(1,GetErrorMsg(result));
-//                logger.info("run:失败原因：" + GetErrorMsg(result));
-//            }
-//            else{
             fingerPushMessage.message(2, "录入成功");
-            //  }
-
-          /*
-            logger.info("run: 存储指纹数据------");
-            //. Store template
-            result = fingerCommon.Run_StoreChar(w_nUserID, 0, w_nDupID);
-            if (result != FingerCommon.ERR_SUCCESS) {
-                fingerPushMessage.message(1,GetErrorMsg(result));
-
-            } else {
-                //录入成功->下载指纹特征
-                byte[] p_pbyTemplate = new byte[512];
-                int re = fingerCommon.Run_UpChar(1, p_pbyTemplate);
-                //  int re = fingerCommon.Run_DownChar(1, p_pbyTemplate);
-                if (re == FingerCommon.ERR_SUCCESS) {
-                    //    testFinger=fingerCommon.byte2HexStr(p_pbyTemplate,498);
-                    testFinger = HexDump.toHexString(p_pbyTemplate);
-                    //   logger.info("指纹数据2： \n" + HexDump.toHexString(p_pbyTemplate));
-                    fingerPushMessage.message(1,"录入成功", HexDump.toHexString(p_pbyTemplate), String.valueOf(m_nUserID));
-                } else fingerPushMessage.message(1,"上传模板错误：" + GetErrorMsg(re));
-            }*/
-
-
-        });
-
-
+        }).start();
     }
 
 
@@ -288,38 +236,39 @@ public class FingerUtil {
      * 后台比对
      * ***/
     public void remoteVerify() {
-        cancel();
-        int[] w_nWidth = new int[1];
-        int[] w_nHeight = new int[1];
-        int re = fingerCommon.Run_TestConnection();
-        if (re != FingerCommon.ERR_SUCCESS) {
-            logger.info("连接错误：" + GetErrorMsg(re));
-            m_bCancel=false;
-            fingerPushMessage.message(1, "设备连接错误！");
-            return;
-        }
-        fingerPushMessage.message(1, "请按下手指！");
-        if (Capturing() < 0) {
-            fingerPushMessage.message(1, "获取指纹信息失败！");
-            return;
-        }
-        fingerPushMessage.message(1, "请抬起手指！");
-        //绘制指纹图片
-        byte[] m_binImage = new byte[1024 * 100];
-        int result = fingerCommon.Run_UpImage(0, m_binImage, w_nWidth, w_nHeight);
-        if (result == FingerCommon.ERR_SUCCESS) {
-            //开始绘制图片
-            fingerImage = createImageBase64(m_binImage, w_nWidth[0], w_nHeight[0]);
-            logger.info("指纹图片：" + fingerImage);
-            String res = fingerPushMessage.upload("/match", fingerImage);
-            if (!StringUtils.isEmpty(res)) {
-                fingerPushMessage.message(2, res);
+        new Thread(() -> {
+            cancel();
+            int[] w_nWidth = new int[1];
+            int[] w_nHeight = new int[1];
+            int re = fingerCommon.Run_TestConnection();
+            if (re != FingerCommon.ERR_SUCCESS) {
+                logger.info("连接错误：" + GetErrorMsg(re));
+                fingerPushMessage.message(1, "设备连接错误！");
                 return;
             }
+            cancel = false;
+            fingerPushMessage.message(1, "请按下手指！");
+            if (Capturing() < 0) {
+                fingerPushMessage.message(1, "获取指纹信息失败！");
+                return;
+            }
+            fingerPushMessage.message(1, "请抬起手指！");
+            //绘制指纹图片
+            byte[] m_binImage = new byte[1024 * 100];
+            int result = fingerCommon.Run_UpImage(0, m_binImage, w_nWidth, w_nHeight);
+            if (result == FingerCommon.ERR_SUCCESS) {
+                //开始绘制图片
+                fingerImage = createImageBase64(m_binImage, w_nWidth[0], w_nHeight[0]);
+                logger.info("指纹图片：" + fingerImage);
+                String res = fingerPushMessage.upload("/match", fingerImage);
+                if (!StringUtils.isEmpty(res)) {
+                    fingerPushMessage.message(2, res);
+                    return;
+                }
 
-        }
-        fingerPushMessage.message(3, "验证失败！");
-
+            }
+            fingerPushMessage.message(3, "验证失败！");
+        }).start();
     }
 
 
@@ -467,7 +416,8 @@ public class FingerUtil {
                 logger.info("获取成功getImage");
                 break;
             }
-            if (m_bCancel) {
+            logger.info("当前状态 cancel ：{}", cancel);
+            if (cancel) {
                 return -1;
             }
         }
@@ -503,7 +453,7 @@ public class FingerUtil {
                 logger.info("测试结果");
                 break;
             }
-            if (m_bCancel) {
+            if (cancel) {
                 return -1;
             }
         }
