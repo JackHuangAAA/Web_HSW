@@ -172,8 +172,8 @@ module.exports = {
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.vaccine.paginate(query, {
             sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size)
+            page: requestBody.page||1,
+            limit: parseInt(requestBody.size)||10
         });
 
         return {rs: result.docs, total: result.total};
