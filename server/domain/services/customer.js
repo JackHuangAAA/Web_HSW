@@ -43,7 +43,7 @@ module.exports={
                         date:requestBody.date
                     },
                 }
-            }
+            },{new:true}
         );
     },
 
