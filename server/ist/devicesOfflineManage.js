@@ -1,5 +1,5 @@
 /**
- * Created by huangshaowei on 2019/10/16.
+ * Created by huangshaowei on 2019/11/12.
  */
 const logger = Libs.logger.getLogger('summariesManage');
 //设备心跳信息筛选掉线设备（设备更新时间超过3分钟）
@@ -7,8 +7,8 @@ let later = require('later');
 let moment = require('moment');
 later.date.localTime();//设置本地时区
 async function updateDeviceStatus() {
-    //冷藏柜设备查询
-    let result = await Domain.models.device.find({type:2});
+    //综合服务终端设备查询
+    let result = await Domain.models.device.find({type:3});
     //let timestamp_dev = await Domain.redis.client.getAsync("5da19b346baebc8f36de1877_heartbeat");
 
     for(let index in result){

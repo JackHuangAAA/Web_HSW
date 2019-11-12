@@ -185,8 +185,8 @@ module.exports = {
     query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
     let result = await Domain.models.user.paginate(query, {
       sort: { _id: -1 },
-      page: requestBody.page,
-      limit: parseInt(requestBody.size),
+      page: requestBody.page||1,
+      limit: parseInt(requestBody.size)||10,
       lean: true
     });
     return { rs: result.docs, total: result.total }
