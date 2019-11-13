@@ -15,30 +15,6 @@
             <Col span="2"><Button type="primary" class="search_btn" @click="search_queryDeviceStock" icon="ios-search">查询</Button></Col>
         </Row>
         <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>      
-        <!-- <Row class="main-table-head">
-            <Col span="2" class="id-center">序号</Col>
-            <Col span="3">设备类型</Col>
-            <Col span="4">设备编号</Col>
-            <Col span="5">所在单位</Col>
-            <Col span="3">所在接种台</Col>
-            <Col span="4">库存状态</Col>
-            <Col span="3">操作</Col>
-        </Row>
-        <div class="table-body">
-            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-                <Col span="2" class="id-center">{{index+1}}</Col>
-                <Col span="3">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
-                <Col span="4">{{item.alias||'--'}}</Col>
-                <Col span="5">{{item.unitName||'不明'}}</Col>
-                <Col span="3">1号接种台</Col>
-                <Col span="4" :class="{abnormal:true}">{{item.flag==0?'正常':'库存缺少、问题疫苗'}}</Col>
-                <Col span="3" class="view-detail"><div @click="routerTo(
-                    item._id,
-                    item.type==1?'接种柜':'冷藏柜',
-                    item.alias?item.alias:'',
-                    item.unitName)">查看详情</div></Col>
-            </Row> 
-        </div> -->
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>

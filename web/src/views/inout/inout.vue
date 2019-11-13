@@ -19,28 +19,6 @@
             <Col span="2"><Button type="primary" class="search_btn" @click="search_queryInouts" icon="ios-search">查询</Button></Col>
         </Row>
         <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>
-        <!-- <Row class="main-table-head">
-            <Col span="1" class="id-center">序号</Col>
-            <Col span="3">设备类型</Col>
-            <Col span="3">所在单位</Col>
-            <Col span="8">操作批次号</Col>
-            <Col span="3">疫苗数量</Col>
-            <Col span="3">操作类型</Col>
-            <Col span="3">操作</Col>
-        </Row>
-        <div class="table-body">
-            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-                <Col span="1" class="id-center">{{index+1}}</Col>
-                <Col span="3">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-                <Col span="3">{{item.unitName}}</Col>
-                <Col span="8">{{item._id||'--'}}</Col>
-                <Col span="3">{{item.count||'--'}}</Col>
-                <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
-                <Col span="3" class="view-detail">
-                    <div @click="routerTo(item._id)">查看详情</div>
-                </Col>
-            </Row>
-        </div> -->
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        

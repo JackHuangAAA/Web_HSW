@@ -112,7 +112,7 @@
 <style lang="less" scoped>
 @import '../style/color.less';
 @import '../style/main.less';
-@import '../style/table.less';
+@import '../style/common.less';
 </style>
 
 <script>
