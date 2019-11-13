@@ -1,30 +1,21 @@
 <template>
-    <div>
+    <div class="main-table">
         <!--用户列表-->
-        <div class="table main-table">
-            <div class="header">
-                <Form inline class="user-form">
-                    <FormItem>                        
-                        <label>用户名称:</label><Input  placeholder="用户名称" style="width: 180px;"></Input>
-                         <label>状态:</label><Select style="width:200px">
-                            <Option v-for="item in select_state" :value="item.value" :key="item.key">{{ item.value }}</Option>
-                         </Select>                    
-                        <Button type="primary" @click="loadOperators('query')">
-                            <Icon type="ios-search-outline" />查询
-                            </Button>
-                        <Button type="primary" @click="showAddUserWin">
-                           <Icon type="ios-add" />新增</Button>
-                    </FormItem>
-                </Form>
-            </div>
-            <div class="content">
-                <Table border :columns="cols" :data="userDatas" size="small" border stripe></Table>
-            </div>
-            <div class="footer">
-                <Page :current="page" :size="size" :total="total" size="small"
-                      @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
-            </div>
-        </div>
+        <Row>
+            <Col offset="14" span="6" class="main-table-search">
+                <div style="width:88px; font-size:15px">用户名称:</div>                    
+                <input  v-model="userName" placeholder="用户名称"  @keyup.enter="queryUsers()"></input>   
+            </Col>
+            <Col span="4" style="display:flex">
+                <Button type="primary" class="search_btn" icon="ios-search" @click="queryUsers()">查询</Button>
+                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            </Col>
+        </Row>
+        <Table :columns="cols" :data="userDatas" size="small" class="table-mt" stripe border></Table>
+        <Row>
+            <Page :current="page" :page-size="size" :total="total"
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+        </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
             <Form ref="frmEdit" :model="formUser" :rules="userValidate" :label-width="83" >
@@ -90,18 +81,11 @@
                 total: 0,
                 page: 1,
                 size: 10,
-                search: {
-                    userName: '',
-                    userCode: ''
-                },
+                userName:'',
                 addCode: true,
                 editModalWin: false,
                 roleDatas:[],
                 userDatas: [],
-                select_state:[
-                    {value:"1",key:1},
-                    {value:"2",key:2}
-                ],
                 cols: [
                     {
                         type: 'index',
@@ -119,6 +103,12 @@
                         title: '角色',
                         key: 'role',
                         align: 'center',
+                        render:(h,params)=>{
+                            return h(
+                                'div',
+                                params.row.role!=undefined?params.row.role.name:''
+                            )
+                        }
                     },{
                         title: '更新时间',
                         key: 'updateDate',
@@ -245,12 +235,11 @@
                 // this.loadRoles();
                 this.editModalWin = true;
             },
-            queryUsers: function (val) {
+            queryUsers: function () {
                 this.$api.get('/user/queryUsers', {
-                    name: this.search.userName,
-                    code: this.search.userCode,
-                    page: val ? 1 : this.page,
-                    size: this.size
+                    name: this.userName,
+                    page: this.page||1,
+                    size: this.size||10
                 }).then(res => {
                     res.data.rs.forEach(item=>{
                         item.updateDate=moment(item.updateDate).format('YYYY-MM-DD HH:mm:ss');
@@ -342,5 +331,7 @@
     }
 </script>
 <style lang="less" scoped>
+@import '~@/style/color.less';
+@import '~@/style/common.less';
 @import '~@/style/user.less';
 </style>

@@ -115,4 +115,5 @@ export default {
 <style lang="less" scoped>
 @import '~@/style/color.less';
 @import '~@/style/inoutDetail.less';
+@import '../../style/common.less';
 </style>

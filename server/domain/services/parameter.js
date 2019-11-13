@@ -20,7 +20,7 @@ module.exports = {
 		let result=await Domain.models.parameter.paginate(query,{
 			sort:{'_id':-1},
 			page:requestBody.page||1,
-			limit:requestBody.size||10,
+			limit:parseInt(requestBody.size)||10,
 		});
 		return { rs: result.docs, total: result.total };
 	},

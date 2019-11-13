@@ -184,6 +184,7 @@ module.exports = {
     }
     query = query.length >0 ? { $and: query } : {};
     let result = await Domain.models.user.paginate(query, {
+      populate:"role",
       sort: { _id: -1 },
       page: requestBody.page||1,
       limit: parseInt(requestBody.size)||10,

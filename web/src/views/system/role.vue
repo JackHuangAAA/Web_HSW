@@ -1,62 +1,46 @@
 <template>
-    <div>
+    <div class="main-table">
         <!--用户列表-->
-        <div class="table main-table">
-            <div class="header">
-                <Form inline class="user-form">
-                    <FormItem>                        
-                        <label>用户名称:</label><Input  placeholder="用户名称" style="width: 180px;"></Input>
-                         <label>状态:</label><Select style="width:200px">
-                            <Option v-for="item in select_state" :value="item.value" :key="item.key">{{ item.value }}</Option>
-                         </Select>                    
-                        <Button type="primary" @click="loadOperators('query')">
-                            <Icon type="ios-search-outline" />查询
-                            </Button>
-                        <Button type="primary" @click="showAddUserWin">
-                           <Icon type="ios-add" />新增</Button>
-                    </FormItem>
-                </Form>
-            </div>
-            <div class="content">
-                <Table border :columns="cols" :data="userDatas" size="small" border stripe></Table>
-            </div>
-            <div class="footer">
-                <Page :current="page" :size="size" :total="total" size="small"
-                      @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
-            </div>
+        <Row>
+            <Col offset="14" span="6" class="main-table-search">
+                <div style="width:88px; font-size:15px">用户名称:</div>                    
+                <input  v-model="name" placeholder="用户名称"  @keyup.enter="queryRole()"></input>   
+            </Col>
+            <Col span="4" style="display:flex">
+                <Button type="primary" class="search_btn" icon="ios-search" @click="queryRole()">查询</Button>
+                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            </Col>
+        </Row>
+        <Table :columns="cols" :data="lists" size="small" class="table-mt role-table" stripe border></Table>
+        <div class="permissionTree">
+            <div class="permissionTree-title">企业测试权限分配</div>
+            <Tree :data="tree" show-checkbox></Tree>
         </div>
+        <Row>
+            <Page :current="page" :page-size="size" :total="total"
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+        </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
-            <Form ref="frmEdit" :model="formUser" :rules="userValidate" :label-width="83" >
-                <div v-if="addCode == true">
-                    <FormItem label="登录账号:" prop="code">
-                        <Input v-model="formUser.code" placeholder="请输入账号" style="width: 260px;"></Input>
+            <Form ref="frmEdit" :model="formRole" :rules="userValidate" :label-width="83" >
+                <div>
+                    <FormItem label="名称:" prop="name">
+                        <Input v-model="formRole.name" placeholder="请输入名称" style="width: 260px;"></Input>
                     </FormItem>
                 </div>
-                <div v-if="addCode == false">
-                    <FormItem label="登录账号:" prop="code">
-                        <Input v-model="formUser.code" placeholder="请输入账号" disabled style="width: 260px;"></Input>
-                    </FormItem>
-                </div>
-                <FormItem label="用户名称:" prop="name">
-                    <Input v-model="formUser.name" placeholder="请输入用户名称" style="width: 260px;"></Input>
-                </FormItem>
-                <FormItem label="移动电话:" prop="phone">
-                    <Input v-model="formUser.phone" placeholder="请输入移动电话号" :maxlength="11" style="width: 260px;"></Input>
-                </FormItem>
-                <FormItem label="角色" prop="role">
-                    <Select v-model="formUser.role" style="width:260px">
-                        <Option v-for="item in roleDatas" :value="item._id" :key="item.id">{{ item.name }}</Option>
+                <FormItem label="归属:" prop="type">
+                    <Select v-model="formRole.type" clearable style="width:260px">
+                        <Option v-for="item in roleType" :value="item.value" :key="item.key">{{ item.name }}</Option>
                     </Select>
                 </FormItem>
-                <FormItem label="备注">
-                    <Input v-model="formUser.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
+                <FormItem label="说明">
+                    <Input v-model="formRole.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                            placeholder="请输入..." style="width: 260px;"></Input>
                 </FormItem>
                 <div align="right">
                     <FormItem style="margin-top: 15px;">
                         <Button  @click="cancelModel('frmEdit')">取消</Button>
-                        <Button type="primary" @click="saveUser('frmEdit')">保存</Button>
+                        <Button type="primary" @click="saveRole('frmEdit')">保存</Button>
                     </FormItem>
                 </div>
             </Form>
@@ -90,42 +74,47 @@
                 total: 0,
                 page: 1,
                 size: 10,
-                search: {
-                    userName: '',
-                    userCode: ''
-                },
-                addCode: true,
+                name:'',
                 editModalWin: false,
-                roleDatas:[],
-                userDatas: [],
-                select_state:[
-                    {value:"1",key:1},
-                    {value:"2",key:2}
+                roleType:[
+                    {name:"运营",value:0,key:1},
+                    {name:"医院",value:1,key:2}
                 ],
+                lists: [],
+                tree: [],
                 cols: [
                     {
                         type: 'index',
                         width: 60,
                         align: 'center'
                     },{
-                        title: '手机号码',
-                        key: 'phone',
-                        align: 'center'
-                    },{
-                        title: '用户名',
+                        title: '角色名称',
                         key: 'name',
                         align: 'center'
                     },{
-                        title: '角色',
-                        key: 'role',
+                        title: '归属',
+                        key: 'type',
                         align: 'center',
+                        render:(h,params)=>{
+                            return h(
+                                'div',
+                                params.row.type==0?'运营':'医院'
+                            )
+                        }
                     },{
-                        title: '更新时间',
-                        key: 'updateDate',
-                        align: 'center'
+                        title: '创建时间',
+                        key: 'createDatele',
+                        align: 'center',
+                        render:(h,params)=>{
+                            return h(
+                                'div',
+                                params.row.createDate
+                            )
+                        }
                     },{
                         title: '操作',
                         key: 'action',
+                        width:200,
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
@@ -155,7 +144,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.removeUser(params.row)
+                                            this.removeRoleById(params.row)
                                         }
                                     }
                                 }, '删除'),
@@ -170,20 +159,18 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.resetPwd(params.row)
+                                            this.resetPermission(params.row)
                                         }
                                     }
-                                }, '密码初始化')
+                                }, '权限分配')
                             ]);
                         }
                     }
                 ],
-                formUser: {
+                formRole: {
                     id:'',
                     name: '',
-                    code: '',
-                    phone: '',
-                    role: '',
+                    type: '',
                     notes: ''
                 },
                 userValidate: {
@@ -228,104 +215,89 @@
         },
         methods: {
             showAddUserWin: function () {
-                this.addCode = true;
                 this.resetForm();
                 this.editModalWin = true;
             },
             showEditUserWin: function (row) {
-                this.addCode = false;
-                this.formUser = {
+                this.formRole = {
                     id:row._id,
-                    name: row.name,
-                    code: row.code,
-                    phone: row.phone,
-                    role: row.role,
-                    notes: row.notes
+                    name:row.name,
+                    type:row.type,
+                    notes:row.notes
                 };
-                // this.loadRoles();
                 this.editModalWin = true;
             },
-            queryUsers: function (val) {
-                this.$api.get('/user/queryUsers', {
-                    name: this.search.userName,
-                    code: this.search.userCode,
-                    page: val ? 1 : this.page,
-                    size: this.size
+            queryRole: function () {
+                this.$api.get('/role/queryRole', {
+                    name: this.name,
+                    page: this.page||1,
+                    size: this.size||10
                 }).then(res => {
                     res.data.rs.forEach(item=>{
-                        item.updateDate=moment(item.updateDate).format('YYYY-MM-DD HH:mm:ss');
+                        item.createDate=moment(item.createDate).format('YYYY-MM-DD HH:mm:ss');
                     });
                     this.total = res.data.total;
-                    this.userDatas = res.data.rs;
-                });
-                
-                this.$api.get('/role/queryRole').then(res=>{
-                    this.roleDatas=res.data.rs;
+                    this.lists = res.data.rs;
                 });
             },
             cancelModel: function(name){
                 this.$refs[name].resetFields();
                 this.editModalWin = false;
             },
-            saveUser: function(name){
+            saveRole: function(name){
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        if(this.formUser.id == ''){
-                            this.$api.post('/user/saveUser', this.formUser).then(response => {
+                        if(this.formRole.id == ''){
+                            this.$api.post('/role/saveRole', this.formRole).then(response => {
                                 this.$Message.success('增加用户成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
-                                this.queryUsers();
+                                this.queryRole();
                             });
                         }else{
-                            this.$api.post('/user/modifyUser', this.formUser).then(response => {
+                            this.$api.post('/role/modifyRole', this.formRole).then(response => {
                                 this.$Message.success('修改用户成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
-                                this.queryUsers();
+                                this.queryRole();
                             });
                         }
                     }
                 })
             },
-            removeUser: function (row) {
+            removeRoleById: function (row) {
                 this.$Modal.confirm({
                     title: '提示',
                     content: '<p>是否确认删除？</p>',
                     onOk: () => {
-                        this.$api.post('/user/removeUserById', {id: row._id}).then(response => {
+                        this.$api.post('/role/removeRoleById', {id: row._id}).then(response => {
                             this.$Message.success('删除成功!');
-                            this.queryUsers();
+                            this.queryRole();
                         });
                     }
                 });
             },
-            resetPwd: function (row) {
-                this.$Modal.confirm({
-                    title: '提示',
-                    content: '<p>确认重置密码？</p>',
-                    onOk: () => {
-                        this.$api.post('/user/resetUser', {id: row.id}).then(response => {
-                            this.$Message.success('密码重置成功!');
-                        });
-                    }
+            resetPermission: function (row) {
+                
+            },
+            getTree(){
+                this.$api.get('/menu/queryMenus').then(res=>{
+                    this.tree=res.data;
                 });
             },
             changePage: function (page) {
                 this.page = page;
-                this.queryUsers();
+                this.queryRole();
             },
             changePageSize: function (size) {
                 this.size = size;
-                this.queryUsers();
+                this.queryRole();
             },
             resetForm: function () {
-                this.formUser = {
+                this.formRole = {
                     id:'',
                     name: '',
-                    code: '',
-                    phone: '',
-                    role: '',
+                    type: '',
                     notes: ''
                 };
             }
@@ -336,11 +308,14 @@
                 this.$router.push(`/error`);
             }*/
             if (this.user != null) {
-                this.queryUsers();
+                this.queryRole();
+                this.getTree();
             }
         }
     }
 </script>
 <style lang="less" scoped>
+@import '~@/style/color.less';
+@import '~@/style/common.less';
 @import '~@/style/user.less';
 </style>

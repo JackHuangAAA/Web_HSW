@@ -1,57 +1,47 @@
 <template>
-    <div>
+    <div class="main-table">
         <!--用户列表-->
-        <div class="table main-table">
-            <div class="header">
-                <Form inline class="user-form">
-                    <FormItem>                        
-                        <label>用户名称:</label><Input  placeholder="用户名称" style="width: 180px;"></Input>
-                         <label>状态:</label><Select style="width:200px">
-                            <Option v-for="item in select_state" :value="item.value" :key="item.key">{{ item.value }}</Option>
-                         </Select>                    
-                        <Button type="primary" @click="loadOperators('query')">
-                            <Icon type="ios-search-outline" />查询
-                            </Button>
-                        <Button type="primary" @click="showAddUserWin">
-                           <Icon type="ios-add" />新增</Button>
-                    </FormItem>
-                </Form>
-            </div>
-            <div class="content">
-                <Table border :columns="cols" :data="userDatas" size="small" border stripe></Table>
-            </div>
-            <div class="footer">
-                <Page :current="page" :size="size" :total="total" size="small"
-                      @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
-            </div>
-        </div>
+        <Row>
+            <Col offset="9" span="5" class="main-table-search">
+                <div class="main-table-search-lab">名称:</div>                    
+                <input  v-model="name" placeholder="请输入中文名称"  @keyup.enter="queryParameter()"></input>   
+            </Col>
+            <Col span="6" class="main-table-search">
+                <div style="width:88px; font-size:15px">使用名称:</div>                    
+                <input  v-model="key" placeholder="请输入英文名称"  @keyup.enter="queryParameter()"></input>   
+            </Col>
+            <Col span="4" style="display:flex">
+                <Button type="primary" class="search_btn" icon="ios-search" @click="queryParameter()">查询</Button>
+                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            </Col>
+        </Row>
+        <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>
+        <Row>
+            <Page :current="page" :page-size="size" :total="total"
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+        </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
-            <Form ref="frmEdit" :model="formUser" :rules="userValidate" :label-width="83" >
-                <div v-if="addCode == true">
-                    <FormItem label="登录账号:" prop="code">
-                        <Input v-model="formUser.code" placeholder="请输入账号" style="width: 260px;"></Input>
+            <Form ref="frmEdit" :model="formParameter" :rules="parameterValidate" :label-width="83" >
+                <div>
+                    <FormItem label="名称:" prop="name">
+                        <Input v-model="formParameter.name" placeholder="请输入名称" style="width: 260px;"></Input>
                     </FormItem>
                 </div>
-                <div v-if="addCode == false">
-                    <FormItem label="登录账号:" prop="code">
-                        <Input v-model="formUser.code" placeholder="请输入账号" disabled style="width: 260px;"></Input>
-                    </FormItem>
-                </div>
-                <FormItem label="用户名称:" prop="name">
-                    <Input v-model="formUser.name" placeholder="请输入用户名称" style="width: 260px;"></Input>
+                <FormItem label="使用名称:" prop="key">
+                    <Input v-model="formParameter.key" placeholder="请输入使用名称" style="width: 260px;"></Input>
                 </FormItem>
-                <FormItem label="移动电话:" prop="phone">
-                    <Input v-model="formUser.phone" placeholder="请输入移动电话号" :maxlength="11" style="width: 260px;"></Input>
+                <FormItem label="参数值:" prop="value">
+                    <Input v-model="formParameter.value" placeholder="请输入参数值" style="width: 260px;"></Input>
                 </FormItem>
-                <FormItem label="角色" prop="role">
-                    <Select v-model="formUser.role" style="width:260px">
-                        <Option v-for="item in roleDatas" :value="item._id" :key="item.id">{{ item.name }}</Option>
+                <FormItem label="说明" prop="notes">
+                    <Input v-model="formParameter.notes" :autosize="{minRows: 2,maxRows: 5}" type="textarea" placeholder="请输入..." :maxlength="11" style="width: 260px;"></Input>
+                </FormItem>
+                <FormItem label="状态" prop="isActive">
+                    <Select v-model="formParameter.isActive" clearable style="width:260px">
+                        <Option v-for="item in select_type" :value="item.value" :key="item.key">{{ item.value }}</Option>
                     </Select>
-                </FormItem>
-                <FormItem label="备注">
-                    <Input v-model="formUser.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
-                           placeholder="请输入..." style="width: 260px;"></Input>
+                    
                 </FormItem>
                 <div align="right">
                     <FormItem style="margin-top: 15px;">
@@ -73,34 +63,18 @@
     import moment from 'moment'
     export default{
         data(){
-            const checkCode = (rule, value, callback, source, options) => {
-                if(this.addCode == true){
-                    this.$api.get('/user/queryUsers', {code: value}).then(res => {
-                        if (res.data.total == 1) {
-                            callback(new Error("账号已被占用"));
-                        } else {
-                            callback();
-                        }
-                    })
-                }else{
-                    callback();
-                }
-            };
             return {
                 total: 0,
                 page: 1,
                 size: 10,
-                search: {
-                    userName: '',
-                    userCode: ''
-                },
-                addCode: true,
+                name:'',
+                key:'',
                 editModalWin: false,
                 roleDatas:[],
-                userDatas: [],
-                select_state:[
-                    {value:"1",key:1},
-                    {value:"2",key:2}
+                lists: [],
+                select_type:[
+                    {value:'true',key:1},
+                    {value:'false',key:2}
                 ],
                 cols: [
                     {
@@ -108,21 +82,31 @@
                         width: 60,
                         align: 'center'
                     },{
-                        title: '手机号码',
-                        key: 'phone',
-                        align: 'center'
-                    },{
-                        title: '用户名',
+                        title: '名称',
                         key: 'name',
                         align: 'center'
                     },{
-                        title: '角色',
-                        key: 'role',
-                        align: 'center',
-                    },{
-                        title: '更新时间',
-                        key: 'updateDate',
+                        title: '使用名称',
+                        key: 'key',
                         align: 'center'
+                    },{
+                        title: '参数值',
+                        key: 'value',
+                        align: 'center'
+                    },{
+                        title: '说明',
+                        key: 'notes',
+                        align: 'center'
+                    },{
+                        title: '状态',
+                        key: 'isActive',
+                        align: 'center',
+                        render:(h,params)=>{
+                            return h(
+                                'div',
+                                params.row.isActive==true?'启用状态':'停用状态'
+                            )
+                        }
                     },{
                         title: '操作',
                         key: 'action',
@@ -155,7 +139,7 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.removeUser(params.row)
+                                            this.removeParameter(params.row)
                                         }
                                     }
                                 }, '删除'),
@@ -170,53 +154,36 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.resetPwd(params.row)
+                                            this.displayParameter(params.row)
                                         }
                                     }
-                                }, '密码初始化')
+                                }, params.row.isActive==true?'停用':'启用')
                             ]);
                         }
                     }
                 ],
-                formUser: {
+                formParameter: {
                     id:'',
                     name: '',
-                    code: '',
-                    phone: '',
-                    role: '',
-                    notes: ''
+                    key: '',
+                    value: '',
+                    notes: '',
+                    isActive: ''
                 },
-                userValidate: {
-                    code : [{
-                        required: true, message: '账号不能为空', trigger: 'blur'
-                    },{
-                        type: 'string',min: 4, message: '账号过短', trigger: 'blur'
-                    },{
-                        type: 'string', max: 30, message: '账号超长', trigger: 'blur',
-                    },{validator: checkCode}],
-                    name: [{
-                        required: true, message: '用户名称不能为空', trigger: 'blur'
+                parameterValidate: {
+                    name : [{
+                        required: true, message: '名称不能为空', trigger: 'blur'
+                    }],
+                    key: [{
+                        required: true, message: '使用名称不能为空', trigger: 'blur'
                     },{
                         type: 'string', max: 20, message: '用户名超长',trigger: 'blur'
-                    }
-                    ],
-                    phone: [{
-                        required: true, message: '移动电话不能为空', trigger: 'blur'
-                    },{
-                        type: 'string', min: 11, message: '移动电话号超短', trigger: 'blur'
-                    },{
-                        type: 'string', max: 11, message: '移动电话号超长', trigger: 'blur'
-                    },{
-                        validator(rule, value, callback, source, options) {
-                            var errors = [];
-                            if (!/^[0-9]{11}$/.test(value)) {
-                                callback('手机号输入错误');
-                            }
-                            callback(errors);
-                        }
                     }],
-                    role: [{
-                        required: true, type: 'string', message: '角色不能为空', trigger: 'change',
+                    value: [{
+                        required: true, message: '参数值不能为空', trigger: 'blur'
+                    }],
+                    isActive: [{
+                        required: true, type: 'string', message: '状态不能为空', trigger: 'change',
                     }]
                 }
             }
@@ -228,39 +195,30 @@
         },
         methods: {
             showAddUserWin: function () {
-                this.addCode = true;
                 this.resetForm();
                 this.editModalWin = true;
             },
             showEditUserWin: function (row) {
-                this.addCode = false;
-                this.formUser = {
+                row.isActive=row.isActive==true?'true':'false';
+                this.formParameter = {
                     id:row._id,
                     name: row.name,
-                    code: row.code,
-                    phone: row.phone,
-                    role: row.role,
-                    notes: row.notes
+                    key: row.key,
+                    value: row.value,
+                    notes: row.notes,
+                    isActive: row.isActive
                 };
-                // this.loadRoles();
                 this.editModalWin = true;
             },
-            queryUsers: function (val) {
-                this.$api.get('/user/queryUsers', {
-                    name: this.search.userName,
-                    code: this.search.userCode,
-                    page: val ? 1 : this.page,
+            queryParameter: function () {
+                this.$api.get('/parameter/queryParameter', {
+                    name:this.name,
+                    key:this.key,
+                    page: this.page,
                     size: this.size
                 }).then(res => {
-                    res.data.rs.forEach(item=>{
-                        item.updateDate=moment(item.updateDate).format('YYYY-MM-DD HH:mm:ss');
-                    });
                     this.total = res.data.total;
-                    this.userDatas = res.data.rs;
-                });
-                
-                this.$api.get('/role/queryRole').then(res=>{
-                    this.roleDatas=res.data.rs;
+                    this.lists = res.data.rs;
                 });
             },
             cancelModel: function(name){
@@ -270,63 +228,61 @@
             saveUser: function(name){
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        if(this.formUser.id == ''){
-                            this.$api.post('/user/saveUser', this.formUser).then(response => {
-                                this.$Message.success('增加用户成功!');
+                        if(this.formParameter.id == ''){
+                            console.log(this.formParameter)
+                            this.$api.post('/parameter/saveParameter', this.formParameter).then(response => {
+                                this.$Message.success('增加参数成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
-                                this.queryUsers();
+                                this.queryParameter();
                             });
                         }else{
-                            this.$api.post('/user/modifyUser', this.formUser).then(response => {
-                                this.$Message.success('修改用户成功!');
+                            this.$api.post('/parameter/modifyParameter', this.formParameter).then(response => {
+                                this.$Message.success('修改参数成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
-                                this.queryUsers();
+                                this.queryParameter();
                             });
                         }
                     }
                 })
             },
-            removeUser: function (row) {
+            displayParameter(row){
+                this.$api.post('/parameter/displayParameter',{id:row._id,
+                isActive:!row.isActive,
+                key:row.key,
+                value:row.value}).then(res=>{
+                    this.queryParameter();
+                })
+            },
+            removeParameter: function (row) {
                 this.$Modal.confirm({
                     title: '提示',
                     content: '<p>是否确认删除？</p>',
                     onOk: () => {
-                        this.$api.post('/user/removeUserById', {id: row._id}).then(response => {
+                        this.$api.post('/parameter/removeParameterById', {id: row._id}).then(response => {
                             this.$Message.success('删除成功!');
-                            this.queryUsers();
-                        });
-                    }
-                });
-            },
-            resetPwd: function (row) {
-                this.$Modal.confirm({
-                    title: '提示',
-                    content: '<p>确认重置密码？</p>',
-                    onOk: () => {
-                        this.$api.post('/user/resetUser', {id: row.id}).then(response => {
-                            this.$Message.success('密码重置成功!');
+                            this.queryParameter();
                         });
                     }
                 });
             },
             changePage: function (page) {
                 this.page = page;
-                this.queryUsers();
+                this.queryParameter();
             },
             changePageSize: function (size) {
                 this.size = size;
-                this.queryUsers();
+                this.queryParameter();
             },
             resetForm: function () {
-                this.formUser = {
+                this.formParameter = {
                     id:'',
                     name: '',
-                    code: '',
-                    phone: '',
-                    role: '',
-                    notes: ''
+                    key: '',
+                    value: '',
+                    notes: '',
+                    isActive: ''
                 };
             }
         },
@@ -336,11 +292,13 @@
                 this.$router.push(`/error`);
             }*/
             if (this.user != null) {
-                this.queryUsers();
+                this.queryParameter();
             }
         }
     }
 </script>
 <style lang="less" scoped>
+@import '~@/style/color.less';
+@import '~@/style/common.less';
 @import '~@/style/user.less';
 </style>
