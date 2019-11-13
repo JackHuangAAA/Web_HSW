@@ -23,7 +23,7 @@ router.post('/saveCustomer',
  * @apiGroup Customer
  * @apiVersion 1.0.0
  * @apiDescription 删除用户信息
- * @apiParam {Object} json 根据id删除用户信息
+ * @apiParam {String} id 根据id删除用户信息
  * @apiSuccess {Object}  json  删除信息状态
  */
 router.post('/removeCustomerById',
@@ -51,7 +51,7 @@ router.post('/modifyCustomer',
  * @apiGroup Customer
  * @apiVersion 1.0.0
  * @apiDescription 查询用户信息
- * @apiParam {Object} json 查询用户信息
+ * @apiParam {String} id(可选) 查询用户信息
  * @apiSuccess {Object}  json  用户信息
  */
 router.get('/queryCustomer',
