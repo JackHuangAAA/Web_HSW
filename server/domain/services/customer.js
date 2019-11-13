@@ -30,14 +30,14 @@ module.exports={
     modifyCustomer: async function (requestBody) {
         logger.debug('modifyCustomer :' + JSON.stringify(requestBody));
         let user=await this.queryCustomer({_id:requestBody.id});
-        console.log(user.docs[0])
+        console.log(user)
         return await Domain.models.customer.updateOne({_id:requestBody.id},
             {
                 $set:{
                     ...requestBody,
                     previou:{//上一次的疫苗计划
-                        plan:user.docs[0].next.plan,
-                        date:user.docs[0].next.date
+                        plan:user.rs[0].next.plan,
+                        date:user.rs[0].next.date
                     },
                     next:{//下一次接种计划
                         plan:requestBody.nexid,
@@ -60,13 +60,14 @@ module.exports={
             query.push({_id:requestBody.id});
         }
         query=query.length>0?{$and:query}:{};
-        return await Domain.models.customer.paginate(query,
+        let result= await Domain.models.customer.paginate(query,
             {
                 sort:{"_id":-1},
                 page:requestBody.page||1,
                 limit:requestBody.size||10
             }
         );
+        return {rs:result.docs,total:result.total};
     },
 
     /**
@@ -81,12 +82,13 @@ module.exports={
             query.push({_id:requestBody.id});
         }
         query=query.length>0?query:{};
-        return await Domain.models.customer.paginate(query,
+        let result= await Domain.models.customer.paginate(query,
             {
                 sort:{"_id":-1},
                 page:requestBody.page||1,
                 limit:requestBody.size||10
             }
         );
+        return {rs:result.docs,total:result.total};
     },
 }
