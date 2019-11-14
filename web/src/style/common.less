@@ -30,17 +30,39 @@
 }
 //角色管理权限树
 .permissionTree{
-  width: 30%;
+  width: 0;
+  height: 0;
   position: absolute;
-  right: 50px;
+  left: 66%;
   top: 202px;
   border: 1px solid #eeeeee;
+  overflow: hidden;
+  transition: all .5s;
   .permissionTree-title{
     height: 40px;
     line-height: 40px;
     background: #eeeeee;
     text-align: center;
   }
+}
+.savePermission{
+  position: absolute;
+  bottom: 10px;
+  right: 130px;
+}
+.resetPermission{
+  position: absolute;
+  bottom: 10px;
+  right: 70px;
+}
+.closePermission{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.permissionStyle{
+  width: 30%;
+  height: calc(100% - 340px);
 }
 //搜索按钮
 .search_btn{

@@ -83,7 +83,7 @@ module.exports = {
             if (!item.children) {
                 if (allMenuMap.get(item.pid) && !temp.has(item.pid)) {
                     temp.add(item.pid);//去重
-                    allsubMuneMap.set(item._id,item);
+                    // allsubMuneMap.set(item._id,item);
                     let obj=allMenuMap.get(item.pid);
                     obj.children=[];
                     newMenu.push(obj);//添加一级菜单

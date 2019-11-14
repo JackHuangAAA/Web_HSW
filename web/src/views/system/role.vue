@@ -12,9 +12,12 @@
             </Col>
         </Row>
         <Table :columns="cols" :data="lists" size="small" class="table-mt role-table" stripe border></Table>
-        <div class="permissionTree">
+        <div class="permissionTree" :class="{'permissionStyle':permissionShow}">
             <div class="permissionTree-title">企业测试权限分配</div>
-            <Tree :data="tree" show-checkbox></Tree>
+            <Tree :data="tree" @on-check-change="getTreeData" show-checkbox></Tree>
+            <Button class="savePermission" type="primary" @click="savePermission">保存</Button>
+            <Button class="resetPermission" type="info" @click="getTree">重置</Button>
+            <Button class="closePermission" type="default" @click="closePermission">关闭</Button>
         </div>
         <Row>
             <Page :current="page" :page-size="size" :total="total"
@@ -205,7 +208,10 @@
                     role: [{
                         required: true, type: 'string', message: '角色不能为空', trigger: 'change',
                     }]
-                }
+                },
+                permissionShow:false,
+                userInfo:{},
+                treeData:[]
             }
         },
         computed: {
@@ -214,6 +220,10 @@
             })
         },
         methods: {
+            getTreeData(data){
+                console.log(data);
+                this.treeData=data;
+            },
             showAddUserWin: function () {
                 this.resetForm();
                 this.editModalWin = true;
@@ -265,6 +275,17 @@
                     }
                 })
             },
+            savePermission(){
+                if(this.userInfo.permission){
+                    this.$api.post('/permission/modifyPermission',{menuData:this.treeData,id:this.userInfo._id}).then(res=>{
+                        this.queryRole();
+                    });
+                }else{
+                    this.$api.post('/permission/savePermission',{menuData:this.treeData,id:this.userInfo._id}).then(res=>{
+                        this.queryRole();
+                    });
+                }
+            },
             removeRoleById: function (row) {
                 this.$Modal.confirm({
                     title: '提示',
@@ -277,13 +298,37 @@
                     }
                 });
             },
-            resetPermission: function (row) {
-                
+            resetPermission:async function (row) {
+                await this.getTree();
+                this.userInfo=row;
+                this.permissionShow=true;
+                if(row.permission){//当前角色是否拥有权限
+                    let tree=this.tree;
+                    let permission=row.permission.children;
+                    let children=[];
+                    permission.forEach(item=>{
+                        item.children.forEach(el=>{
+                            children.push(el);
+                        })
+                    })
+                    tree.forEach(item=>{
+                        item.children.forEach(el=>{
+                            children.forEach((ele,i)=>{
+                                if(el._id==children[i]._id){
+                                    this.$set(el,'checked',true);
+                                }
+                            })
+                        })
+                    })
+                }
             },
-            getTree(){
-                this.$api.get('/menu/queryMenus').then(res=>{
+            async getTree(){
+                await this.$api.get('/menu/queryMenus').then(res=>{
                     this.tree=res.data;
                 });
+            },
+            closePermission(){
+                this.permissionShow=false;
             },
             changePage: function (page) {
                 this.page = page;
@@ -309,7 +354,6 @@
             }*/
             if (this.user != null) {
                 this.queryRole();
-                this.getTree();
             }
         }
     }
