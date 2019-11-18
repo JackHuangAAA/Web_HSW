@@ -14,14 +14,14 @@
             <div class="left">
                 <div class="leftTop">
                     <div class="leftTopLeft">
-                        <span class="code">{{vaccinationData? vaccinationData.code:''}}号</span><span class="name">{{vaccinationData?vaccinationData.name: ''}}</span>
+                        <span class="code">{{vaccinationData.customer? vaccinationData.customer.code:''}}号</span><span class="name">{{vaccinationData.customer?vaccinationData.customer.name: ''}}</span>
                     </div>
                     <div class="leftTopRight">
                         <div class="age">
                             年龄:
                         </div>
                         <div class="ageCount">
-                            {{vaccinationData?vaccinationData.age:''}}周岁
+                            {{vaccinationData.customer?vaccinationData.customer.age:''}}周岁
                         </div>
                     </div>
                     <div class="leftTopRightTwo">
@@ -29,36 +29,38 @@
                             性别:
                         </div>
                         <div class="ageCount">
-                            {{vaccinationData?vaccinationData.sex:''}}
+                            {{vaccinationData.customer?vaccinationData.customer.sex:''}}
                         </div>
                     </div>
                 </div>
                 <div class="leftBottom">
-                    <div class="personInf">
-                        <div>
-                            <span v-if="!status" class="tipInf" style="color:#F42954">信息不匹配</span><img src="/static/img/error.png" class="succeed" v-if="!status">
-                            <span v-if="status" class="tipInf" style="color:#1AA95E">信息匹配</span><img src="/static/img/succeed.png" class="succeed" v-if="status">
-                            <Checkbox v-model="single" class="personInf-check">{{vaccineName}}</Checkbox>
-                        </div>
-                        <div class="producter">
-                            生产厂家：北京科兴生物制品有限公司
-                        </div>
-                        <div class="vaccine-info">
-                            <div class="vaccine-info-part">
-                                <div>接种部位：</div>
-                                <Select v-model="part" style="width:9rem;height:2.25rem">
-                                    <Option v-for="item in part" :value="item.value" :key="item.key">{{ item.value }}</Option>
-                                </Select>
+                    <CheckboxGroup v-model="model1">
+                        <div class="personInf" v-for="(item,index) in vaccinationData.vaccine">
+                            <div>
+                                <span v-if="!item.status" class="tipInf" style="color:#F42954">信息不匹配</span><img src="/static/img/error.png" class="succeed" v-if="!item.status">
+                                <span v-if="item.status" class="tipInf" style="color:#1AA95E">信息匹配</span><img src="/static/img/succeed.png" class="succeed" v-if="item.status">
+                                <Checkbox class="personInf-check" :label="item.name"></Checkbox>
                             </div>
-                            <div class="vaccine-info-num">
-                                接种剂量：1支
+                            <div class="producter">
+                                生产厂家：{{item.product}}
+                            </div>
+                            <div class="vaccine-info">
+                                <div class="vaccine-info-part">
+                                    <div>接种部位：</div>
+                                    <Select v-model="model1" style="width:9rem;height:2.25rem">
+                                        <Option v-for="item in part" :value="item.value" :key="item.key">{{ item.value }}</Option>
+                                    </Select>
+                                </div>
+                                <div class="vaccine-info-num">
+                                    接种剂量：{{item.num}}支
+                                </div>
+                            </div>
+                            <div class="vaccine-btnBox">
+                                <button>取消接种</button>
+                                <button>确认接种</button>
                             </div>
                         </div>
-                        <div class="vaccine-btnBox">
-                            <!-- <button>取消接种</button> -->
-                            <button v-if="status">确认接种</button>
-                        </div>
-                    </div>
+                    </CheckboxGroup>
                 </div>
             </div>
             <div class="right">
@@ -74,10 +76,6 @@
                     <div class="vaccineInf-bottom">接种份数：<span>1</span></div>
                 </div>
             </div>
-        </div>
-        <div class="bottom-btn">
-            <button>返回主页</button>
-            <button>下一位</button>
         </div>
         </div>
     </div>
@@ -96,7 +94,7 @@
                 commonData: null,
                 queryVaccine: null,  //查询的本地疫苗信息
                 vaccinationData: {
-                    /*'customer':{
+                    'customer':{
                         'code': '089',
                         'name': '李义',
                         'age': 4,
@@ -120,7 +118,7 @@
                             status: false
                         }
 
-                    ]*/
+                    ]
                 }, //接种信息
                 vaccine: [
                     {
@@ -128,19 +126,19 @@
                         'expiry': new Date(),
                         'batchNo':'b-001',
                         'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '流感疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-002',
+                        'producer':'长春生物制药'
+                    },
+                    {
+                        'name': '腮腺炎疫苗',
+                        'expiry': new Date(),
+                        'batchNo':'b-003',
+                        'producer':'长春生物制药'
                     }
-                    // {
-                    //     'name': '流感疫苗',
-                    //     'expiry': new Date(),
-                    //     'batchNo':'b-002',
-                    //     'producer':'长春生物制药'
-                    // },
-                    // {
-                    //     'name': '腮腺炎疫苗',
-                    //     'expiry': new Date(),
-                    //     'batchNo':'b-003',
-                    //     'producer':'长春生物制药'
-                    // }
                 ],//疫苗扫码信息
                 part: [
                     {
@@ -152,9 +150,8 @@
                         key: '右上臂'
                     }
                 ],
-                single: false,
-                status:false,
-                vaccineName:''
+                model1: [],
+                single:false
             };
         },
         computed: {
@@ -171,7 +168,7 @@
                     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
                     this.vaccine = data.data;
                     //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
-                    if(this.vaccine.name == this.vaccinationData.vaccine.name){
+                    if(this.vaccine.name == this.vaccinationData.name){
                         this.progress = 1;
                         //比对成功，疫苗数量减少1、增加出库信息、保存接种信息
                         //疫苗数量减少1
@@ -245,11 +242,7 @@
                 });
             },
             queryQueue(){
-                this.$api.get('/queue/queryQueueByCondition',{status:1}).then(res=>{
-                    this.vaccinationData=res.data[0];
-                    console.log(this.vaccinationData)
-                    this.vaccineName=res.data[0].vaccine.name;
-                });
+                // this.$api.get()
             }
         },
         mounted() {
@@ -269,7 +262,6 @@
             //接收疫苗扫描后结果，与接种信息比对
             this.matchInfo();
             //获取排队数据
-            this.queryQueue();
         }
     };
 </script>

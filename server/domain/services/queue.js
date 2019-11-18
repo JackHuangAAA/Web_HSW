@@ -95,10 +95,13 @@ module.exports = {
         if (!_.isEmpty(requestBody.age)) {
             query.push({"age": requestBody.age});
         }
+        if (!_.isEmpty(requestBody.status)) {
+            query.push({"status": requestBody.status});
+        }
         if (!_.isEmpty(requestBody.vaccineName)) {
             query.push({"vaccine.name":  new RegExp(requestBody.vaccineName)});
         }
         query = query.length > 0 ? { "$and": query } : {};
-        return await Domain.models.queue.find(query);
+        return await Domain.models.queue.find(query).sort({'createDate':-1});
     }
 };
