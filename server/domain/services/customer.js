@@ -81,14 +81,8 @@ module.exports={
         if(!_.isEmpty(requestBody.id)){
             query.push({_id:requestBody.id});
         }
-        query=query.length>0?query:{};
-        let result= await Domain.models.customer.paginate(query,
-            {
-                sort:{"_id":-1},
-                page:requestBody.page||1,
-                limit:requestBody.size||10
-            }
-        );
-        return {rs:result.docs,total:result.total};
+        query=query.length>0?{$and:query}:{};
+        return await Domain.models.customer.find(query);
+        
     },
 }
