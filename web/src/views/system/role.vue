@@ -3,12 +3,12 @@
         <!--用户列表-->
         <Row>
             <Col offset="14" span="6" class="main-table-search">
-                <div style="width:88px; font-size:15px">用户名称:</div>                    
-                <input  v-model="name" placeholder="用户名称"  @keyup.enter="queryRole()"></input>   
+            <div style="width:88px; font-size:15px">用户名称:</div>
+            <input  v-model="name" placeholder="用户名称"  @keyup.enter="queryRole()"></input>
             </Col>
             <Col span="4" style="display:flex">
-                <Button type="primary" class="search_btn" icon="ios-search" @click="queryRole()">查询</Button>
-                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            <Button type="primary" class="search_btn" icon="ios-search" @click="queryRole()">查询</Button>
+            <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
             </Col>
         </Row>
         <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt role-table" stripe border></Table>
@@ -345,9 +345,9 @@
         },
         mounted(){
             /*if (this.user.roleIds[0] != 1) {
-                //非系统管理员不能操作，跳转到没有操作权限页面
-                this.$router.push(`/error`);
-            }*/
+             //非系统管理员不能操作，跳转到没有操作权限页面
+             this.$router.push(`/error`);
+             }*/
             if (this.user != null) {
                 this.queryRole();
             }

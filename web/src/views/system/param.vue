@@ -3,16 +3,16 @@
         <!--用户列表-->
         <Row>
             <Col offset="9" span="5" class="main-table-search">
-                <div class="main-table-search-lab">名称:</div>                    
-                <input  v-model="name" placeholder="请输入中文名称"  @keyup.enter="queryParameter()"></input>   
+            <div class="main-table-search-lab">名称:</div>
+            <input  v-model="name" placeholder="请输入中文名称"  @keyup.enter="queryParameter()"></input>
             </Col>
             <Col span="6" class="main-table-search">
-                <div style="width:88px; font-size:15px">使用名称:</div>                    
-                <input  v-model="key" placeholder="请输入英文名称"  @keyup.enter="queryParameter()"></input>   
+            <div style="width:88px; font-size:15px">使用名称:</div>
+            <input  v-model="key" placeholder="请输入英文名称"  @keyup.enter="queryParameter()"></input>
             </Col>
             <Col span="4" style="display:flex">
-                <Button type="primary" class="search_btn" icon="ios-search" @click="queryParameter()">查询</Button>
-                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            <Button type="primary" class="search_btn" icon="ios-search" @click="queryParameter()">查询</Button>
+            <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
             </Col>
         </Row>
         <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt" stripe border></Table>
@@ -41,7 +41,7 @@
                     <Select v-model="formParameter.isActive" clearable style="width:260px">
                         <Option v-for="item in select_type" :value="item.value" :key="item.key">{{ item.value }}</Option>
                     </Select>
-                    
+
                 </FormItem>
                 <div align="right">
                     <FormItem style="margin-top: 15px;">
@@ -245,9 +245,9 @@
             },
             displayParameter(row){
                 this.$api.post('/parameter/displayParameter',{id:row._id,
-                isActive:!row.isActive,
-                key:row.key,
-                value:row.value}).then(res=>{
+                    isActive:!row.isActive,
+                    key:row.key,
+                    value:row.value}).then(res=>{
                     this.queryParameter();
                 })
             },
@@ -284,9 +284,9 @@
         },
         mounted(){
             /*if (this.user.roleIds[0] != 1) {
-                //非系统管理员不能操作，跳转到没有操作权限页面
-                this.$router.push(`/error`);
-            }*/
+             //非系统管理员不能操作，跳转到没有操作权限页面
+             this.$router.push(`/error`);
+             }*/
             if (this.user != null) {
                 this.queryParameter();
             }

@@ -3,12 +3,12 @@
         <!--用户列表-->
         <Row>
             <Col offset="14" span="6" class="main-table-search">
-                <div style="width:88px; font-size:15px">用户名称:</div>                    
-                <input  v-model="userName" placeholder="用户名称"  @keyup.enter="queryUsers()"></input>   
+            <div style="width:88px; font-size:15px">用户名称:</div>
+            <input  v-model="userName" placeholder="用户名称"  @keyup.enter="queryUsers()"></input>
             </Col>
             <Col span="4" style="display:flex">
-                <Button type="primary" class="search_btn" icon="ios-search" @click="queryUsers()">查询</Button>
-                <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            <Button type="primary" class="search_btn" icon="ios-search" @click="queryUsers()">查询</Button>
+            <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
             </Col>
         </Row>
         <Table :columns="cols" :data="userDatas" size="small" max-height=435 class="table-mt" stripe border></Table>
@@ -244,7 +244,7 @@
                     this.total = res.data.total;
                     this.userDatas = res.data.rs;
                 });
-                
+
                 this.$api.get('/role/queryRole').then(res=>{
                     this.roleDatas=res.data.rs;
                 });
@@ -318,9 +318,9 @@
         },
         mounted(){
             /*if (this.user.roleIds[0] != 1) {
-                //非系统管理员不能操作，跳转到没有操作权限页面
-                this.$router.push(`/error`);
-            }*/
+             //非系统管理员不能操作，跳转到没有操作权限页面
+             this.$router.push(`/error`);
+             }*/
             if (this.user != null) {
                 this.queryUsers();
             }
