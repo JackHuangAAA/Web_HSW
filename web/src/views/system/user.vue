@@ -1,30 +1,21 @@
 <template>
-    <div>
+    <div class="main-table">
         <!--用户列表-->
-        <div class="table main-table">
-            <div class="header">
-                <Form inline class="user-form">
-                    <FormItem>                        
-                        <label>用户名称:</label><Input  placeholder="用户名称" style="width: 180px;"></Input>
-                         <label>状态:</label><Select style="width:200px">
-                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                         </Select>                    
-                        <Button type="primary" @click="loadOperators('query')">
-                            <Icon type="ios-search-outline" />查询
-                            </Button>
-                        <Button type="primary" @click="showAddUserWin">
-                           <Icon type="ios-add" />新增</Button>
-                    </FormItem>
-                </Form>
-            </div>
-            <div class="content">
-                <Table border :columns="cols" :data="userDatas" size="small" border stripe></Table>
-            </div>
-            <div class="footer">
-                <Page :current="page" :size="size" :total="total" size="small"
-                      @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
-            </div>
-        </div>
+        <Row>
+            <Col offset="14" span="6" class="main-table-search">
+            <div style="width:88px; font-size:15px">用户名称:</div>
+            <input  v-model="userName" placeholder="用户名称"  @keyup.enter="queryUsers()"></input>
+            </Col>
+            <Col span="4" style="display:flex">
+            <Button type="primary" class="search_btn" icon="ios-search" @click="queryUsers()">查询</Button>
+            <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
+            </Col>
+        </Row>
+        <Table :columns="cols" :data="userDatas" size="small" class="table-mt" stripe border></Table>
+        <Row>
+            <Page :current="page" :page-size="size" :total="total"
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+        </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
             <Form ref="frmEdit" :model="formUser" :rules="userValidate" :label-width="83" >
@@ -44,39 +35,39 @@
                 <FormItem label="移动电话:" prop="phone">
                     <Input v-model="formUser.phone" placeholder="请输入移动电话号" :maxlength="11" style="width: 260px;"></Input>
                 </FormItem>
-                <FormItem label="角色" prop="roles">
-                    <Select v-model="formUser.roles" style="width:260px">
+                <FormItem label="角色" prop="role">
+                    <Select v-model="formUser.role" style="width:260px">
                         <Option v-for="item in roleDatas" :value="item._id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem label="备注">
-                    <Input v-model="formUser.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
+                    <Input v-model="formUser.notes" type="textarea" :autosize="{minRows: 2,maxRows: 5}"
                            placeholder="请输入..." style="width: 260px;"></Input>
                 </FormItem>
                 <div align="right">
                     <FormItem style="margin-top: 15px;">
                         <Button  @click="cancelModel('frmEdit')">取消</Button>
-                        <Button type="primary" @click="addOperator('frmEdit')">保存</Button>
+                        <Button type="primary" @click="saveUser('frmEdit')">保存</Button>
                     </FormItem>
                 </div>
             </Form>
         </Modal>
-         <!-- 分页 -->       
-        <Row>
+        <!-- 分页 -->
+        <!-- <Row>
             <Page :total="total" show-sizer show-total show-elevator @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
-        </Row>  
+        </Row>   -->
     </div>
 </template>
 <script>
     import Button from 'iview/src/components/button'
     import {mapGetters} from 'vuex'
-
+    import moment from 'moment'
     export default{
         data(){
             const checkCode = (rule, value, callback, source, options) => {
                 if(this.addCode == true){
-                    this.$api.get('/user/checkCode', {code: value}).then(response => {
-                        if (response.data == 1) {
+                    this.$api.get('/user/queryUsers', {code: value}).then(res => {
+                        if (res.data.total == 1) {
                             callback(new Error("账号已被占用"));
                         } else {
                             callback();
@@ -90,10 +81,7 @@
                 total: 0,
                 page: 1,
                 size: 10,
-                search: {
-                    userName: '',
-                    userCode: ''
-                },
+                userName:'',
                 addCode: true,
                 editModalWin: false,
                 roleDatas:[],
@@ -105,50 +93,35 @@
                         align: 'center'
                     },{
                         title: '手机号码',
-                        key: 'code',
-                        width: 160,
+                        key: 'phone',
                         align: 'center'
                     },{
                         title: '用户名',
                         key: 'name',
-                        width: 160,
                         align: 'center'
-                    },
-                    {
-                        title: '所属区域',
-                        key: 'region',
-                        width: 160,
-                        align: 'center'
-                    },
-                    {
+                    },{
                         title: '角色',
                         key: 'role',
-                        width: 150,
                         align: 'center',
-                        render: (h, params) => {
-                            return <div> {params.row.role.name} </div>;
+                        render:(h,params)=>{
+                            return h(
+                                'div',
+                                params.row.role!=undefined?params.row.role.name:''
+                            )
                         }
                     },{
-                        title: '状态',
-                        key: 'status',
-                        width: 150,
-                        align: 'center'
-                    },{
                         title: '更新时间',
-                        key: 'time',
-                        ellipsis:true,
-                        width: 350,
+                        key: 'updateDate',
                         align: 'center'
                     },{
                         title: '操作',
                         key: 'action',
-                        width: 230,
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        type: 'Large',
+                                        type: 'default',
                                         size: 'small',
                                         disabled: (params.row.code == 'admin') ? true:false
                                     },
@@ -196,13 +169,12 @@
                     }
                 ],
                 formUser: {
-                    id: '',
+                    id:'',
                     name: '',
                     code: '',
-                    region: '',
-                    roles: '',
-                    status: '',
-                    time:''
+                    phone: '',
+                    role: '',
+                    notes: ''
                 },
                 userValidate: {
                     code : [{
@@ -233,7 +205,7 @@
                             callback(errors);
                         }
                     }],
-                    roles: [{
+                    role: [{
                         required: true, type: 'string', message: '角色不能为空', trigger: 'change',
                     }]
                 }
@@ -252,25 +224,32 @@
             },
             showEditUserWin: function (row) {
                 this.addCode = false;
-
                 this.formUser = {
-                    id: row.id,
+                    id:row._id,
                     name: row.name,
                     code: row.code,
                     phone: row.phone,
-                    remark: row.remark
-                };this.loadRoles();
+                    role: row.role,
+                    notes: row.notes
+                };
+                // this.loadRoles();
                 this.editModalWin = true;
             },
-            queryUsers: function (val) {
+            queryUsers: function () {
                 this.$api.get('/user/queryUsers', {
-                    name: this.search.userName,
-                    code: this.search.userCode,
-                    page: val ? 1 : this.page,
-                    size: this.size
-                }).then(response => {
-                    this.total = response.data.total;
-                    this.userDatas = response.data.rs;
+                    name: this.userName,
+                    page: this.page||1,
+                    size: this.size||10
+                }).then(res => {
+                    res.data.rs.forEach(item=>{
+                        item.updateDate=moment(item.updateDate).format('YYYY-MM-DD HH:mm:ss');
+                    });
+                    this.total = res.data.total;
+                    this.userDatas = res.data.rs;
+                });
+
+                this.$api.get('/role/queryRole').then(res=>{
+                    this.roleDatas=res.data.rs;
                 });
             },
             cancelModel: function(name){
@@ -282,17 +261,17 @@
                     if (valid) {
                         if(this.formUser.id == ''){
                             this.$api.post('/user/saveUser', this.formUser).then(response => {
-                                this.loadOperators();
                                 this.$Message.success('增加用户成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
+                                this.queryUsers();
                             });
                         }else{
                             this.$api.post('/user/modifyUser', this.formUser).then(response => {
-                                this.loadOperators();
                                 this.$Message.success('修改用户成功!');
                                 this.$refs[name].resetFields();
                                 this.editModalWin = false;
+                                this.queryUsers();
                             });
                         }
                     }
@@ -304,8 +283,8 @@
                     content: '<p>是否确认删除？</p>',
                     onOk: () => {
                         this.$api.post('/user/removeUserById', {id: row._id}).then(response => {
-                            this.loadOperators();
                             this.$Message.success('删除成功!');
+                            this.queryUsers();
                         });
                     }
                 });
@@ -315,7 +294,7 @@
                     title: '提示',
                     content: '<p>确认重置密码？</p>',
                     onOk: () => {
-                        this.$api.post('/user/resetPwd', {id: row.id}).then(response => {
+                        this.$api.post('/user/resetUser', {id: row.id}).then(response => {
                             this.$Message.success('密码重置成功!');
                         });
                     }
@@ -329,21 +308,22 @@
                 this.size = size;
                 this.queryUsers();
             },
-            resetForm: function (size) {
+            resetForm: function () {
                 this.formUser = {
-                    id: '',
+                    id:'',
                     name: '',
                     code: '',
                     phone: '',
-                    remark: ''
+                    role: '',
+                    notes: ''
                 };
             }
         },
         mounted(){
             /*if (this.user.roleIds[0] != 1) {
-                //非系统管理员不能操作，跳转到没有操作权限页面
-                this.$router.push(`/error`);
-            }*/
+             //非系统管理员不能操作，跳转到没有操作权限页面
+             this.$router.push(`/error`);
+             }*/
             if (this.user != null) {
                 this.queryUsers();
             }
@@ -351,5 +331,7 @@
     }
 </script>
 <style lang="less" scoped>
-@import '~@/style/user.less';
+    @import '~@/style/color.less';
+    @import '~@/style/common.less';
+    @import '~@/style/user.less';
 </style>

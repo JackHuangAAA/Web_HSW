@@ -11,9 +11,6 @@ async function updateDeviceStatus() {
     let result = await Domain.models.device.find({type:1});
     //let timestamp_dev = await Domain.redis.client.getAsync("5da19b346baebc8f36de1877_heartbeat");
 
-    let time_now = Date.now();
-
-
     for(let index in result){
         let deviceId = result[index]._id.toString();
         let deviceId_h = deviceId+'_heartbeat';

@@ -65,7 +65,27 @@ module.exports = {
                 }
             }],
             levels: 'INFO'
-        }
+        },
+        ist: {
+            appenders: [{
+                type: 'console',
+                layout: {
+                    type: 'pattern',
+                    pattern: '%[[%d] [%p] [%z] %c%] %m'
+                }
+            }, {
+                type: 'dateFile',
+                filename: 'log/',
+                pattern: 'yyyy-MM/ist-yyyy-MM-dd.log',
+                alwaysIncludePattern: true,
+                makers: {},
+                layout: {
+                    type: 'pattern',
+                    pattern: '[%d] [%p] [%z] %c %m',
+                }
+            }],
+            levels: 'INFO'
+        },
     },
     mongoose: {
         uri: 'mongodb://192.168.0.96/iviotp',
@@ -85,5 +105,9 @@ module.exports = {
     vfc: {
         host: '0.0.0.0',
         port: 9997
+    },
+    ist: {
+        host: '0.0.0.0',
+        port: 9995
     }
 };

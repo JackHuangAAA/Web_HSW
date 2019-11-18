@@ -6,6 +6,7 @@
     "vcc": "node vcc/main.js dev",
     "vccpush": "node vcc/push.js dev",
     "vfc": "node vfc/main.js dev",
+    "ist": "node ist/main.js dev",
     "build": "node build/build.js"
   },
   "dependencies": {
@@ -50,7 +51,7 @@
     "xlsx": "^0.14.0",
     "xml2js": "^0.4.19"
   },
-  "description": "用户登录：调用外围接口-->用户是否存在--接口1\r 基本信息：接口3---->接口4\r 指纹录入：接口13\r 区域划分：接口5 ！！\r 疫苗入库：接口7-->输入数量接口5-->入库完成接口6\r 库存: 接口7-->库存详情接口15\r 疫苗出库：接口7-->出库完成接口6",
+  "description": "",
   "main": "index.js",
   "devDependencies": {},
   "author": "huangshaowei",

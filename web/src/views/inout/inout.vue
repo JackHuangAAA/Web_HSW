@@ -1,7 +1,7 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="8" class="main-table-title">出入库记录查询</Col>
+            <Col span="7" class="main-table-title">出入库记录查询</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryInouts()"/>
@@ -16,30 +16,9 @@
                 <div class="main-table-box-time">时间:</div>
                 <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="请选择日期" ></DatePicker>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryInouts">查询</Button></Col>
-        </Row>      
-        <Row class="main-table-head">
-            <Col span="1" class="id-center">序号</Col>
-            <Col span="3">设备类型</Col>
-            <Col span="3">所在单位</Col>
-            <Col span="8">操作批次号</Col>
-            <Col span="3">疫苗数量</Col>
-            <Col span="3">操作类型</Col>
-            <Col span="3">操作</Col>
+            <Col span="2"><Button type="primary" class="search_btn" @click="search_queryInouts" icon="ios-search">查询</Button></Col>
         </Row>
-        <div class="table-body">
-            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-                <Col span="1" class="id-center">{{index+1}}</Col>
-                <Col span="3">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-                <Col span="3">{{item.unitName}}</Col>
-                <Col span="8">{{item._id||'--'}}</Col>
-                <Col span="3">{{item.count||'--'}}</Col><!--2019-9-29 ~ 2019-9-29 -->
-                <Col span="3">{{item.type==1?'入库':'出库'}}</Col>
-                <Col span="3" class="view-detail">
-                    <div @click="routerTo(item._id)">查看详情</div>
-                </Col>
-            </Row>
-        </div>
+        <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
@@ -68,7 +47,62 @@ export default {
                     name:'冷藏柜',
                     key:2
                 }
-            ]
+            ],
+            cols: [
+                {
+                    type: 'index',
+                    width:100,
+                    align: 'center'
+                },{
+                    title: '设备类型',
+                    key: 'type',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.deviceType==1?'接种柜':'冷藏柜'
+                        )
+                    }
+                },{
+                    title: '所在单位',
+                    key: 'unitName'
+                },{
+                    title: '操作批次号',
+                    key: '_id'
+                },{
+                    title: '疫苗数量',
+                    key: 'count'
+                },{
+                    title: '操作类型',
+                    key: 'type',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.type==1?'入库':'出库'
+                        )
+                    }
+                },{
+                    title: '操作',
+                    align: 'center',
+                    render: (h, params) => {
+                            return h('div', [
+                                h('Button', {
+                                    props: {
+                                        type: 'default',
+                                        size: 'small'
+                                    },
+                                    on: {
+                                        click: () => {
+                                            this.routerTo(
+                                                params.row._id
+                                            )
+                                        }
+                                    }
+                                }, '查看详情')
+                            ]
+                        )
+                    }
+                }
+            ],
         }
     },
     methods:{
@@ -126,5 +160,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-
+@import '~@/style/color.less';
+@import '../../style/common.less';
 </style>

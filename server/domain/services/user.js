@@ -182,13 +182,15 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) });
     }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+    query = query.length >0 ? { $and: query } : {};
     let result = await Domain.models.user.paginate(query, {
+      populate:"role",
       sort: { _id: -1 },
-      page: requestBody.page,
-      limit: parseInt(requestBody.size),
+      page: requestBody.page||1,
+      limit: parseInt(requestBody.size)||10,
       lean: true
     });
+    console.log(result)
     return { rs: result.docs, total: result.total }
   },
 
@@ -269,8 +271,7 @@ module.exports = {
     logger.debug(`resetUser param: ${JSON.stringify(requestBody)}`);
     let password=crypto.createHash('md5');
     password.update("000000");
-    password=password.digest('hex').toUpperCase()
-    console.log(password)
+    password=password.digest('hex').toUpperCase();
     return await Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
