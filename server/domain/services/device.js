@@ -161,24 +161,25 @@ module.exports = {
         query = query.length > 0 ? { "$and": query } : {};
         //查询设备库存信息
         let result = await Domain.models.device.paginate(query, {
+            populate:'vaccine',
             sort: {"_id": -1},
             page: requestBody.page,
             limit: parseInt(requestBody.size)
         });
         return {rs: result.docs, total: result.total};
 
-/*        return await  Domain.models.device.aggregate([
+        // return await  Domain.models.device.aggregate([
 
-            {$match:query},
-            {
-                $lookup:{
-                    from:"vaccines",
-                    localField:"_id",
-                    foreignField:"device",
-                    as:"stockdocs"
-                }
-            },
-        ]);*/
+        //     {$match:query},
+        //     {
+        //         $lookup:{
+        //             from:"vaccines",
+        //             localField:"_id",
+        //             foreignField:"device",
+        //             as:"stockdocs"
+        //         }
+        //     },
+        // ]);
     },
 
     /**
@@ -201,7 +202,7 @@ module.exports = {
         docs = await Domain.models.vaccine.aggregate([{$match:query},
             {$group:{
                     _id:{
-                        "code":"$code"
+                        "name":"$name"
                     },
                     count:{$sum:"$surplus"},
                 }},

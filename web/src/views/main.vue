@@ -112,7 +112,7 @@
 <style lang="less" scoped>
 @import '../style/color.less';
 @import '../style/main.less';
-@import '../style/table.less';
+@import '../style/common.less';
 </style>
 
 <script>
@@ -180,7 +180,7 @@
                 // })
             },
             queryAlarmDailyInfo(){
-                this.$api.get('/alarm/queryAlarmDailyInfo').then(res=>{
+                this.$api.get('/alarm/queryAlarmByCondition',{type:1}).then(res=>{
                     let data=res.data;
                     data=data.slice(0,4);
                     this.alarmList=data;

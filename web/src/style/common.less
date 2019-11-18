@@ -1,6 +1,6 @@
 .main-table{
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 120px);
   margin-top: 96px;
   margin-bottom: 20px;
   padding: 0 21px;
@@ -11,12 +11,66 @@
   color: @black;
   box-shadow:0px 0px 15px 1px rgba(206,210,218,0.43);
 }
+.table-mt{
+  margin-top: 30px;
+  height: calc(100% - 200px) !important;
+}
+//表格滚动条
+/deep/.ivu-table-body{
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 95%;
+}
+//角色管理表格宽度
+/deep/.role-table{
+  width: 65% !important;
+}
+/deep/.ivu-table{
+  width: 100%;
+}
+//角色管理权限树
+.permissionTree{
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: 66%;
+  top: 202px;
+  border: 1px solid #eeeeee;
+  overflow: hidden;
+  transition: all .5s;
+  .permissionTree-title{
+    height: 40px;
+    line-height: 40px;
+    background: #eeeeee;
+    text-align: center;
+  }
+}
+.savePermission{
+  position: absolute;
+  bottom: 10px;
+  right: 130px;
+}
+.resetPermission{
+  position: absolute;
+  bottom: 10px;
+  right: 70px;
+}
+.closePermission{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.permissionStyle{
+  width: 30%;
+  height: calc(100% - 340px);
+}
 //搜索按钮
 .search_btn{
   margin-top: 36px;
   margin-left: 5px;
-  margin-right: 5px;
+  float: right;
   height: 40px;
+  width: 90%;
 }
 .main-table-height{
   height: calc(100% - 360px) !important;
@@ -43,11 +97,7 @@
 }
 .table-body{
   overflow: auto;
-  height: calc(100% - 220px);
-}
-.id-center{
-  text-align: center;
-  padding-right: 10px;
+  height: auto
 }
 .main-table-title{
   padding-top: 45px;
@@ -61,7 +111,7 @@
   margin-top: 36px;
   padding-left: 10px;
   .main-table-search-lab{
-      width: 40px;
+      width: 44px;
       text-align: end;
   }
   input{
@@ -80,7 +130,7 @@
   padding: 0;
 }
 .main-table-box-time{
-  width: 40px;
+  width: 44px;
 }
 .main-table-box{
   display: flex;
@@ -91,7 +141,7 @@
   margin-top: 36px;
   padding-left: 10px;
   .main-table-box-lab{
-    width: 40px;
+    width: 44px;
     text-align: end;
   }
 }
@@ -100,24 +150,6 @@
 }
 .ivu-select-selection{
   width: 100%;
-}
-.detail-table-head{
-  font-size: 15px;
-  height:44px;
-  line-height: 44px;
-  border-bottom: 1px solid rgba(220,220,220,1);
-  border-left: 1px solid rgba(220,220,220,1);
-  border-right: 1px solid rgba(220,220,220,1);
-}
-.detail-table-body{
-  font-size: 14px;
-  font-weight:400;
-  height:44px;
-  line-height: 44px;
-  color: @dark;
-  border-bottom: 1px solid rgba(220,220,220,1);
-  border-left: 1px solid rgba(220,220,220,1);
-  border-right: 1px solid rgba(220,220,220,1);
 }
 .ivu-select-single .ivu-select-selection{
   width: 100%;
@@ -156,22 +188,6 @@
   color: @white;
 }
 
-// stock查看详情
-.view-detail{
-  width:79px;
-  height:30px;
-  margin-top: 7px;
-  cursor: pointer;
-  line-height: 30px;
-  text-align: center;
-  background:rgba(255,255,255,1);
-  border:1px solid rgba(194,194,194,1);
-}
-//展开详情
-.open-detail{
-  color: @blue;
-  cursor: pointer;
-}
 // stockDetail
 .stockDetail-table-title{
   color: @dark;
@@ -212,12 +228,4 @@
 .list-row{
   display: flex;
   flex-direction: row;
-}
-.show{
-  height: auto;
-  transition: .5s height;
-}
-.none{
-  height: 0 !important;
-  overflow: hidden;
 }
