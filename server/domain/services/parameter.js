@@ -11,10 +11,10 @@ module.exports = {
 		logger.debug('queryParameter：' + JSON.stringify(requestBody));
 		let query = [];
 		if (!_.isEmpty(requestBody.name)) {
-			query.push({ name: new RegExp(requestBody.name) });
+			query.push({ "name": new RegExp(requestBody.name) });
 		}
 		if (!_.isEmpty(requestBody.key)) {
-			query.push({ 'key': new RegExp(requestBody.key) });
+			query.push({ "key": new RegExp(requestBody.key) });
 		}
 		query = query.length > 0 ? { "$and": query } : {};
 
