@@ -1,4 +1,5 @@
 package com.ethink.vcd.controller;
+
 import android.content.Context;
 import android.os.SystemClock;
 
@@ -94,32 +95,42 @@ public class FingerCommon {
     public byte[] m_abyPacket2 = new byte[65536];
     private SerialPortController controller;
 
-    public FingerCommon(Context context,String path, int baudRate ) {
-        this.controller = new SerialPortController(context,path,baudRate);
+    public FingerCommon(Context context, String path, int baudRate) {
+        this.controller = new SerialPortController(context, path, baudRate);
     }
 
 
-    public void CloseComm(){
+    public void CloseComm() {
         controller.close();
     }
 
     public int Run_TestConnection() {
-        this.InitCmdPacket((short)1, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.SendPacket((short)1);
+        this.InitCmdPacket((short) 1, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        boolean w_bRet = this.SendPacket((short) 1);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public    int Run_SetParam(int p_nParamIndex, int p_nParamValue) {
-        byte[] w_abyData = new byte[]{(byte)p_nParamIndex, (byte)(p_nParamValue & 255), (byte)((p_nParamValue & '\uff00') >> 8), (byte)((p_nParamValue & 16711680) >> 16), (byte)((p_nParamValue & -16777216) >> 24)};
-        this.InitCmdPacket((short)2, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 5);
-        boolean w_bRet = this.SendPacket((short)2);
+    /****
+     * 正在录入的时候取消录入
+     * **/
+    public int Run_Cancel() {
+        this.InitCmdPacket((short) 1, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        boolean w_bRet = this.SendPacket((short) 1);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public  int Run_GetParam(int p_nParamIndex, int[] p_pnParamValue) {
-        byte[] w_abyData = new byte[]{(byte)p_nParamIndex};
-        this.InitCmdPacket((short)3, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
-        boolean w_bRet = this.SendPacket((short)3);
+
+    public int Run_SetParam(int p_nParamIndex, int p_nParamValue) {
+        byte[] w_abyData = new byte[]{(byte) p_nParamIndex, (byte) (p_nParamValue & 255), (byte) ((p_nParamValue & '\uff00') >> 8), (byte) ((p_nParamValue & 16711680) >> 16), (byte) ((p_nParamValue & -16777216) >> 24)};
+        this.InitCmdPacket((short) 2, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 5);
+        boolean w_bRet = this.SendPacket((short) 2);
+        return !w_bRet ? 2 : this.GetRetCode();
+    }
+
+    public int Run_GetParam(int p_nParamIndex, int[] p_pnParamValue) {
+        byte[] w_abyData = new byte[]{(byte) p_nParamIndex};
+        this.InitCmdPacket((short) 3, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
+        boolean w_bRet = this.SendPacket((short) 3);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -130,22 +141,22 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_GetDeviceInfo(String[] p_szDevInfo) {
-        this.InitCmdPacket((short)4, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.SendPacket((short)4);
+    public int Run_GetDeviceInfo(String[] p_szDevInfo) {
+        this.InitCmdPacket((short) 4, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        boolean w_bRet = this.SendPacket((short) 4);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
             int w_nDevInfoLen = this.MAKEWORD(this.m_abyPacket[10], this.m_abyPacket[11]);
-            w_bRet = this.ReceiveDataPacket((short)4);
+            w_bRet = this.ReceiveDataPacket((short) 4);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
                 return this.GetRetCode();
             } else {
-                this.memset(this.m_abyPacket2, (byte)0, 512);
+                this.memset(this.m_abyPacket2, (byte) 0, 512);
                 System.arraycopy(this.m_abyPacket, 10, this.m_abyPacket2, 0, w_nDevInfoLen);
                 String w_strTmp = new String(this.m_abyPacket2);
                 p_szDevInfo[0] = w_strTmp;
@@ -154,47 +165,47 @@ public class FingerCommon {
         }
     }
 
-    public    int Run_SetIDNote(int p_nTmplNo, String p_pstrNote) {
+    public int Run_SetIDNote(int p_nTmplNo, String p_pstrNote) {
         boolean w_bRet = false;
         byte[] w_abyData = new byte[66];
         byte[] w_abyData2 = new byte[2];
         byte[] w_abyNoteBuf = p_pstrNote.getBytes();
-        w_abyData2[0] = this.LOBYTE((short)66);
-        w_abyData2[1] = this.HIBYTE((short)66);
-        this.InitCmdPacket((short)6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.SendPacket((short)6);
+        w_abyData2[0] = this.LOBYTE((short) 66);
+        w_abyData2[1] = this.HIBYTE((short) 66);
+        this.InitCmdPacket((short) 6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
+        w_bRet = this.SendPacket((short) 6);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            this.memset(w_abyData, (byte)0, 66);
-            w_abyData[0] = this.LOBYTE((short)p_nTmplNo);
-            w_abyData[1] = this.HIBYTE((short)p_nTmplNo);
+            this.memset(w_abyData, (byte) 0, 66);
+            w_abyData[0] = this.LOBYTE((short) p_nTmplNo);
+            w_abyData[1] = this.HIBYTE((short) p_nTmplNo);
             System.arraycopy(w_abyNoteBuf, 0, w_abyData, 2, w_abyNoteBuf.length);
-            this.InitCmdDataPacket((short)6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 66);
-            w_bRet = this.SendDataPacket((short)6);
+            this.InitCmdDataPacket((short) 6, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 66);
+            w_bRet = this.SendDataPacket((short) 6);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
 
-    public   int Run_GetIDNote(int p_nTmplNo, String[] p_pstrNote) {
+    public int Run_GetIDNote(int p_nTmplNo, String[] p_pstrNote) {
         boolean w_bRet = false;
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo)};
-        this.InitCmdPacket((short)7, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        w_bRet = this.SendPacket((short)7);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nTmplNo), this.HIBYTE((short) p_nTmplNo)};
+        this.InitCmdPacket((short) 7, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
+        w_bRet = this.SendPacket((short) 7);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.ReceiveDataPacket((short)7);
+            w_bRet = this.ReceiveDataPacket((short) 7);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
                 return this.GetRetCode();
             } else {
-                this.memset(this.m_abyPacket2, (byte)0, 512);
+                this.memset(this.m_abyPacket2, (byte) 0, 512);
                 System.arraycopy(this.m_abyPacket, 10, this.m_abyPacket2, 0, 64);
                 String w_strTmp = new String(this.m_abyPacket2);
                 p_pstrNote[0] = w_strTmp;
@@ -208,39 +219,39 @@ public class FingerCommon {
         byte[] w_abyData = p_pstrModuleSN.getBytes();
         byte[] w_abyModuleSN = new byte[16];
         byte[] w_abyData2 = new byte[2];
-        this.memset(w_abyModuleSN, (byte)0, 16);
+        this.memset(w_abyModuleSN, (byte) 0, 16);
         System.arraycopy(w_abyData, 0, w_abyModuleSN, 0, w_abyData.length);
-        w_abyData2[0] = this.LOBYTE((short)16);
-        w_abyData2[1] = this.HIBYTE((short)16);
-        this.InitCmdPacket((short)8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.SendPacket((short)8);
+        w_abyData2[0] = this.LOBYTE((short) 16);
+        w_abyData2[1] = this.HIBYTE((short) 16);
+        this.InitCmdPacket((short) 8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
+        w_bRet = this.SendPacket((short) 8);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            this.InitCmdDataPacket((short)8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyModuleSN, 16);
-            w_bRet = this.SendDataPacket((short)8);
+            this.InitCmdDataPacket((short) 8, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyModuleSN, 16);
+            w_bRet = this.SendDataPacket((short) 8);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
 
     public int Run_GetModuleSN(String[] p_pstrModuleSN) {
         boolean w_bRet = false;
-        this.InitCmdPacket((short)9, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        w_bRet = this.SendPacket((short)9);
+        this.InitCmdPacket((short) 9, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        w_bRet = this.SendPacket((short) 9);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.ReceiveDataPacket((short)9);
+            w_bRet = this.ReceiveDataPacket((short) 9);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
                 return this.GetRetCode();
             } else {
-                this.memset(this.m_abyPacket2, (byte)0, 512);
+                this.memset(this.m_abyPacket2, (byte) 0, 512);
                 System.arraycopy(this.m_abyPacket, 10, this.m_abyPacket2, 0, 16);
                 String w_strTmp = new String(this.m_abyPacket2);
                 p_pstrModuleSN[0] = w_strTmp;
@@ -249,15 +260,15 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_GetImage() {
-        this.InitCmdPacket((short)32, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.SendPacket((short)32);
+    public int Run_GetImage() {
+        this.InitCmdPacket((short) 32, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        boolean w_bRet = this.SendPacket((short) 32);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public   int Run_FingerDetect(int[] p_pnDetectResult) {
-        this.InitCmdPacket((short)33, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
-        boolean w_bRet = this.SendPacket((short)33);
+    public int Run_FingerDetect(int[] p_pnDetectResult) {
+        this.InitCmdPacket((short) 33, this.m_bySrcDeviceID, this.m_byDstDeviceID, this.m_abyPacket2, 0);
+        boolean w_bRet = this.SendPacket((short) 33);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -268,10 +279,10 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_UpImage(int p_nType, byte[] p_pFpData, int[] p_pnImgWidth, int[] p_pnImgHeight) {
-        byte[] w_abyData = new byte[]{(byte)p_nType};
-        this.InitCmdPacket((short)34, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
-        boolean w_bRet = this.SendPacket((short)34);
+    public int Run_UpImage(int p_nType, byte[] p_pFpData, int[] p_pnImgWidth, int[] p_pnImgHeight) {
+        byte[] w_abyData = new byte[]{(byte) p_nType};
+        this.InitCmdPacket((short) 34, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 1);
+        boolean w_bRet = this.SendPacket((short) 34);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -290,21 +301,21 @@ public class FingerCommon {
         }
     }
 
-    public    int Run_DownImage(byte[] p_pData, int p_nWidth, int p_nHeight) {
+    public int Run_DownImage(byte[] p_pData, int p_nWidth, int p_nHeight) {
         return 0;
     }
 
-    public  int Run_SLEDControl(int p_nState) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nState), this.HIBYTE((short)p_nState)};
-        this.InitCmdPacket((short)36, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.SendPacket((short)36);
+    public int Run_SLEDControl(int p_nState) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nState), this.HIBYTE((short) p_nState)};
+        this.InitCmdPacket((short) 36, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
+        boolean w_bRet = this.SendPacket((short) 36);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public int Run_StoreChar(int p_nTmplNo, int p_nRamBufferID, int[] p_pnDupTmplNo) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
-        this.InitCmdPacket((short)64, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)64);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nTmplNo), this.HIBYTE((short) p_nTmplNo), this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID)};
+        this.InitCmdPacket((short) 64, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 64);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -318,24 +329,24 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_LoadChar(int p_nTmplNo, int p_nRamBufferID) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
-        this.InitCmdPacket((short)65, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)65);
+    public int Run_LoadChar(int p_nTmplNo, int p_nRamBufferID) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nTmplNo), this.HIBYTE((short) p_nTmplNo), this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID)};
+        this.InitCmdPacket((short) 65, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 65);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public   int Run_UpChar(int p_nRamBufferID, byte[] p_pbyTemplate) {
+    public int Run_UpChar(int p_nRamBufferID, byte[] p_pbyTemplate) {
         boolean w_bRet = false;
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
-        this.InitCmdPacket((short)66, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        w_bRet = this.SendPacket((short)66);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID)};
+        this.InitCmdPacket((short) 66, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
+        w_bRet = this.SendPacket((short) 66);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_bRet = this.ReceiveDataPacket((short)66);
+            w_bRet = this.ReceiveDataPacket((short) 66);
             if (!w_bRet) {
                 return 2;
             } else if (this.GetRetCode() != 0) {
@@ -347,37 +358,37 @@ public class FingerCommon {
         }
     }
 
-    public   int Run_DownChar(int p_nRamBufferID, byte[] p_pbyTemplate) {
+    public int Run_DownChar(int p_nRamBufferID, byte[] p_pbyTemplate) {
         boolean w_bRet = false;
         byte[] w_abyData = new byte[500];
-        byte[] w_abyData2 = new byte[]{this.LOBYTE((short)500), this.HIBYTE((short)500)};
-        this.InitCmdPacket((short)67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
-        w_bRet = this.SendPacket((short)67);
+        byte[] w_abyData2 = new byte[]{this.LOBYTE((short) 500), this.HIBYTE((short) 500)};
+        this.InitCmdPacket((short) 67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData2, 2);
+        w_bRet = this.SendPacket((short) 67);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
             return this.GetRetCode();
         } else {
-            w_abyData[0] = this.LOBYTE((short)p_nRamBufferID);
-            w_abyData[1] = this.HIBYTE((short)p_nRamBufferID);
+            w_abyData[0] = this.LOBYTE((short) p_nRamBufferID);
+            w_abyData[1] = this.HIBYTE((short) p_nRamBufferID);
             System.arraycopy(p_pbyTemplate, 0, w_abyData, 2, 498);
-            this.InitCmdDataPacket((short)67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 500);
-            w_bRet = this.SendDataPacket((short)67);
+            this.InitCmdDataPacket((short) 67, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 500);
+            w_bRet = this.SendDataPacket((short) 67);
             return !w_bRet ? 2 : this.GetRetCode();
         }
     }
 
     public int Run_DelChar(int p_nSTmplNo, int p_nETmplNo) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
-        this.InitCmdPacket((short)68, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)68);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nSTmplNo), this.HIBYTE((short) p_nSTmplNo), this.LOBYTE((short) p_nETmplNo), this.HIBYTE((short) p_nETmplNo)};
+        this.InitCmdPacket((short) 68, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 68);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
     public int Run_GetEmptyID(int p_nSTmplNo, int p_nETmplNo, int[] p_pnEmptyID) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
-        this.InitCmdPacket((short)69, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)69);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nSTmplNo), this.HIBYTE((short) p_nSTmplNo), this.LOBYTE((short) p_nETmplNo), this.HIBYTE((short) p_nETmplNo)};
+        this.InitCmdPacket((short) 69, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 69);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -388,10 +399,10 @@ public class FingerCommon {
         }
     }
 
-   public int Run_GetStatus(int p_nTmplNo, int[] p_pnStatus) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo)};
-        this.InitCmdPacket((short)70, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.SendPacket((short)70);
+    public int Run_GetStatus(int p_nTmplNo, int[] p_pnStatus) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nTmplNo), this.HIBYTE((short) p_nTmplNo)};
+        this.InitCmdPacket((short) 70, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
+        boolean w_bRet = this.SendPacket((short) 70);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -402,10 +413,10 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_GetBrokenID(int p_nSTmplNo, int p_nETmplNo, int[] p_pnCount, int[] p_pnFirstID) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
-        this.InitCmdPacket((short)71, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)71);
+    public int Run_GetBrokenID(int p_nSTmplNo, int p_nETmplNo, int[] p_pnCount, int[] p_pnFirstID) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nSTmplNo), this.HIBYTE((short) p_nSTmplNo), this.LOBYTE((short) p_nETmplNo), this.HIBYTE((short) p_nETmplNo)};
+        this.InitCmdPacket((short) 71, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 71);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -417,10 +428,10 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_GetEnrollCount(int p_nSTmplNo, int p_nETmplNo, int[] p_pnEnrollCount) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nSTmplNo), this.HIBYTE((short)p_nSTmplNo), this.LOBYTE((short)p_nETmplNo), this.HIBYTE((short)p_nETmplNo)};
-        this.InitCmdPacket((short)72, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)72);
+    public int Run_GetEnrollCount(int p_nSTmplNo, int p_nETmplNo, int[] p_pnEnrollCount) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nSTmplNo), this.HIBYTE((short) p_nSTmplNo), this.LOBYTE((short) p_nETmplNo), this.HIBYTE((short) p_nETmplNo)};
+        this.InitCmdPacket((short) 72, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 72);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -432,30 +443,30 @@ public class FingerCommon {
     }
 
     public int Run_Generate(int p_nRamBufferID) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
-        this.InitCmdPacket((short)96, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
-        boolean w_bRet = this.SendPacket((short)96);
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID)};
+        this.InitCmdPacket((short) 96, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 2);
+        boolean w_bRet = this.SendPacket((short) 96);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public  int Run_Merge(int p_nRamBufferID, int p_nMergeCount) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID), (byte)p_nMergeCount};
-        this.InitCmdPacket((short)97, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 3);
-        boolean w_bRet = this.SendPacket((short)97);
+    public int Run_Merge(int p_nRamBufferID, int p_nMergeCount) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID), (byte) p_nMergeCount};
+        this.InitCmdPacket((short) 97, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 3);
+        boolean w_bRet = this.SendPacket((short) 97);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public   int Run_Match(int p_nRamBufferID0, int p_nRamBufferID1) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID0), this.HIBYTE((short)p_nRamBufferID0), this.LOBYTE((short)p_nRamBufferID1), this.HIBYTE((short)p_nRamBufferID1)};
-        this.InitCmdPacket((short)98, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)98);
+    public int Run_Match(int p_nRamBufferID0, int p_nRamBufferID1) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nRamBufferID0), this.HIBYTE((short) p_nRamBufferID0), this.LOBYTE((short) p_nRamBufferID1), this.HIBYTE((short) p_nRamBufferID1)};
+        this.InitCmdPacket((short) 98, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 98);
         return !w_bRet ? 2 : this.GetRetCode();
     }
 
-    public  int Run_Search(int p_nRamBufferID, int p_nStartID, int p_nSearchCount, int[] p_pnTmplNo, int[] p_pnLearnResult) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID), this.LOBYTE((short)p_nStartID), this.HIBYTE((short)p_nStartID), this.LOBYTE((short)p_nSearchCount), this.HIBYTE((short)p_nSearchCount)};
-        this.InitCmdPacket((short)99, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 6);
-        boolean w_bRet = this.SendPacket((short)99);
+    public int Run_Search(int p_nRamBufferID, int p_nStartID, int p_nSearchCount, int[] p_pnTmplNo, int[] p_pnLearnResult) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID), this.LOBYTE((short) p_nStartID), this.HIBYTE((short) p_nStartID), this.LOBYTE((short) p_nSearchCount), this.HIBYTE((short) p_nSearchCount)};
+        this.InitCmdPacket((short) 99, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 6);
+        boolean w_bRet = this.SendPacket((short) 99);
         if (!w_bRet) {
             return 2;
         } else if (this.GetRetCode() != 0) {
@@ -467,10 +478,10 @@ public class FingerCommon {
         }
     }
 
-    public  int Run_Verify(int p_nTmplNo, int p_nRamBufferID, int[] p_pnLearnResult) {
-        byte[] w_abyData = new byte[]{this.LOBYTE((short)p_nTmplNo), this.HIBYTE((short)p_nTmplNo), this.LOBYTE((short)p_nRamBufferID), this.HIBYTE((short)p_nRamBufferID)};
-        this.InitCmdPacket((short)100, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
-        boolean w_bRet = this.SendPacket((short)100);
+    public int Run_Verify(int p_nTmplNo, int p_nRamBufferID, int[] p_pnLearnResult) {
+        byte[] w_abyData = new byte[]{this.LOBYTE((short) p_nTmplNo), this.HIBYTE((short) p_nTmplNo), this.LOBYTE((short) p_nRamBufferID), this.HIBYTE((short) p_nRamBufferID)};
+        this.InitCmdPacket((short) 100, this.m_bySrcDeviceID, this.m_byDstDeviceID, w_abyData, 4);
+        boolean w_bRet = this.SendPacket((short) 100);
         if (!w_bRet) {
             return 2;
         } else {
@@ -483,7 +494,7 @@ public class FingerCommon {
         int[] w_nRecvLen = new int[1];
         byte[] w_abyPCCmd = new byte[6];
         byte[] w_abyData = new byte[32];
-        Arrays.fill(w_abyPCCmd, (byte)0);
+        Arrays.fill(w_abyPCCmd, (byte) 0);
         w_abyPCCmd[2] = 4;
         boolean w_bRet = this.SendPackage(w_abyPCCmd, w_abyData);
         if (!w_bRet) {
@@ -536,13 +547,13 @@ public class FingerCommon {
     }
 
     private short GetRetCode() {
-        return (short)(this.m_abyPacket[9] << 8 & '\uff00' | this.m_abyPacket[8] & 255);
+        return (short) (this.m_abyPacket[9] << 8 & '\uff00' | this.m_abyPacket[8] & 255);
     }
 
     private short CalcChkSumOfPkt(byte[] pDataPkt, int nSize) {
         int nChkSum = 0;
 
-        for(int i = 0; i < nSize; ++i) {
+        for (int i = 0; i < nSize; ++i) {
             if (pDataPkt[i] < 0) {
                 nChkSum += pDataPkt[i] + 256;
             } else {
@@ -550,26 +561,26 @@ public class FingerCommon {
             }
         }
 
-        return (short)nChkSum;
+        return (short) nChkSum;
     }
 
     void InitCmdPacket(short wCMDCode, byte bySrcDeviceID, byte byDstDeviceID, byte[] pbyData, int nDataLen) {
-        this.memset(this.m_abyPacket, (byte)0, 26);
+        this.memset(this.m_abyPacket, (byte) 0, 26);
         this.m_abyPacket[0] = 85;
         this.m_abyPacket[1] = -86;
         this.m_abyPacket[2] = bySrcDeviceID;
         this.m_abyPacket[3] = byDstDeviceID;
-        this.m_abyPacket[4] = (byte)(wCMDCode & 255);
-        this.m_abyPacket[5] = (byte)(wCMDCode >> 8 & 255);
-        this.m_abyPacket[6] = (byte)(nDataLen & 255);
-        this.m_abyPacket[7] = (byte)(nDataLen >> 8 & 255);
+        this.m_abyPacket[4] = (byte) (wCMDCode & 255);
+        this.m_abyPacket[5] = (byte) (wCMDCode >> 8 & 255);
+        this.m_abyPacket[6] = (byte) (nDataLen & 255);
+        this.m_abyPacket[7] = (byte) (nDataLen >> 8 & 255);
         if (nDataLen > 0) {
             System.arraycopy(pbyData, 0, this.m_abyPacket, 8, nDataLen);
         }
 
         short w_wCheckSum = this.CalcChkSumOfPkt(this.m_abyPacket, 24);
-        this.m_abyPacket[24] = (byte)(w_wCheckSum & 255);
-        this.m_abyPacket[25] = (byte)(w_wCheckSum >> 8 & 255);
+        this.m_abyPacket[24] = (byte) (w_wCheckSum & 255);
+        this.m_abyPacket[25] = (byte) (w_wCheckSum >> 8 & 255);
         this.m_nPacketSize = 26;
     }
 
@@ -578,53 +589,54 @@ public class FingerCommon {
         this.m_abyPacket[1] = -91;
         this.m_abyPacket[2] = bySrcDeviceID;
         this.m_abyPacket[3] = byDstDeviceID;
-        this.m_abyPacket[4] = (byte)(wCMDCode & 255);
-        this.m_abyPacket[5] = (byte)(wCMDCode >> 8 & 255);
-        this.m_abyPacket[6] = (byte)(nDataLen & 255);
-        this.m_abyPacket[7] = (byte)(nDataLen >> 8 & 255);
+        this.m_abyPacket[4] = (byte) (wCMDCode & 255);
+        this.m_abyPacket[5] = (byte) (wCMDCode >> 8 & 255);
+        this.m_abyPacket[6] = (byte) (nDataLen & 255);
+        this.m_abyPacket[7] = (byte) (nDataLen >> 8 & 255);
         System.arraycopy(pbyData, 0, this.m_abyPacket, 8, nDataLen);
         short w_wCheckSum = this.CalcChkSumOfPkt(this.m_abyPacket, nDataLen + 8);
-        this.m_abyPacket[nDataLen + 8] = (byte)(w_wCheckSum & 255);
-        this.m_abyPacket[nDataLen + 9] = (byte)(w_wCheckSum >> 8 & 255);
+        this.m_abyPacket[nDataLen + 8] = (byte) (w_wCheckSum & 255);
+        this.m_abyPacket[nDataLen + 9] = (byte) (w_wCheckSum >> 8 & 255);
         this.m_nPacketSize = nDataLen + 10;
     }
 
     boolean CheckReceive(byte[] pbyPacket, int nPacketLen, short wPrefix, short wCMDCode) {
-        short w_wTmp = (short)(pbyPacket[1] << 8 & '\uff00' | pbyPacket[0] & 255);
+        short w_wTmp = (short) (pbyPacket[1] << 8 & '\uff00' | pbyPacket[0] & 255);
         if (wPrefix != w_wTmp) {
             return false;
         } else {
-            short w_wCheckSum = (short)(pbyPacket[nPacketLen - 1] << 8 & '\uff00' | pbyPacket[nPacketLen - 2] & 255);
+            short w_wCheckSum = (short) (pbyPacket[nPacketLen - 1] << 8 & '\uff00' | pbyPacket[nPacketLen - 2] & 255);
             short w_wCalcCheckSum = this.CalcChkSumOfPkt(pbyPacket, nPacketLen - 2);
             if (w_wCheckSum != w_wCalcCheckSum) {
                 return false;
             } else {
-                w_wTmp = (short)(pbyPacket[5] << 8 & '\uff00' | pbyPacket[4] & 255);
+                w_wTmp = (short) (pbyPacket[5] << 8 & '\uff00' | pbyPacket[4] & 255);
                 return wCMDCode == w_wTmp;
             }
         }
     }
 
-    private boolean  SendPacket(short wCMD) {
+    private boolean SendPacket(short wCMD) {
         byte[] btCDB = new byte[8];
-        Arrays.fill(btCDB, (byte)0);
+        Arrays.fill(btCDB, (byte) 0);
         btCDB[0] = -17;
         btCDB[1] = 17;
-        btCDB[4] = (byte)this.m_nPacketSize;
+        btCDB[4] = (byte) this.m_nPacketSize;
         boolean w_bRet = this.controller.Write(this.m_abyPacket, this.m_nPacketSize);
         return !w_bRet ? false : this.ReceiveAck(wCMD);
     }
 
+
     private boolean ReceiveAck(short wCMD) {
         byte[] btCDB = new byte[8];
         byte[] w_abyWaitPacket = new byte[26];
-        Arrays.fill(btCDB, (byte)0);
+        Arrays.fill(btCDB, (byte) 0);
         int c = 0;
-        Arrays.fill(w_abyWaitPacket, (byte)-81);
+        Arrays.fill(w_abyWaitPacket, (byte) -81);
 
         byte w_nLen;
         do {
-            Arrays.fill(this.m_abyPacket, (byte)0);
+            Arrays.fill(this.m_abyPacket, (byte) 0);
             btCDB[0] = -17;
             btCDB[1] = 18;
             w_nLen = 26;
@@ -634,10 +646,10 @@ public class FingerCommon {
 
             SystemClock.sleep(40L);
             ++c;
-        } while(this.memcmp(this.m_abyPacket, w_abyWaitPacket, 26));
+        } while (this.memcmp(this.m_abyPacket, w_abyWaitPacket, 26));
 
         this.m_nPacketSize = w_nLen;
-        if (!this.CheckReceive(this.m_abyPacket, this.m_nPacketSize, (short)21930, wCMD)) {
+        if (!this.CheckReceive(this.m_abyPacket, this.m_nPacketSize, (short) 21930, wCMD)) {
             return false;
         } else {
             return true;
@@ -647,8 +659,8 @@ public class FingerCommon {
     boolean ReceiveDataAck(short wCMD) {
         byte[] btCDB = new byte[8];
         byte[] w_WaitPacket = new byte[10];
-        this.memset(btCDB, (byte)0, 8);
-        this.memset(w_WaitPacket, (byte)-81, 10);
+        this.memset(btCDB, (byte) 0, 8);
+        this.memset(w_WaitPacket, (byte) -81, 10);
 
         do {
             btCDB[0] = -17;
@@ -659,15 +671,15 @@ public class FingerCommon {
             }
 
             SystemClock.sleep(40L);
-        } while(this.memcmp(this.m_abyPacket, w_WaitPacket, 8));
+        } while (this.memcmp(this.m_abyPacket, w_WaitPacket, 8));
 
-        int w_nLen = (short)(this.m_abyPacket[7] << 8 & '\uff00' | this.m_abyPacket[6] & 255) + 2;
+        int w_nLen = (short) (this.m_abyPacket[7] << 8 & '\uff00' | this.m_abyPacket[6] & 255) + 2;
         if (!this.ReceiveRawData(this.m_abyPacket2, w_nLen)) {
             return false;
         } else {
             System.arraycopy(this.m_abyPacket2, 0, this.m_abyPacket, 8, w_nLen);
             this.m_nPacketSize = 8 + w_nLen;
-            if (!this.CheckReceive(this.m_abyPacket, this.m_nPacketSize, (short)23205, wCMD)) {
+            if (!this.CheckReceive(this.m_abyPacket, this.m_nPacketSize, (short) 23205, wCMD)) {
                 return false;
             } else {
                 return true;
@@ -677,11 +689,11 @@ public class FingerCommon {
 
     boolean SendDataPacket(short wCMD) {
         byte[] btCDB = new byte[8];
-        this.memset(btCDB, (byte)0, 8);
+        this.memset(btCDB, (byte) 0, 8);
         btCDB[0] = -17;
         btCDB[1] = 19;
-        btCDB[4] = (byte)(this.m_nPacketSize & 255);
-        btCDB[5] = (byte)(this.m_nPacketSize >> 8 & 255);
+        btCDB[4] = (byte) (this.m_nPacketSize & 255);
+        btCDB[5] = (byte) (this.m_nPacketSize >> 8 & 255);
         return !this.controller.Write(this.m_abyPacket, this.m_nPacketSize) ? false : this.ReceiveDataAck(wCMD);
     }
 
@@ -691,7 +703,7 @@ public class FingerCommon {
 
     boolean ReceiveRawData(byte[] pBuffer, int nDataLen) {
         byte[] btCDB = new byte[8];
-        this.memset(btCDB, (byte)0, 8);
+        this.memset(btCDB, (byte) 0, 8);
         btCDB[0] = -17;
         btCDB[1] = 20;
         return this.controller.Read(pBuffer, nDataLen);
@@ -699,13 +711,13 @@ public class FingerCommon {
 
     boolean ReceiveImage(byte[] p_pBuffer, int nDataLen) {
         int offset = 0;
-        while(nDataLen > offset) {
+        while (nDataLen > offset) {
             byte[] header = new byte[12];
             if (!this.controller.Read(header, 12)) {
                 return false;
             }
-            int dataLen = this.MAKEWORD(header[6],header[7]);
-            if (!this.controller.Read(p_pBuffer,offset, dataLen - 4)) {
+            int dataLen = this.MAKEWORD(header[6], header[7]);
+            if (!this.controller.Read(p_pBuffer, offset, dataLen - 4)) {
                 return false;
             }
             if (!this.controller.Read(header, 2)) {
@@ -731,7 +743,7 @@ public class FingerCommon {
     }
 
     private boolean memcmp(byte[] p1, byte[] p2, int nLen) {
-        for(int i = 0; i < nLen; ++i) {
+        for (int i = 0; i < nLen; ++i) {
             if (p1[i] != p2[i]) {
                 return false;
             }
@@ -749,21 +761,22 @@ public class FingerCommon {
     }
 
     private short MAKEWORD(byte low, byte high) {
-        short s = (short)(high << 8 & '\uff00' | low & 0xFF);
+        short s = (short) (high << 8 & '\uff00' | low & 0xFF);
         return s;
     }
 
     private byte LOBYTE(short s) {
-        return (byte)(s & 255);
+        return (byte) (s & 255);
     }
 
     private byte HIBYTE(short s) {
-        return (byte)(s >> 8 & 255);
+        return (byte) (s >> 8 & 255);
     }
 
     //数组转字符串
     private final static char[] mChars = "0123456789ABCDEF".toCharArray();
-    public     String byte2HexStr(byte[] b, int iLen) {
+
+    public String byte2HexStr(byte[] b, int iLen) {
         StringBuilder sb = new StringBuilder();
         for (int n = 0; n < iLen; n++) {
             sb.append(mChars[(b[n] & 0xFF) >> 4]);
@@ -773,14 +786,14 @@ public class FingerCommon {
         return sb.toString().trim().toUpperCase(Locale.US);
     }
     //字符串转数组
+
     /**
      * 16进制的字符串表示转成字节数组
      *
-     * @param hexString
-     *            16进制格式的字符串
+     * @param hexString 16进制格式的字符串
      * @return 转换后的字节数组
      **/
-    public   byte[] toByteArray(String hexString) {
+    public byte[] toByteArray(String hexString) {
         if (StringUtils.isEmpty(hexString))
             throw new IllegalArgumentException("this hexString must not be empty");
 
@@ -799,8 +812,7 @@ public class FingerCommon {
     /**
      * 字节数组转成16进制表示格式的字符串
      *
-     * @param byteArray
-     *            需要转换的字节数组
+     * @param byteArray 需要转换的字节数组
      * @return 16进制表示格式的字符串
      **/
     public static String toHexString(byte[] byteArray) {

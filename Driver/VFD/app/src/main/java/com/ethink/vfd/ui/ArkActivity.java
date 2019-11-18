@@ -16,7 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,7 +39,7 @@ public class ArkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ark);
         ButterKnife.bind(this);
-        this.arkController = new ArkController("/dev/ttyUSB0", 115200);
+          this.arkController = new ArkController("/dev/ttyUSB0", 115200);
     }
 
     @OnClick({R.id.open, R.id.ark_status, R.id.tem_value, R.id.swh_status, R.id.sys_value})
@@ -48,27 +51,29 @@ public class ArkActivity extends AppCompatActivity {
                 case R.id.open:
                     if (radioGroup.getCheckedRadioButtonId() == R.id.radio_mini) {
                         if (StringUtils.isEmpty(nu)) {
-                            Toast.makeText(this, "请输入编号", Toast.LENGTH_LONG).show();
+                            runOnUiThread(()->{
+                                Toast.makeText(this, "请输入编号", Toast.LENGTH_LONG).show();
+                            });
                             break;
                         }
                         String[] a = nu.split(",");
-                        List<Integer> list = new ArrayList<>();
+                        Set<Integer> set = new HashSet<>();
                         for (String s : a) {
                             if (!StringUtils.isEmpty(s)) {
                                 try {
-                                    list.add(Integer.parseInt(s));
+                                    set.add(Integer.parseInt(s));
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
                                     break;
                                 }
                             }
                         }
-                        if (!list.isEmpty()) {
-                            String result = arkController.openDoorData(list);
+                        if (!set.isEmpty()) {
+                            String result = arkController.openDrawer(set);
                             logger.info("开门结果：" + result);
                         }
                     } else {
-                        boolean result = arkController.bigOpen();
+                        boolean result = arkController.openDoor();
                         logger.info("冷藏柜开门结果：" + result);
                     }
 
@@ -92,23 +97,25 @@ public class ArkActivity extends AppCompatActivity {
                 case R.id.tem_value:
                     // arkController.temperature(b);
                     if (StringUtils.isEmpty(nu)) {
-                        Toast.makeText(this, "请输入编号", Toast.LENGTH_LONG).show();
+                        runOnUiThread(()->{
+                            Toast.makeText(this, "请输入编号", Toast.LENGTH_LONG).show();
+                        });
                         break;
                     }
                     String[] a = nu.split(",");
-                    List<Integer> list = new ArrayList<>();
+                    Set<Integer> set = new HashSet<>();
                     for (String s : a) {
                         if (!StringUtils.isEmpty(s)) {
                             try {
-                                list.add(Integer.parseInt(s));
+                                set.add(Integer.parseInt(s));
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                                 break;
                             }
                         }
                     }
-                    if (!list.isEmpty()) {
-                        logger.info("当前温度：" + arkController.temperature(list));
+                    if (!set.isEmpty()) {
+                        logger.info("当前温度：" + arkController.temperature(set));
                     }
                     break;
                 //查询程序版本信息
