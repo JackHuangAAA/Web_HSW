@@ -18,7 +18,7 @@
             </Col>
             <Col span="2"><Button type="primary" class="search_btn" @click="search_queryTemperatures" icon="ios-search">查询</Button></Col>
         </Row>
-        <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>      
+        <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt" stripe border></Table>      
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        

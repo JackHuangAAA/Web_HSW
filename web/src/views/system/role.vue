@@ -11,7 +11,7 @@
                 <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
             </Col>
         </Row>
-        <Table :columns="cols" :data="lists" size="small" class="table-mt role-table" stripe border></Table>
+        <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt role-table" stripe border></Table>
         <div class="permissionTree" :class="{'permissionStyle':permissionShow}">
             <div class="permissionTree-title">企业测试权限分配</div>
             <Tree :data="tree" @on-check-change="getTreeData" show-checkbox></Tree>
@@ -20,8 +20,8 @@
             <Button class="closePermission" type="default" @click="closePermission">关闭</Button>
         </div>
         <Row>
-            <Page :current="page" :page-size="size" :total="total"
-                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+            <Page :current="page" :page-size="size" :total="total" class="role-page"
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-sizer></Page>
         </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
@@ -48,10 +48,6 @@
                 </div>
             </Form>
         </Modal>
-         <!-- 分页 -->       
-        <!-- <Row>
-            <Page :total="total" show-sizer show-total show-elevator @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
-        </Row>   -->
     </div>
 </template>
 <script>
@@ -361,5 +357,4 @@
 <style lang="less" scoped>
 @import '~@/style/color.less';
 @import '~@/style/common.less';
-@import '~@/style/user.less';
 </style>
