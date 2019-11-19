@@ -50,7 +50,7 @@
         </div>
         <div class="btn-box">
             <div class="cancel">取消</div>
-            <div class="confirm">确认</div>
+            <div class="confirm" @click="confirm()">确认</div>
         </div>
     </div>
 </template>
@@ -60,6 +60,11 @@ export default {
         return {
             single:false
         }    
+    },
+    methods:{
+        confirm: function(){
+            this.$router.push({path:'/complete/complete',query:{type: true}})
+        }
     }
 }
 </script>
