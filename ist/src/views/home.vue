@@ -7,7 +7,7 @@
         <div class="main">
             <router-view></router-view>
         </div>
-        
+        <div class="copyright">银信博荣疫苗接种一体化解决方案</div>
     </div>
 </template>
 <script>
@@ -16,6 +16,9 @@ export default {
         return {
             
         }    
+    },
+    mounted(){
+        this.$router.push('/register/register')
     }
 }
 </script>

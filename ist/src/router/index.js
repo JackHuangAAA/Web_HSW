@@ -36,10 +36,10 @@ router.beforeEach((to, from, next) => {
     if (menu != null) {
         let p = Promise.resolve();
         if (store.getters.user == null && to.path != '/login') { //当前用户信息不存在
-            p = api.get('/user/current').then((result) => {
-                store.dispatch('saveUser', result.data);
-                return Promise.resolve();
-            });
+            // p = api.get('/user/current').then((result) => {
+            //     store.dispatch('saveUser', result.data);
+            //     return Promise.resolve();
+            // });
         }
         if (menu.access != null) {
             p.then(() => { //校验权限

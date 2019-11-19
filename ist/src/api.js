@@ -16,7 +16,7 @@ const commonResponseHandler = (response,resolve,reject)=>{
         console.log(`<= `,response.data);
     }
     if (response.code == RSP_CODE.NO_LOGIN) {
-        router.push('/login');
+        // router.push('/login');
     } else if (response.code == '9999') {
         Message.error({content:response.message,closable: true,duration: 0});
     } else {
