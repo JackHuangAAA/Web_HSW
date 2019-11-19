@@ -7,7 +7,7 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<Query|*|T|{}>}
      */
-<<<<<<< HEAD
+
 	queryParameter: async function (requestBody) {
 		logger.debug('queryParameter：' + JSON.stringify(requestBody));
 		let query = [];
@@ -23,22 +23,7 @@ module.exports = {
             sort: { "_id": -1 },
 			page: requestBody.page || 1,
 			limit: parseInt(requestBody.size) || 10
-=======
-	queryParameter:async function(requestBody){
-		logger.debug(`queryParameter params: ${JSON.stringify(requestBody)}`);
-		let query=[];
-		if(!_.isEmpty(requestBody.name)){
-			query.push({name:new RegExp(requestBody.name)});
-		};
-		if(!_.isEmpty(requestBody.key)){
-			query.push({key:new RegExp(requestBody.key)});
-		};
-		query=query.length>0 ? {$and:query} : {};
-		let result=await Domain.models.parameter.paginate(query,{
-			sort:{'_id':-1},
-			page:requestBody.page||1,
-			limit:parseInt(requestBody.size)||10,
->>>>>>> develop
+
 		});
 		return { rs: result.docs, total: result.total };
 	},

@@ -182,11 +182,8 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) });
     }
-<<<<<<< HEAD
-      query = query.length > 0 ? { "$and": query } : {};
-=======
-    query = query.length >0 ? { $and: query } : {};
->>>>>>> develop
+    query = query.length > 0 ? { "$and": query } : {};
+
     let result = await Domain.models.user.paginate(query, {
       populate:"role",
       sort: { _id: -1 },
