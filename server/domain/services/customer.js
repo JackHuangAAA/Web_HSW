@@ -3,7 +3,7 @@ const moment = require('moment');
 
 module.exports={
     /**
-     * 增加用户信息
+     * 增加客户信息
      * @param requestBody
      * @returns {requestBody}
      */
@@ -13,7 +13,7 @@ module.exports={
     },
 
     /**
-     * 删除用户信息
+     * 删除客户信息
      * @param requestBody
      * @returns {requestBody}
      */
@@ -23,33 +23,23 @@ module.exports={
     },
 
     /**
-     * 更新用户信息
+     * 更新客户信息
      * @param requestBody
      * @returns {requestBody}
      */
     modifyCustomer: async function (requestBody) {
         logger.debug('modifyCustomer :' + JSON.stringify(requestBody));
-        let user=await this.queryCustomer({_id:requestBody.id});
-        console.log(user)
         return await Domain.models.customer.updateOne({_id:requestBody.id},
             {
                 $set:{
-                    ...requestBody,
-                    previou:{//上一次的疫苗计划
-                        plan:user.rs[0].next.plan,
-                        date:user.rs[0].next.date
-                    },
-                    next:{//下一次接种计划
-                        plan:requestBody.nexid,
-                        date:requestBody.date
-                    },
+                    ...requestBody
                 }
             },{new:true}
         );
     },
 
     /**
-     * 查询用户信息
+     * 查询客户信息
      * @param requestBody
      * @returns {requestBody}
      */
@@ -64,14 +54,14 @@ module.exports={
             {
                 sort:{"_id":-1},
                 page:requestBody.page||1,
-                limit:requestBody.size||10
+                limit:parseInt(requestBody.size)||10
             }
         );
         return {rs:result.docs,total:result.total};
     },
 
     /**
-     * 根据条件查询用户信息
+     * 根据条件查询客户信息
      * @param requestBody
      * @returns {requestBody}
      */

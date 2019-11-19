@@ -11,10 +11,10 @@
             <Button type="primary" class="search_btn" icon="ios-add" @click="showAddUserWin">新增</Button>
             </Col>
         </Row>
-        <Table :columns="cols" :data="userDatas" size="small" class="table-mt" stripe border></Table>
+        <Table :columns="cols" :data="userDatas" size="small" max-height=435 class="table-mt" stripe border></Table>
         <Row>
             <Page :current="page" :page-size="size" :total="total"
-                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-elevator show-sizer></Page>
+                  @on-change="changePage" @on-page-size-change="changePageSize" show-total show-sizer></Page>
         </Row>
         <!--编辑用户-->
         <Modal v-model="editModalWin" title="编辑用户信息" :footerHide="true" width="400" height="150" :closable="false">
@@ -52,10 +52,6 @@
                 </div>
             </Form>
         </Modal>
-        <!-- 分页 -->
-        <!-- <Row>
-            <Page :total="total" show-sizer show-total show-elevator @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
-        </Row>   -->
     </div>
 </template>
 <script>
@@ -224,12 +220,13 @@
             },
             showEditUserWin: function (row) {
                 this.addCode = false;
+                console.log(row.role.name)
                 this.formUser = {
                     id:row._id,
                     name: row.name,
                     code: row.code,
                     phone: row.phone,
-                    role: row.role,
+                    role: row.role._id,
                     notes: row.notes
                 };
                 // this.loadRoles();
@@ -331,7 +328,6 @@
     }
 </script>
 <style lang="less" scoped>
-    @import '~@/style/color.less';
-    @import '~@/style/common.less';
-    @import '~@/style/user.less';
+@import '~@/style/color.less';
+@import '~@/style/common.less';
 </style>

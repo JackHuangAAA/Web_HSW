@@ -4,7 +4,7 @@
             <Col span="24" class="stockDetail-table-title">{{alias}}<span>{{type}}</span><i>{{position}}</i></Col>
             <div class="comeback" @click="routerTo()">返回</div>
         </Row>
-        <Table :columns="cols" :data="lists" size="small" class="table-mt" stripe border></Table>
+        <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt" stripe border></Table>
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="active" @on-change="indexChange" :page-size="10"/>
         </Row>        
