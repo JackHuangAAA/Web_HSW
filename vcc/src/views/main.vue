@@ -53,11 +53,16 @@
                 <p class="cardTwo">接种顾客</p>
                 <img class="cardImg" src="/static/img/customer.png">
             </div>
-            <div class="addButton" @click="vaccineIn()">
-                疫苗入库
+            <div class="btnBox">
+                <div class="addButton" @click="vaccineIn()">
+                    疫苗入库
+                </div>
+                <div class="outButton" @click="vaccineOut()">
+                    疫苗出库
+                </div>
             </div>
-            <div class="outButton" @click="vaccineOut()">
-                疫苗出库
+            <div class="startButton" @click="startVaccine()">
+                开始接种
             </div>
         </div>
     </div>
@@ -173,6 +178,9 @@
             },
             vaccineOut(){
                 this.$router.push('/inout/outStock');
+            },
+            startVaccine(){
+                this.$router.push('/vaccination/vaccination');
             }
         },
         destroyed(){
