@@ -26,6 +26,7 @@ public class SerialPortController {
 //                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
 
         try {
+            setting.setReadTimeout(2000);
             finger = SerialPortManager.getSerialPort(path, setting);
 //            finger = SerialPortManager.getSerialPort(context, setting);
         } catch (IOException e) {

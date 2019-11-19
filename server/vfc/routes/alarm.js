@@ -3,7 +3,7 @@ const router = require('koa-router')();
 const logger = Libs.logger.getLogger('alarm');
 
 /**
- * @api {GET} /alarm/queryAlarmByByCondition  查询当天报警次数及报警信息
+ * @api {GET} /alarm/queryAlarmByCondition  查询当天报警次数及报警信息
  * @apiGroup Alarm
  * @apiVersion 1.0.0
  * @apiDescription 查询当天报警次数及报警信息
@@ -15,9 +15,9 @@ const logger = Libs.logger.getLogger('alarm');
  * @apiSuccess {Array}  rs  当天报警次数信息数组
  * @apiSuccess {Number}  total 当天报警次数
  */
-router.get('/queryAlarmByByCondition',
+router.get('/queryAlarmByCondition',
     Libs.router(async (ctx, next) => {
-       return await Domain.services.alarm.queryAlarmByByCondition(ctx.request.query);
+       return await Domain.services.alarm.queryAlarmByCondition(ctx.request.query);
     })
 );
 
@@ -35,4 +35,22 @@ router.post('/saveAlarm',
     })
 );
 
+/**
+ * @api {GET} /alarm/queryAlarm  查询报警信息
+ * @apiGroup alarm
+ * @apiVersion 1.0.0
+ * @apiDescription 查询报警信息
+ * @apiParam {String} [device] 设备
+ * @apiParam {Number} [deviceType] 设备类型
+ * @apiParam {String} [unitCode] 所属单位编号
+ * @apiParam {Number} [type] 报警类型(1:温度异常;2:库存不足)
+ * @apiParam {String} [device] 设备
+ * @apiParam {String} [device] 设备
+ * @apiSuccess {JSON}  Object  inout model 数组
+ */
+router.get('/queryAlarm',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.alarm.queryAlarm(ctx.request.query);
+    })
+);
 module.exports = router;

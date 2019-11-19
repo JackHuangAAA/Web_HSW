@@ -109,8 +109,11 @@ public class NetWorkUtils {
         try {
             logger.info("  网络请求加载的地址" + path);
             pluginMessage.changeToResponse();
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data.toString());
-            Request request = new Request.Builder().post(requestBody).url(Const.getUrl(path)).build();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), data==null?"":data);
+            if(!path.startsWith("http://")){
+                path=Const.getUrl(path);
+            }
+            Request request = new Request.Builder().post(requestBody).url(path).build();
             Response response = HttpUtils.getOkHttpClient().newCall(request).execute();
             if (response.isSuccessful()) {
                 String body = response.body().string();

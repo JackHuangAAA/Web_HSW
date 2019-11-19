@@ -3,6 +3,7 @@
  */
 const logger = Libs.logger.getLogger('alarm');
 const moment = require('moment');
+const mongoose = require('mongoose');
 
 module.exports = {
 
@@ -12,8 +13,8 @@ module.exports = {
      * @param {any} requestBody
      * @returns
      */
-    queryAlarmByByCondition: async function (requestBody) {
-        logger.debug(`queryAlarmByByCondition param: ${JSON.stringify(requestBody)}`);
+    queryAlarmByCondition: async function (requestBody) {
+        logger.debug(`queryAlarmByCondition param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.ifToday)) {
            let today = moment();
@@ -31,7 +32,7 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.alarm.find(query);
         return result;
     },
@@ -53,11 +54,11 @@ module.exports = {
         if (!_.isEmpty(requestBody.unitCode)) {
             query.push({ "unitCode": requestBody.unitCode });
         }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.alarm.paginate(query, {
             sort: {"_id": -1},
-            page: requestBody.page,
-            limit: parseInt(requestBody.size)
+            page: requestBody.page || 1,
+            limit: parseInt(requestBody.size)||10
         });
         return {rs: result.docs, total: result.total};
     },
@@ -71,39 +72,5 @@ module.exports = {
         logger.debug(`saveAlarm param: ${JSON.stringify(requestBody)}`);
         return Domain.models.alarm.create(requestBody);
     },
-
-    /**
-     * 查询今日报警信息
-     * @param requestBody
-     * @returns
-     */
-    queryAlarmDailyInfo: async function(requestBody){
-        logger.debug(`queryAlarmDailyInfo param: ${JSON.stringify(requestBody)}`);
-        let query = [];
-        if (!_.isEmpty(requestBody.device)) {
-            query.push({ "device": mongoose.Types.ObjectId(requestBody.device) });
-        }
-        if (!_.isEmpty(requestBody.deviceType)) {
-            query.push({ "deviceType": requestBody.deviceType });
-        }
-        if (!_.isEmpty(requestBody.unitCode)) {
-            query.push({ "unitCode": requestBody.unitCode });
-        }
-        if (!_.isEmpty(requestBody.unitName)) {
-            query.push({"unitName": {"$regex" : requestBody.unitName, "$options" : "$i"}});
-        }
-        if (!_.isEmpty(requestBody.type)) {
-            query.push({ "type": requestBody.type });
-        }
-        if (!_.isEmpty(requestBody.ifToday)) {
-            let today = moment();
-            let dailyInfo={ '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() };
-            query.push({ "createDate": dailyInfo });
-        }
-        query = query.length >1 ? { "$and": query } : query.length == 1 ? query[0] : {};
-
-        return await Domain.models.alarm.find(query);
-    }
-
 
 };

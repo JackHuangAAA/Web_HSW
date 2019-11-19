@@ -50,11 +50,13 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: requestBody.name });
     }
+
     if (!_.isEmpty(requestBody._id)) {
       query.push({_id: requestBody._id })
     }
     query =
       query.length >1 ? { $and: query } : query.length == 1 ? query[0] : {};
+
     return Domain.models.user.find(query)
   },
 
@@ -169,7 +171,7 @@ module.exports = {
    * @returns {Promise.<{rs: *, total: (*|number)}>}
    */
   queryUsers: async function (requestBody) {
-    logger.debug(`queryUsers param: ${json.stringify(requestBody)}`);
+    logger.debug(`queryUsers param: ${JSON.stringify(requestBody)}`);
     let query = [];
     if (!_.isEmpty(requestBody.code)) {
       query.push({ code: new RegExp(requestBody.code) });
@@ -180,13 +182,15 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) });
     }
-    query = query.length == 2 ? { $and: query } : query.length == 1 ? query[0] : {};
+    query = query.length >0 ? { $and: query } : {};
     let result = await Domain.models.user.paginate(query, {
+      populate:"role",
       sort: { _id: -1 },
-      page: requestBody.page,
-      limit: parseInt(requestBody.size),
+      page: requestBody.page||1,
+      limit: parseInt(requestBody.size)||10,
       lean: true
     });
+    console.log(result)
     return { rs: result.docs, total: result.total }
   },
 
@@ -210,7 +214,7 @@ module.exports = {
     return Domain.models.user.updateOne(
       { _id: requestBody.id },
       {
-        $set: requestBody
+        $set: {...requestBody}
       }
     )
   },
@@ -256,6 +260,23 @@ module.exports = {
           "finger": requestBody.code_new
         }
       });
-  }
+  },
 
+  /**
+   * 密码初始化
+   * @param requestBody
+   * @returns {Promise.<*>}
+   */
+  resetUser: async function (requestBody) {
+    logger.debug(`resetUser param: ${JSON.stringify(requestBody)}`);
+    let password=crypto.createHash('md5');
+    password.update("000000");
+    password=password.digest('hex').toUpperCase();
+    return await Domain.models.user.updateOne(
+      { _id: requestBody.id },
+      {
+        $set:{password:password}
+      });
+  }
+  
 }

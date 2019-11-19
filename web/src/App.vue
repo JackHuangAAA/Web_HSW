@@ -11,6 +11,7 @@
         margin: 0;
         height: 100%;
         min-width: @min-width;
+        overflow: hidden;
     }
 </style>
 <script>

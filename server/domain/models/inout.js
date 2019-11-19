@@ -12,11 +12,14 @@ const inoutSchema = mongoose.Schema({
     deviceType: Number, //设备类型
     unitCode: String,   //所属单位编号
     unitName: String,   //所属单位
-    x: Number,          //横坐标
-    y: Number,          //纵坐标
+    x: Number,          //横坐标(仅接种柜使用)
+    y: Number,          //纵坐标(仅接种柜使用)
     supervisionCode: String,//药品监管码
     code: String,       //疫苗编号
     name: String,       //疫苗名称
+    batchNo: String,    //批次号
+    expiry: Date,       //有效日期
+    product: String,    //厂家
     total: Number,      //数量(入库总数)
     surplus: Number,    //剩余数量
     use: Number,        //使用数量(use=total-surplus)

@@ -8,7 +8,7 @@
       <div class="loginform-notice" :class="{'loginform-notice-hide':account}">账户不能为空</div>
     </Row>
     
-    <Row style="padding-top:24px;" class="loginform-row">
+    <Row style="padding-top:30px;" class="loginform-row">
       <Input v-model="pwd" type="password" autocomplete="off" placeholder="密码" @on-blur="passwordBlur">
         <img src="/static/img/pwd.png" class="icon" slot="suffix">
       </Input>
@@ -18,7 +18,7 @@
     <!--<Row style="padding-top:19px">
       <Checkbox style="font-size:16px;" v-model="rember">记住密码</Checkbox>
     </Row>-->
-    <Row style="padding-top:34px">
+    <Row style="padding-top:36px">
       <Button style="height:53px;font-size:20px;margin-bottom:7px;" type="primary" @click="handleSubmit()" long>登录</Button>
     </Row>
   </div>
@@ -26,6 +26,7 @@
 
 <script>
 //import { Storages } from "@/libs/util.js";
+import config from "@/config";
 export default {
   name: "loginform",
   data() {
@@ -51,12 +52,6 @@ export default {
       }
     },
   },
-  mounted() {
-    /*if (Storages.GetStorage("user") != null) {
-      this.rember = true;
-      this.GetUser();
-    }*/
-  },
   computed:{
   },
   methods: {
@@ -72,30 +67,34 @@ export default {
       //this.user = Storages.GetStorage("user");
       //this.pwd = Storages.GetStorage("password");
     },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch();
+    },
     accountBlur(){
       if(!this.user){
-        this.account=false
+        this.account=false;
       }else{
-        this.account=true
+        this.account=true;
       }
     },
     passwordBlur(){
       if(!this.pwd){
-        this.password=false
+        this.password=false;
       }else{
-        this.password=true
+        this.password=true;
       }
     },
     handleSubmit() {
       if(!this.user && !this.pwd){
-        this.account=false
-        this.password=false
+        this.account=false;
+        this.password=false;
         return
       }else if(!this.user){
-        this.account=false
+        this.account=false;
         return
       }else if(!this.pwd){
-        this.password=false
+        this.password=false;
         return
       }
       if (this.rember) {
@@ -106,6 +105,15 @@ export default {
         password: this.pwd
       };
       this.$emit("Submit", form);
+    }
+  },
+  mounted() {
+    /*if (Storages.GetStorage("user") != null) {
+      this.rember = true;
+      this.GetUser();
+    }*/
+    if(config.env != 'development'){
+      this.un_fingerSearch();
     }
   }
 };

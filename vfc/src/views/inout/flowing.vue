@@ -6,59 +6,78 @@
         </div>
         <div class="type">
             类型:
-            <Select v-model="model1" style="width:70%">
-                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Select v-model="actionType" style="width:70%;" class="inoculate-select" size="large" clearable @on-change="contextChange">
+                <Option v-for="item in types" :value="item.key" :key="item.key">{{ item.label }}</Option>
             </Select>
         </div>
         <div class="date">
-            日期:<DatePicker type="date" placeholder="Select date" style="width: 200px" v-model="date"></DatePicker>
+            日期:<DatePicker type="date" size="large" v-model="date" style="width: 200px" placeholder="请选择日期" clearable @on-change="contextChange"></DatePicker>
         </div>
     </Row>
     <div class="inoculate card">
-        <!-- <Row class="inoculate-title">
-            <Col span="24">详情页面</Col>
-        </Row> -->
+
         <Row class="inoculate-table-row">
             <Col span="4">疫苗名称</Col>
             <Col span="7">生产厂家</Col>
             <Col span="4">唯一号</Col>
-            <Col span="6">截止有效期</Col>
-            <Col span="3">出库数量</Col>
+            <Col span="6">有效期</Col>
+            <Col span="3">{{action}}数量</Col>
         </Row>
-        <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
-            <Col span="4">{{item.name||'--'}}</Col>
-            <Col span="7">{{item.produce||'--'}}</Col>
-            <Col span="4">{{item.code||'--'}}</Col>
-            <Col span="6">{{item.date||'--'}}</Col>
-            <Col span="3">{{item.count||'--'}}</Col>
-        </Row>
+        <div class="inoculate-table">
+            <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
+                <Col span="4">{{item.name}}</Col>
+                <Col span="7" class="producer">{{item.product}}</Col>
+                <Col span="4">{{item.code}}</Col>
+                <Col span="6">{{dateFormat(item.expiry)}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.total-item.surplus}}</Col>
+            </Row>
+        </div>
     </div>
 </div>
 </template>
 <script>
     import {mapGetters} from 'vuex';
-    import moment from 'moment'
+    import moment from 'moment';
+
     export default {
         data() {
             return {
-                cityList:[{label:'1',value:'1'}],
-                model1: '',
-                date:'',
-                datas:[{name: '乙型肝炎疫苗',produce: '北京科生生物制品有限公司',code: 'yHUG-7U940',date: '2019-09-18 12:30:28',count: '3'},{},{}]
+                types:[
+                    {label:'入库',key:1},
+                    {label:'出库',key:2}
+                    ],
+                actionType: 2,
+                action:'出库',
+                date: moment().format('YYYY-MM-DD'),
+                inoutDatas:[]
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         components:{},
         methods: {
-            
+            async queryInoutByCondition(){
+                let res = await this.$api.get("/inout/queryInoutByCondition", {
+                    device: this.device._id,
+                    type: this.actionType,
+                    date: this.date
+                });
+                this.inoutDatas = res.data;
+            },
+            dateFormat(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            contextChange(){
+                this.actionType == 1?'入库':'出库';
+                this.queryInoutByCondition();
+            }
         },
         mounted() {
-           
+           this.queryInoutByCondition();
         }
     };
 </script>

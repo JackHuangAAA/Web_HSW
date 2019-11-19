@@ -1,18 +1,6 @@
 'use strict';
 const router = require('koa-router')();
 
-/**
- * @api {GET} /permission/loadTree  查询权限信息树
- * @apiGroup permission
- * @apiVersion 1.0.0
- * @apiDescription 查询权限信息树
- * @apiSuccess {JSON}  Object  permission model数组、数量
- */
-router.get('/loadTree',
-    Libs.router( async (ctx, next) => {
-        return await Domain.services.permission.loadTree(ctx.request.query);
-    })
-);
 
 /**
  * @api {GET} /permission/queryPermission  查询权限信息
@@ -25,23 +13,7 @@ router.get('/loadTree',
  */
 router.get('/queryPermission',
     Libs.router( async (ctx, next) => {
-        let result  = await Domain.services.permission.queryPermission(ctx.request.query);
-        return result;
-    })
-);
-
-/**
- * @api {GET} /permission/queryPermission  根据权限id查询权限信息
- * @apiGroup permission
- * @apiVersion 1.0.0
- * @apiDescription 根据权限id查询权限信息
- * @apiParam {String} [id] 权限id
- * @apiSuccess {JSON}  Object  permission model数组、数量
- */
-router.get('/queryPermissionById',
-    Libs.router( async (ctx, next) => {
-        let result  = await Domain.services.permission.queryPermissionById(ctx.request.query);
-        return result;
+        return await Domain.services.permission.queryPermission(ctx.request.query);
     })
 );
 
@@ -90,5 +62,18 @@ router.post('/removePermissionById',
     })
 );
 
+/**
+ * @api {GET} /permission/queryPermissionByCondition  根据条件查询权限信息
+ * @apiGroup permission
+ * @apiVersion 1.0.0
+ * @apiDescription 根据条件查询权限信息
+ * @apiParam {String} [id] 权限id
+ * @apiSuccess {JSON}  Object  permission model数组、数量
+ */
+router.get('/queryPermissionByCondition',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.permission.queryPermissionByCondition(ctx.request.query);
+    })
+);
 
 module.exports = router;

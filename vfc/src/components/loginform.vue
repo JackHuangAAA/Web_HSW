@@ -8,7 +8,7 @@
       <div class="loginform-notice" :class="{'loginform-notice-hide':account}">账户不能为空</div>
     </Row>
     
-    <Row style="padding-top:24px;" class="loginform-row">
+    <Row style="padding-top:40px;" class="loginform-row">
       <Input v-model="pwd" type="password" autocomplete="off" placeholder="密码" @on-blur="passwordBlur">
         <img src="/static/img/pwd.png" class="icon" slot="suffix">
       </Input>
@@ -18,7 +18,7 @@
     <!--<Row style="padding-top:19px">
       <Checkbox style="font-size:16px;" v-model="rember">记住密码</Checkbox>
     </Row>-->
-    <Row style="padding-top:34px">
+    <Row style="padding-top:44px">
       <Button style="height:53px;font-size:20px;margin-bottom:7px;" type="primary" @click="handleSubmit()" long>登录</Button>
     </Row>
   </div>
@@ -26,6 +26,7 @@
 
 <script>
 //import { Storages } from "@/libs/util.js";
+import config from "@/config";
 export default {
   name: "loginform",
   data() {
@@ -51,12 +52,6 @@ export default {
       }
     }
   },
-  mounted() {
-    /*if (Storages.GetStorage("user") != null) {
-      this.rember = true;
-      this.GetUser();
-    }*/
-  },
   methods: {
     SaveUser() {
       //Storages.SaveStorage("user", this.user);
@@ -69,6 +64,10 @@ export default {
     GetUser() {
       //this.user = Storages.GetStorage("user");
       //this.pwd = Storages.GetStorage("password");
+    },
+    //关闭指纹登录的指纹查找方法
+    un_fingerSearch(){
+      this.$device.un_fingerSearch()
     },
     accountBlur(){
       if(!this.user){
@@ -104,6 +103,15 @@ export default {
         password: this.pwd
       };
       this.$emit("Submit", form);
+    }
+  },
+  mounted() {
+    /*if (Storages.GetStorage("user") != null) {
+      this.rember = true;
+      this.GetUser();
+    }*/
+    if(config.env != 'development'){
+      this.un_fingerSearch();
     }
   }
 };

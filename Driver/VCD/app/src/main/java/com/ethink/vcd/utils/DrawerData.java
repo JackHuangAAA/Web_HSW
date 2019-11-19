@@ -1,13 +1,9 @@
 package com.ethink.vcd.utils;
 
-import com.blankj.utilcode.util.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public enum DrawerData {
@@ -46,24 +42,21 @@ public enum DrawerData {
         }
         return -1;
     }
+
     protected static Logger logger = LoggerFactory.getLogger("DrawerData");
+
     /**
-     * @param num  格式为：1#1,2#1,
-     * */
-    public static Set<Integer> getDrawerList(String num){
-       Set<Integer>set=new HashSet<>();
-        String []strings=num.split(",");
-        for (int i = 0; i <=strings.length; i++) {
-            try {
-                Integer a=  Integer.parseInt(strings[i]);
-                set.add(a);
-            }catch (NumberFormatException e){
-             logger.info("格式化数字错误：",e);
-            }
+     * @param num 格式为：1#1,2#1,
+     */
+    public static Set<Integer> getDrawerList(String num) {
+        Set<Integer> set = new HashSet<>();
+        String[] strings = num.split(",");
+        for (String string : strings) {
+            set.add(getLocationByPoint(string));
         }
         return set;
 
     }
-    
+
 
 }

@@ -1,6 +1,5 @@
 <template>
     <div class="fingerAdd">
-        <!-- <div class="finger-save" @click="savehandle()">保存</div> -->
         <div class="fingerAdd-conent">
             <div class="fingerAdd-title">放置手指</div>
             <div class="fingerAdd-info">将手指放置在指纹仪上，识别完成后移开，并重复此步骤</div>
@@ -22,7 +21,6 @@ export default {
         return{
             noticeState:false,//提示信息状态
             notice:'',
-            state:false
         }
     },
     computed:{
@@ -35,10 +33,6 @@ export default {
                 saveUser: 'saveUser',
                 saveDevice: 'saveDevice'
             }),
-        savehandle(){
-            this.register()
-            // this.$emit('save',true)
-        },
         // 指纹录入
         register(){
             this.$device.fingerRegister({userId:this.user._id})
@@ -46,29 +40,27 @@ export default {
         //指纹数据更新
         async modifyUserById(params){
             let user=await this.$api.post('/user/modifyUserById',params)
-        },
-    },
-    destroyed(){
-        this.state=false
+        }
     },
     mounted(){
         // 设备反馈监听
-        this.state=true
         this.$device.subscribe('FINGER_MESSAGE', (data) => {
-            if(this.state=true){
-                this.notice=data.msg
-                if(data.type==2){//type=1持续录入2完成
-                    this.noticeState=true
-                    let finger=this.user.finger
-                    finger.push('2')
-                    this.modifyUserById({id:this.user._id,finger:finger})
+            this.notice=data.msg
+            if(data.type==2){//type=1持续录入2完成
+                this.noticeState=true
+                let finger=this.user.finger
+                finger.push('2')
+                this.modifyUserById({id:this.user._id,finger:finger})
+                if(finger.length<2){
+                    this.register()
+                }else{
                     let to=setTimeout(()=>{
                         this.$emit('save',true)
                         clearTimeout(to)
                     },1500)
-                }else{
-                    this.noticeState=false
                 }
+            }else{
+                this.noticeState=false
             }
         });
         // 执行指纹录入方法

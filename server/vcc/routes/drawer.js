@@ -12,8 +12,7 @@ const logger = Libs.logger.getLogger('drawer')
  * @apiSuccess {Array}  rs  疫苗为空的数据数组
  * @apiSuccess {Number}  total 疫苗为空的数据总数
  */
-router.get(
-  '/queryDrawerEmpty',
+router.get('/queryDrawerEmpty',
   Libs.router(async (ctx, next) => {
     return await Domain.services.drawer.queryDrawerEmpty(ctx.request.query)
   })
@@ -29,8 +28,7 @@ router.get(
  * @apiParam {String} [unitCode] 所属单位编号
  * @apiSuccess {Array}  data 操作返回数据数组
  */
-router.get(
-  '/queryDrawerByCondition',
+router.get('/queryDrawerByCondition',
   Libs.router(async (ctx, next) => {
     return await Domain.services.drawer.queryDrawerByCondition(
       ctx.request.query
@@ -47,8 +45,7 @@ router.get(
  * @apiParam {Object} vaccine 疫苗json数据
  * @apiSuccess {Object} data 操作返回数据 新增疫苗数据
  */
-router.post(
-  '/modifyDrawerById',
+router.post('/modifyDrawerById',
   Libs.router(async (ctx, next) => {
     return await Domain.services.drawer.modifyDrawerById(ctx.request.body)
   })
@@ -63,8 +60,7 @@ router.post(
  * @apiParam {Object} vaccineId 疫苗id
  * @apiSuccess {Object} data 操作返回数据的
  */
-router.post(
-  '/modifyDrawerByIdDec',
+router.post('/modifyDrawerByIdDec',
   Libs.router(async (ctx, next) => {
     return await Domain.services.drawer.modifyDrawerByIdDec(ctx.request.body)
   })
@@ -79,10 +75,10 @@ router.post(
  * @apiParam {Object} vaccineId 疫苗id
  * @apiSuccess {Object} data 操作返回数据的
  */
-router.post('/queryDrawerByVaccineArr',
-  Libs.router(async (ctx, next) => {
-    return await Domain.services.drawer.queryDrawerByVaccineArr(ctx.request.body);
-  })
+router.get('/queryDrawerByVaccineArr',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.drawer.queryDrawerByVaccineArr(ctx.request.query)
+    })
 );
 
 module.exports = router;

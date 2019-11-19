@@ -8,14 +8,18 @@
     font-weight:bold;
     color: @black;
     padding-top: 1.4375rem;
-    padding-left: 2.75rem;
-    padding-right: 2.75rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
     position: relative;
 }
 // .inoculate-title{
 //     font-size: 1.125rem;
 //     margin-bottom: 1rem;
 // }
+.inoculate-table{
+    overflow: auto;
+    height: 92%;
+}
 .inoculate-table-row{
     margin-bottom: .375rem;
     width: 100%;
@@ -41,7 +45,11 @@
     height: 77%;
     cursor: pointer;
 }
-
+.producer{
+    white-space: nowrap;      /*超出的空白区域不换行*/
+    overflow: hidden;         /*超出隐藏*/
+    text-overflow: ellipsis;  /*文本超出显示省略号*/
+}
 //detail.vue
 .stock-title{
     display: flex;
@@ -49,6 +57,12 @@
     align-items: center;
     font-size: 1.875rem;
     font-weight:400
+}
+.alarmStatus{
+    color: #f28d00;
+}
+.dangerStatus{
+    color: red;
 }
 .stock-title img{
     margin-right: 1.6875rem;
@@ -89,7 +103,7 @@
     left: 0;
     line-height: 80px;
     text-indent: 2rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
 }
 .type{
@@ -98,7 +112,7 @@
     position: absolute;
     left: 25.5%;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 80px;
 }
 .date{
@@ -107,6 +121,40 @@
     position: absolute;
     left: 63.5%;
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 80px;
+}
+/deep/.ivu-select-single .ivu-select-selection{
+    height: 40px;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px;
+    line-height: 40px;
+    color: @dark;
+    font-size: 14px;
+}
+/deep/.ivu-input{
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+}
+/deep/.ivu-input-icon{
+    height: 40px;
+    line-height: 40px;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 40px !important;
+    line-height: 40px !important;
+}
+/deep/input::-webkit-input-placeholder { /* WebKit browsers */
+    color: @black;
+    }
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: @black;
+    }
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: @black;
+    }
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: @black;
 }

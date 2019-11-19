@@ -18,6 +18,14 @@
                         <p class="vaccineTwoName" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoName}}</p>
                         <p class="vaccineTwoCount" :class="{warning:item.vaccineTwoCount == 0,tips:item.vaccineTwoCount <10}">{{item.vaccineTwoCount || 0}}支</p>
                     </div>
+                    <div class="vaccineLeft" v-if="item.vaccineThreeName">
+                        <p class="vaccineOneName" :class="{warning:item.vaccineThreeCount == 0,tips:item.vaccineThreeCount <10}">{{item.vaccineThreeName}}</p>
+                        <p class="vaccineOneCount" :class="{warning:item.vaccineThreeCount == 0,tips:item.vaccineThreeCount <10}">{{item.vaccineThreeCount || 0}}支</p>
+                    </div>
+                    <div class="vaccineRight" v-if="item.vaccineFourName">
+                        <p class="vaccineTwoName" :class="{warning:item.vaccineFourCount == 0,tips:item.vaccineFourCount <10}">{{item.vaccineFourName}}</p>
+                        <p class="vaccineTwoCount" :class="{warning:item.vaccineFourCount == 0,tips:item.vaccineFourCount <10}">{{item.vaccineFourCount || 0}}支</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,11 +53,16 @@
                 <p class="cardTwo">接种顾客</p>
                 <img class="cardImg" src="/static/img/customer.png">
             </div>
-            <div class="addButton" @click="vaccineIn()">
-                疫苗入库
+            <div class="btnBox">
+                <div class="addButton" @click="vaccineIn()">
+                    疫苗入库
+                </div>
+                <div class="outButton" @click="vaccineOut()">
+                    疫苗出库
+                </div>
             </div>
-            <div class="outButton" @click="vaccineOut()">
-                疫苗出库
+            <div class="startButton" @click="startVaccine()">
+                开始接种
             </div>
         </div>
     </div>
@@ -69,12 +82,13 @@
                 // temperature: 0,
                 // temperatureDes:'正常',
                 vaccineData:[],
+                state:false
             }
         },
         computed: {
             ...mapGetters({
                 user: 'user',
-                device: 'device',
+                device: 'device'
             })
         },
         props:{
@@ -91,7 +105,7 @@
         methods: {
             //查询温度报警
             async queryAlarmByByCondition(){
-                let res = await this.$api.get("/alarm/queryAlarmByByCondition",{
+                let res = await this.$api.get("/alarm/queryAlarmByCondition",{
                     device: this.device._id,
                     type:1,
                     ifToday:'today'
@@ -124,32 +138,65 @@
                                 temp.vaccineTwoName = vaccine[k].name;
                                 temp.vaccineTwoCount = vaccine[k].surplus;
                             }
+                            if (k == 2) {
+                                temp.vaccineThreeName = vaccine[k].name;
+                                temp.vaccineThreeCount = vaccine[k].surplus;
+                            }
+                            if (k == 3) {
+                                temp.vaccineFourName = vaccine[k].name;
+                                temp.vaccineFourCount = vaccine[k].surplus;
+                            }
                         }
                     } else {
                         temp.vaccineOneName = '';
                         temp.vaccineOneCount = '';
                         temp.vaccineTwoName = '';
                         temp.vaccineTwoCount = '';
+                        temp.vaccineThreeName = '';
+                        temp.vaccineThreeCount = '';
+                        temp.vaccineFourName = '';
+                        temp.vaccineFourCount = '';
                     }
                     this.vaccineData.push(temp);
                 }
+            },
+            receiveSocketData(){
+                this.$device.subscribe('SOCKET_DATA', (data) => {
+                    if(this.state==true){
+                        console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
+                        let res=JSON.parse(data.data)
+                        if(res.type=="refresh"){
+                            this.queryDrawerByCondition();
+                            this.queryAlarmByByCondition();
+                            this.queryVaccinationDailyInfo();
+                        }
+                    }
+                });
             },
             vaccineIn(){
                 this.$router.push('/inout/inStock');
             },
             vaccineOut(){
                 this.$router.push('/inout/outStock');
+            },
+            startVaccine(){
+                this.$router.push('/vaccination/vaccination');
             }
+        },
+        destroyed(){
+            
         },
         mounted() {
             //查询首页数据
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });
+            this.state=true
             if(this.device){
                 this.queryDrawerByCondition();
                 this.queryAlarmByByCondition();
                 this.queryVaccinationDailyInfo();
+                this.receiveSocketData();
             }
         }
     }

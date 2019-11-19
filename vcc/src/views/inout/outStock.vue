@@ -36,12 +36,20 @@
                                     <p class="vaccineTwoName">{{item.nameTwo}}</p>
                                     <p class="vaccineTwoCount">{{item.countTwo||0}}支</p>
                                 </div>
+                                <div class="cabineLeft" v-if="item.nameThree">
+                                    <p class="vaccineOneName">{{item.nameThree}}</p>
+                                    <p class="vaccineOneCount">{{item.countThree||0}}支</p>
+                                </div>
+                                <div class="cabineRight" v-if="item.nameFour">
+                                    <p class="vaccineTwoName">{{item.nameFour}}</p>
+                                    <p class="vaccineTwoCount">{{item.countFour||0}}支</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="finish">
                         <div class="finishButton" @click="openDrawer()">
-                            完成
+                            确定
                         </div>
                     </div>
                 </div>
@@ -62,6 +70,10 @@
                 addVaccineTwo: '',
                 vaccineOneCount: "",
                 vaccineTwoCount: "",
+                addVaccineThree: '',
+                addVaccineFour: '',
+                vaccineThreeCount: "",
+                vaccineFourCount: "",
             }
         },
         computed: {
@@ -98,6 +110,18 @@
                                 temp.idTwo = vaccine[k]._id;
                                 temp.codeTwo = vaccine[k].code;
                             }
+                            if (k == 2) {
+                                temp.nameThree = vaccine[k].name;
+                                temp.countThree = vaccine[k].surplus;
+                                temp.idThree = vaccine[k]._id;
+                                temp.codeThree = vaccine[k].code;
+                            }
+                            if (k == 3) {
+                                temp.nameFour = vaccine[k].name;
+                                temp.countFour = vaccine[k].surplus;
+                                temp.idFour = vaccine[k]._id;
+                                temp.codeFour = vaccine[k].code;
+                            }
                         }
                         temp.x=array[i].x;
                         temp.y=array[i].y;
@@ -106,6 +130,10 @@
                         temp.countOne = '';
                         temp.nameTwo = '';
                         temp.countTwo = '';
+                        temp.nameThree = '';
+                        temp.countThree = '';
+                        temp.nameFour = '';
+                        temp.countFour = '';
                         temp.x=array[i].x;
                         temp.y=array[i].y;
                     }

@@ -5,6 +5,7 @@
 const logger = Libs.logger.getLogger('redis');
 let redis = require('redis');
 const client = redis.createClient(Config.redis);
+const pub = redis.createClient(Config.redis);
 Promise.promisifyAll(redis.RedisClient.prototype);
 Promise.promisifyAll(redis.Multi.prototype);
 
@@ -13,5 +14,6 @@ client.on("error", function (err) {
 });
 
 module.exports = {
-    client: client
+    client: client,
+    pub:pub
 };

@@ -3,38 +3,39 @@
     <div>
     <Row class="inoculate-head">
         <div class="history">
-            缺少库存<span style="color:rgb(255,96,19);margin-left:5px">11种</span>
+            缺少库存<span style="color:rgb(255,96,19);margin-left:5px">{{lackNumber}}种</span>
         </div>
         <div class="type">
             疫苗名称:
-            <Select v-model="model1" style="width:70%">
-                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Select v-model="vaccineCode" style="width:70%" clearable @on-change="contextChange">
+                <Option v-for="item in kindList" :value="item.code" :key="item.code">{{ item.name }}</Option>
             </Select>
         </div>
         <div class="date">
-            产地:<Select v-model="model1" style="width:70%">
+            生产厂家:
+            <Input v-model="product" placeholder="请输入厂家" style="width:70%" clearable @on-change="contextChange"/>
+            <!--<Select v-model="model1" style="width:70%">
                 <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-            </Select>
+            </Select>-->
         </div>
     </Row>
     <div class="inoculate card">
-        <!-- <Row class="inoculate-title">
-            <Col span="24">详情页面</Col>
-        </Row> -->
         <Row class="inoculate-table-row">
             <Col span="4">疫苗名称</Col>
             <Col span="7">生产厂家</Col>
             <Col span="4">唯一号</Col>
-            <Col span="6">截止有效期</Col>
-            <Col span="3">出库数量</Col>
+            <Col span="6">有效期</Col>
+            <Col span="3">库存数量</Col>
         </Row>
-        <Row v-for="(item, index) in datas" class="inoculate-table-row row-bg">
-            <Col span="4">{{item.name||'--'}}</Col>
-            <Col span="7">{{item.produce||'--'}}</Col>
-            <Col span="4">{{item.code||'--'}}</Col>
-            <Col span="6">{{item.date||'--'}}</Col>
-            <Col span="3">{{item.count||'--'}}</Col>
-        </Row>
+        <div class="inoculate-table">
+            <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
+                <Col span="4">{{item.name}}</Col>
+                <Col span="7" class="producer">{{item.product}}</Col>
+                <Col span="4">{{item.code}}</Col>
+                <Col span="6">{{dateFormat(item.expiry)}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus}}</Col>
+            </Row>
+        </div>
     </div>
 </div>
 </template>
@@ -44,9 +45,11 @@
         data() {
             return {
                 cityList:[{label:'1',value:'1'}],
-                model1: '',
-                date:'',
-                datas:[{name: '乙型肝炎疫苗',produce: '北京科生生物制品有限公司',code: 'yHUG-7U940',date: '2019-09-18 12:30:28',count: '3'},{},{}]
+                vaccineCode: '',
+                product:'',
+                kindList:[],
+                lackNumber:0,
+                vaccineDatas:[]
             }
         },
         computed: {
@@ -56,9 +59,40 @@
         },
         components:{},
         methods: {
+            //查询疫苗信息
+            async queryVaccineStorageNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    code: this.vaccineCode,
+                    product: this.product
+                });
+                this.vaccineDatas = res.data.rs;
+            },
+            async lackVaccineNum(){
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
+                    device: this.device._id,
+                    surplusltTen: true,
+                    code: this.vaccineCode,
+                    product: this.product
+                });
+                this.lackNumber = res.data.total;
+            },
+            async queryVaccineKinds(){
+                let res = await this.$api.get("/zcy/queryVaccineKinds");
+                this.kindList = res.data;
+            },
+            dateFormat(val){
+                return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            contextChange(){
+                this.queryVaccineStorageNum();
+                this.lackVaccineNum();
+            }
         },
         mounted() {
-
+            this.queryVaccineStorageNum();
+            this.lackVaccineNum();
+            this.queryVaccineKinds();
         }
     };
 </script>

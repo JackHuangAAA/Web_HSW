@@ -19,7 +19,7 @@ module.exports = {
             query.push({"device": requestBody.deviceId});
         }
         if (!_.isEmpty(requestBody.type)) {
-            query.push({"type": requestBody.type});
+            query.push({"type": parseInt(requestBody.type)});
         }
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});
@@ -31,7 +31,7 @@ module.exports = {
             query.push({"unitName":  new RegExp(requestBody.unitName)});
         }
         if (!_.isEmpty(requestBody.deviceType)) {
-            query.push({"deviceType": requestBody.deviceType});
+            query.push({"deviceType": parseInt(requestBody.deviceType)});
         }
         if (!_.isEmpty(requestBody.batchId)) {
             query.push({"batchId": requestBody.batchId});
@@ -47,7 +47,7 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
 
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let total,docs;
         docs = await Domain.models.inout.aggregate([{$match:query},{$group:{
                 _id:{
@@ -65,8 +65,8 @@ module.exports = {
                 "unitName":{"$first":"$unitName"},
                 count:{$sum:"$total"}
             }},
-            {$skip:(requestBody.page-1)*requestBody.size},
-            {$limit:parseInt(requestBody.size)}
+            {$skip:(requestBody.page-1)*requestBody.size ||0},
+            {$limit:parseInt(requestBody.size)||10}
         ]);
 
         return {rs: docs, total: total};
@@ -122,7 +122,7 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         return await Domain.models.inout.find(query);
     },
 
@@ -166,7 +166,7 @@ module.exports = {
             query.push({"createDate": {"$lte": end}});
         }
 
-        query = query.length>1?{"$and": query} : query.length==1 ? query[0] : {};
+        query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},
             populate:[{path:'user',select:'name'},{path:'device',select:'alias'}],
@@ -175,6 +175,35 @@ module.exports = {
             lean:true
         });
         return {rs: result.docs, total: result.total};
+    },
+
+    /**
+     * 按指定条件查询出入库信息
+     * @param requestBody
+     * @returns {Promise.<*>}
+     */
+    queryInoutByCondition: async function(requestBody){
+        logger.debug(`queryInoutByCondition param: ${JSON.stringify(requestBody)}`);
+        let query = [], sort=null;
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({ "code": requestBody.code });
+        }
+        if (!_.isEmpty(requestBody.name)) {
+            query.push({ "name": requestBody.name });
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.date)) {
+            let date = moment(requestBody.date);
+            query.push({"createDate": {"$gte": date.startOf('day').toDate()}});
+            query.push({"createDate": {"$lte": date.endOf('day').toDate()}});
+        }
+        query = query.length > 0 ? { "$and": query } : {};
+        return await Domain.models.inout.find(query,null, sort);
     },
 
 };

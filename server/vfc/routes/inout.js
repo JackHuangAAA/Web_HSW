@@ -30,4 +30,16 @@ router.post('/saveManyInout',
     })
 );
 
+/**
+ * 查询出入库记录
+ * @param requestBody
+ * @returns {Promise.<requestBody>}
+ */
+router.get('/queryInoutByCondition',
+    Libs.router( async (ctx, next) => {
+        return await Domain.services.inout.queryInoutByCondition(ctx.request.query);
+    })
+);
+
+
 module.exports = router;

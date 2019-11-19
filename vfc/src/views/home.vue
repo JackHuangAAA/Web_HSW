@@ -32,9 +32,8 @@
                 <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
             <div class="footer"><p class="dateTime">{{nowdate}}</p></div>
+            <!-- <audio src="/static/audio/temperatureAbnormal.mp3" autoplay></audio> -->
         </div>
-        </div>
-    </div>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
@@ -63,8 +62,9 @@ global.moment = moment;
                 isactive: 0,
                 ifShowMenu: false ,
                 menuStatus: '展开菜单',
-                temperature:0,
+                temperature:5,
                 temperatureDes:'正常',
+                audio:null
                 }
         },
         computed: {
@@ -116,53 +116,74 @@ global.moment = moment;
                     this.$router.push('/setting/setting');
                 }
                 this.ifShowMenu = false;
+                this.imgMenu = '/static/img/menuopen.png';
+                this.menuStatus = '展开菜单';
             },
             openCloseMenu: function(){
                 this.ifShowMenu = !this.ifShowMenu;
                 if(this.ifShowMenu == true){
                     this.imgMenu = '/static/img/menuclose.png';
-                    this.menuStatus = '折叠菜单'
+                    this.menuStatus = '折叠菜单';
                 }else{
                     this.imgMenu = '/static/img/menuopen.png';
-                    this.menuStatus = '展开菜单'
+                    this.menuStatus = '展开菜单';
                 }
             },
-            //接收温度信息
-            receiveTemperature(){
-                this.$device.subscribe('NOW_TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[1].toFixed(1));
-                    let temp = '', val= JSON.parse(data.res)[1].toFixed(1);
-                    console.log("设备id，温度，result:"+this.device._id)
-                    if(val>5 || val<0){
+            //第一次主动请求温度信息
+            queryTemperature(){
+                console.log("CONTROLLER_BOARD===>TEMPERATURE");
+                this.$device.temperature({num:"1"}).then(res=>{
+                    console.log("第一次主动请求数据 result:"+JSON.stringify(res));
+                    let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    if(val>8 || val<2){
+                        this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
-                        if(val>5){
-                            temp = '高于正常温度5℃';
-                        }else {
-                            temp = '低于正常温度0℃';
-                        }
-                        this.$api.post("/alarm/saveAlarm", {
-                            device: this.device._id,
-                            deviceType: 1, //1:接种柜;
-                            unitCode: this.device.unitCode,
-                            unitName: this.device.unitName,
-                            type: 1,       //1:温度异常
-                            reason: `当前温度${val},${temp}`
-                        })
                     }else{
                         this.temperatureDes = '正常';
                     }
                     this.temperature = val;
-                    // __app.emit("NOW_TEMPERATURE",val);
-                    //保存温度到设备记录
-                    
-                    this.$api.post('/device/modifyDevice',{id:this.device._id, temperature:val})
+                    //保存温度/警报到设备记录
+                    this.$api.post('/temperature/saveTemperatures',{
+                        device:this.device._id,
+                        deviceType:1, //1:接种柜;
+                        unitCode:this.device.unitCode,
+                        unitName:this.device.unitName,
+                        temperature:val
+                    })
+                })
+            },
+            //接收温度信息
+            receiveTemperature(){
+                this.$device.subscribe('NOW_TEMPERATURE', (data) => {
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[0].toFixed(1));
+                    let temp = '', val= JSON.parse(data.res)[0].toFixed(1);
+                    if(val>8 || val<2){
+                        this.audio.play();//异常语音播放
+                        this.temperatureDes = '异常';
+                    }else{
+                        this.temperatureDes = '正常';
+                    }
+                    this.temperature = val;
+                    //保存温度/警报到设备记录
+                    this.$api.post('/temperature/saveTemperatures',{
+                        device:this.device._id,
+                        deviceType:1, //1:接种柜;
+                        unitCode:this.device.unitCode,
+                        unitName:this.device.unitName,
+                        temperature:val
+                    })
                 });
             },
+            //温度异常语音
+            controllerAudio(){
+                this.audio = new Audio();
+                this.audio.src = '/static/audio/temperatureAbnormal.mp3';
+            }
         },
         mounted(){
             //获取设备信息
             this.$device.getDeviceCode().then(res => {
-                this.$api.get('/device/queryDeviceByCondition',{code:res.deviceId}).then((res)=>{
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
                     console.log('vuex save device info:'+JSON.stringify(res.data[0]));
                     this.saveDevice(res.data[0]);
                     if(this.$route.path == '/'){
@@ -170,8 +191,12 @@ global.moment = moment;
                     }
                 });
             });
+            //第一次请求温度信息
+            this.queryTemperature();
             //接收温度信息
             this.receiveTemperature();
+            this.controllerAudio();
+            // this.audio.load();
         }
 }
 </script>

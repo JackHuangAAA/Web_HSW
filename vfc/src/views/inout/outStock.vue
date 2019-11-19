@@ -109,14 +109,11 @@
                 let res = await this.$api.get("/vaccine/queryVaccineByCondition",param);
                 return res.data[0];
             },
-            async modifyDrawerByIdDec(params){
-                await this.$api.post("/drawer/modifyDrawerByIdDec", params);
+            async removeVaccineById(params){
+                await this.$api.post("/vaccine/removeVaccineById", params);
             },
             async modifyVaccineNum(params){
                 await this.$api.post("/vaccine/modifyVaccineNum", params);
-            },
-            async modifyVaccine(params){
-                await this.$api.post("/vaccine/modifyVaccine", params);
             },
             async saveInout(params){
                 await this.$api.post("/inout/saveInout", params);
@@ -124,66 +121,65 @@
             async queryExceptionVaccine(){
                 return await this.$api.get("/zcy/queryExceptionVaccine");
             },
-            async queryDrawerByCondition(param){
-                let res = await this.$api.get("/drawer/queryDrawerByCondition", param);
-               return res.data[0]
-            },
             //扫描枪扫码数量减少后，自动保存
             async scanOut(){
-                //this.$device.subscribe('SCAN_REDUCE_VACCINE', (data) => {
-                console.log('SERVER_PUSH==>SCAN_REDUCE_VACCINE');
-                let result= {code: '1',name:'y1',batchNo:'1'};// 模拟扫描枪返回结果 todo
-                //查询疫苗数据
-                let vaccine = await this.queryVaccineByCondition({
-                    'device': this.device._id,
-                    'code': result.code,
-                    'batchNo': result.batchNo
-                });
-                
-                //查询抽屉信息
-                let drawer= await this.queryDrawerByCondition({'vaccineCode':vaccine._id});
-                //使用1支，若剩余数量=0，从抽屉删除并删除疫苗记录
-                if(vaccine.surplus-1 == 0){
-                    //从抽屉删除，并删除疫苗记录
-                    await this.modifyDrawerByIdDec({
-                        id: drawer._id,
-                        vaccineId: vaccine._id
+                // this.$device.subscribe('SCANNER_RESULT', (data) => {
+                //     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data));
+                    let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20191001', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'上海生物制药有限公司'};// 模拟扫描枪返回结果 todo
+                    //查询疫苗数据
+                    let vaccine = await this.queryVaccineByCondition({
+                        'device': this.device._id,
+                        'code': result.code
                     });
-                }else{
-                    //疫苗数量减少
-                    await this.modifyVaccineNum({
-                        id: vaccine._id,
-                        total: 0, //出库总记录不变
-                        surplus: -1
+                    console.log(vaccine)
+                    if(_.isEmpty(vaccine)){
+                        return false;
+                    }
+                    //使用1支，若剩余数量=0，从删除疫苗记录
+                    if(vaccine.surplus-1 == 0){
+                        //删除疫苗记录
+                        await this.removeVaccineById({
+                            id: vaccine._id
+                        });
+                    }else{
+                        //疫苗数量减少
+                        await this.modifyVaccineNum({
+                            id: vaccine._id,
+                            total: 0, //出库总记录不变
+                            surplus: -1
+                        });
+                    }
+                    //增加出库记录
+                    await this.saveInout({
+                        batchId: this.batchId,
+                        ...this.commonData,
+                        code: result.code,
+                        name: result.name,
+                        total: vaccine.total,
+                        surplus: vaccine.surplus-1,
+                        product: vaccine.product,
+                        use: 1
                     });
-                }
-                //增加出库记录
-                await this.saveInout({
-                    batchId: this.batchId,
-                    ...this.commonData,
-                    code: result.code,
-                    name: result.name,
-                    total: vaccine.total,
-                    surplus:vaccine.surplus-1,
-                    use: 1
-                });
-                vaccine.invalid='正常';
-                //检查是否异常疫苗
-                let ex = await this.queryExceptionVaccine();
-                //检查异常条件待接口完善后，需要修改 todo
-                if(result.batchNo == ex.batchNo){
-                    this.exName = result.name;
-                    this.exReason = "报废或失效"; // todo
-                    vaccine.invalid='异常';
-                    this.ifTip = true; //提示框显示
-                }
-                //判断有效期是否过期
-                if(moment().isAfter(vaccine.expiry)){
-                    vaccine.invalid='异常';
-                }
-                //页面数据更新
-                await this.freshTableDatas(vaccine);
-                //});
+                    vaccine.invalid='正常';
+                    //检查是否异常疫苗
+                    //判断有效期是否过期
+                    if(moment().isAfter(vaccine.expiry)){
+                        this.exName = result.name;
+                        this.exReason = "疫苗过期";
+                        vaccine.invalid='异常';
+                        this.ifTip = true; //提示框显示
+                    }
+                    let ex = await this.queryExceptionVaccine();
+                    //检查异常条件待接口完善后，需要修改 todo
+                    if(result.batchNo == ex.batchNo){
+                        this.exName = result.name;
+                        this.exReason = "报废或失效"; // todo
+                        vaccine.invalid='异常';
+                        this.ifTip = true; //提示框显示
+                    }
+                    //页面数据更新
+                    await this.freshTableDatas(vaccine);
+                // });
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
@@ -193,7 +189,7 @@
                     array.push(obj);
                 }else{
                     for(let z=0;z<array.length;z++){
-                        if(obj.code == array[z].code && obj.batchNo == array[z].batchNo && obj.invalid == array[z].invalid){
+                        if(obj.code == array[z].code){
                             array[z].count = parseInt(array[z].count)+1;
                             array[z].clickIndex = z;
                             flag = false;

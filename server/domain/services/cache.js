@@ -115,6 +115,16 @@ module.exports = {
             Domain.redis.client.setAsync(param.ckey, JSON.stringify(param));
         })
         logger.info('config parament cache to redis success!');
+    },
+
+    /**
+     * 删除缓存数据
+     * @param ckey
+     * @returns {Promise.<*>}
+     */
+    del: async function(key){
+        logger.info(`del redis,key:${key}`)
+        return Domain.redis.client.delAsync(key);
     }
 
 }
