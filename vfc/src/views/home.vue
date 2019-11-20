@@ -83,7 +83,10 @@ global.moment = moment;
             }),
             logout: function () {
                 this.$api.get('/user/logout').then(()=>{
-                    this.saveUser(null);
+                    let timer=setTimeout(()=>{
+                        this.saveUser(null);
+                        clearTimeout(timer);
+                    },1000);
                     window.location.href="/";
                 });
             },

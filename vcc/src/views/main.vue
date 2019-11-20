@@ -79,8 +79,6 @@
             return {
                 alarmNumber: 0,
                 customerNumber:0,
-                // temperature: 0,
-                // temperatureDes:'正常',
                 vaccineData:[],
                 state:false
             }
