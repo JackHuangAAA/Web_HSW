@@ -63,9 +63,8 @@ public class ConfigActivity extends AppCompatActivity {
         String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://192.168.0.160:8080");
+            etUrl.setText("http://192.168.0.229:8082");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
-
         } else {
             etUrl.setText(url);
         }
@@ -76,7 +75,7 @@ public class ConfigActivity extends AppCompatActivity {
             etSerial.setText(""+PhoneUtils.getSerial());
         }
         if (socketUrl.isEmpty()) {
-            edSocket.setText("http://192.168.0.160:9996");
+            edSocket.setText("http://192.168.0.229:9996");
         } else {
             edSocket.setText(socketUrl);
         }
@@ -168,8 +167,8 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, VCDService.class);
         startService(startIntent);
 
-        Intent finger = new Intent(this, FingerActivity.class);
-        startActivity(finger);
+//        Intent finger = new Intent(this, FingerActivity.class);
+//        startActivity(finger);
 
         finish();
     }
