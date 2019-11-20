@@ -4,21 +4,6 @@ const mongoose = require('mongoose');
 module.exports = {
 
     /**
-     * 查询权限信息树
-     * @param requestBody
-     * @returns {Promise.<Array>}
-     */
-    loadTree: async function (requestBody) {
-        logger.debug('loadTree:' + JSON.stringify(requestBody));
-        //type=0:运营商;type=1:企业
-        let result = await Domain.models.menu.find({type: parseInt(requestBody.type)}, null, { sort: { 'sort': 1 }, lean: true });
-        //增加根节点
-        let root = { title: '根节点', pid: null, expand: true };
-        root.children = result;
-        return new Array(root);
-    },
-
-    /**
      * 查询权限信息
      * @param requestBody
      * @returns {Promise.<{rs: (*|Array), total}>}
@@ -33,17 +18,6 @@ module.exports = {
             lean: true
         })
         return { rs: result.docs, total: result.total };
-    },
-
-    /**
-     * 根据权限id查询权限信息
-     * @param requestBody
-     * @returns {Promise.<{rs: (*|Array), total}>}
-     */
-    queryPermissionById: async function (requestBody) {
-        logger.debug('queryPermissionById:' + JSON.stringify(requestBody));
-        return await Domain.models.permission.find({_id: requestBody.id})
-
     },
 
     /**
@@ -87,7 +61,7 @@ module.exports = {
      */
     removePermissionById: async function (requestBody) {
         logger.debug('removePermissionById:' + JSON.stringify(requestBody));
-        return await Domain.models.permission.findOneAndRemove({ _id: requestBody._id }); // _id ?
+        return await Domain.models.permission.findOneAndRemove({ _id: requestBody.id }); 
     },
 
     /**
@@ -97,33 +71,52 @@ module.exports = {
      */
     createPermissionTree: async function (menuData) {
         logger.debug('createPermissionTree:' + JSON.stringify(menuData));
-        let newMenu=[];
-        let pid_arr=[];
-        let sub_arr=[];
-        //获取唯一父子节点id
-        menuData.forEach((item)=>{
-            if(!item.children || item.children.length==0){
-                sub_arr.push(item._id);
-                if(pid_arr.indexOf(item.pid)==-1){
-                    pid_arr.push(item.pid);
+        const allMenu = await Domain.models.menu.find({}, null);
+        let allMenuMap = new Map();
+        allMenu.forEach(item => {
+            allMenuMap.set(item._id.toString(), item)
+        });
+        let newMenu = [];
+        let temp=new Set();
+        // 获取的菜单父类
+        menuData.forEach(item => {
+            if (!item.children) {
+                if (allMenuMap.get(item.pid) && !temp.has(item.pid)) {
+                    temp.add(item.pid);//去重
+                    // allsubMuneMap.set(item._id,item);
+                    let obj=allMenuMap.get(item.pid);
+                    obj.children=[];
+                    newMenu.push(obj);//添加一级菜单
                 }
             }
         });
-        
-        const allMenu = await Domain.models.menu.find({}, null);
-        allMenu.forEach((el,i)=>{
-            let arrItem={};
-            //判断是否当前父节点
-            if(pid_arr.indexOf(el._id.toString())>-1){
-                arrItem=el;
-                el.children.forEach((e)=>{
-                    if(sub_arr.indexOf(e._id.toString())>-1){
-                        arrItem.children=e;
+        temp.clear();
+        menuData.forEach(item=>{
+            if(!item.children){
+                newMenu.forEach(el=>{
+                    if(item.pid==el._id){//添加二级菜单
+                        el.children.push(item);
                     }
                 });
-                newMenu.push(arrItem);
             }
         });
         return newMenu;
-    }
-}
+    },
+
+    /**
+     * 根据指定条件查询权限信息
+     * @param requestBody
+     * @returns {Promise.<{rs: (*|Array), total}>}
+     */
+    queryPermissionByCondition: async function (requestBody) {
+        logger.debug('queryPermissionById:' + JSON.stringify(requestBody));
+        let query=[];
+        if(!_.isEmpty(requestBody.id)){
+            query.push({_id:requestBody.id});
+        }
+        query=query.length>0?{$and:query}:{};
+        return await Domain.models.permission.find(query)
+
+    },
+
+};

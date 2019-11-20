@@ -1,7 +1,7 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="8" class="main-table-title">温度运行监控</Col>
+            <Col span="7" class="main-table-title">温度运行监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryTemperatures()"/>
@@ -16,28 +16,9 @@
                 <div class="main-table-box-time">时间:</div>
                 <DatePicker :value="dateTime" format="yyyy/MM/dd" @on-change="dateChange" type="daterange" placement="bottom-end" placeholder="请选择日期"></DatePicker>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryTemperatures">查询</Button></Col>
-        </Row>      
-        <Row class="main-table-head">
-            <Col span="2" class="id-center">序号</Col>
-            <Col span="2">设备类型</Col>
-            <Col span="3">设备编号</Col>
-            <Col span="5">所在单位</Col>
-            <Col span="3">运行温度</Col>
-            <Col span="4">温度状态</Col>
-            <Col span="5">时间</Col>
+            <Col span="2"><Button type="primary" class="search_btn" @click="search_queryTemperatures" icon="ios-search">查询</Button></Col>
         </Row>
-        <div class="table-body">
-            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-                <Col span="2" class="id-center">{{index+1}}</Col>
-                <Col span="2">{{item.deviceType==1?'接种柜':'冷藏柜'}}</Col>
-                <Col span="3">{{item.device==null?'--':item.device.alias?item.device.alias:'--'}}</Col><!-- Y750230-64368 -->
-                <Col span="5">{{item.unitName||'--'}}</Col>
-                <Col span="3" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value+'℃'||'不明'}}</Col>
-                <Col span="4" :class="{abnormal:item.degree[0].value<0 || item.degree[0].value>5}">{{item.degree[0].value>=0 && item.degree[0].value<=5?'正常':'异常'}}</Col>
-                <Col span="5">{{item.createDate}}</Col>
-            </Row>
-        </div>
+        <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt" stripe border></Table>      
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
@@ -66,7 +47,64 @@ export default {
                     name:'冷藏柜',
                     key:2
                 }
-            ]
+            ],
+            cols: [
+                {
+                    type: 'index',
+                    width:100,
+                    align: 'center'
+                },{
+                    title: '设备类型',
+                    key: 'type',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.deviceType==1?'接种柜':'冷藏柜'
+                        )
+                    }
+                },{
+                    title: '设备编号',
+                    key: 'device',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.device!=null?param.row.device.alias:''
+                        )
+                    }
+                },{
+                    title: '所在单位',
+                    key: 'unitName'
+                },{
+                    title: '运行温度',
+                    key: 'degree',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.degree[0].value<0 || param.row.degree[0].value>5?'abnormal':''
+                            },
+                            param.row.degree[0].value+'℃'
+                        )
+                    }
+                },{
+                    title: '温度状态',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.degree[0].value<0 || param.row.degree[0].value>5?'abnormal':''
+                            },
+                            param.row.degree[0].value>=0 && param.row.degree[0].value<=5?'正常':'异常'
+                        )
+                    }
+                },{
+                    title: '时间',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.degree[0].time
+                        )
+                    }
+                }
+            ],
         }
     },
     methods:{
@@ -76,7 +114,7 @@ export default {
             this.$api.get('/temperature/queryTemperatures',{page:this.active,size:this.pageSize}).then(res=>{
                 let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
+                    data[i].degree[0].time=moment(data[i].degree[0].time).format('YYYY年MM月DD日HH:mm:ss');
                 }
                 this.lists=data;
                 this.total=res.data.total;
@@ -96,7 +134,7 @@ export default {
             this.$api.get('/temperature/queryTemperatures',formdata).then(res=>{
                 let data=res.data.rs;
                 for(let i=0;i<data.length;i++){
-                    data[i].createDate=moment(data[i].createDate).format('YYYY年MM月DD日HH:mm:ss');
+                    data[i].degree[0].time=moment(data[i].degree[0].time).format('YYYY年MM月DD日HH:mm:ss');
                 }
                 this.lists=data;
                 this.total=res.data.total;
@@ -126,6 +164,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-@import '../../style/color';
-@import '../../style/table';
+@import '../../style/color.less';
+@import '../../style/common.less';
 </style>

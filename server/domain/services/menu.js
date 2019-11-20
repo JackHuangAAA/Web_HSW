@@ -9,6 +9,6 @@ module.exports={
    */
   queryMenus: async function () {
     // logger.debug(`queryMenus param: ${JSON.stringify(requestBody)}`);
-    return await Domain.models.menu.find();
+    return await Domain.models.menu.find({},null);
   }
 }

@@ -9,7 +9,7 @@
                 <Panel :name="String(index)" v-for="(item,index) in menus" :key="index" :class="{homepage:index==0}">
                     <!-- <img class="menuImg" src="/static/img/inout.png"> -->
                     {{item.title}}
-                    <p slot="content"  v-for="(el,i) in item.children" :key="i" @click="changeMenu(el.url)">
+                    <p slot="content" class="menu-item"  v-for="(el,i) in item.children" :key="i" @click="changeMenu(el.url)">
                         {{el.title}}
                     </p>
                 </Panel>
@@ -94,4 +94,7 @@
 </script>
 <style lang="less" scoped>
     @import "~@/style/layout.less";
+    .ivu-collapse-content-box p {
+        height: 50px !important;
+    }
 </style>

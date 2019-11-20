@@ -84,7 +84,7 @@
             </Row>
             
             <Row class="main-table-head">
-                <Col span="2" class="id-center">序号</Col>
+                <Col span="2">序号</Col>
                 <Col span="4">接种单位</Col>
                 <Col span="3">冷藏柜数量</Col>
                 <Col span="3">正常冷藏柜</Col>
@@ -95,14 +95,14 @@
             </Row>
             <div class="home-table-body">
                 <Row v-for="(item,index) of 10" :key="index" class="main-table-body">
-                    <Col span="2" class="id-center">{{index+1}}</Col>
+                    <Col span="2">{{index+1}}</Col>
                     <Col span="4">{{index%2==0?'望江':'武林'}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
-                    <Col span="3">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
+                    <Col span="3" class="main-table-padding">{{Math.floor(Math.random()*10)+1}}</Col>
                 </Row>
             </div>
         </div>
@@ -112,7 +112,7 @@
 <style lang="less" scoped>
 @import '../style/color.less';
 @import '../style/main.less';
-@import '../style/table.less';
+@import '../style/common.less';
 </style>
 
 <script>
@@ -180,7 +180,7 @@
                 // })
             },
             queryAlarmDailyInfo(){
-                this.$api.get('/alarm/queryAlarmDailyInfo').then(res=>{
+                this.$api.get('/alarm/queryAlarmByCondition',{type:1}).then(res=>{
                     let data=res.data;
                     data=data.slice(0,4);
                     this.alarmList=data;

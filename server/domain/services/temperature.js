@@ -40,8 +40,8 @@ module.exports = {
         let result = await Domain.models.temperature.paginate(query, {
             sort: {"_id": -1},
             populate:[{path:'device',select:'code alias'}],
-            page: requestBody.page,
-            limit: parseInt(requestBody.size),
+            page: requestBody.page||1,
+            limit: parseInt(requestBody.size)||10,
             lean:true
         });
         return {rs: result.docs, total: result.total};

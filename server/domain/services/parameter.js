@@ -7,21 +7,20 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<Query|*|T|{}>}
      */
-	queryParameter: async function (requestBody) {
-		logger.debug('queryParameter：' + JSON.stringify(requestBody));
-		let query = [];
-		if (!_.isEmpty(requestBody.name)) {
-			query.push({ name: new RegExp(requestBody.name) });
-		}
-		if (!_.isEmpty(requestBody.key)) {
-			query.push({ 'key': new RegExp(requestBody.key) });
-		}
-		query = query.length > 0 ? { "$and": query } : {};
-
-		let result = await Domain.models.parameter.paginate(query, {
-            sort: { "_id": -1 },
-			page: requestBody.page || 1,
-			limit: parseInt(requestBody.size) || 10
+	queryParameter:async function(requestBody){
+		logger.debug(`queryParameter params: ${JSON.stringify(requestBody)}`);
+		let query=[];
+		if(!_.isEmpty(requestBody.name)){
+			query.push({name:new RegExp(requestBody.name)});
+		};
+		if(!_.isEmpty(requestBody.key)){
+			query.push({key:new RegExp(requestBody.key)});
+		};
+		query=query.length>0 ? {$and:query} : {};
+		let result=await Domain.models.parameter.paginate(query,{
+			sort:{'_id':-1},
+			page:requestBody.page||1,
+			limit:parseInt(requestBody.size)||10,
 		});
 		return { rs: result.docs, total: result.total };
 	},
@@ -32,7 +31,7 @@ module.exports = {
      * @returns {Promise.<requestBody>}
      */
 	saveParameter: async function (requestBody) {
-		logger.debug('saveParameter：' + JSON.stringify(requestBody));
+		logger.debug(`saveParameter: ${JSON.stringify(requestBody)}`);
 		await Domain.services.cache.setCacheToString(requestBody.key, requestBody.value);
 		return await Domain.models.parameter.create(requestBody);
 	},
@@ -41,35 +40,33 @@ module.exports = {
      * @param requestBody
      * @returns {Promise.<Query>}
      */
-	modifyParameter: async function (requestBody) {
-		logger.debug('modifyParameterById：' + JSON.stringify(requestBody));
-		await Domain.services.cache.setCacheToString(requestBody.key, requestBody.value);
-		return await Domain.models.parameter.updateOne({ '_id': requestBody.id },
-			{
-				$set: {
-					...requestBody,
-					updateDate: new Date()
-				}
-			});
+	modifyParameter:async function(requestBody){
+		logger.debug(`modifyParameter params: ${JSON.stringify(requestBody)}`);
+		await Domain.services.cache.updataParam(requestBody.key, requestBody.value);
+		return await Domain.models.parameter.updateOne({'_id':requestBody.id},{
+			$set:{
+				...requestBody,
+				updateDate:new Date()
+			}
+		});
 	},
-
 	/**
 	* 根据id删除参数信息
 	* @param requestBody
 	* @returns {Promise.<*>}
 	*/
-	removeParameterById: async function (requestBody) {
-		logger.debug('removeParameterById：' + JSON.stringify(requestBody));
+	removeParameterById:async function(requestBody){
+		logger.debug(`removeParameterById params:${JSON.stringify(requestBody)}`);
 		await Domain.services.cache.del(requestBody.key);
-		return await Domain.models.parameter.findOneAndRemove({ _id: requestBody.id });
+		return await Domain.models.parameter.findOneAndRemove({ '_id': requestBody.id });
 	},
 	/**
 	* 根据id停用启用参数信息
 	* @param requestBody
 	* @returns {Promise.<*>}
 	*/
-	ableOrDisableParameter: async function (requestBody) {
-		logger.debug('ableOrDisableParameter' + JSON.stringify(requestBody));
+	displayParameter: async function (requestBody) {
+		logger.debug('displayParameter' + JSON.stringify(requestBody));
 		if(requestBody.isActive){
             await Domain.services.cache.setCacheToString(requestBody.key, requestBody.value);
 		}else{

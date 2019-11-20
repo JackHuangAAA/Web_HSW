@@ -65,8 +65,8 @@ module.exports = {
                 "unitName":{"$first":"$unitName"},
                 count:{$sum:"$total"}
             }},
-            {$skip:(requestBody.page-1)*requestBody.size},
-            {$limit:parseInt(requestBody.size)}
+            {$skip:(requestBody.page-1)*requestBody.size ||0},
+            {$limit:parseInt(requestBody.size)||10}
         ]);
 
         return {rs: docs, total: total};

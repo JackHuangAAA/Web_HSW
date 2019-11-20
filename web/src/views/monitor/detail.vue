@@ -1,7 +1,7 @@
 <template>
     <div class="main-table">
         <Row>
-            <Col span="13" class="main-table-title">疫苗柜运行监控</Col>
+            <Col span="12" class="main-table-title">疫苗柜运行监控</Col>
             <Col span="5" class="main-table-search">
                 <div class="main-table-search-lab">单位:</div>                    
                 <input v-model="unitName" placeholder="" @keyup.enter="search_queryDevice()" />
@@ -12,28 +12,9 @@
                     <Option v-for="(item,index) in select_type" :value="item.key" :key="index">{{ item.name }}</Option>
                 </Select>
             </Col>
-            <Col span="1"><Button type="primary" class="search_btn" @click="search_queryDevice()">查询</Button></Col>
-        </Row>      
-        <Row class="main-table-head">
-            <Col span="2" class="id-center">序号</Col>
-            <Col span="3">设备类型</Col>
-            <Col span="5">设备编号</Col>
-            <Col span="5">所在单位</Col>
-            <Col span="3">当前温度</Col>
-            <Col span="3">运行状态</Col>
-            <Col span="3">原因</Col>
+            <Col span="2"><Button type="primary" class="search_btn" @click="search_queryDevice()" icon="ios-search">查询</Button></Col>
         </Row>
-        <div class="table-body">
-            <Row v-for="(item,index) of lists" :key="index" class="main-table-body">
-                <Col span="2" class="id-center">{{index+1}}</Col>
-                <Col span="3">{{item.type==1?'接种柜':'冷藏柜'}}</Col>
-                <Col span="5">{{item.alias||'--'}}</Col>
-                <Col span="5">{{item.unitName||'--'}}</Col>
-                <Col span="3" :class="{abnormal:item.temperature<0 || item.temperature>5}">{{item.temperature||'--'}}</Col>
-                <Col span="3" :class="{abnormal:item.temperature<0 || item.temperature>5}">{{item.status==0?'在线':item.status==1?'离线':'故障'}}</Col>
-                <Col span="3">{{item.notes||'--'}}</Col>
-            </Row>
-        </div>
+        <Table :columns="cols" :data="lists" size="small" max-height=435 class="table-mt" stripe border></Table>      
         <Row>
             <Page :total="total" show-sizer show-total @on-page-size-change="pageSizeChange" :current="search_type?search_active:active" @on-change="indexChange" :page-size="10"/>
         </Row>        
@@ -61,7 +42,54 @@ export default {
                     name:'冷藏柜',
                     key:2
                 }
-            ]
+            ],
+            cols: [
+                {
+                    type: 'index',
+                    width:100,
+                    align: 'center'
+                },{
+                    title: '设备类型',
+                    key: 'type',
+                    render:(h,param)=>{
+                        return h(
+                            'div',
+                            param.row.type==1?'接种柜':'冷藏柜'
+                        )
+                    }
+                },{
+                    title: '编号',
+                    key: 'alias'
+                },{
+                    title: '所在单位',
+                    key: 'unitName'
+                },{
+                    title: '当前温度',
+                    key: 'temperature',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.temperature<0 || param.row.temperature>5?'abnormal':''
+                            },
+                            param.row.temperature
+                        )
+                    }
+                },{
+                    title: '运行状态',
+                    key: 'status',
+                    render:(h,param)=>{
+                        return h(
+                            'div',{
+                                class: param.row.status==0?'':'abnormal'
+                            },
+                            param.row.status==0?'在线':param.row.status==1?'离线':'故障'
+                        )
+                    }
+                },{
+                    title: '原因',
+                    key: 'notes'
+                }
+            ],
         }
     },
     methods:{
@@ -109,5 +137,5 @@ export default {
 </script>
 <style lang="less" scoped>
 @import '../../style/color';
-@import '../../style/table';
+@import '../../style/common.less';
 </style>
