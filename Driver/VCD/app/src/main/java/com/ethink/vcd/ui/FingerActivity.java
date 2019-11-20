@@ -18,7 +18,6 @@ import com.ethink.vcd.App;
 import com.ethink.vcd.Const;
 import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
-import com.ethink.vcd.controller.FingerCommon;
 import com.ethink.vcd.controller.FingerUtil;
 import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.service.HttpUtils;
@@ -27,8 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

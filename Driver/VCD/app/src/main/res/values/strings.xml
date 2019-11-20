@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">育苗接种柜</string>
+    <string name="app_name">疫苗接种柜</string>
     <string name="server_err">服务器异常，修复中</string>
     <string name="nomore">没有更多数据</string>
     <string name="nointentet">亲,没有网络</string>
