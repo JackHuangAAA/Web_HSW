@@ -18,7 +18,7 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler {
     public PrintPlugin(Context context) {
         super("PRINT");
         this.context = context;
-       // printController=new PrintController("/dev/ttyS2",9600);
+        printController=new PrintController("/dev/ttyS2",9600);
     }
 
     @Override

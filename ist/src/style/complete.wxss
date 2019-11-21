@@ -1,0 +1,72 @@
+.mt {
+  padding-top: 1.0625rem;
+  margin: 0 6.25% 0 6.3%;
+}
+.complete {
+  width: 100%;
+  height: 52.3125rem;
+  border-radius: 10px;
+  background: #ffffff;
+  position: relative;
+}
+.countDown {
+  color: #36506B;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 2.75rem;
+  top: 1.9375rem;
+}
+.countDown img {
+  margin-right: .9rem;
+}
+.complete-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6.0625rem;
+  font-size: 2.25rem;
+  color: #36506B;
+  font-weight: bold;
+}
+.complete-success img {
+  margin-right: 2.0625rem;
+}
+.complete-detail {
+  margin-top: 3.375rem;
+}
+.complete-notice {
+  font-size: 2.25rem;
+  color: #36506B;
+  text-align: center;
+  margin-top: 2.4375rem;
+  font-weight: bold;
+}
+.complete-message {
+  font-size: 1.5rem;
+  color: #36506B;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+.complete-confirm {
+  background: url('/static/img/confirm.png') no-repeat center;
+  width: 16rem;
+  height: 4.375rem;
+  font-size: 1.5rem;
+  padding-left: 5rem;
+  line-height: 4.375rem;
+  color: #ffffff;
+  margin-left: 47.125rem;
+  margin-top: 3.875rem;
+}
+.cashPay {
+  width: 100%;
+  height: 6.5rem;
+  text-align: center;
+  font-size: 2.25rem;
+  line-height: 9.5rem;
+  color: #36506B;
+  font-weight: bold;
+}

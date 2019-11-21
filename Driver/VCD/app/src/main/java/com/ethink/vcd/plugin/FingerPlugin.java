@@ -73,7 +73,7 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
         String functionName = pluginMessage.getFunctionName();
         switch (functionName) {
             case "OPEN":
-                //   fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
+                   fingerUtil = new FingerUtil(this, new FingerCommon(context, "/dev/ttyS1", 115200));
                 break;
             case "REGISTER":
                 String uid = pluginMessage.getString("userId");
