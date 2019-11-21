@@ -19,6 +19,7 @@
             <div class="inStockTitle">
                 <!--<img src="/static/img/back.png" class="back" @click="back()">-->
                 <p class="headP">请将入库疫苗扫码</p>
+                {{'这是扫码枪内容：'+JSON.stringify(test)}}
                 <img src="/static/img/inCabinet1.png" class="vaccineIn">
             </div>
             <div class="main">
@@ -79,7 +80,8 @@
                 clickIndex: 0,
                 ifTip: false,
                 exName: '',
-                exReason:''
+                exReason:'',
+                test:''
             }
         },
         computed: {
@@ -98,14 +100,15 @@
             },
             //扫描枪扫码数量增加后，自动保存
             async scanIn(){
-                // this.$device.subscribe('SCANNER_RESULT', (data) => {
-                //     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
+                this.$device.subscribe('SCANNER_RESULT',async (data) => {
+                    console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
+                    this.test=data;
                     let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20190926', expiry:this.dateformat('2019-12-30'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
                     //检查是否异常疫苗
                     await this.checkException(result);
                     //页面数据更新
                     await this.freshTableDatas(result);
-                // });
+                });
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;

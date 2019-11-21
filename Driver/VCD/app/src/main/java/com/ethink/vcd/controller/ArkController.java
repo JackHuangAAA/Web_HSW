@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -28,13 +27,17 @@ public class ArkController {
 //   usb方法
 //        UsbSerialPortSetting setting = new UsbSerialPortSetting(UsbSerialPortSetting.PL2303_VENDOR, UsbSerialPortSetting.PL2303_PRODUCT, 0,
 //                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
+        //usb方法
+        //  finger = SerialPortManager.getSerialPort(context, setting);
         try {
+            setting.setReadTimeout(2000);
             serialPort = SerialPortManager.getSerialPort(path, setting);
-            //usb方法
-            //  finger = SerialPortManager.getSerialPort(context, setting);
         } catch (IOException e) {
+            e.printStackTrace();
             logger.error("串口打开失败", e);
         }
+
+
     }
 
 

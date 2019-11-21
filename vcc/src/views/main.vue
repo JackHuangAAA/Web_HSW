@@ -8,8 +8,9 @@
                 <div class="yellowBlock"></div>
                 <p class="yj">预警</p>
             </div>
+            {{"这是订阅的数据:"+JSON.stringify(test)}}
             <div class="vaccineContent">
-                <div v-for="(item,index) in vaccineData" class="vaccineStatusShow">
+                <div v-for="(item,index) in vaccineData" :key="index" class="vaccineStatusShow">
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
                         <p class="vaccineOneName" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneName}}</p>
                         <p class="vaccineOneCount" :class="{warning:item.vaccineOneCount == 0,tips:item.vaccineOneCount <10}">{{item.vaccineOneCount || 0}}支</p>
@@ -79,10 +80,9 @@
             return {
                 alarmNumber: 0,
                 customerNumber:0,
-                // temperature: 0,
-                // temperatureDes:'正常',
                 vaccineData:[],
-                state:false
+                state:false,
+                test:''
             }
         },
         computed: {
@@ -122,6 +122,7 @@
             },
             //查询抽屉疫苗信息
             async queryDrawerByCondition(){
+                this.vaccineData=[];
                 let res = await this.$api.get("/drawer/queryDrawerByCondition", {
                     device: this.device._id
                 });
@@ -164,7 +165,8 @@
                 this.$device.subscribe('SOCKET_DATA', (data) => {
                     if(this.state==true){
                         console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
-                        let res=JSON.parse(data.data)
+                        let res=JSON.parse(data.data);
+                        this.test=JSON.stringify(data.data);
                         if(res.type=="refresh"){
                             this.queryDrawerByCondition();
                             this.queryAlarmByByCondition();
@@ -191,6 +193,7 @@
             // __app.on("NOW_TEMPERATURE",(data)=>{
             //     console.log("NOW_TEMPERATURE: " + JSON.stringify(data));
             // });
+            console.log("这里进入到main页面了")
             this.state=true
             if(this.device){
                 this.queryDrawerByCondition();
