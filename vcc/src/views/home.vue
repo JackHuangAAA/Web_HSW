@@ -22,6 +22,8 @@
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
+                    {{'这是温度:'+temperature}}
+                    {{'这是deviceid:'+JSON.stringify(device._id)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -88,7 +90,7 @@ global.moment = moment;
             logout: function () {
                 this.$api.get('/user/logout').then(()=>{
                     this.saveUser(null);
-                    window.location.href="/";
+                    this.$router.push("/");
                 });
             },
             dateint() {
@@ -135,10 +137,13 @@ global.moment = moment;
             },
             //第一次主动请求温度信息
             queryTemperature(){
+                this.audio = new Audio();
+                this.audio.src = '/static/audio/temperatureAbnormal.mp3';
                 console.log("CONTROLLER_BOARD===>TEMPERATURE");
                 this.$device.temperature({num:"1"}).then(res=>{
                     console.log("第一次主动请求数据 result:"+JSON.stringify(res));
                     let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    console.log("获取到的值"+JSON.stringify(val))
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
@@ -179,20 +184,15 @@ global.moment = moment;
                 });
             },
             //接收接种信息
-            receiveVaccination(){
-                this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
-                    if(this.state==true){
-                        console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
-                        let vaccination =data.data;
-                        this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
-                    }
-                });
-            },
-            //温度异常语音
-            controllerAudio(){
-                this.audio = new Audio();
-                this.audio.src = '/static/audio/temperatureAbnormal.mp3';
-            }
+            // receiveVaccination(){
+            //     this.$device.subscribe('SOCKET_VACCINATION_DATA', (data) => {
+            //         if(this.state==true){
+            //             console.log('SOCKET_VACCINATION_DATA====> result:'+JSON.stringify(data));
+            //             let vaccination =data.data;
+            //             this.$router.push({ path: '/vaccination/vaccination', query: { vaccination: vaccination} });
+            //         }
+            //     });
+            // },
         },
         //离开页面时阻止消息推送页面跳转
         destroyed(){
@@ -205,6 +205,7 @@ global.moment = moment;
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
                     this.saveDevice(res2.data[0]);
                     if(this.$route.path == '/' && this.device){
+                        console.log("跳转到main");
                         this.$router.push('/main');
                     }
                 });
@@ -212,7 +213,7 @@ global.moment = moment;
             //接收温度信息
             this.receiveTemperature();
             //接收接种信息
-            this.receiveVaccination();
+            // this.receiveVaccination();
             this.queryTemperature();
         }
 }

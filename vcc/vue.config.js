@@ -53,12 +53,12 @@ module.exports = {
   devServer: {
     proxy: {
       "/vcc": {
-        target: "http://192.168.0.229:9998",
+        target: "http://localhost:9998",
         secure: false,
         pathRewrite: { "^/vcc": "" }
       },
       "/socket.io": {
-        target: "http://192.168.0.229:9990",
+        target: "http://localhost:9990",
         secure: false,
         changeOrigin: true,
         ws: true

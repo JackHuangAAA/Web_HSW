@@ -18,10 +18,12 @@
                         {{menuStatus}}
                     </div>
                 </div>
+                {{"这是deviceid："+JSON.stringify(device._id)}}
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
+                    {{"这是温度的信息："+JSON.stringify(temperature)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -83,11 +85,7 @@ global.moment = moment;
             }),
             logout: function () {
                 this.$api.get('/user/logout').then(()=>{
-                    let timer=setTimeout(()=>{
-                        this.saveUser(null);
-                        clearTimeout(timer);
-                    },1000);
-                    window.location.href="/";
+                    this.$router.push("/");
                 });
             },
             dateint() {

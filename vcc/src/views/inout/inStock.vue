@@ -40,6 +40,7 @@
                     <p class="headP">请选择疫苗入库的抽屉</p>
                     <img src="/static/img/vaccineIn.png" class="vaccineIn">
             </div>
+            {{"这是打开抽屉的返回数据："+JSON.stringify(test)}}
             <div class="main">
                 <div class="mainTop">
                     <p class="ctOne">抽屉1</p>
@@ -126,7 +127,8 @@
                 vaccineFourX: '',//抽屉4号格疫苗X
                 vaccineThreeY: '',//抽屉3号格疫苗Y
                 vaccineFourY: '',//抽屉4号格疫苗Y
-                endData:[]//完成的数据
+                endData:[],//完成的数据
+                test:''
             }
         },
         computed: {
@@ -420,9 +422,36 @@
                         }
                     }
                 }
+                //打开抽屉
+                this.$device.openDrawer({num:this.vaccineOneX+"#"+this.vaccineOneY}).then(res=>{
+                        console.log(res);
+                        this.test=res;
+                    }).catch(err=>{
+                        console.log('open drawer error: '+err.message());
+                    });
                 console.log(this.endData);
                 this.queryDrawerByCondition();
                 this.addForm = false;
+            },
+            //打开指定抽屉
+            openDrawer(){
+                //获取选中的的抽屉
+                //打开柜子的参数  num
+                let ids = [], position = '', array = this.cabineDatas;
+                for(let n=0;n<array.length;n++) {
+                    if(array[n].single){
+                        ids.push(array[n].drawerId);
+                        position+=','+array[n].x+'#'+array[n].y
+                    }
+                }
+                //position不为空时，调用Android接口，打开抽屉
+                if(position!=''){
+                    this.$device.openDrawer({num:position.slice(1)}).then(res=>{
+                        this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
+                    }).catch(err=>{
+                        console.log('open drawer error: '+err.message());
+                    });
+                }
             },
             finishInStock(){
                 this.$router.push({ path: '/inout/detail', query: { action: 'in', inStockDate:this.endData} });

@@ -58,10 +58,12 @@
         },
         methods: {
             async addVaccine(index){
+                console.log("1111111111111111111111")
                 let drawer = this.cabineData[index];
                 if(drawer.name=="" || drawer.code==""){
                     return false;
                 }
+                console.log("222222222222222222222222222")
                 if(this.cabineData[index].vaccine !== "" && this.cabineData[index].vaccine !== undefined){
                     let temp = this.cabineData[index].vaccine;
                     for(let i=0;i<temp.length;i++){
@@ -75,6 +77,7 @@
                         } 
                     }
                 }
+                console.log("33333333333333333333333333")
                 await this.$api.post("/drawer/modifyDrawerById", {
                     id: drawer._id,
                     vaccine: {
@@ -83,6 +86,7 @@
                         name: drawer.name  //疫苗名称
                     }
                 });
+                console.log("4444444444444444444444444444")
                 this.queryDrawerByCondition();
             },
             async delVaccine(index,i){
@@ -105,7 +109,6 @@
                 this.queryDrawerByCondition();
             },
             select(index, event){
-                console.log(index,event);
                 this.cabineData[index].name=event.label;
                 this.cabineData[index].code=event.value;
             },
@@ -130,6 +133,7 @@
         mounted() {
             this.queryVaccineKinds();
             this.queryDrawerByCondition();
+            console.log(this.cabineData)
         },
     };
 </script>

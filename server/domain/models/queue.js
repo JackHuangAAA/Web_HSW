@@ -11,6 +11,9 @@ const queueSchema = mongoose.Schema({
     age: Number, //年龄
     vaccine:{
         name: String, //疫苗名称
+        code: String, //疫苗code
+        producer:String, //生产厂家
+        count:Number, //接种数量
         date: {type: Date, default: Date.now}  //接种时间
     },
     status: Number, //状态0:完成; 1:排队中;
