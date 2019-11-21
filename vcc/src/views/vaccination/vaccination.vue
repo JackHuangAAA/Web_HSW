@@ -225,7 +225,7 @@
                     surplusIsNotZero: true,
                     code: obj.vaccineCode //接种信息中的疫苗code todo
                 });
-                let drawer = await thisqueryDrawerByCondition({
+                let drawer = await this.queryDrawerByCondition({
                     device: this.device._id,
                     vaccineCode: this.queryVaccine._id
                 });
