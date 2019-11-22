@@ -24,7 +24,7 @@
                     </div>
                     <div class="left-right">
                         <div>免费￥0.00</div>
-                        <Checkbox v-model="single" value="" label=""> </Checkbox>
+                        <!--<Checkbox v-model="self" value="" label=""> </Checkbox>-->
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="right-right">
                         <div>自费￥300.00</div>
-                        <Checkbox v-model="single" value="" label=""> </Checkbox>
+                        <Checkbox v-model="self" value="" label=""> </Checkbox>
                     </div>
                 </div>  
             </div>
@@ -60,7 +60,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     data () {
         return {
-            single:false
+            self:false
         }    
     },
     computed: {
@@ -74,10 +74,14 @@ export default {
             saveUser: 'saveUser',
             saveDevice: 'saveDevice'
         }),
-        confirm: function(){
-            this.$router.push({path:'/complete/complete',query:{type: true}})
+        confirm(){
+            if(this.self){
+                this.$router.push({path:'/pay/pay',query:{type: this.self}})
+            }else{
+                this.$router.push({path:'/register/free'})
+            }
         },
-        quit: function(){
+        quit(){
             this.saveUser(null);
             this.$router.push('/main');
         }

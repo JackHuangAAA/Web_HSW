@@ -22,9 +22,11 @@ const routers = [
         children: [
             { path: '/main', component: (resolve) => require(['@/views/main.vue'], resolve) },  //智能接种主页
             { path: '/register/register', component: (resolve) => require(['@/views/register/register.vue'], resolve) }, //挂号信息
+            { path: '/register/free', component: (resolve) => require(['@/views/register/free.vue'], resolve) }, //选择疫苗信息
             { path: '/complete/complete', component: (resolve) => require(['@/views/complete/complete.vue'], resolve) },//免费选完疫苗  支付成功  人工付费
             { path: '/pay/pay', component: (resolve) => require(['@/views/pay/pay.vue'], resolve) },//付费
             { path: '/pay/payQrcode', component: (resolve) => require(['@/views/pay/payQrcode.vue'], resolve) },//扫码
+            { path: '/pay/finish', component: (resolve) => require(['@/views/pay/finish.vue'], resolve) } //支付完成
 
         ]
     },

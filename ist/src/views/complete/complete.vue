@@ -30,7 +30,9 @@
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
 import detail from '../../components/detail';
+
 export default {
     data () {
         return {
@@ -43,7 +45,17 @@ export default {
     components:{
         detail
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
     methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
         confirm: function(){
             if(this.type){
                 this.$router.push('/pay/pay')

@@ -16,7 +16,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     data () {
         return {
-            deviceId: ''
+            deviceId:''
         }    
     },
     computed: {
@@ -33,6 +33,7 @@ export default {
         getDevice(){
             this.$device.getDeviceCode().then(res => {
                 this.deviceId = res;
+                this.saveDevice({id:res})
             });
         },
         scanBarcode(){
