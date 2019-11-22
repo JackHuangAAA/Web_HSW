@@ -52,10 +52,10 @@ module.exports = {
   //开发配置
   devServer: {
     proxy: {
-      "/vcc": {
-        target: "http://localhost:9998",
+      "/ist": {
+        target: "http://localhost:9995",
         secure: false,
-        pathRewrite: { "^/vcc": "" }
+        pathRewrite: { "^/ist": "" }
       },
       "/socket.io": {
         target: "http://localhost:9990",

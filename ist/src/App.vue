@@ -4,7 +4,6 @@
     </div>
 </template>
 <style lang="less">
-    // @import "style/vars";
     html,body{
         height: 100%;
     }
