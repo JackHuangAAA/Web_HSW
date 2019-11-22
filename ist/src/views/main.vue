@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/logo.png" class="logo" alt="">
-        <div class="device">设备编号：7549360545</div>
+        <div class="device">设备编号：{{device.id}}</div>
         <div class="title">智能接种，排队挂号，扫描疫苗本</div>
         <div class="scanNotice">
             <div>扫码挂号</div>
@@ -12,11 +12,22 @@
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default {
     data() {
         return {
                
         }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
+    mounted(){
+
     }
 }
 </script>
