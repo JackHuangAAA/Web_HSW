@@ -3,7 +3,7 @@
  * 政采云接口服务
  */
 
-const logger = Libs.logger.getLogger('vaccine')
+const logger = Libs.logger.getLogger('zcy')
 var mongoose = require('mongoose')
 
 module.exports = {

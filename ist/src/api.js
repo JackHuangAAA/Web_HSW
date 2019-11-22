@@ -37,9 +37,9 @@ export default {
     get: function (url, data) {
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
-            axios.defaults.headers.common['deviceid'] = 'DT0001'; //todo 测试使用
+            axios.defaults.headers.common['deviceid'] = 'IST0001'; //todo 测试使用
             return new Promise((resolve,reject)=>{
-                axios.get(`/vcc${url}?t=${new Date().getTime()}`, {params: data})
+                axios.get(`/ist${url}?t=${new Date().getTime()}`, {params: data})
                     .then(response =>{
                         commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
