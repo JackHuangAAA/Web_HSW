@@ -17,9 +17,8 @@ const customerSchema = mongoose.Schema({
         plan: {type:mongoose.Schema.Types.ObjectId, ref:'plan'}, //下一次接种计划
         date: {type: Date, default: Date.now}
     },
-    status: Number, //状态0:接种完成; 1:挂号完成; 2:缴费完成; 3:登记完成
+    status:Number, //状态0:接种完成; 1:挂号完成; 2:缴费完成; 3:登记完成
     createDate: {type: Date, default: Date.now},   //创建时间
-    createDate: {type: Date, default: Date.now}    //更新时间
 }, {autoIndex: false});
 customerSchema.plugin(paginate);
 module.exports = mongoose.model('customer', customerSchema);

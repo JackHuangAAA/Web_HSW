@@ -54,8 +54,8 @@ module.exports = {
     if (!_.isEmpty(requestBody._id)) {
       query.push({_id: requestBody._id })
     }
-    query =
-      query.length >1 ? { $and: query } : query.length == 1 ? query[0] : {};
+
+    query = query.length > 0 ? { "$and": query } : {};
 
     return Domain.models.user.find(query)
   },
@@ -182,13 +182,15 @@ module.exports = {
     if (!_.isEmpty(requestBody.name)) {
       query.push({ name: new RegExp(requestBody.name) });
     }
-    query = query.length >0 ? { $and: query } : {};
+    query = query.length > 0 ? { "$and": query } : {};
+
     let result = await Domain.models.user.paginate(query, {
       populate:"role",
       sort: { _id: -1 },
       page: requestBody.page||1,
       limit: parseInt(requestBody.size)||10,
-      lean: true
+      lean: true,
+      populate: ['role']
     });
     console.log(result)
     return { rs: result.docs, total: result.total }
