@@ -49,22 +49,42 @@
             </div>
         </div>
         <div class="btn-box">
-            <div class="cancel">取消</div>
+            <div class="cancel" @click="quit()">退出</div>
             <div class="confirm" @click="confirm()">确认</div>
         </div>
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default {
     data () {
         return {
             single:false
         }    
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
     methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
         confirm: function(){
             this.$router.push({path:'/complete/complete',query:{type: true}})
+        },
+        quit: function(){
+            this.saveUser(null);
+            this.$router.push('/main');
         }
+
+    },
+    mounted(){
+
     }
 }
 </script>

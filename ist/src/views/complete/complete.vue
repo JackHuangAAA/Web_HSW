@@ -43,6 +43,16 @@ export default {
     components:{
         detail
     },
+    methods:{
+        confirm: function(){
+            if(this.type){
+                this.$router.push('/pay/pay')
+            }else{
+                this.$router.push('/main')
+            }
+
+        }
+    },
     mounted(){
         console.log(this.$route.query.type);
         if(this.$route.query){
@@ -60,16 +70,6 @@ export default {
                     }
                 }
         }, 1000);
-    },
-    methods:{
-        confirm: function(){
-            if(this.type){
-                this.$router.push('/pay/pay')
-            }else{
-                this.$router.push('/main')
-            }
-            
-        }
     }
 }
 </script>
