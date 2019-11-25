@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/whiteLogo.png" class="logo">
-        <div class="code">设备编号：7549360545</div>
+        <div class="code">设备编号：SC0003</div>
         <p class="title">{{title}}</p>
         <div class="main">
             <router-view></router-view>

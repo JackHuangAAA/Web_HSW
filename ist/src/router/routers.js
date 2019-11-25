@@ -1,6 +1,6 @@
 const routers = [
     {
-        path: '/22',               //显示器页面
+        path: '/',               //显示器页面
         component: (resolve) => require(['@/views/displayHome.vue'], resolve),
         children: [
             { path: '/displayHome/callNumber', component: (resolve) => require(['@/views/display/callNumber.vue'], resolve) }, //叫号综合显示屏
@@ -9,15 +9,16 @@ const routers = [
         ]
     },
     {
-        path: '/11',
-        component: (resolve) => require(['@/views/print/printMain.vue'], resolve),   //补打一体机主页
+        path: '/1',
+        component: (resolve) => require(['@/views/printHome.vue'], resolve),   //补打一体机主页
         children:[
+            { path: '/print/printMain', component: (resolve) => require(['@/views/print/printMain.vue'], resolve) },//打印
             { path: '/print/printInf', component: (resolve) => require(['@/views/print/printInf.vue'], resolve) },//打印
             { path: '/print/printEnd', component: (resolve) => require(['@/views/print/printEnd.vue'], resolve) }//打印成功
         ]
     },
     {
-        path: '/',
+        path: '/2',
         component: (resolve) => require(['@/views/home.vue'], resolve),
         children: [
             { path: '/main', component: (resolve) => require(['@/views/main.vue'], resolve) },  //智能接种主页
