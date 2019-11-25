@@ -13,10 +13,10 @@
                 请用{{type=='ali'?'支付宝':'微信'}}扫码付款:
             </div>
             <div class="vaccineName">
-                脊髓灰质炎疫苗    自费
+                {{data?data.vaccine.name:''}}    自费
             </div>
             <div class="price">
-                ￥300.00
+                ￥{{data?data.vaccine.cost:''}}
             </div>
             <div class="qrcodeImg" v-show="!ifCash">
                 <img :src="payPic" @click="finishPay"/>
@@ -47,6 +47,7 @@ import detail from '../../components/detail';
 export default {
     data () {
         return {
+            data:{},
             zero: false,
             count: 10,
             type: '', //支付方式
@@ -119,10 +120,16 @@ export default {
                 this.ifCash = true;
                 this.countdown();
             }
-        }
+        },
+        initData(){
+            //获取vuex里的客户信息
+            this.data = this.user;
+            this.type = this.$route.query.way;
+        },
     },
     mounted() {
-        this.type = this.$route.query.way;
+        //初始接种数据
+        this.initData();
         //初始页面支付方式
         this.initPays();
     },

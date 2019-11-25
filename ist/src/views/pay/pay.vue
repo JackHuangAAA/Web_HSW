@@ -54,10 +54,15 @@ export default {
         },
         back: function(){
             this.$router.push({path:'/register/register'});
-        }
+        },
+        initData(){
+            //从vuex user 里获取接种数据
+            this.data = this.user
+        },
     },
     mounted(){
-        this.data = this.user
+        //初始接种数据
+        this.initData();
     }
 }
 </script>

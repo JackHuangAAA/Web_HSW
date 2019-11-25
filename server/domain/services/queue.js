@@ -13,6 +13,7 @@ module.exports = {
      */
     queryQueue: async function(requestBody){
         logger.debug(`queryQueue param: ${JSON.stringify(requestBody)}`);
+
         let query = [];
         if (!_.isEmpty(requestBody.code)) {
             query.push({"code": requestBody.code});
@@ -46,6 +47,14 @@ module.exports = {
      */
     saveQueue: async function(requestBody){
         logger.debug(`saveQueue param: ${JSON.stringify(requestBody)}`);
+        //新增排队信息是推送至socket.io
+        let channel = "UpdateQueueStatus";
+        let message={};
+        message.type = channel;
+        message.code = 'IST0001';
+        message = JSON.stringify(message);
+        Domain.redis.pub.publishAsync(channel, message);
+
         return await Domain.models.queue.create(requestBody);
     },
 
@@ -66,6 +75,13 @@ module.exports = {
      */
     modifyQueue: async function(requestBody){
         logger.debug("modifyQueue:" + JSON.stringify(requestBody));
+        //新增排队信息是推送至socket.io
+        let channel = "UpdateQueueStatus";
+        let message = {};
+        message.type = channel;
+        message.code = 'IST0001';
+        message = JSON.stringify(message);
+        Domain.redis.pub.publishAsync(channel, message);
         return await Domain.models.queue.updateOne({'_id': requestBody.id},
             {
                 $set: {
@@ -102,6 +118,19 @@ module.exports = {
             query.push({"vaccine.name":  new RegExp(requestBody.vaccineName)});
         }
         query = query.length > 0 ? { "$and": query } : {};
-        return await Domain.models.queue.find(query).sort({'createDate':-1});
+
+        let result = await Domain.models.queue.find(query).sort({'createDate':-1});
+        //推送接种人信息到屏幕
+        if(!_.isEmpty(requestBody.next)){
+            let channel = "NextVaccination";
+            let message = {};
+            message.type = channel;
+            message.code = 'IST0001';
+            message.data = result;
+            message = JSON.stringify(message);
+            Domain.redis.pub.publishAsync(channel, message);
+        }
+
+        return result;
     }
 };

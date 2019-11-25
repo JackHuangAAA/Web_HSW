@@ -100,9 +100,11 @@ export default {
             let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:'12306'});
             this.customer = customer.data[0];
 
-
-            this.customer.intervalTime = 180;
             let planId = customer.data[0].next.plan;
+            //计算距离上次接种的时间差
+
+            let previou_time = customer.data[0].previou.date?customer.data[0].previou.date:new Date();
+            this.customer.intervalTime =Math.floor( (new Date().getTime()-new Date(previou_time).getTime())/(24*3600*1000));
             let plan = await this.$api.get('/plan/queryPlanByCondition', {id:planId,test:0});
             let vaccineName = plan.data[0].vaccine;
 

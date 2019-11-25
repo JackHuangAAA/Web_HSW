@@ -15,24 +15,8 @@ const bindUserFilter = async (ctx,next) => {
         //检查设备是否已经接入平台
         let result = await deviceFilter(ctx);
         if(result){
-            //检查是否已经登录(//!_.endsWith(ctx.url,'test=0' 测试使用)
-            if (
-                _.find(excluded, v => {
-                    return _.startsWith(ctx.url, v);
-                }) == undefined &&
-                !_.endsWith(ctx.url, 'test=0')
-            ) {
-                let token = ctx.cookies.get('token');
-                if (!_.isEmpty(token)) {
-                    let result = await Domain.services.user.checkToken(token);
-                    ctx.currentUser = result;
-                    await next();
-                } else {
-                    ctx.body = Libs.response.error(Libs.error('0001', '未登录'));
-                }
-            } else {
-                await next();
-            }
+            await next();
+
         } else {
             ctx.body = Libs.response.error(Libs.error('9999', '使用设备尚未接入平台'));
         }

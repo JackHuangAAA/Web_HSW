@@ -5,7 +5,7 @@ const paginate = require('mongoose-paginate');
  * 用户信息
  */
 const queueSchema = mongoose.Schema({
-    sort: String,//接种序号，排队叫号
+    sort: Number,//接种序号，排队叫号
     code: String, //接种编号
     name: String, //姓名
     sex: String, //性别

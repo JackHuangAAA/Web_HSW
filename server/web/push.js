@@ -68,3 +68,5 @@ Domain.redis.pub.on('message', (channel, message) => {
 //订阅主题
 Domain.redis.pub.subscribe('receiveVaccination');
 Domain.redis.pub.subscribe('receiveVaccinationStatus');
+Domain.redis.pub.subscribe('UpdateQueueStatus');
+Domain.redis.pub.subscribe('NextVaccination');
