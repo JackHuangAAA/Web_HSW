@@ -1,6 +1,6 @@
 <template>
-    <div class="layout">
-        <div class="header">
+    <div class="layout" v-if="bgShow">
+        <div class="header"  >
             <img src="/static/img/whiteLogo.png" alt="">
             <div>设备编号：{{deviceId}}</div>
         </div>
@@ -9,6 +9,7 @@
         </div>
         <div class="copyright">银信博荣疫苗接种一体化解决方案</div>
     </div>
+    <router-view v-else></router-view>
 </template>
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex';
@@ -16,6 +17,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     data () {
         return {
+            bgShow: true,
             deviceId:''
         }    
     },
@@ -24,6 +26,15 @@ export default {
             user: 'user',
             device: 'device'
         })
+    },
+    watch: {
+        $route(to, from) {console.log(to.path+'----44----'+from.path)
+            if(to.path == '/main'){
+                this.bgShow = false;
+            }else{
+                this.bgShow = true;
+            }
+        }
     },
     methods:{
         ...mapActions({
@@ -52,7 +63,6 @@ export default {
         this.scanBarcode();
         //this.$router.push('/main');
         this.$router.push('/register/register');
-        //this.$router.push('/print/printInf');
     }
 }
 </script>

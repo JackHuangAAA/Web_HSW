@@ -16,14 +16,31 @@
     </div>
 </template>
 <script>
+import io from  'socket.io-client';
+
 export default {
     data () {
         return {
-            
+            socket: io.connect("/"),
+            vaccine: null
         }    
     },
+    methods: {
+        registerSocket(){
+            this.socket.emit("register", JSON.stringify({code:'queue_2'}));
+        },
+        freshDatas(){
+            this.socket.on('test', data => {
+                console.log('tttt----'+data);
+                this.vaccine = '';
+            });
+        }
+    },
     mounted(){
-
+        //建立socket连接
+        this.registerSocket();
+        //监听事件，刷新数据
+        this.freshDatas();
     }
 }
 </script>

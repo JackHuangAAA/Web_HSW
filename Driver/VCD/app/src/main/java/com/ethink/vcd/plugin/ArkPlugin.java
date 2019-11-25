@@ -121,10 +121,10 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
     public void run() {
         Set<Integer> set = new HashSet<>();
         set.add(1);
-        set.add(2);
-        set.add(3);
-        set.add(4);
-        set.add(5);
+//        set.add(2);
+//        set.add(3);
+//        set.add(4);
+//        set.add(5);
         while (!Thread.interrupted()) {
             try {
                 Thread.sleep(1000 * 60);

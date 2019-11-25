@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/whiteLogo.png" class="logo">
-        <div class="code">设备编号：7549360545</div>
+        <div class="code">设备编号：SC0003</div>
         <p class="title">{{title}}</p>
         <div class="main">
             <router-view></router-view>
@@ -18,13 +18,12 @@ export default {
     },
     mounted(){
         console.log(this.$route.path)
-        if(this.$route.path == '/displayHome/callNumber'){
-            this.title = '叫号综合显示屏';
-        }else if(this.$route.path == '/displayHome/desk'){
-            this.title = '1号登记台';
-        }else{
-            this.title = '留观显示屏';
-        }
+        //this.title = '叫号综合显示屏';
+        //this.$router.push('/display/queue');
+        //this.title = '1号登记台';
+        //this.$router.push('/display/desk');
+        this.title = '留观显示屏';
+        this.$router.push('/display/check');
     }
 }
 </script>

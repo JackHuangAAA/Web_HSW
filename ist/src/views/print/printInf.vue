@@ -12,28 +12,52 @@
             <detail class="detail"></detail>
         </div>
         <div class="btn-box">
-            <div class="cancel">取消</div>
-            <div class="confirm" @click="confirm()">确认</div>
+            <div class="cancel" @click="back">取消</div>
+            <div class="confirm" @click="confirm()">打印信息</div>
         </div>
         <p class="confirmTip">请将疫苗本放入打印机，点击打印信息按钮</p>
     </div>
 </template>
 
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
 import detail from '../../components/detail';
+
 export default {
     data() {
         return {
-               
+            customer: null
         }
     },
     components:{
         detail
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
     methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
         confirm: function(){
+            //调用打印接口
+
             this.$router.push('/print/printEnd')
+        },
+        back: function(){
+            this.$router.push('/print/printMain')
+        },
+        initData(){
+
         }
+    },
+    mounted(){
+        //初始数据
+        this.initData();
     }
 }
 </script>
