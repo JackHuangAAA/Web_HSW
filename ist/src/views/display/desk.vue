@@ -21,13 +21,13 @@ import io from  'socket.io-client';
 export default {
     data () {
         return {
-            socket: io.connect("/"),
+            socket: io.connect("http://localhost:9996"),
             vaccine: null
         }    
     },
     methods: {
         registerSocket(){
-            this.socket.emit("register", JSON.stringify({code:'queue_2'}));
+            this.socket.emit("register", JSON.stringify({code:'IST0001D'}));
         },
         freshDatas(){
             this.socket.on('test', data => {

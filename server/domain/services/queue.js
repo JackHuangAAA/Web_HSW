@@ -125,7 +125,7 @@ module.exports = {
             let channel = "NextVaccination";
             let message = {};
             message.type = channel;
-            message.code = 'IST0001';
+            message.code = 'IST0001D';
             message.data = result;
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
