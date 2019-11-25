@@ -51,7 +51,7 @@ export default {
             });
             url= url+param.substr(0,param.length-1);
             return new Promise((resolve,reject)=>{
-                $d.invoke('SERVER', 'Get', {path: `/vcc${url}`}).then((res)=>{
+                $d.invoke('SERVER', 'Get', {path: `/ist${url}`}).then((res)=>{
                     commonResponseHandler(JSON.parse(res.rsp),resolve,reject)
                 }).catch(errorHandler)
             });
@@ -63,14 +63,14 @@ export default {
             console.log(`=> ${url}`,data || {});
             axios.defaults.headers.common['deviceid'] = 'DT0001';  //todo 测试使用
             return new Promise((resolve,reject)=>{
-                axios.post(`/vcc${url}?t=${new Date().getTime()}`, data)
+                axios.post(`/ist${url}?t=${new Date().getTime()}`, data)
                     .then(response =>{
                         commonResponseHandler(response.data,resolve,reject)
                     }).catch(errorHandler);
             });
         }else{
             return new Promise((resolve,reject)=>{
-                $d.invoke('SERVER', 'Post', {path: `/vcc${url}?t=${new Date().getTime()}`, data : JSON.stringify(data)}).then((res)=>{
+                $d.invoke('SERVER', 'Post', {path: `/ist${url}?t=${new Date().getTime()}`, data : JSON.stringify(data)}).then((res)=>{
                     commonResponseHandler(JSON.parse(res.rsp),resolve,reject)
                 }).catch(errorHandler)
             });

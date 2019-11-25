@@ -5,8 +5,8 @@
             <div class="pay-top-title">请选择付费方式，并付费</div>
         </div>
         <div class="pay-content">
-            <div class="pay-content-title">脊髓灰质炎疫苗<span>自费</span></div>
-            <div class="pay-content-price">￥300.00</div>
+            <div class="pay-content-title">{{data?data.vaccine.name:''}}<span>自费</span></div>
+            <div class="pay-content-price">{{data?data.vaccine.cost:''}}</div>
             <div class="pay-content-notice">请选择您要支付的方式:</div>
             <div class="pay-content-box">
                 <div class="pay-content-choose" v-for="(item,index) in payWays" :key="item.payWay" @click="selectPayWays(item.type)">
@@ -22,10 +22,11 @@
 </template>
 <script>
 import detail from '../../components/detail';
-
+import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     data () {
         return {
+            data:{},
             payWays:[
                 {ifRecommend: true,img:'/static/img/zfbBig.png',payWay:'支付宝支付',type:'ali'},
                 {ifRecommend: true,img:'/static/img/wxBig.png',payWay:'微信支付',type: 'we'},
@@ -36,14 +37,27 @@ export default {
     components:{
         detail
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
     
     methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
         selectPayWays: function(type){
             this.$router.push({path:'/pay/payQrcode',query:{way:type}});
         },
         back: function(){
             this.$router.push({path:'/register/register'});
         }
+    },
+    mounted(){
+        this.data = this.user
     }
 }
 </script>

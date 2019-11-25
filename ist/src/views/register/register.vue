@@ -70,24 +70,27 @@ export default {
     computed: {
         ...mapGetters({
             user: 'user',
-            device: 'device',
-            customer:'customer',
-            vaccine:'vaccine'
+            device: 'device'
         })
     },
     methods:{
         ...mapActions({
             saveUser: 'saveUser',
-            saveDevice: 'saveDevice',
-            saveCustomer:'saveCustomer',
-            saveVaccine:'saveVaccine'
+            saveDevice: 'saveDevice'
         }),
         confirm(){
-            if(this.self){
-                this.$router.push({path:'/pay/pay',query:{type: this.self}})
+            let customerVaccine = {}
+
+            customerVaccine.customer = this.customer
+
+            if(this.single){
+                this.$router.push({path:'/pay/pay',query:{type: this.single}})
+                customerVaccine.vaccine = this.paidVaccineData;
             }else{
                 this.$router.push({path:'/register/free'})
+                customerVaccine.vaccine = this.freeVaccineData
             }
+            this.saveUser(customerVaccine)
         },
         quit(){
             this.saveUser(null);
@@ -96,6 +99,9 @@ export default {
         async queryCustomer(){
             let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:'12306'});
             this.customer = customer.data[0];
+
+
+            this.customer.intervalTime = 180;
             let planId = customer.data[0].next.plan;
             let plan = await this.$api.get('/plan/queryPlanByCondition', {id:planId,test:0});
             let vaccineName = plan.data[0].vaccine;
@@ -104,14 +110,11 @@ export default {
             this.vaccine = vaccinePrice.data;
             this.paidVaccineData=vaccinePrice.data.paid;
             this.freeVaccineData=vaccinePrice.data.free;
-
         }
-
     },
     mounted(){
         //根据扫码获得的客户code获取客户信息
         this.queryCustomer();
-
     }
 }
 </script>

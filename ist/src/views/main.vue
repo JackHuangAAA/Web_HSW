@@ -27,7 +27,9 @@ export default {
         })
     },
     mounted(){
+        this.$device.getDeviceCode().then(res=>{
 
+        })
     }
 }
 </script>

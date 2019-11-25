@@ -8,8 +8,6 @@ import Vue from "vue"
     state: {
         user: null,
         device: null, //当前设备
-        customer:null,
-        vaccine:null,
     },
 
     getters: {
@@ -19,12 +17,6 @@ import Vue from "vue"
         device: state => {
             return state.device;
         },
-        customer: state => {
-            return state.customer;
-        },
-        vaccine: state => {
-            return state.vaccine;
-        },
     },
 
     mutations: {
@@ -33,13 +25,7 @@ import Vue from "vue"
         },
         ['SAVE_DEVICE']: (state, action) => {
             state.device = action;
-        },
-        ['SAVE_CUSTOMER']: (state, action) => {
-            state.customer = action;
-        },
-        ['SAVE_VACCINE']: (state, action) => {
-            state.vaccine = action;
-        },
+        }
     },
 
     actions: {
@@ -48,13 +34,7 @@ import Vue from "vue"
         },
         saveDevice({ commit }, device) {
             commit('SAVE_DEVICE', device);
-        },
-        saveCustomer({ commit }, customer) {
-            commit('SAVE_CUSTOMER', customer);
-        },
-        saveVaccine({ commit }, vaccine) {
-            commit('SAVE_VACCINE', vaccine);
-        },
+        }
     }
 }
 

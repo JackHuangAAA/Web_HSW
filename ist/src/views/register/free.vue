@@ -67,7 +67,7 @@ export default {
         },
         initData(){
             //从vuex user 里获取接种数据
-            //this.data = this.user;
+            this.data = this.user;
         }
     },
     mounted(){
