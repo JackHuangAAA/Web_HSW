@@ -2,7 +2,7 @@
     <div class="layout">
         <div class="header">
             <img src="/static/img/whiteLogo.png" alt="">
-            <div>设备编号：7549360545</div>
+            <div>设备编号：{{deviceId}}</div>
         </div>
         <div class="main">
             <router-view></router-view>
@@ -11,14 +11,48 @@
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default {
     data () {
         return {
-            
+            deviceId:''
         }    
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
+    methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
+        getDevice(){
+            this.$device.getDeviceCode().then(res => {
+                this.deviceId = res;
+                this.saveDevice({id:res})
+            });
+        },
+        scanBarcode(){
+            this.$device.subscribe('SCAN_BARCODE', (data) => {
+                console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
+                //扫描结果存入vuex user
+                this.saveUser();
+
+            });
+        }
+    },
     mounted(){
-        this.$router.push('/register/register')
+        //获取设备信息
+        this.getDevice();
+        //监听扫描条形码结果
+        this.scanBarcode();
+        //this.$router.push('/main');
+        this.$router.push('/register/register');
+        //this.$router.push('/print/printInf');
     }
 }
 </script>

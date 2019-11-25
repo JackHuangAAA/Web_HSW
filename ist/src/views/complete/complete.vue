@@ -30,7 +30,9 @@
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
 import detail from '../../components/detail';
+
 export default {
     data () {
         return {
@@ -42,6 +44,26 @@ export default {
     },
     components:{
         detail
+    },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
+    methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
+        confirm: function(){
+            if(this.type){
+                this.$router.push('/pay/pay')
+            }else{
+                this.$router.push('/main')
+            }
+
+        }
     },
     mounted(){
         console.log(this.$route.query.type);
@@ -60,16 +82,6 @@ export default {
                     }
                 }
         }, 1000);
-    },
-    methods:{
-        confirm: function(){
-            if(this.type){
-                this.$router.push('/pay/pay')
-            }else{
-                this.$router.push('/main')
-            }
-            
-        }
     }
 }
 </script>

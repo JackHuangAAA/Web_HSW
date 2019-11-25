@@ -21,6 +21,9 @@ export default {
         return {
             
         }    
+    },
+    props:{
+        datas: Object
     }
 }
 </script>
