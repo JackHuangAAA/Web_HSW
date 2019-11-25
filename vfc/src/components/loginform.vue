@@ -110,9 +110,10 @@ export default {
       this.rember = true;
       this.GetUser();
     }*/
-    if(config.env != 'development'){
-      this.un_fingerSearch();
-    }
+    // if(config.env != 'development'){
+    //   this.un_fingerSearch();
+    // }
+    this.un_fingerSearch();
   }
 };
 </script>

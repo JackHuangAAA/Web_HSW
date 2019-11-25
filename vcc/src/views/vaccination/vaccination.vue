@@ -80,7 +80,7 @@
         </div>
         <div class="bottom-btn">
             <button @click="()=>{this.$emit('changeMenu',0);this.$router.push('/main');}">返回主页</button>
-            <button @click="queryQueue()">下一位</button>
+            <button @click="queryNextQueue()">下一位</button>
         </div>
         </div>
     </div>
@@ -297,11 +297,26 @@
             //     });
             // },
             async queryQueue(){
-                this.confirm=false;
+                await this.$api.get('/queue/queryQueueByCondition',{status:1}).then(res=>{
+                    this.vaccinationData=res.data[0];
+                    console.log(this.vaccinationData);
+                    this.vaccineName=res.data[0].vaccine.name;
+                });
+                this.openDrawer(this.vaccinationData);
+            },
+            async queryNextQueue(){
+                if(this.confirm){
+                    this.confirm=false; 
+                }else{
+                    //未接种点击下一位直接完成
+                    await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                        console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
+                    });
+                }
                 this.ready=false;
                 this.status=false;
                 this.showScan=false;
-                await this.$api.get('/queue/queryQueueByCondition',{status:1}).then(res=>{
+                await this.$api.get('/queue/queryQueueByCondition',{status:1,next:1}).then(res=>{
                     this.vaccinationData=res.data[0];
                     console.log(this.vaccinationData);
                     this.vaccineName=res.data[0].vaccine.name;

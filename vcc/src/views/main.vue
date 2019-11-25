@@ -35,9 +35,9 @@
                 <p class="temP">{{temperature}}</p>
                 <p class="temStatus">{{temperatureDes}}</p>
                 <!--<p class="roomTem">室温： 26℃</p>-->
-                <p class="tem1">{{temperature-3}}</p>
-                <p class="tem2">{{temperature-2}}</p>
-                <p class="tem3">{{temperature-1}}</p>
+                <p class="tem1">{{(temperature-3).toFixed(1)}}</p>
+                <p class="tem2">{{(temperature-2).toFixed(1)}}</p>
+                <p class="tem3">{{(temperature-1).toFixed(1)}}</p>
                 <p class="tem4">{{temperature}}</p>
                 <p class="tem5">{{temperature+1}}</p>
                 <p class="tem6">{{temperature+2}}</p>

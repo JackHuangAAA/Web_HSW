@@ -79,9 +79,11 @@ export default {
         },
         showLogin(){
             this.showMain=false;
+            clearInterval(this.temperatureTimer);
             this.timer=setTimeout(()=>{
-                this.showMain=true;
                 this.$device.un_fingerSearch();
+                this.showMain=true;
+                this.receiveTemperature();
                 clearTimeout(this.timer);
             },180000);
         },
@@ -106,12 +108,12 @@ export default {
                 this.state=false;
             }
         },
-        //第一次主动请求温度信息
+        //主动请求温度信息
         queryTemperature(){
             console.log("CONTROLLER_BOARD===>TEMPERATURE");
-            this.$device.temperature({num:"1"}).then(res=>{
+            this.$device.temperature().then(res=>{
                 console.log("第一次主动请求数据 result:"+JSON.stringify(res));
-                let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                let temp = '', val= JSON.parse(res.res).toFixed(1);
                 if(val>8 || val<2){
                     this.audio.play();//异常语音播放
                     this.temperatureDes = '异常';

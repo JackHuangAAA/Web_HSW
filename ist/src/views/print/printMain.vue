@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/logo.png" class="logo" alt="">
-        <p class="code">设备编号：PR0002</p>
+        <p class="code">设备编号：7549360545</p>
         <p class="tip">安全用药，打印信息，排队接种</p>
         <div class="scanNotice">
             <div>接种信息打印</div>

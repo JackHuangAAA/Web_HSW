@@ -131,9 +131,9 @@ global.moment = moment;
             //第一次主动请求温度信息
             queryTemperature(){
                 console.log("CONTROLLER_BOARD===>TEMPERATURE");
-                this.$device.temperature({num:"1"}).then(res=>{
+                this.$device.temperature().then(res=>{
                     console.log("第一次主动请求数据 result:"+JSON.stringify(res));
-                    let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    let temp = '', val= JSON.parse(res.res).toFixed(1);
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
@@ -154,8 +154,8 @@ global.moment = moment;
             //接收温度信息
             receiveTemperature(){
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[0].toFixed(1));
-                    let temp = '', val= JSON.parse(data.res)[0].toFixed(1);
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res).toFixed(1));
+                    let temp = '', val= JSON.parse(data.res).toFixed(1);
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
