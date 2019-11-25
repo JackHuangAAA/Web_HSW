@@ -6,11 +6,8 @@
 const logger = Libs.logger.getLogger('filter');
 let moment = require('moment');
 const excluded = [
-    '/zcy/checkUser',
-    '/user/modifyUserByCode',
     '/device/queryDeviceByCondition',
-    '/device',
-    '/user/queryUserByCondition'
+    '/customer/queryCustomerByCondition'
 ];
 
 const bindUserFilter = async (ctx,next) => {

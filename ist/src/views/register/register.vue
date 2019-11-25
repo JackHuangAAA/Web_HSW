@@ -24,7 +24,7 @@
                     </div>
                     <div class="left-right">
                         <div>免费￥0.00</div>
-                        <Checkbox v-model="single" value="" label=""> </Checkbox>
+                        <!--<Checkbox v-model="self" value="" label=""> </Checkbox>-->
                     </div>
                 </div>
             </div>
@@ -43,28 +43,52 @@
                     </div>
                     <div class="right-right">
                         <div>自费￥300.00</div>
-                        <Checkbox v-model="single" value="" label=""> </Checkbox>
+                        <Checkbox v-model="self" value="" label=""> </Checkbox>
                     </div>
                 </div>  
             </div>
         </div>
         <div class="btn-box">
-            <div class="cancel">取消</div>
+            <div class="cancel" @click="quit()">退出</div>
             <div class="confirm" @click="confirm()">确认</div>
         </div>
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
+
 export default {
     data () {
         return {
-            single:false
+            self:false
         }    
     },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
     methods:{
-        confirm: function(){
-            this.$router.push({path:'/complete/complete',query:{type: true}})
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
+        confirm(){
+            if(this.self){
+                this.$router.push({path:'/pay/pay',query:{type: this.self}})
+            }else{
+                this.$router.push({path:'/register/free'})
+            }
+        },
+        quit(){
+            this.saveUser(null);
+            this.$router.push('/main');
         }
+
+    },
+    mounted(){
+
     }
 }
 </script>

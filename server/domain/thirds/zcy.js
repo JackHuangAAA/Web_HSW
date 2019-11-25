@@ -145,14 +145,20 @@ module.exports = {
      */
     queryVaccine: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
-        let result = {
-            code: 'ym991',
-            name: '卡介苗',
-            supervisionCode: 'jg20190920001',
-            expiry: new Date(),
-            producer: '上海生物'
-
-        };
+        let vaccineMap = new Map([
+            ["ym991",{code: 'ym991',name: '卡介苗',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"), producer: '上海生物'}],
+            ["ym992",{code: 'ym992',name: '免费乙肝',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '大连汉信' }],
+            ["ym993",{code: 'ym993',name: '脊灰灭活疫苗',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '医科院' }],
+            ["ym994",{code: 'ym994',name: '百白破',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '武汉生物'}],
+            ["ym995",{code: 'ym995',name: '麻风',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '北京天坛'}],
+            ["ym996",{code: 'ym996',name: '麻腮风',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '上海生物'}],
+            ["ym997",{code: 'ym997',name: 'AC群结合疫苗',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '无锡罗益'}],
+            ["ym998",{code: 'ym998',name: '水痘减毒活疫苗',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '长春祁健'}],
+            ["ym999",{code: 'ym999',name: '23价肺炎',supervisionCode: 'jg20190920001',expiry: new Date("2019-10-20T06:14:02.478Z"),producer: '成都生物'}],
+            ["ym1000",{code: 'ym1000',name: '甲肝减毒活疫苗',supervisionCode: 'jg20190920001',expiry: new Date("2019-10-20T06:14:02.478Z"),producer: '浙江普康'}],
+            ["ym1001",{code: 'ym1001',name: '流脑A群多糖',supervisionCode: 'jg20190920001',expiry: new Date("2020-11-20T06:14:02.478Z"),producer: '武汉生物'}]
+        ]);
+        let result= vaccineMap.get(requestBody.code);
         return result;
     },
     /**
@@ -167,43 +173,78 @@ module.exports = {
                 code: 'ym991',
                 name: '卡介苗',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '上海生物'
             },
             {
                 code: 'ym992',
                 name: '免费乙肝',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '大连汉信'
             },
             {
                 code: 'ym993',
                 name: '脊灰灭活疫苗',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '医科院'
             },
             {
                 code: 'ym994',
                 name: '百白破',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '武汉生物'
             },
             {
                 code: 'ym995',
                 name: '麻风',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '北京天坛'
             },
             {
                 code: 'ym996',
                 name: '麻腮风',
                 supervisionCode: 'jg20190920001',
-                expiry: new Date(),
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
                 producer: '上海生物'
+            },
+            {
+                code: 'ym997',
+                name: 'AC群结合疫苗',
+                supervisionCode: 'jg20190920001',
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
+                producer: '无锡罗益'
+            },
+            {
+                code: 'ym998',
+                name: '水痘减毒活疫苗',
+                supervisionCode: 'jg20190920001',
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
+                producer: '长春祁健'
+            },
+            {
+                code: 'ym999',
+                name: '23价肺炎',
+                supervisionCode: 'jg20190920001',
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
+                producer: '成都生物'
+            },
+            {
+                code: 'ym1000',
+                name: '甲肝减毒活疫苗',
+                supervisionCode: 'jg20190920001',
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
+                producer: '浙江普康'
+            },
+            {
+                code: 'ym1001',
+                name: '流脑A群多糖',
+                supervisionCode: 'jg20190920001',
+                expiry: new Date("2020-11-20T06:14:02.478Z"),
+                producer: '武汉生物'
             }
         ];
         return result;

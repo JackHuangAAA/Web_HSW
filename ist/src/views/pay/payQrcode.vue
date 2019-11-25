@@ -1,12 +1,16 @@
 <template>
     <div class="pay">
         <div class="pay-top">
-            <div class="pay-back" @click="back()">返回上一页</div>
-            <div class="pay-top-title">请扫码付费</div>
+            <div class="pay-back"  v-if="!ifCash" @click="back(true)">返回</div>
+            <div class="pay-top-title">{{type=='hand'?'请到人工窗口付费':'请扫码付费'}}</div>
+            <div class="countDown" v-show="ifCash">
+                <img src="/static/img/clock.png" alt="">
+                <div>倒计时00:{{zero?'0':''}}{{count}}</div>
+            </div>
         </div>
         <div class="pay-content">
-            <div class="tips">
-                请用支付宝扫码付款:
+            <div class="tips"  v-if="!ifCash">
+                请用{{type=='ali'?'支付宝':'微信'}}扫码付款:
             </div>
             <div class="vaccineName">
                 脊髓灰质炎疫苗    自费
@@ -15,32 +19,39 @@
                 ￥300.00
             </div>
             <div class="qrcodeImg" v-show="!ifCash">
+                <img :src="payPic" @click="finishPay"/>
+            </div>
 
-            </div>
-            <div class="cashPay" v-show="ifCash">
-                <div class="cashTip">请前往人工付费窗口支付费用</div>
-                <div class="complete-confirm" @click="confirm()">确认</div>
-            </div>
-            <div class="otherWaysTip">
+            <div class="otherWaysTip" v-if="!ifCash">
                 其他支付的方式:
             </div>
-            <div class="otherWays">
-                <div class="otherWaysImg" v-for="(item,index) in otherWays" :key="item.payName" @click="changeWays(item)">
+            <div class="otherWays" v-if="!ifCash">
+                <div class="otherWaysImg" v-for="(item,index) in otherWays" :key="item.payName" @click="changeWays(item.type)">
                     <img :src="item.img" class="otherWaysImg_img">
                     <div class="payName">{{item.payName}}</div>
                 </div>
             </div>
-            <detail class="qrCodeDetail"/>
+            <detail />
+            <div class="cashPay" v-show="ifCash">
+                <!--<div class="cashTip">请前往人工付费窗口支付费用</div>-->
+                <div class="complete-confirm" @click="back(false)">返回首页</div>
+            </div>
         </div>
         
     </div>
 </template>
 <script>
+import { mapGetters, mapActions, mapState } from 'vuex';
 import detail from '../../components/detail';
+
 export default {
     data () {
         return {
-            otherWays:[{payName: '支付宝支付',img:'/static/img/zfbBig.png'},{payName: '人工支付',img:'/static/img/peoplePay.png'}],
+            zero: false,
+            count: 10,
+            type: '', //支付方式
+            payPic: '',
+            otherWays:[],
             ifCash: false,
             timer: ''
         }    
@@ -48,52 +59,73 @@ export default {
     components:{
         detail
     },
-    mounted() {
-        console.log(this.$route.query.way)
-        if(this.$route.query.way == 0){
-            this.otherWays = [{payName: '微信支付',img:'/static/img/wxBig.png'},{payName: '人工支付',img:'/static/img/peoplePay.png'}];
-            this.finishQrcode();
-        }else if(this.$route.query.way == 1){
-            this.otherWays = [{payName: '支付宝支付',img:'/static/img/zfbBig.png'},{payName: '人工支付',img:'/static/img/peoplePay.png'}];
-            this.finishQrcode();
-        }else{
-            this.ifCash = true;
-            this.otherWays = [{payName: '支付宝支付',img:'/static/img/zfbBig.png'},{payName: '微信支付',img:'/static/img/wxBig.png'}]
-        }
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
     },
     methods:{
-        changeWays: function(item){
-            console.log(item)
-            if(item.payName == "支付宝支付"){
-                clearTimeout(this.timer);
-                this.ifCash = false;
-                this.otherWays = [{payName: '微信支付',img:'/static/img/wxBig.png'},{payName: '人工支付',img:'/static/img/peoplePay.png'}];
-                this.finishQrcode();
-            }else if(item.payName == "微信支付"){
-                clearTimeout(this.timer);
-                this.ifCash = false;
-                this.otherWays = [{payName: '支付宝支付',img:'/static/img/zfbBig.png'},{payName: '人工支付',img:'/static/img/peoplePay.png'}];
-                this.finishQrcode();
-            }else if(item.payName == "人工支付"){
-                clearTimeout(this.timer);
-                this.ifCash = true;
-                this.otherWays = [{payName: '支付宝支付',img:'/static/img/zfbBig.png'},{payName: '微信支付',img:'/static/img/wxBig.png'}]
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
+        changeWays(type){
+            this.type = type;
+            this.ifCash = false;
+            this.initPays();
+        },
+        finishPay(){
+            this.$router.push({path:'/pay/finish'});
+        },
+        back(val){
+            clearInterval(this.timer);
+            if(val){
+                this.$router.push({path:'/register/register'});
+            }else{
+                this.saveUser(null);
+                this.$router.push({path:'/main'});
             }
         },
-        confirm: function(){
-            this.$router.push({path:'/complete/complete',query:{type: false,ifCash: true}});
+        //倒计时
+        countdown(){
+            this.timer = setInterval(() => {
+                this.count --;
+                if(this.count<10){
+                    this.zero = true;
+                }
+                if(this.count == 0){
+                    clearInterval(this.timer);
+                    this.$router.push('/main');
+                }
+            }, 1000);
         },
-        finishQrcode: function(){
-            this.timer = setTimeout(()=>{
-                console.log(111)
-                this.$router.push({path:'/complete/complete',query:{type: false,ifCash: false}});
-            },5000)
-        },
-        back: function(){
-            clearTimeout(this.timer);
-            this.$router.push({path:'/pay/pay'});
+        initPays(){
+            this.otherWays = [
+                {payName: '支付宝',img:'/static/img/zfbBig.png', type:'ali'},
+                {payName: '微信支付',img:'/static/img/wxBig.png', type:'we'},
+                {payName: '人工支付',img:'/static/img/peoplePay.png', type:'hand'}
+            ];
+            if(this.type == 'ali'){
+                this.payPic = '/static/img/alipay.png';
+                this.otherWays.splice(0,1);
+                //this.finishPay();
+            }else if(this.type =='we'){
+                this.payPic = '/static/img/wepay.png';
+                this.otherWays.splice(1,1);
+                //this.finishPay();
+            }else{
+                this.otherWays.splice(2,1);
+                this.ifCash = true;
+                this.countdown();
+            }
         }
-    }
+    },
+    mounted() {
+        this.type = this.$route.query.way;
+        //初始页面支付方式
+        this.initPays();
+    },
 }
 </script>
 <style lang="less" scoped>

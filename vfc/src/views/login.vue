@@ -44,8 +44,9 @@ export default {
             device: "device"
         })
     },
-    created() { },
-
+    created() {
+        this.saveUser(null);
+    },
     methods: {
         ...mapActions(["saveUser"]),
         login(type) {
@@ -86,7 +87,7 @@ export default {
         }
     },
     mounted() {
-
+        console.log(this.user);
     }
 };
 </script>
