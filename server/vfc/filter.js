@@ -10,7 +10,10 @@ const excluded = [
     '/user/modifyUserByCode',
     '/device/queryDeviceByCondition',
     '/device',
-    '/user/queryUserByCondition'
+    '/user/queryUserByCondition',
+    '/alarm/queryAlarmByCondition',
+    '/vaccine/queryVaccineNum',
+    '/vaccine/queryVaccineStorageNum'
 ];
 
 const bindUserFilter = async (ctx,next) => {

@@ -40,7 +40,6 @@
                     <p class="headP">请选择疫苗入库的抽屉</p>
                     <img src="/static/img/vaccineIn.png" class="vaccineIn">
             </div>
-            {{"这是打开抽屉的返回数据："+JSON.stringify(test)}}
             <div class="main">
                 <div class="mainTop">
                     <p class="ctOne">抽屉1</p>
@@ -88,7 +87,6 @@
                 </div>
             </div>
         </div>
-        <audio src="/static/audio/inputInStockCount.mp3" autoplay></audio>
     </div>
 </template>
 <script>
@@ -128,7 +126,7 @@
                 vaccineThreeY: '',//抽屉3号格疫苗Y
                 vaccineFourY: '',//抽屉4号格疫苗Y
                 endData:[],//完成的数据
-                test:''
+                audio:null
             }
         },
         computed: {
@@ -221,6 +219,14 @@
 
                 if(this.addVaccineOne || this.addVaccineTwo || this.addVaccineThree || this.addVaccineFour){
                     this.addForm = true;
+                    //提示语音
+                    this.audio.play();
+                    //打开抽屉
+                    this.$device.openDrawer({num:this.vaccineOneX+"#"+this.vaccineOneY}).then(res=>{
+                            console.log(res);
+                        }).catch(err=>{
+                            console.log('open drawer error: '+err.message());
+                        });
                 }
             },
             cancel(){
@@ -422,13 +428,6 @@
                         }
                     }
                 }
-                //打开抽屉
-                this.$device.openDrawer({num:this.vaccineOneX+"#"+this.vaccineOneY}).then(res=>{
-                        console.log(res);
-                        this.test=res;
-                    }).catch(err=>{
-                        console.log('open drawer error: '+err.message());
-                    });
                 console.log(this.endData);
                 this.queryDrawerByCondition();
                 this.addForm = false;
@@ -467,6 +466,8 @@
                 unitCode: this.device.unitCode,
                 unitName: this.device.unitName
             };
+            this.audio = new Audio();
+            this.audio.src = '/static/audio/inputInStockCount.mp3';
             this.queryDrawerByCondition();
         }
     };
