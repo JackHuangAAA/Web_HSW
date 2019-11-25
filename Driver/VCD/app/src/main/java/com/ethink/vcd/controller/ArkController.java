@@ -30,7 +30,7 @@ public class ArkController {
         //usb方法
         //  finger = SerialPortManager.getSerialPort(context, setting);
         try {
-            setting.setReadTimeout(2000);
+            setting.setReadTimeout(10000);
             serialPort = SerialPortManager.getSerialPort(path, setting);
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,11 +47,11 @@ public class ArkController {
     public String openDrawer(Set<Integer> set) {
         ByteBuffer buffer1 = ByteBuffer.allocate(8);
         ByteBuffer buffer2 = ByteBuffer.allocate(8);
-        for (Integer door:set){
+        for (Integer door : set) {
             if (door > 8) {
                 buffer2.put((byte) (0x00000001 << (door - 9)));
             } else {
-                buffer1.put((byte) (0x00000001 << (door- 1)));
+                buffer1.put((byte) (0x00000001 << (door - 1)));
             }
         }
         byte[] da1 = buffer1.array();
@@ -141,10 +141,10 @@ public class ArkController {
      * 读取温度传感器
      **/
     public List<Double> temperature(Set<Integer> set) {
-        logger.info("查询的传感器："+set);
+        logger.info("查询的传感器：" + set);
         List<Double> list1 = new ArrayList<>();
         ByteBuffer da1 = ByteBuffer.allocate(6);
-        for (Integer s:set) {
+        for (Integer s : set) {
             da1.put((byte) (1 << (s - 1)));
         }
         byte[] b_data = da1.array();
@@ -175,6 +175,65 @@ public class ArkController {
         }
         return list1;
     }
+
+    /**
+     * 设置冷藏柜温度
+     **/
+    public boolean setTemperature(int tem) {
+        byte[] da = new byte[]{0x55, (byte) 0xAA, 0x03, 0x06};
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.put(da);
+        buffer.putInt(tem);
+        buffer.put((byte) 0x00);
+        byte xor = CheckSum.xor(buffer.array());
+        buffer.put(xor);
+        buffer.put((byte) 0xF0);
+        byte[] data = buffer.array();
+        if (write(data, data.length)) {
+            byte[] re = new byte[7];
+            read(re, 0, re.length);
+            return re[4] == ((byte) 0x01);
+        }
+        return false;
+    }
+/**
+ *
+ * 查询内部温度
+ * **/
+public String temperatureArk(){
+    byte []da=new byte[]{0x55, (byte) 0xAA, 0x03, 0x08};
+    ByteBuffer buffer=ByteBuffer.allocate(7);
+    buffer.put(da);
+    buffer.put(CheckSum.xor(buffer.array()));
+    buffer.put((byte)0xF0);
+    byte [] data=buffer.array();
+    if(write(data,data.length)){
+        byte[] re = new byte[8];
+        read(re, 0, re.length);
+        int result = HexDump.toUInt16LE(re, 4);
+        logger.info("温度整数：{}",result);
+        int a = HexDump.toUInt16LE(re, 5);
+        String s = Integer.toBinaryString(a);
+        logger.info("单位正负换后：" + s);
+        if(s.substring(1,1).equals("1")){
+            //1为负数
+            s="-"+s;
+        }
+        if(s.startsWith("0")){
+            //单位摄氏度
+            s+="℃";
+        }else{
+            s+="℉";
+        }
+        return  s;
+
+    }
+    return "查询错误！";
+}
+
+
+
+
     /***
      * 查询单个温度
      * **/
