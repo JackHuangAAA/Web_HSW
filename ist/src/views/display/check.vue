@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="personInfContent">
-                <div :class="{personInf:index%2==0,personInfHeight:index%2==1}" v-for="(item,index) in personInf">
+                <div :class="{personInf:index%2==0,personInfHeight:index%2==1}" v-for="(item,index) in datas">
                     <div class="phone">
                         {{item.code}}
                     </div>
@@ -32,21 +32,38 @@
     </div>
 </template>
 <script>
+import io from  'socket.io-client';
+
 export default {
     data () {
         return {
-            personInf: [{code:'0089',name:'黄江华',time:'30'},
-                        {code:'0089',name:'李梦琪',time:'25'},
-                        {code:'0089',name:'王小明',time:'18'},
-                        {code:'0089',name:'王小明',time:'18'},
-                        {code:'0089',name:'王小明',time:'18'},{code:'0089',name:'王小明',time:'18'},
-                        {code:'0089',name:'王小明',time:'18'},
-                        {code:'0089',name:'王小明',time:'18'},
-                        {code:'0089',name:'王小明',time:'18'}]
+            socket: io.connect("/"),
+            datas: []
         }    
     },
-    mounted(){
+    methods: {
+        registerSocket(){
+            this.socket.emit("register", JSON.stringify({code:'queue_3'}));
+        },
+        freshDatas(){
+            this.socket.on('test', data => {
+                console.log('tttt----'+data);
+                this.queryQueue();
+            });
+        },
+        queryQueue(){
 
+            this.datas = [{code:'0088',name:'黄江华',time:'30'},
+                {code:'0089',name:'李梦琪',time:'25'}];
+        }
+    },
+    mounted(){
+        //建立socket连接
+        this.registerSocket();
+        //监听事件，刷新数据
+        this.freshDatas();
+        //查询队列中待接种数据
+        //this.queryQueue();
     }
 }
 </script>

@@ -18,13 +18,12 @@ export default {
     },
     mounted(){
         console.log(this.$route.path)
-        if(this.$route.path == '/displayHome/callNumber'){
-            this.title = '叫号综合显示屏';
-        }else if(this.$route.path == '/displayHome/desk'){
-            this.title = '1号登记台';
-        }else{
-            this.title = '留观显示屏';
-        }
+        //this.title = '叫号综合显示屏';
+        //this.$router.push('/display/queue');
+        //this.title = '1号登记台';
+        //this.$router.push('/display/desk');
+        this.title = '留观显示屏';
+        this.$router.push('/display/check');
     }
 }
 </script>
