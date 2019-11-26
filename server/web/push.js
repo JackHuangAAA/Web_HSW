@@ -37,7 +37,7 @@ let push = {
 const http = require('http').Server();
 const io = require('socket.io')(http);
 push.init(io);
-http.listen(9996 || 8080, '0.0.0.0');
+http.listen(Config.push.port || 8080, Config.push.host ||'0.0.0.0');
 
 async function execute() {
     _.mapKeys(map, async function (value, key) {

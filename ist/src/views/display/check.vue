@@ -64,6 +64,7 @@ export default {
         this.freshDatas();
         //查询队列中待接种数据
         //this.queryQueue();
+        __app.$emit("setTitle","留观显示屏")
     }
 }
 </script>
