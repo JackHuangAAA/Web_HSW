@@ -71,6 +71,9 @@ module.exports={
         if(!_.isEmpty(requestBody.id)){
             query.push({_id:requestBody.id});
         }
+        if(!_.isEmpty(requestBody.code)){
+            query.push({code:requestBody.code});
+        }
         query=query.length>0?{$and:query}:{};
         return await Domain.models.customer.find(query);
         

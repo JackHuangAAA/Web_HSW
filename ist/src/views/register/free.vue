@@ -14,7 +14,7 @@
             </div>
             <div>
                 <div class="complete-notice">请前往等待区，等待接种</div>
-                <div class="complete-message">您当前处于089号，前面还有32位</div>
+                <div class="complete-message">您当前处于{{sort?sort:''}}号，前面还有{{queueLength?queueLength:''}}位</div>
             </div>
             <div class="complete-confirm" @click="back()">确认</div>
         </div>
@@ -30,7 +30,9 @@ export default {
             count: 10,
             zero: false,
             timer: '',
-            data: null //接种信息
+            data: null, //接种信息
+            sort:2,
+            queueLength:1
         }    
     },
     components:{
@@ -65,16 +67,44 @@ export default {
             this.saveUser(null);
             this.$router.push('/main');
         },
-        initData(){
-            //从vuex user 里获取接种数据
-            //this.data = this.user;
+
+        async queryQueue() {
+            this.customerVaccine = this.user
+            //获取最后一个排队编号
+            let queue = await this.$api.get('/queue/queryQueueByCondition');
+            let max = queue.data.length;
+            this.sort_now = queue.data[max-1].sort?queue.data[max-1].sort:0;
+            this.sort = this.sort_now+1;
+            //获取未完成接种的排队人数
+            queue = await this.$api.get('/queue/queryQueueByCondition', {
+                status:1
+            });
+            this.queueLength = queue.data.length?queue.data.length:0;
+
+             await this.$api.post('/queue/saveQueue', {
+                sort: this.sort,
+                code: this.customerVaccine.customer.code,
+                name: this.customerVaccine.customer.name,
+                sex: this.customerVaccine.customer.sex,
+                age: this.customerVaccine.customer.age,
+                vaccine:{
+                    name: this.customerVaccine.vaccine.name,
+                    code: this.customerVaccine.vaccine.code,
+                    producer:this.customerVaccine.vaccine.product,
+                    count:1,
+                    date: new Date()
+                },
+                status: 1
+            });
         }
     },
     mounted(){
+        //将顾客接种信息插入排队队列
+        this.queryQueue();
         //倒计时
         this.countdown();
-        //初始接种数据
-        this.initData();
+
+
     }
 }
 </script>

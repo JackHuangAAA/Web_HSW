@@ -5,6 +5,7 @@ const paginate = require('mongoose-paginate');
  * 用户信息
  */
 const queueSchema = mongoose.Schema({
+    sort: Number,//接种序号，排队叫号
     code: String, //接种编号
     name: String, //姓名
     sex: String, //性别
@@ -12,6 +13,7 @@ const queueSchema = mongoose.Schema({
     vaccine:{
         name: String, //疫苗名称
         code: String, //疫苗code
+        batchNo: String,  //批次号
         producer:String, //生产厂家
         count:Number, //接种数量
         date: {type: Date, default: Date.now}  //接种时间

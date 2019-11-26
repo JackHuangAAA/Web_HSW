@@ -34,6 +34,7 @@ export default {
             this.deviceId = msg.deviceId;
         })
     }
+
 }
 </script>
 <style lang="less" scoped>
