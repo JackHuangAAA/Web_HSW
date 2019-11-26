@@ -14,6 +14,7 @@
             </div>
             <div class="vaccineName">
                 {{data?data.vaccine.name:''}}    自费
+
             </div>
             <div class="price">
                 ￥{{data?data.vaccine.cost:''}}

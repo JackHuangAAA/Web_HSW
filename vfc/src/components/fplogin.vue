@@ -83,9 +83,10 @@ export default {
       }
     });
     //激活指纹模块
-    if(config.env != 'development'){
-      this.fingerLogin();
-    }
+    // if(config.env != 'development'){
+    //   this.fingerLogin();
+    // }
+    this.fingerLogin();
   },
 };
 </script>

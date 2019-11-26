@@ -63,7 +63,7 @@
             this.getDevice();
             //监听扫描条形码结果
             this.scanBarcode();
-            //this.$router.push('/print/printMain');
+            // this.$router.push('/print/printMain');
             this.$router.push('/print/printInf');
         }
     }

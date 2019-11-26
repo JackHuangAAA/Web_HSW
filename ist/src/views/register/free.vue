@@ -16,7 +16,7 @@
                 <div class="complete-notice">请前往等待区，等待接种</div>
                 <div class="complete-message">您当前处于{{sort?sort:''}}号，前面还有{{queueLength?queueLength:''}}位</div>
             </div>
-            <div class="complete-confirm" @click="back()">返回首页</div>
+            <div class="complete-confirm" @click="back()">确认</div>
         </div>
     </div>
 </template>
