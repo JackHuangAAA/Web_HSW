@@ -34,14 +34,10 @@ export default {
                 status:1
             });
             this.queueLength = queue.data.length?queue.data.length:0;
-            console.log("*******");
-            console.log(this.queueLength);
         }
     },
     mounted(){
-        this.$device.getDeviceCode().then(res=>{
-
-        })
+        this.queryQueue()
     }
 }
 </script>

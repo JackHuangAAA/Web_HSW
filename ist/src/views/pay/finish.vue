@@ -71,7 +71,6 @@ export default {
             this.customerVaccine = this.user
         },
         async queryQueue() {
-            this.customerVaccine = this.user
             //获取最后一个排队编号
             let queue = await this.$api.get('/queue/queryQueueByCondition');
             this.sort_now = queue.data[0].sort?queue.data[0].sort:0;
@@ -84,14 +83,14 @@ export default {
 
             await this.$api.post('/queue/saveQueue', {
                 sort: this.sort,
-                code: this.customerVaccine.customer.code,
-                name: this.customerVaccine.customer.name,
-                sex: this.customerVaccine.customer.sex,
-                age: this.customerVaccine.customer.age,
+                code: this.user.customer.code,
+                name: this.user.customer.name,
+                sex: this.user.customer.sex,
+                age: this.user.customer.age,
                 vaccine:{
-                    name: this.customerVaccine.vaccine.name,
-                    code: this.customerVaccine.vaccine.code,
-                    producer:this.customerVaccine.vaccine.product,
+                    name: this.user.vaccine.name,
+                    code: this.user.vaccine.code,
+                    producer:this.user.vaccine.product,
                     count:1,
                     date: new Date()
                 },
