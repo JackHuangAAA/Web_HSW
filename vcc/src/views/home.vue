@@ -22,8 +22,6 @@
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{'这是温度:'+temperature}}
-                    {{'这是deviceid:'+JSON.stringify(device._id)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -32,7 +30,7 @@
                 <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
-                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" @changeMenu="changeMenu" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
         </div>
@@ -205,7 +203,7 @@ global.moment = moment;
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
                     this.saveDevice(res2.data[0]);
                     if(this.$route.path == '/' && this.device){
-                        console.log("跳转到main");
+                        console.log("进入home了")
                         this.$router.push('/main');
                     }
                 });

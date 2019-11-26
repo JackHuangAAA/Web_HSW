@@ -26,6 +26,7 @@
             <div class="scanTip-main-button" @click="finishOutStock">完成</div>
             <div class="scanTip-main-message">疫苗取出完毕请点击完成按钮</div>
         </div>
+        
     </div>
 </template>
 <script>

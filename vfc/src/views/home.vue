@@ -18,12 +18,10 @@
                         {{menuStatus}}
                     </div>
                 </div>
-                {{"这是deviceid："+JSON.stringify(device._id)}}
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{"这是温度的信息："+JSON.stringify(temperature)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -31,7 +29,7 @@
                 </div>
             </div>
             <div class="main">
-                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" :mainScreen="false" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
             <div class="footer"><p class="dateTime">{{nowdate}}</p></div>
             <!-- <audio src="/static/audio/temperatureAbnormal.mp3" autoplay></audio> -->
@@ -183,21 +181,23 @@ global.moment = moment;
         },
         mounted(){
             //获取设备信息
-            this.$device.getDeviceCode().then(res => {
-                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
-                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
-                    this.saveDevice(res.data[0]);
-                    if(this.$route.path == '/'){
-                        this.$router.push('/main');
-                    }
-                });
-            });
+            // this.$device.getDeviceCode().then(res => {
+            //     this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
+            //         console.log('vuex save device info:'+JSON.stringify(res.data[0]));
+            //         this.saveDevice(res.data[0]);
+            //         if(this.$route.path == '/'){
+            //             this.$router.push('/main');
+            //         }
+            //     });
+            // });
+            if(this.$route.path == '/'){
+                this.$router.push('/main');
+            }
             //第一次请求温度信息
             this.queryTemperature();
             //接收温度信息
             this.receiveTemperature();
             this.controllerAudio();
-            // this.audio.load();
         }
 }
 </script>

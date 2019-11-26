@@ -156,11 +156,11 @@
                 }
                 //position不为空时，调用Android接口，打开抽屉
                 if(position!=''){
-                    this.$device.openDrawer({num:position.slice(1)}).then(res=>{
+                    // this.$device.openDrawer({num:position.slice(1)}).then(res=>{
                         this.$router.push({ path: '/inout/scanTip', query: { openDrawerIds: ids} });
-                    }).catch(err=>{
-                        console.log('open drawer error: '+err.message());
-                    });
+                    // }).catch(err=>{
+                    //     console.log('open drawer error: '+err.message());
+                    // });
                 }
             }
         },

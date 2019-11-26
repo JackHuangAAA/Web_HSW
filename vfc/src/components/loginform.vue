@@ -8,7 +8,7 @@
       <div class="loginform-notice" :class="{'loginform-notice-hide':account}">账户不能为空</div>
     </Row>
     
-    <Row style="padding-top:40px;" class="loginform-row">
+    <Row style="padding-top:50px;" class="loginform-row">
       <Input v-model="pwd" type="password" autocomplete="off" placeholder="密码" @on-blur="passwordBlur">
         <img src="/static/img/pwd.png" class="icon" slot="suffix">
       </Input>

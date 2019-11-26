@@ -8,7 +8,6 @@
                 <div class="yellowBlock"></div>
                 <p class="yj">预警</p>
             </div>
-            {{"这是订阅的数据:"+JSON.stringify(test)}}
             <div class="vaccineContent">
                 <div v-for="(item,index) in vaccineData" :key="index" class="vaccineStatusShow">
                     <div class="vaccineLeft" v-if="item.vaccineOneName">
@@ -81,8 +80,7 @@
                 alarmNumber: 0,
                 customerNumber:0,
                 vaccineData:[],
-                state:false,
-                test:''
+                state:false
             }
         },
         computed: {
@@ -166,7 +164,6 @@
                     if(this.state==true){
                         console.log('SOCKET_DATA====> result:'+ JSON.stringify(data.data));
                         let res=JSON.parse(data.data);
-                        this.test=JSON.stringify(data.data);
                         if(res.type=="refresh"){
                             this.queryDrawerByCondition();
                             this.queryAlarmByByCondition();

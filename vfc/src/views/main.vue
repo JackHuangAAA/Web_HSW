@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="button">
+        <div class="button" v-if="!mainScreen">
             <div class="buttonLeft">
                 <div class="ymrk" @click="vaccineIn()">疫苗入库</div>
             </div>
@@ -100,10 +100,18 @@
             temperatureDes:{
                 type:String,
                 default:'正常'
+            },
+            mainScreen:{
+                type:Boolean,
+                default:false
             }
         },
         components:{},
         methods: {
+            ...mapActions({
+                saveUser: 'saveUser',
+                saveDevice: 'saveDevice'
+            }),
             //查询温度报警
             async queryAlarmByByCondition(){
                 let res = await this.$api.get("/alarm/queryAlarmByCondition",{
@@ -127,7 +135,14 @@
                     device: this.device._id,
                     surplusltTen: true
                 });
-                this.vaccineData = res.data.rs;
+                console.log(JSON.stringify(res))
+                let arr=[];
+                res.data.rs.forEach(item=>{
+                    if(item.surplus<10){
+                        arr.push(item);
+                    }
+                });
+                this.vaccineData = arr;
                 this.lackNumber = res.data.total;
             },
             receiveSocketData(){
@@ -156,12 +171,17 @@
         mounted() {
             this.state=true
             //查询首页数据
-            if(this.device){
-                this.queryVaccineNum();
-                this.queryAlarmByByCondition();
-                this.queryVaccineStorageNum();
-                this.receiveSocketData();
-            }
+            //获取设备信息
+            this.$device.getDeviceCode().then(res => {
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
+                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
+                    this.saveDevice(res.data[0]);
+                    this.queryVaccineNum();
+                    this.queryAlarmByByCondition();
+                    this.queryVaccineStorageNum();
+                    this.receiveSocketData();
+                });
+            });
         }
     }
 </script>
