@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/whiteLogo.png" class="logo">
-        <div class="code">设备编号：SC0003</div>
+        <div class="code">设备编号：{{deviceId}}</div>
         <p class="title">{{title}}</p>
         <div class="main">
             <router-view></router-view>
@@ -13,6 +13,7 @@
 export default {
     data () {
         return {
+            deviceId: '',
             title: ''
         }    
     },
@@ -29,7 +30,8 @@ export default {
         console.log("created")
         __app.$on("setTitle",msg=>{
             console.log(msg)
-            this.title = msg
+            this.title = msg.title;
+            this.deviceId = msg.deviceId;
         })
     }
 }

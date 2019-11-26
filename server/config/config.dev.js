@@ -96,23 +96,23 @@ module.exports = {
     },
     admin: {
         host: '0.0.0.0',
-        port: 9999,
+        port: 7000,
     },
     vcc: {
         host: '0.0.0.0',
-        port: 9998
+        port: 7001
     },
     vfc: {
         host: '0.0.0.0',
-        port: 9997
+        port: 7002
     },
     ist: {
         host: '0.0.0.0',
-        port: 9995
+        port: 7003
     },
-	push:{
-		host: '0.0.0.0',
-        port: 9996
-	}
+    push:{
+        host: '0.0.0.0',
+        port: 7004
+    }
 
 };

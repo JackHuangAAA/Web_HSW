@@ -50,7 +50,7 @@ export default {
         this.freshDatas();
         //查询队列中待接种数据
         //this.queryQueue();
-        __app.$emit("setTitle","叫号综合显示屏")
+        __app.$emit("setTitle",{title:"叫号综合显示屏",deviceId:"CN0001"})
     }
 }
 </script>
