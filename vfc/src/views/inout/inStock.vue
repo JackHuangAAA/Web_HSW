@@ -19,7 +19,6 @@
             <div class="inStockTitle">
                 <!--<img src="/static/img/back.png" class="back" @click="back()">-->
                 <p class="headP">请将入库疫苗扫码</p>
-                {{'这是扫码枪内容：'+JSON.stringify(test)}}
                 <img src="/static/img/inCabinet1.png" class="vaccineIn">
             </div>
             <div class="main">
@@ -80,8 +79,7 @@
                 clickIndex: 0,
                 ifTip: false,
                 exName: '',
-                exReason:'',
-                test:''
+                exReason:''
             }
         },
         computed: {
@@ -102,47 +100,19 @@
             async scanIn(){
                 this.$device.subscribe('SCANNER_RESULT',async (data) => {
                     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
-                    this.test=data;
-                    let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20190926', expiry:this.dateformat('2019-12-30'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
-                    //检查是否异常疫苗
-                    await this.checkException(result);
-                    //页面数据更新
-                    await this.freshTableDatas(result);
+                    // let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20190926', expiry:this.dateformat('2019-12-30'), product:'武汉生物制药有限公司'};// 模拟扫描枪返回结果 todo
+                    await this.$api.get('/zcy/queryVaccine',{code:data.data}).then(async (res)=>{
+                        console.log(res.data)
+                        let result=res.data;
+                        //检查是否异常疫苗
+                        await this.checkException(result);
+                        //页面数据更新
+                        await this.freshTableDatas(result);
+                    });                    
                 });
             },
             freshTableDatas(obj){
                 let array = this.tableDatas, flag = true;
-                /*for(let i=0;i<obj.length;i++){
-                    obj[i].device = this.device._id;
-                    if(_.isEmpty(array)){
-                        obj[i].count = 1;
-                        obj[i].total = 1;
-                        obj[i].surplus = 1;
-                        obj[i].clickIndex = 0;
-                        array.push(obj[i]);
-                    }else{
-                        for(let z=0;z<array.length;z++){
-                            if(obj[i].code == array[z].code){
-                                array[z].count = parseInt(array[z].count)+1;
-                                array[z].total = array[z].count;
-                                array[z].surplus = array[z].count;
-                                array[z].clickIndex = z;
-                                flag = false;
-                                break;
-                            }else{
-                                array[z].clickIndex = null;
-                            }
-                        }
-                        //已扫描疫苗中没有的新疫苗
-                        if(flag){
-                            obj[i].count = 1;
-                            obj[i].total = 1;
-                            obj[i].surplus = 1;
-                            obj[i].clickIndex = 0;
-                            array.unshift(obj[i]);
-                        }
-                    }
-                }*/
                 obj.device = this.device._id;
                 if(_.isEmpty(array)){
                     obj.count = 1;
@@ -172,6 +142,7 @@
                         array.unshift(obj);
                     }
                 }
+                console.log(this.tableDatas)
             },
             async checkException(result){
                 //判断有效期是否过期
@@ -184,7 +155,7 @@
                 //获取政采云的疫苗异常标准数据
                 let ex = await this.queryExceptionVaccine();
                 //检查异常条件待接口完善后，需要修改 todo
-                if(result.batchNo == ex.batchNo){
+                if(result.batchNo == ex.data.batchNo){
                     this.exReason = "报废失效"; // todo
                     this.exName = result.name;
                     this.ifTip = true; //提示框显示
@@ -201,6 +172,10 @@
         mounted() {
             //监听扫描枪事件
             this.scanIn();
+            this.$device.openDoor().then(res=>{
+                console.log("开门结果 result:"+ JSON.stringify(res.rsp));
+                //结果为true门打开了
+            })
         }
     };
 </script>

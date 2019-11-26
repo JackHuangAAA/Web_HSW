@@ -31,7 +31,7 @@ module.exports = {
         }
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.queue.paginate(query, {
-            sort: {"_id": -1},
+            sort: {"sort": -1},
             page: requestBody.page || 1,
             limit: parseInt(requestBody.size) || 10
         });
@@ -102,6 +102,6 @@ module.exports = {
             query.push({"vaccine.name":  new RegExp(requestBody.vaccineName)});
         }
         query = query.length > 0 ? { "$and": query } : {};
-        return await Domain.models.queue.find(query).sort({'createDate':-1});
+        return await Domain.models.queue.find(query).sort({'sort':1});
     }
 };

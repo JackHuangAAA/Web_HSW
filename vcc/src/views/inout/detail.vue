@@ -26,16 +26,16 @@
         </Row>
         <!--data-->
         <Row>
-            <Col span="12" class="column-pd">
+            <Col span="12" class="column-pd column-content" style="overflow:hidden">
             <Row v-for="(item, index) in leftDatas" class="stock-row row-center">
                 <Col span="6">{{index+1}}</Col>
                 <Col span="11">{{item.name}}</Col>
                 <Col span="7">{{item.surplus}}</Col>
             </Row>
             </Col>
-            <Col span="12" class="column-pd">
+            <Col span="12" class="column-pd column-content">
             <Row v-for="(item, index) in rightDatas" class="stock-row row-center">
-                <Col span="6">{{index+10}}</Col>
+                <Col span="6">{{index+9}}</Col>
                 <Col span="11">{{item.name}}</Col>
                 <Col span="7">{{item.surplus}}</Col>
             </Row>
@@ -79,9 +79,9 @@
                     ids: this.outVaccineIds
                 });
                 this.datas = res.data.rs;
-                if(this.datas.length>10){
-                    this.leftDatas = _.slice(this.datas,0,10);
-                    this.rightDatas = _.slice(this.datas,10);
+                if(this.datas.length>8){
+                    this.leftDatas = _.slice(this.datas,0,8);
+                    this.rightDatas = _.slice(this.datas,8);
                 }else{
                     this.leftDatas = this.datas;
                 }

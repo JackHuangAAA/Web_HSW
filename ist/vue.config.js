@@ -53,12 +53,12 @@ module.exports = {
   devServer: {
     proxy: {
       "/ist": {
-        target: "http://localhost:9995",
+        target: "http://localhost:7003",
         secure: false,
         pathRewrite: { "^/ist": "" }
       },
       "/socket.io": {
-        target: "http://localhost:9996",
+        target: "http://localhost:7004",
         secure: false,
         changeOrigin: true,
         ws: true

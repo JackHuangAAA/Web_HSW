@@ -61,7 +61,7 @@ export default {
         this.getDevice();
         //监听扫描条形码结果
         this.scanBarcode();
-        //this.$router.push('/main');
+        // this.$router.push('/main');
         this.$router.push('/register/register');
     }
 }

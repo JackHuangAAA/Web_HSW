@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="leftBottom">
+                <div class="leftBottom" v-if="vaccinationData">
                     <div class="personInf">
                         <div>
                             <div v-if="status">
@@ -49,7 +49,7 @@
                         <div class="vaccine-info">
                             <div class="vaccine-info-part">
                                 <div>接种部位：</div>
-                                <Select v-model="part" style="width:9rem;height:2.25rem">
+                                <Select v-model="partVal" style="width:9rem;height:2.25rem">
                                     <Option v-for="item in part" :value="item.value" :key="item.key">{{ item.value }}</Option>
                                 </Select>
                             </div>
@@ -59,13 +59,13 @@
                         </div>
                         <div class="vaccine-btnBox">
                             <!-- <button>取消接种</button> -->
-                            <button v-if="single && !status" @click="confirmVaccine()" :disabled="ready">确认接种</button>
+                            <button v-if="single && status && ready" @click="confirmVaccine()" :disabled="confirm">确认接种</button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="right">
-                <div class="vaccineInf">
+                <div class="vaccineInf" v-if="showScan">
                     <div class="vaccineInf-top">
                         <div><span>{{vaccine.name}}</span></div>
                         <div>监管码：<span>Y750230-64368</span></div>
@@ -76,14 +76,11 @@
                     <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.producer}}</span></div>
                     <div class="vaccineInf-bottom">接种份数：<span>1</span></div>
                 </div>
-                {{"这是接种疫苗的信息："+JSON.stringify(vaccine)}}
-                <br/>
-                {{"这是扫码枪的内容："+JSON.stringify(test)}}
             </div>
         </div>
         <div class="bottom-btn">
-            <button @click="()=>{this.$router.push('/main')}">返回主页</button>
-            <button @click="queryQueue()">下一位</button>
+            <button @click="()=>{this.$emit('changeMenu',0);this.$router.push('/main');}">返回主页</button>
+            <button @click="queryNextQueue()">下一位</button>
         </div>
         </div>
     </div>
@@ -100,6 +97,9 @@
                 progress:0,
                 batchId: uuid(),
                 commonData: null,
+                audio:null,
+                confirmAudio:null,
+                wrongAudio:null,
                 queryVaccine: null,  //查询的本地疫苗信息
                 vaccinationData: {
                     /*'customer':{
@@ -141,12 +141,14 @@
                         key: '右上臂'
                     }
                 ],
+                partVal:'',
                 single: true,
                 status:false,
                 vaccineName:'',
                 confirm:false,
                 ready:false,
-                test:''
+                showScan:false,
+                drawer:{}
             };
         },
         computed: {
@@ -160,24 +162,28 @@
             async matchInfo(){
                 //接收疫苗
                 this.$device.subscribe('SCANNER_RESULT', async (data) => {
+                    if(this.$route.path != '/vaccination/vaccination'){
+                        return false;
+                    }
                     console.log("这里是扫码枪的内容 result:" + JSON.stringify(data))
-                    this.test=data.data;
                     await this.getVaccine(data.data);//
                     let now=moment().isBefore(this.vaccine.expiry);
                     console.log("这里是日期比较结果："+JSON.stringify(now));
                     this.status=true;
+                    this.showScan=true;
                     //疫苗信息与扫码的疫苗比对,根据不同结果显示不同提示信息
                     if(this.vaccine.name == this.vaccineName && now){
                         this.progress = 1;
                         this.ready=true;
+                        this.confirmAudio.play();
                     }else{
                         this.progress = 2;
                         this.ready=false;
+                        this.wrongAudio.play();
                     }
                 });
             },
             async confirmVaccine(){
-                this.ready=false;
                 //排队状态完成
                 await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
                     console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
@@ -190,19 +196,42 @@
                     total: 0,
                     surplus: -1
                 });
+                console.log("这里是drawer的信息:"+JSON.stringify(this.drawer))
                 // //增加出库信息
                 this.saveInout({
-                    batchId: batchId,
+                    batchId: this.batchId,
                     ...this.commonData,
-                    x: this.vaccineOneX,
-                    y: this.vaccineOneY,
-                    code: this.vaccineOneCode,
-                    name: this.addVaccineOne,
-                    total: this.vaccineOneCount,
-                    surplus: this.vaccineOneCount
-                }); //todo
+                    x: this.drawer.x,
+                    y: this.drawer.y,
+                    code: this.drawer.vaccine.code,
+                    name: this.drawer.vaccine.name,
+                    total: this.drawer.vaccine.total,
+                    surplus: this.drawer.vaccine.surplus
+                }); 
                 //保存接种信息
-                //this.saveVaccination({}); //todo
+                this.saveVaccination({
+                    user:this.user._id,
+                    device:this.device._id,
+                    deviceType:this.device.type,
+                    unitCode:this.device.unitCode,
+                    unitName:this.device.unitName,
+                    sort:'',//排队序号(叫号码)
+                    customer:{          //顾客
+                        code: this.vaccinationData.code,   //接种序号
+                        name: this.vaccinationData.name,   //姓名
+                        age: this.vaccinationData.age,    //年龄
+                        vaccineCode: this.vaccinationData.vaccine.code,//疫苗编号
+                        vaccineName: this.vaccinationData.vaccine.name,//疫苗名称
+                        vaccineNum: this.vaccinationData.vaccine.count //疫苗数量
+                    },
+                    match:{                 //匹配信息(政采云响应结果)
+                        vaccineCode: this.vaccinationData.vaccine.code,//疫苗编号
+                        vaccineName: this.vaccinationData.vaccine.name,//疫苗名称
+                        supervisionCode: this.vaccine.supervisionCode,//药品监管码
+                        expiry: this.vaccine.expiry,       //有效日期
+                        producer: this.vaccine.producer    //生产商
+                    }
+                }); //todo
             },
             getExpiryDate(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
@@ -237,15 +266,24 @@
                     device: this.device._id,
                     sortSurplus: true,
                     surplusIsNotZero: true,
-                    code: obj.code //接种信息中的疫苗code todo
+                    code: obj.vaccine.code //接种信息中的疫苗code todo
                 });
                 let drawer = await this.queryDrawerByCondition({
                     device: this.device._id,
                     vaccineCode: this.queryVaccine._id
                 });
-                console.log('drawer===>'+JSON.stringify(drawer))
+                this.drawer=drawer.data[0];
+                let vacc={};
+                for(let i=0;i<this.drawer.vaccine.length;i++){
+                    if(this.vaccineName==this.drawer.vaccine[i].name){
+                        vacc=this.drawer.vaccine[i];
+                    }
+                }
+                this.drawer.vaccine=vacc;
+                console.log('drawer===>'+JSON.stringify(this.drawer))
                 //调用打开抽屉接口
-                this.$device.openDrawer({num:drawer.data[0].x+"#"+drawer.data[0].y});  //todo
+                this.$device.openDrawer({num:this.drawer.x+"#"+this.drawer.y});
+                this.audio.play();
             },
             //接收接种状态
             // receiveVaccinationStatus(){
@@ -255,11 +293,30 @@
             //         let res=JSON.parse(data.data)
             //         if(res.status=='finish'){
             //             this.$router.push('/main');
-            //         }                    
+            //         }
             //     });
             // },
             async queryQueue(){
                 await this.$api.get('/queue/queryQueueByCondition',{status:1}).then(res=>{
+                    this.vaccinationData=res.data[0];
+                    console.log(this.vaccinationData);
+                    this.vaccineName=res.data[0].vaccine.name;
+                });
+                this.openDrawer(this.vaccinationData);
+            },
+            async queryNextQueue(){
+                if(this.confirm){
+                    this.confirm=false; 
+                }else{
+                    //未接种点击下一位直接完成
+                    await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                        console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
+                    });
+                }
+                this.ready=false;
+                this.status=false;
+                this.showScan=false;
+                await this.$api.get('/queue/queryQueueByCondition',{status:1,next:1}).then(res=>{
                     this.vaccinationData=res.data[0];
                     console.log(this.vaccinationData);
                     this.vaccineName=res.data[0].vaccine.name;
@@ -276,12 +333,16 @@
                 unitCode: this.device.unitCode,
                 unitName: this.device.unitName
             };
+            this.audio=new Audio();
+            this.audio.src='/static/audio/outVaccine.mp3';
+            this.confirmAudio=new Audio();
+            this.confirmAudio.src='/static/audio/vaccineCheckConfirm.mp3';
+            this.wrongAudio=new Audio();
+            this.wrongAudio.src='/static/audio/vaccineCheckWrong.mp3';
             //接收推送的接种信息(home.vue中接收)
             // this.vaccinationData = this.$route.query.vaccination;
             //获取排队数据
             this.queryQueue();
-            //打开需要接种的疫苗所在抽屉
-            this.openDrawer(this.vaccine);
             //this.receiveVaccinationStatus();
             //接收疫苗扫描后结果，与接种信息比对
             this.matchInfo();

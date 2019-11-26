@@ -12,7 +12,7 @@
             <div class="complete-detail">
                 <detail/>
             </div>
-            <div class="complete-confirm" style="margin-top:11.5625rem;" @click="confirm()">返回首页</div>
+            <div class="complete-confirm" @click="confirm()">确认</div>
         </div>
     </div>
 </template>

@@ -18,12 +18,10 @@
                         {{menuStatus}}
                     </div>
                 </div>
-                {{"这是deviceid："+JSON.stringify(device._id)}}
                 <div class="pageName">{{pageName}}</div>
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{"这是温度的信息："+JSON.stringify(temperature)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -31,7 +29,7 @@
                 </div>
             </div>
             <div class="main">
-                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" :mainScreen="false" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
             <div class="footer"><p class="dateTime">{{nowdate}}</p></div>
             <!-- <audio src="/static/audio/temperatureAbnormal.mp3" autoplay></audio> -->
@@ -133,9 +131,9 @@ global.moment = moment;
             //第一次主动请求温度信息
             queryTemperature(){
                 console.log("CONTROLLER_BOARD===>TEMPERATURE");
-                this.$device.temperature({num:"1"}).then(res=>{
+                this.$device.temperature().then(res=>{
                     console.log("第一次主动请求数据 result:"+JSON.stringify(res));
-                    let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    let temp = '', val= JSON.parse(res.res).toFixed(1);
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
@@ -156,8 +154,8 @@ global.moment = moment;
             //接收温度信息
             receiveTemperature(){
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[0].toFixed(1));
-                    let temp = '', val= JSON.parse(data.res)[0].toFixed(1);
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res).toFixed(1));
+                    let temp = '', val= JSON.parse(data.res).toFixed(1);
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
@@ -183,21 +181,23 @@ global.moment = moment;
         },
         mounted(){
             //获取设备信息
-            this.$device.getDeviceCode().then(res => {
-                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
-                    console.log('vuex save device info:'+JSON.stringify(res.data[0]));
-                    this.saveDevice(res.data[0]);
-                    if(this.$route.path == '/'){
-                        this.$router.push('/main');
-                    }
-                });
-            });
+            // this.$device.getDeviceCode().then(res => {
+            //     this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res)=>{
+            //         console.log('vuex save device info:'+JSON.stringify(res.data[0]));
+            //         this.saveDevice(res.data[0]);
+            //         if(this.$route.path == '/'){
+            //             this.$router.push('/main');
+            //         }
+            //     });
+            // });
+            if(this.$route.path == '/'){
+                this.$router.push('/main');
+            }
             //第一次请求温度信息
             this.queryTemperature();
             //接收温度信息
             this.receiveTemperature();
             this.controllerAudio();
-            // this.audio.load();
         }
 }
 </script>
