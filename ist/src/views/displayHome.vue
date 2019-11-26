@@ -18,21 +18,13 @@ export default {
         }    
     },
     mounted(){
-<<<<<<< HEAD
-        console.log(this.$route.path)
-        this.title = '叫号综合显示屏';
-        this.$router.push('/display/queue');
-=======
         //console.log(this.$route.path)
         //this.title = '叫号综合显示屏';
         //this.$router.push('/display/queue');
->>>>>>> develop
         //this.title = '1号登记台';
         //this.$router.push('/display/desk');
         //this.title = '留观显示屏';
         //this.$router.push('/display/check');
-<<<<<<< HEAD
-=======
     },
     created(){
         console.log("created")
@@ -41,8 +33,8 @@ export default {
             this.title = msg.title;
             this.deviceId = msg.deviceId;
         })
->>>>>>> develop
     }
+
 }
 </script>
 <style lang="less" scoped>
