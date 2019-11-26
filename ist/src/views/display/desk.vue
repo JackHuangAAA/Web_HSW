@@ -41,6 +41,7 @@ export default {
         this.registerSocket();
         //监听事件，刷新数据
         this.freshDatas();
+        __app.$emit("setTitle","1号登记台")
     }
 }
 </script>
