@@ -4,13 +4,13 @@
         <div class="vaccineInf">
             <p class="vaccineInfTitle">脊髓灰质炎疫苗</p>
             <div class="information">
-                生产厂家：<span style="font-weight:bold;font-size:1.75rem;">中科生物制药股份有限公司</span>
+                生产厂家：<span>中科生物制药股份有限公司</span>
             </div>
             <div class="code">
-                批次号：<span style="font-weight:bold;font-size:1.75rem;">HU5747908488</span>
+                批次号：<span>HU5747908488</span>
             </div>
             <div class="date">
-                有效期：<span style="font-weight:bold;font-size:1.75rem;">2019-09-18 12:30:28   至  2022-12-29 12:20:19</span>
+                有效期：<span>2019-09-18 12:30:28   至  2022-12-29 12:20:19</span>
             </div>
         </div>
     </div>

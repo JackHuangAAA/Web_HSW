@@ -22,8 +22,6 @@
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{'这是温度:'+temperature}}
-                    {{'这是deviceid:'+JSON.stringify(device._id)}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
@@ -32,7 +30,7 @@
                 <p class="dateTime">{{nowdate}}</p>
             </div>
             <div class="main">
-                <router-view :temperature="parseFloat(temperature)" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
+                <router-view :temperature="parseFloat(temperature)" @changeMenu="changeMenu" :temperatureDes="temperatureDes" ref="contentView" style="width:100%;height:100%"></router-view>
             </div>
         </div>
         </div>
@@ -140,9 +138,9 @@ global.moment = moment;
                 this.audio = new Audio();
                 this.audio.src = '/static/audio/temperatureAbnormal.mp3';
                 console.log("CONTROLLER_BOARD===>TEMPERATURE");
-                this.$device.temperature({num:"1"}).then(res=>{
+                this.$device.temperature().then(res=>{
                     console.log("第一次主动请求数据 result:"+JSON.stringify(res));
-                    let temp = '', val= JSON.parse(res.res)[0].toFixed(1);
+                    let temp = '', val= JSON.parse(res.res).toFixed(1);
                     console.log("获取到的值"+JSON.stringify(val))
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
@@ -164,8 +162,8 @@ global.moment = moment;
             //接收温度信息
             receiveTemperature(){
                 this.$device.subscribe('NOW_TEMPERATURE', (data) => {
-                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res)[0].toFixed(1));
-                    let temp = '', val= JSON.parse(data.res)[0].toFixed(1);
+                    console.log('SERVER_PUSH==>TEMPERATURE,result:'+JSON.parse(data.res).toFixed(1));
+                    let temp = '', val= JSON.parse(data.res).toFixed(1);
                     if(val>8 || val<2){
                         this.audio.play();//异常语音播放
                         this.temperatureDes = '异常';
@@ -205,7 +203,7 @@ global.moment = moment;
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
                     this.saveDevice(res2.data[0]);
                     if(this.$route.path == '/' && this.device){
-                        console.log("跳转到main");
+                        console.log("进入home了")
                         this.$router.push('/main');
                     }
                 });

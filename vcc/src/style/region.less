@@ -214,15 +214,30 @@ div{
 // }
 .chooseVaccine{
     width: 50%;
+    height: 1.875rem;
     padding:0 10% 0 5%;
     position: absolute;
     bottom: 8%;
     right: 0;
 }
+/deep/.chooseVaccine .ivu-select-selection{
+    height: 1.875rem;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-placeholder{
+    height: 1.875rem;
+    line-height: 1.875rem;
+    font-size: 1rem;
+}
+/deep/.ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    height: 1.875rem;
+    line-height: 1.875rem;
+    font-size: 1rem;
+}
 .boxAdd{
     position: absolute;
-    right: 3%;
-    bottom: 16%;
+    right: 0;
+    bottom: 8%;
+    padding: 2.2% 3%;
 }
 .vaccineBox{
     position: relative;
@@ -248,12 +263,18 @@ div{
 .vaccineBox-list-title{
     width: 78%;
     text-align: center;
+    font-size: 1rem;
 }
 .vaccineBox-list-del{
     width: 22%;
+    height: 100%;
     text-align: center;
+    justify-content: center;
     display: flex;
     align-items: center;
+    img{
+        
+    }
 }
 .noVaccineTwo{
     width: 38.5%;
@@ -319,4 +340,11 @@ div{
     top: 50%;
     margin-top: -1.5px;
     left: 73%;
+}
+.ivu-select-item{
+    padding: 14px 16px;
+    font-size: 14px;
+}
+.ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    font-size: 14px;
 }

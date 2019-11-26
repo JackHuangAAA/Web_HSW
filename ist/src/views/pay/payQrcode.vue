@@ -12,7 +12,7 @@
             <div class="tips"  v-if="!ifCash">
                 请用{{type=='ali'?'支付宝':'微信'}}扫码付款:
             </div>
-            <div class="vaccineName">
+            <div class="vaccineName" :class="{top:ifCash}">
                 脊髓灰质炎疫苗    自费
             </div>
             <div class="price">
