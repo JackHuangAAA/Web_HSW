@@ -72,7 +72,8 @@ export default {
             this.customerVaccine = this.user
             //获取最后一个排队编号
             let queue = await this.$api.get('/queue/queryQueueByCondition');
-            this.sort_now = queue.data[0].sort?queue.data[0].sort:0;
+            let max = queue.data.length;
+            this.sort_now = queue.data[max-1].sort?queue.data[max-1].sort:0;
             this.sort = this.sort_now+1;
             //获取未完成接种的排队人数
             queue = await this.$api.get('/queue/queryQueueByCondition', {

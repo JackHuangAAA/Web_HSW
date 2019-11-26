@@ -32,7 +32,7 @@ module.exports = {
         }
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.queue.paginate(query, {
-            sort: {"_id": -1},
+            sort: {"sort": 1},
             page: requestBody.page || 1,
             limit: parseInt(requestBody.size) || 10
         });
@@ -47,14 +47,14 @@ module.exports = {
      */
     saveQueue: async function(requestBody){
         logger.debug(`saveQueue param: ${JSON.stringify(requestBody)}`);
-        //新增排队信息是推送至socket.io
+        //新增排队信息是推送至socket.io,队列显示屏，刷新排队信息
         let channel = "UpdateQueueStatus";
-        let message={};
+        let message = {};
         message.type = channel;
-        message.code = 'IST0001';
+        message.code = 'IST0001Q';
+        message.data = 'update';
         message = JSON.stringify(message);
         Domain.redis.pub.publishAsync(channel, message);
-
         return await Domain.models.queue.create(requestBody);
     },
 
@@ -75,11 +75,12 @@ module.exports = {
      */
     modifyQueue: async function(requestBody){
         logger.debug("modifyQueue:" + JSON.stringify(requestBody));
-        //新增排队信息是推送至socket.io
+        //新增排队信息是推送至socket.io,队列显示屏，刷新排队信息
         let channel = "UpdateQueueStatus";
         let message = {};
         message.type = channel;
-        message.code = 'IST0001';
+        message.code = 'IST0001Q';
+        message.data = 'update';
         message = JSON.stringify(message);
         Domain.redis.pub.publishAsync(channel, message);
         return await Domain.models.queue.updateOne({'_id': requestBody.id},
@@ -119,14 +120,14 @@ module.exports = {
         }
         query = query.length > 0 ? { "$and": query } : {};
 
-        let result = await Domain.models.queue.find(query).sort({'createDate':-1});
-        //推送接种人信息到屏幕
+        let result = await Domain.models.queue.find(query).sort({'sort':1});
+        //推送接种人信息到屏幕，接种屏
         if(!_.isEmpty(requestBody.next)){
             let channel = "NextVaccination";
             let message = {};
             message.type = channel;
             message.code = 'IST0001D';
-            message.data = result;
+            message.data = result[0];
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
         }

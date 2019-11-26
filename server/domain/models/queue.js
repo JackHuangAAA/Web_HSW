@@ -13,6 +13,7 @@ const queueSchema = mongoose.Schema({
     vaccine:{
         name: String, //疫苗名称
         code: String, //疫苗code
+        batchNo: String,  //批次号
         producer:String, //生产厂家
         count:Number, //接种数量
         date: {type: Date, default: Date.now}  //接种时间
