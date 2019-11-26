@@ -72,6 +72,9 @@ export default {
         this.freshDatas();
         //查询队列中待接种数据
         this.queryQueue();
+        //this.queryQueue();
+        __app.$emit("setTitle",{title:"留观显示屏",deviceId:"CK0001"})
+
     }
 }
 </script>

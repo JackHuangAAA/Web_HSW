@@ -53,6 +53,8 @@ export default {
         this.freshDatas();
         //查询队列中待接种数据,全部为等待
         this.queryQueue();
+        __app.$emit("setTitle",{title:"叫号综合显示屏",deviceId:"CN0001"})
+
     }
 }
 </script>
