@@ -56,15 +56,19 @@ later.setInterval(execute, later.parse.cron('0/1 * * * * ?'));
 //监听主题信息
 Domain.redis.pub.on('message', (channel, message) => {
     logger.info('receive sub '+channel+' data; '+message);
+
     let result = JSON.parse(message);
 
     let value= map[result.code];
-
     if (value!=undefined){
         value.emit( channel, result);
+
     }
 });
 
 //订阅主题
 Domain.redis.pub.subscribe('receiveVaccination');
 Domain.redis.pub.subscribe('receiveVaccinationStatus');
+Domain.redis.pub.subscribe('UpdateQueueStatus');
+Domain.redis.pub.subscribe('NextVaccination');
+Domain.redis.pub.subscribe('VaccinationCheck');

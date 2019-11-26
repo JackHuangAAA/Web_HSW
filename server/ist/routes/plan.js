@@ -58,4 +58,18 @@ router.post('/modifyPlan',
     })
 );
 
+/**
+ * @api {GET} /plan/queryPlanByCondition  根据条件查询接种计划
+ * @apiGroup Plan
+ * @apiVersion 1.0.0
+ * @apiDescription 根据条件查询接种计划
+ * @apiParam {Object} json
+ * @apiSuccess [array]    接种计划
+ */
+router.get('/queryPlanByCondition',
+    Libs.router(async (ctx, next) => {
+        return await Domain.services.plan.queryPlanByCondition(ctx.request.query);
+    })
+);
+
 module.exports = router;

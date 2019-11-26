@@ -25,7 +25,7 @@ import Vue from "vue"
         },
         ['SAVE_DEVICE']: (state, action) => {
             state.device = action;
-        },
+        }
     },
 
     actions: {
@@ -34,7 +34,7 @@ import Vue from "vue"
         },
         saveDevice({ commit }, device) {
             commit('SAVE_DEVICE', device);
-        },
+        }
     }
 }
 

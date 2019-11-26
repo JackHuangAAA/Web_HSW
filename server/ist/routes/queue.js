@@ -13,6 +13,7 @@ const logger = Libs.logger.getLogger('queue');
  * @apiParam {String} [sex] 性别
  * @apiParam {Number} [age] 年龄
  * @apiParam {String} [vaccineName] 接种疫苗名称
+ * @apiParam {Number} [next] 是否为下一位操作的查询，1是，不是为空
  * @apiSuccess {JSON}  Object  数组
  */
 router.get('/queryQueue',

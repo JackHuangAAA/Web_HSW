@@ -7,7 +7,7 @@
             <div>扫码挂号</div>
             <div>请将疫苗本条码对准扫描口，进行扫码</div>
         </div>
-        <div class="awaitPeople">当前等待接种<span>20</span>人</div>
+        <div class="awaitPeople">当前等待接种<span>{{queueLength?queueLength:''}}</span>人</div>
     </div>
 </template>
 
@@ -17,7 +17,7 @@ import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
     data() {
         return {
-               
+            queueLength:null
         }
     },
     computed: {
@@ -26,8 +26,22 @@ export default {
             device: 'device'
         })
     },
-    mounted(){
+    methods:{
+        async queryQueue() {
 
+            //获取未完成接种的排队人数
+            let queue = await this.$api.get('/queue/queryQueueByCondition', {
+                status:1
+            });
+            this.queueLength = queue.data.length?queue.data.length:0;
+            console.log("*******");
+            console.log(this.queueLength);
+        }
+    },
+    mounted(){
+        this.$device.getDeviceCode().then(res=>{
+
+        })
     }
 }
 </script>
