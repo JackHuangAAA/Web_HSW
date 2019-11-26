@@ -41,7 +41,7 @@ export default {
         this.registerSocket();
         //监听事件，刷新数据
         this.freshDatas();
-        __app.$emit("setTitle",{title:"1号登记台",deviceId:"DK0001"})
+        __app.$emit("setTitle",{title:"1号接种台",deviceId:"DK0001"})
     }
 }
 </script>

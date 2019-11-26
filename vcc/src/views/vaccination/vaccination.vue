@@ -185,7 +185,7 @@
             },
             async confirmVaccine(){
                 //排队状态完成
-                await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
                     console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
                 });
                 this.confirm=true;
@@ -309,7 +309,7 @@
                     this.confirm=false; 
                 }else{
                     //未接种点击下一位直接完成
-                    await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                    await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
                         console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
                     });
                 }

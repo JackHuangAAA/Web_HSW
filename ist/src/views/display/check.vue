@@ -52,7 +52,6 @@ export default {
             });
         },
         queryQueue(){
-
             this.datas = [{code:'0088',name:'黄江华',time:'30'},
                 {code:'0089',name:'李梦琪',time:'25'}];
         }
