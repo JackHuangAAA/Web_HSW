@@ -32,11 +32,7 @@ module.exports = {
         }
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.queue.paginate(query, {
-<<<<<<< HEAD
             sort: {"sort": 1},
-=======
-            sort: {"sort": -1},
->>>>>>> develop
             page: requestBody.page || 1,
             limit: parseInt(requestBody.size) || 10
         });
@@ -123,7 +119,6 @@ module.exports = {
             query.push({"vaccine.name":  new RegExp(requestBody.vaccineName)});
         }
         query = query.length > 0 ? { "$and": query } : {};
-<<<<<<< HEAD
 
         let result = await Domain.models.queue.find(query).sort({'sort':1});
         //推送接种人信息到屏幕，接种屏
@@ -136,10 +131,7 @@ module.exports = {
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
         }
-
         return result;
-=======
-        return await Domain.models.queue.find(query).sort({'sort':1});
->>>>>>> develop
+
     }
 };

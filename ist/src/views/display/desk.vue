@@ -21,7 +21,7 @@ import io from  'socket.io-client';
 export default {
     data () {
         return {
-            socket: io.connect("http://localhost:9996"),
+            socket: io.connect("/"),
             nextVaccination: null
         }    
     },
