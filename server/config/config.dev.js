@@ -109,6 +109,10 @@ module.exports = {
     ist: {
         host: '0.0.0.0',
         port: 9995
-    }
+    },
+	push:{
+		host: '0.0.0.0',
+        port: 9996
+	}
 
 };
