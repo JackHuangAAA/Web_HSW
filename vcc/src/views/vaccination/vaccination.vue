@@ -293,7 +293,7 @@
             //         let res=JSON.parse(data.data)
             //         if(res.status=='finish'){
             //             this.$router.push('/main');
-            //         }                    
+            //         }
             //     });
             // },
             async queryQueue(){
