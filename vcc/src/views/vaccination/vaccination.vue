@@ -73,7 +73,7 @@
                         <div class="mt24">疫苗剂量：<span>0.5ml/支</span></div>
                     </div>
                     <div class="vaccineInf-bottom">有效期：<span>2019-09-18 12:30:28   至  2022-12-29 12:20:19</span></div>
-                    <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.producer}}</span></div>
+                    <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.product}}</span></div>
                     <div class="vaccineInf-bottom">接种份数：<span>1</span></div>
                 </div>
             </div>
@@ -229,7 +229,7 @@
                         vaccineName: this.vaccinationData.vaccine.name,//疫苗名称
                         supervisionCode: this.vaccine.supervisionCode,//药品监管码
                         expiry: this.vaccine.expiry,       //有效日期
-                        producer: this.vaccine.producer    //生产商
+                        product: this.vaccine.product    //生产商
                     }
                 }); //todo
             },

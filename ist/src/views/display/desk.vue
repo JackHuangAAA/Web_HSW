@@ -4,7 +4,7 @@
         <div class="vaccineInf">
             <p class="vaccineInfTitle">{{nextVaccination?nextVaccination.vaccine.name:''}}</p>
             <div class="information">
-                生产厂家：<span>{{nextVaccination?nextVaccination.vaccine.producer:''}}</span>
+                生产厂家：<span>{{nextVaccination?nextVaccination.vaccine.product:''}}</span>
             </div>
             <div class="code">
                 批次号：<span>{{nextVaccination?nextVaccination.vaccine.batchNo:''}}</span>
@@ -31,7 +31,6 @@ export default {
         },
         freshDatas(){
             this.socket.on('NextVaccination', data => {
-                console.log(data);
                 this.nextVaccination = data.data;
             });
         }
