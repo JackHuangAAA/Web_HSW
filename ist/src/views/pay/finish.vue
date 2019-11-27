@@ -73,7 +73,8 @@ export default {
         async queryQueue() {
             //获取最后一个排队编号
             let queue = await this.$api.get('/queue/queryQueueByCondition');
-            this.sort_now = queue.data[0].sort?queue.data[0].sort:0;
+            let max = queue.data?queue.data.length:0;
+            this.sort_now = (max!=0)?queue.data[max-1].sort:0;
             this.sort = this.sort_now+1;
             //获取未完成接种的排队人数
             queue = await this.$api.get('/queue/queryQueueByCondition', {
@@ -90,7 +91,12 @@ export default {
                 vaccine:{
                     name: this.user.vaccine.name,
                     code: this.user.vaccine.code,
-                    producer:this.user.vaccine.product,
+                    product:this.user.vaccine.product,
+                    batchNo:this.user.vaccine.batchNo,
+                    dosage:this.user.vaccine.dosage,
+                    supervisionCode:this.user.vaccine.supervisionCode,
+                    expiry:this.user.vaccine.expiry,
+                    cost:this.user.vaccine.cost,
                     count:1,
                     date: new Date()
                 },

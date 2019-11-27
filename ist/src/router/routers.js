@@ -1,6 +1,6 @@
 const routers = [
     {
-        path: '/1',               //显示器页面
+        path: '/2',               //显示器页面
         component: (resolve) => require(['@/views/displayHome.vue'], resolve),
         children: [
             { path: '/display/queue', component: (resolve) => require(['@/views/display/queue.vue'], resolve) }, //叫号综合显示屏
@@ -9,7 +9,7 @@ const routers = [
         ]
     },
     {
-        path: '/2',
+        path: '/',
         component: (resolve) => require(['@/views/printHome.vue'], resolve),   //补打一体机主页
         children:[
             { path: '/print/printMain', component: (resolve) => require(['@/views/print/printMain.vue'], resolve) },//打印主页
@@ -18,7 +18,7 @@ const routers = [
         ]
     },
     {
-        path: '/',
+        path: '/2',
         component: (resolve) => require(['@/views/home.vue'], resolve),
         children: [
             { path: '/main', component: (resolve) => require(['@/views/main.vue'], resolve) },  //智能接种主页

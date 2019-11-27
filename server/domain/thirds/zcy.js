@@ -4,8 +4,7 @@
  */
 
 const logger = Libs.logger.getLogger('zcy')
-var mongoose = require('mongoose')
-const moment = require('moment');
+var moment = require('moment')
 
 module.exports = {
     /**
@@ -147,17 +146,17 @@ module.exports = {
     queryVaccine: async function(requestBody) {
         logger.debug(`queryVaccine param: ${JSON.stringify(requestBody)}`);
         let vaccineMap = new Map([
-            ["ym991",{code: 'ym991',name: '卡介苗', batchNo:'B-998',supervisionCode: 'jg20190920001', expiry:moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'), product: '上海生物'}],
-            ["ym992",{code: 'ym992',name: '免费乙肝',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '大连汉信' }],
-            ["ym993",{code: 'ym993',name: '脊灰灭活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '医科院' }],
-            ["ym994",{code: 'ym994',name: '百白破',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '武汉生物'}],
-            ["ym995",{code: 'ym995',name: '麻风',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '北京天坛'}],
-            ["ym996",{code: 'ym996',name: '麻腮风',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '上海生物'}],
-            ["ym997",{code: 'ym997',name: 'AC群结合疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '无锡罗益'}],
-            ["ym998",{code: 'ym998',name: '水痘减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '长春祁健'}],
-            ["ym999",{code: 'ym999',name: '23价肺炎',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '成都生物'}],
-            ["ym1000",{code: 'ym1000',name: '甲肝减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '浙江普康'}],
-            ["ym1001",{code: 'ym1001',name: '流脑A群多糖',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),product: '武汉生物'}]
+            ["ym991",{code: 'ym991',name: '卡介苗', batchNo:'B-998',supervisionCode: 'jg20190920001', expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'), product: '上海生物'}],
+            ["ym992",{code: 'ym992',name: '免费乙肝',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '大连汉信' }],
+            ["ym993",{code: 'ym993',name: '脊灰灭活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '医科院' }],
+            ["ym994",{code: 'ym994',name: '百白破',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '武汉生物'}],
+            ["ym995",{code: 'ym995',name: '麻风',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '北京天坛'}],
+            ["ym996",{code: 'ym996',name: '麻腮风',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '上海生物'}],
+            ["ym997",{code: 'ym997',name: 'AC群结合疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '无锡罗益'}],
+            ["ym998",{code: 'ym998',name: '水痘减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '长春祁健'}],
+            ["ym999",{code: 'ym999',name: '223价肺炎',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '成都生物'}],
+            ["ym1000",{code: 'ym1000',name: '甲肝减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '浙江普康'}],
+            ["ym1001",{code: 'ym1001',name: '流脑A群多糖',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '武汉生物'}]
         ]);
         let result= vaccineMap.get(requestBody.code);
         return result;
@@ -175,7 +174,7 @@ module.exports = {
                 name: '卡介苗',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '上海生物'
             },
             {
@@ -183,7 +182,7 @@ module.exports = {
                 name: '免费乙肝',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '大连汉信'
             },
             {
@@ -191,7 +190,7 @@ module.exports = {
                 name: '脊灰灭活疫苗',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '医科院'
             },
             {
@@ -199,7 +198,7 @@ module.exports = {
                 name: '百白破',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '武汉生物'
             },
             {
@@ -207,7 +206,7 @@ module.exports = {
                 name: '麻风',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '北京天坛'
             },
             {
@@ -215,7 +214,7 @@ module.exports = {
                 name: '麻腮风',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '上海生物'
             },
             {
@@ -223,7 +222,7 @@ module.exports = {
                 name: 'AC群结合疫苗',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '无锡罗益'
             },
             {
@@ -231,7 +230,7 @@ module.exports = {
                 name: '水痘减毒活疫苗',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '长春祁健'
             },
             {
@@ -239,7 +238,7 @@ module.exports = {
                 name: '23价肺炎',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '成都生物'
             },
             {
@@ -247,7 +246,7 @@ module.exports = {
                 name: '甲肝减毒活疫苗',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '浙江普康'
             },
             {
@@ -255,7 +254,7 @@ module.exports = {
                 name: '流脑A群多糖',
                 batchNo:'B-998',
                 supervisionCode: 'jg20190920001',
-                expiry: moment('2020-11-20T06:14:02.478Z ').format('YYYY-MM-DD HH:mm:ss'),
+                expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),
                 product: '武汉生物'
             }
         ];
