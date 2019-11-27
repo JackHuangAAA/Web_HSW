@@ -28,7 +28,7 @@ public class ArkController {
 //        UsbSerialPortSetting setting = new UsbSerialPortSetting(UsbSerialPortSetting.PL2303_VENDOR, UsbSerialPortSetting.PL2303_PRODUCT, 0,
 //                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
         try {
-            setting.setReadTimeout(2000);
+            setting.setReadTimeout(8000);
             serialPort = SerialPortManager.getSerialPort(path, setting);
             //usb方法
             //  finger = SerialPortManager.getSerialPort(context, setting);
@@ -73,6 +73,27 @@ public class ArkController {
         }
         return "000";
     }
+    /**
+     * 设置冷藏柜温度
+     **/
+    public boolean setTemperature(int tem) {
+        byte[] da = new byte[]{0x55, (byte) 0xAA, 0x03, 0x06};
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.put(da);
+        buffer.put( (byte)(tem & 0xff));
+        buffer.put((byte)0x00);
+        byte xor = CheckSum.xor(buffer.array(),3, 2, buffer.get(2));
+        buffer.put(xor);
+        buffer.put((byte) 0xF0);
+        byte[] data = buffer.array();
+        if (write(data, data.length)) {
+            byte[] re = new byte[7];
+            read(re, 0, re.length);
+            return re[4] == ((byte) 0x01);
+        }
+        return false;
+    }
+
 
     public static byte por(byte[] buffer, int offset, int length, byte iv) {
         byte result = iv;
@@ -81,7 +102,41 @@ public class ArkController {
         }
         return result;
     }
+    /**
+     *
+     * 查询内部温度
+     * **/
+    public String temperatureArk(){
+        byte []da=new byte[]{0x55, (byte) 0xAA, 0x01, 0x08};
+        ByteBuffer buffer=ByteBuffer.allocate(7);
+        buffer.put(da);
+        buffer.put(CheckSum.xor(buffer.array(),3, 1, buffer.get(2)));
+        buffer.put((byte)0xF0);
+        byte [] data=buffer.array();
+        if(write(data,data.length)){
+            byte[] re = new byte[8];
+            read(re, 0, re.length);
+            int result = HexDump.toUInt16LE(re, 4);
+            logger.info("温度整数：{}",result);
+            int a = HexDump.toUInt16LE(re, 5);
+            String s = Integer.toBinaryString(a);
+            logger.info("单位正负换后：" + s);
+            if(s.substring(1,1).equals("1")){
+                //1为负数
+                s="-"+s;
+            }
+          /*  if(s.startsWith("0")){
+                //单位摄氏度℃
+                s+="℃";
+            }else{
+                //单位华氏温度℉
+                s+="℉";
+            }*/
+            return  String.valueOf(result);
 
+        }
+        return "查询错误！";
+    }
 
     /**
      * 读取开关状态 疫苗柜

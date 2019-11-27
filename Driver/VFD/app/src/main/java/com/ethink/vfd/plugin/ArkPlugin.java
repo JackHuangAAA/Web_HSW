@@ -50,7 +50,7 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 pluginMessage.set("res", res);
                 break;
             case "TEMPERATURE":
-                String b = pluginMessage.getString("num");
+               /*String b = pluginMessage.getString("num");
                 pluginMessage.changeToResponse();
                 if (StringUtils.isEmpty(b)) {
                     pluginMessage.set("res", "请输入硬件编号");
@@ -71,7 +71,10 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 if (!set.isEmpty()) {
                     List<Double> list = arkController.temperature(set);
                     pluginMessage.setString("res", JSON.toJSONString(list));
-                }
+                }*/
+                pluginMessage.changeToResponse();
+                String a= arkController.temperatureArk();
+                pluginMessage.set("res",a);
                 break;
             case "ARK_STATUS":
                 if (arkController.arkStatus() == 1) {
@@ -87,8 +90,14 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 break;
             case "OPEN_DOOR":
                 pluginMessage.changeToResponse();
-               boolean re= arkController.openDoor();
-               pluginMessage.setBool("rsp",re);
+                boolean re= arkController.openDoor();
+                pluginMessage.setBool("rsp",re);
+                break;
+            case "SET_TEMPERATURE":
+                String tem = pluginMessage.getString("num");
+                pluginMessage.changeToResponse();
+                boolean result= arkController.setTemperature(Integer.parseInt(tem));
+                pluginMessage.setBool("rsp",result);
                 break;
         }
 
@@ -113,6 +122,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SYS_VALUES", this);
         //开关状态
         registerFunction("SWITCH_STATUS", this);
+        //设置温度
+        registerFunction("SET_TEMPERATURE", this);
     }
 
     @Override
@@ -124,20 +135,22 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
     public void run() {
         Set<Integer> set = new HashSet<>();
         set.add(1);
-        set.add(2);
-        set.add(3);
-        set.add(4);
-        set.add(5);
+//        set.add(2);
+//        set.add(3);
+//        set.add(4);
+//        set.add(5);
         while (!Thread.interrupted()) {
             try {
-                Thread.sleep(1000 * 60);
+                Thread.sleep(1000 * 6);
                 if (arkController != null) {
                     logger.info("查询温度-----");
                     EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");
-                    List<Double> list = arkController.temperature(set);
-                    eventMessage.setString("res",JSON.toJSONString(list));
+                    //  List<Double> list = arkController.temperature(set);
+                    //  eventMessage.setString("res",JSON.toJSONString(list));
+                    String a= arkController.temperatureArk();
+                    eventMessage.setString("res",a);
                     eventMessage.setBool("message", true);
-                    logger.info("温度主动上报：" + JSON.toJSONString(list));
+                    logger.info("温度主动上报：" + a);
                     pluginManager.post(eventMessage);
                 }
             } catch (InterruptedException e) {

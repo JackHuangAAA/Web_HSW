@@ -3,7 +3,6 @@ package com.ethink.vcd.plugin;
 import android.content.Context;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.blankj.utilcode.util.StringUtils;
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
@@ -50,7 +49,7 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 pluginMessage.set("res", res);
                 break;
             case "TEMPERATURE":
-                String b = pluginMessage.getString("num");
+               /* String b = pluginMessage.getString("num");
                 pluginMessage.changeToResponse();
                 if (StringUtils.isEmpty(b)) {
                     pluginMessage.set("res", "请输入硬件编号");
@@ -71,11 +70,12 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 if (!set.isEmpty()) {
                     List<Double> list = arkController.temperature(set);
                     if (!list.isEmpty()) {
-                        for (int i = 0; i < list.size(); i++) {
-                            pluginMessage.setArrayDoubleValue("res" + i, list.get(i));
-                        }
+                      pluginMessage.set("res",JSON.toJSONString(list));
                     }
-                }
+                }*/
+                pluginMessage.changeToResponse();
+                String a= arkController.temperatureArk();
+                pluginMessage.set("res",a);
                 break;
             case "ARK_STATUS":
                 if (arkController.arkStatus() == 1) {
@@ -88,6 +88,12 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 break;
             case "SWITCH_STATUS":
                 arkController.switchStatus();
+                break;
+            case "SET_TEMPERATURE":
+                String tem = pluginMessage.getString("num");
+                pluginMessage.changeToResponse();
+                boolean result= arkController.setTemperature(Integer.parseInt(tem));
+                pluginMessage.setBool("rsp",result);
                 break;
 
         }
@@ -110,6 +116,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SYS_VALUES", this);
         //开关状态
         registerFunction("SWITCH_STATUS", this);
+        //设置温度
+        registerFunction("SET_TEMPERATURE", this);
     }
 
     @Override
@@ -131,10 +139,12 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 if (arkController != null) {
                     logger.info("查询温度-----");
                     EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");
-                    List<Double> list = arkController.temperature(set);
-                   eventMessage.setString("res",JSON.toJSONString(list));
+//                    List<Double> list = arkController.temperature(set);
+//                   eventMessage.setString("res",JSON.toJSONString(list));
+                    String a= arkController.temperatureArk();
+                    eventMessage.setString("res",a);
                     eventMessage.setBool("message", true);
-                    logger.info("温度主动上报：" + JSON.toJSONString(list));
+                    logger.info("温度主动上报：" + a);
                     pluginManager.post(eventMessage);
                 }
             } catch (InterruptedException e) {
