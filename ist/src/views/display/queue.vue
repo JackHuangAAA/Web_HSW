@@ -8,11 +8,11 @@
                 {{item.name}}
             </div>
             <div class="position">
-                请到1号接种台
+                {{item.position}}
             </div>
-            <div class="call">
+            <!-- <div class="call">
                 {{item.call}}
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -32,16 +32,17 @@ export default {
         },
         freshDatas(){
             this.socket.on('UpdateQueueStatus', data => {
+                console.log(data)
                 this.queryQueue();
-                this.queue[0].call="正在呼叫";
             });
         },
         async queryQueue(){
             let queue = await this.$api.get('/queue/queryQueueByCondition',{status:1});
             this.queue = queue.data;
-            for(let i =0;i<this.queue.length;i++){
-                this.queue[i].call="等待叫号";
+            for(let i =1;i<this.queue.length;i++){
+                this.$set(this.queue[i],'position',"等待接种");
             }
+            this.$set(this.queue[0],'position',"请到1号接种台");
             console.log(this.queue)
         }
     },
@@ -53,7 +54,7 @@ export default {
         this.freshDatas();
         //查询队列中待接种数据,全部为等待
         this.queryQueue();
-        __app.$emit("setTitle",{title:"叫号综合显示屏",deviceId:"CN0001"})
+        __app.$emit("setTitle",{title:"叫号显示屏",deviceId:"CN0001"})
 
     }
 }

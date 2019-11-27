@@ -118,6 +118,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.vaccineName)) {
             query.push({"vaccine.name":  new RegExp(requestBody.vaccineName)});
         }
+        if (!_.isEmpty(requestBody.finishDate)) {
+            query.push({"finishDate": {"$gte":requestBody.finishDate}});
+        }
         query = query.length > 0 ? { "$and": query } : {};
 
         let result = await Domain.models.queue.find(query).sort({'sort':1});

@@ -1,7 +1,7 @@
 <template>
     <div class="pay">
         <div class="pay-top">
-            <div class="pay-back"  v-if="!ifCash" @click="back(true)">返回</div>
+            <div class="pay-back"  v-if="!ifCash" @click="back(true)">返回上一页</div>
             <div class="pay-top-title">{{type=='hand'?'请到人工窗口付费':'请扫码付费'}}</div>
             <div class="countDown" v-show="ifCash">
                 <img src="/static/img/clock.png" alt="">
@@ -12,7 +12,7 @@
             <div class="tips"  v-if="!ifCash">
                 请用{{type=='ali'?'支付宝':'微信'}}扫码付款:
             </div>
-            <div class="vaccineName">
+            <div class="vaccineName" :class="{top:ifCash}">
                 {{data?data.vaccine.name:''}}    自费
 
             </div>
