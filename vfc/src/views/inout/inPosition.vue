@@ -54,6 +54,7 @@
                     temp = _.assign(temp, array[k]);
                     result.push(temp);
                 }
+                console.log(result)
                 await this.saveManyInout(result);
                 this.$router.push({ path: '/inout/inStockEnd', query: { datas: this.datas }});
             }

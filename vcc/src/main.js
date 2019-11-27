@@ -15,7 +15,7 @@ import rem from '@/rem';
 import device from '@/device.js';
 import FastClick from 'fastclick'
 
-FastClick.attach(document.body);
+// FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
 if (config.env == 'development') {

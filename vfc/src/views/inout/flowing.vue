@@ -29,7 +29,7 @@
                 <Col span="7" class="producer">{{item.product}}</Col>
                 <Col span="4">{{item.code}}</Col>
                 <Col span="6">{{dateFormat(item.expiry)}}</Col>
-                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.total-item.surplus}}</Col>
+                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{action == '入库'?item.total:item.use}}</Col>
             </Row>
         </div>
     </div>
@@ -73,6 +73,7 @@
             },
             contextChange(){
                 this.actionType == 1?'入库':'出库';
+                this.actionType == 1?this.action='入库':this.action='出库';                
                 this.queryInoutByCondition();
             }
         },

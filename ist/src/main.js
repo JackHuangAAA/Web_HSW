@@ -18,14 +18,15 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
-if (config.env == 'development') {
+//if (config.env == 'development') {
+    //生产环境显示屏应用仅使用下面的配置，if else 需要注释
     global.__app = new Vue({
         el: '#app',
         router: router,
         store: store,
         render: h => h(App)
     });
-}else {
+/*}else {
     // 安卓环境使用
     window.$d.onReady = function() {
         console.log('$d.ready');
@@ -36,7 +37,7 @@ if (config.env == 'development') {
             render: h => h(App)
         });
     };
-}
+}*/
 Vue.prototype.$cookies = Cookies;
 Vue.prototype.$api = api;
 Vue.prototype.$config = config;

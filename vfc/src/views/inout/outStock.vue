@@ -19,7 +19,6 @@
             <div class="inStockTitle">
                 <img src="/static/img/back.png" class="back" @click="back()">
                 <p class="headP">请将出库疫苗扫码</p>
-                {{'这是扫码枪的内容:'+JSON.stringify(test)}}
                 <img src="/static/img/outCabineSetp1.png" class="vaccineIn">
             </div>
             <div class="main">
@@ -73,6 +72,7 @@
                 </div>
             </div>
         </div>
+        <audio src="/static/audio/outVaccineScan.mp3" autoplay/>
     </div>
 </template>
 <script>
@@ -89,8 +89,7 @@
                 commonData: null,
                 batchId:'',
                 exName: '',
-                exReason:'',
-                test:''
+                exReason:''
             }
         },
         computed: {
@@ -127,62 +126,55 @@
             async scanOut(){
                  this.$device.subscribe('SCANNER_RESULT',async (data) => {
                      console.log("这里是扫码枪的内容 result:" + JSON.stringify(data));
-                    this.test=data;
-                    let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20191001', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'上海生物制药有限公司'};// 模拟扫描枪返回结果 todo
+                    // let result= {code: 'ym991',name:'卡介苗',batchNo:'B-20191001', expiry:moment('2019-12-24').format('YYYY-MM-DD HH:mm:ss'), product:'上海生物制药有限公司'};// 模拟扫描枪返回结果 todo
+                     await this.$api.get('/zcy/queryVaccine',{code:data.data}).then(async (res)=>{
+                        let result= res.data;
+                        console.log("这里是出库的result"+JSON.stringify(result))                  
+                        //查询疫苗数据
+                        let vaccine = await this.queryVaccineByCondition({
+                            'device': this.device._id,
+                            'code': result.code
+                        });
+                        console.log(vaccine)
+                        if(_.isEmpty(vaccine)){
+                            return false;
+                        }
+                        //使用1支，若剩余数量=0，从删除疫苗记录
+                        if(vaccine.surplus-1 == 0){
+                            //删除疫苗记录
+                            await this.removeVaccineById({
+                                id: vaccine._id
+                            });
+                        }else{
+                            //疫苗数量减少
+                            await this.modifyVaccineNum({
+                                id: vaccine._id,
+                                total: 0, //出库总记录不变
+                                surplus: -1
+                            });
+                        }
+                        console.log(vaccine)
+                        vaccine.invalid='正常';
+                        //检查是否异常疫苗
+                        //判断有效期是否过期
+                        if(moment().isAfter(vaccine.expiry)){
+                            this.exName = result.name;
+                            this.exReason = "疫苗过期";
+                            vaccine.invalid='异常';
+                            this.ifTip = true; //提示框显示
+                        }
+                        let ex = await this.queryExceptionVaccine();
+                        //检查异常条件待接口完善后，需要修改 todo
+                        if(result.batchNo == ex.batchNo){
+                            this.exName = result.name;
+                            this.exReason = "报废或失效"; // todo
+                            vaccine.invalid='异常';
+                            this.ifTip = true; //提示框显示
+                        }
+                        //页面数据更新
+                        await this.freshTableDatas(vaccine);
+                    });
                     
-                    //查询疫苗数据
-                    let vaccine = await this.queryVaccineByCondition({
-                        'device': this.device._id,
-                        'code': result.code
-                    });
-                    console.log(vaccine)
-                    if(_.isEmpty(vaccine)){
-                        return false;
-                    }
-                    //使用1支，若剩余数量=0，从删除疫苗记录
-                    if(vaccine.surplus-1 == 0){
-                        //删除疫苗记录
-                        await this.removeVaccineById({
-                            id: vaccine._id
-                        });
-                    }else{
-                        //疫苗数量减少
-                        await this.modifyVaccineNum({
-                            id: vaccine._id,
-                            total: 0, //出库总记录不变
-                            surplus: -1
-                        });
-                    }
-                    //增加出库记录
-                    await this.saveInout({
-                        batchId: this.batchId,
-                        ...this.commonData,
-                        code: result.code,
-                        name: result.name,
-                        total: vaccine.total,
-                        surplus: vaccine.surplus-1,
-                        product: vaccine.product,
-                        use: 1
-                    });
-                    vaccine.invalid='正常';
-                    //检查是否异常疫苗
-                    //判断有效期是否过期
-                    if(moment().isAfter(vaccine.expiry)){
-                        this.exName = result.name;
-                        this.exReason = "疫苗过期";
-                        vaccine.invalid='异常';
-                        this.ifTip = true; //提示框显示
-                    }
-                    let ex = await this.queryExceptionVaccine();
-                    //检查异常条件待接口完善后，需要修改 todo
-                    if(result.batchNo == ex.batchNo){
-                        this.exName = result.name;
-                        this.exReason = "报废或失效"; // todo
-                        vaccine.invalid='异常';
-                        this.ifTip = true; //提示框显示
-                    }
-                    //页面数据更新
-                    await this.freshTableDatas(vaccine);
                  });
             },
             freshTableDatas(obj){
@@ -208,8 +200,22 @@
                         array.unshift(obj);
                     }
                 }
+                console.log(this.tableDatas)
             },
-            finish(){
+            async finish(){
+                //增加出库记录
+                for(let i=0;i<this.tableDatas.length;i++){
+                    await this.saveInout({
+                        batchId: this.batchId,
+                        ...this.commonData,
+                        code: this.tableDatas[i].code,
+                        name: this.tableDatas[i].name,
+                        total: this.tableDatas[i].total,
+                        surplus: this.tableDatas[i].surplus-this.tableDatas[i].count,
+                        product: this.tableDatas[i].product,
+                        use: this.tableDatas[i].count
+                    });
+                }
                 this.$router.push({ path: '/inout/outStockEnd', query: { datas: this.tableDatas }});
             },
         },
@@ -225,6 +231,10 @@
                 unitCode: this.device.unitCode,
                 unitName: this.device.unitName
             };
+            this.$device.openDoor().then(res=>{
+                console.log("开门结果 result:"+ JSON.stringify(res.rsp));
+                //结果为true门打开了
+            })
         }
     };
 </script>

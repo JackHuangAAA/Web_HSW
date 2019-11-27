@@ -43,6 +43,7 @@ export default {
           console.log("开门结果 result:"+ JSON.stringify(res.rsp));
           //结果为true门打开了
         })
+        this.$emit('closeTimer');
         this.un_fingerSearch();
         this.$router.push('/');
       }else{
@@ -66,6 +67,7 @@ export default {
           if(this.user._id==_id){
             this.message='登录成功'
             this.$api.post("/user/modifyUserByCode", this.user);
+            this.$emit('closeTimer');
             this.un_fingerSearch();
             this.$device.openDoor().then(res=>{
               console.log("开门结果 result:"+ JSON.stringify(res.rsp));
@@ -81,9 +83,10 @@ export default {
       }
     });
     //激活指纹模块
-    if(config.env != 'development'){
-      this.fingerLogin();
-    }
+    // if(config.env != 'development'){
+    //   this.fingerLogin();
+    // }
+    this.fingerLogin();
   },
 };
 </script>

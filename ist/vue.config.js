@@ -11,7 +11,7 @@ const resolve = dir => {
 
 //静态文件基础路径
 const BASE_URL = process.env.NODE_ENV === 'production'
-  ? '/'
+  ? '/display'
   : '/'
 
 module.exports = {
@@ -53,12 +53,12 @@ module.exports = {
   devServer: {
     proxy: {
       "/ist": {
-        target: "http://localhost:9995",
+        target: "http://localhost:7003",
         secure: false,
         pathRewrite: { "^/ist": "" }
       },
       "/socket.io": {
-        target: "http://localhost:9990",
+        target: "http://localhost:7004",
         secure: false,
         changeOrigin: true,
         ws: true

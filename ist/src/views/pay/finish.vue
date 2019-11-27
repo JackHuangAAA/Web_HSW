@@ -55,7 +55,7 @@ export default {
                 }
                 if(this.count == 0){
                     clearInterval(this.timer);
-                    this.$router.push('/main');
+                    // this.$router.push('/main');
                 }
             }, 1000);
         },
