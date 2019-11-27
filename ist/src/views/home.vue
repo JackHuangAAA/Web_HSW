@@ -54,6 +54,7 @@ export default {
                 this.saveUser();
 
             });
+            this.code = "12306"
         }
     },
     mounted(){
@@ -62,7 +63,7 @@ export default {
         //监听扫描条形码结果
         this.scanBarcode();
         // this.$router.push('/main');
-        this.$router.push('/register/register');
+        this.$router.push({path:'/register/register',query:{code:this.code}});
     }
 }
 </script>
