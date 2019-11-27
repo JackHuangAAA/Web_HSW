@@ -19,6 +19,7 @@ FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
 //if (config.env == 'development') {
+    //生产环境显示屏应用仅使用下面的配置，if else 需要注释
     global.__app = new Vue({
         el: '#app',
         router: router,

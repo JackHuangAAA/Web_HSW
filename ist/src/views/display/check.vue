@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="right">
-            <img src="/static/img/check.png">
+            <img src="static/img/check.png">
         </div>
     </div>
 </template>
