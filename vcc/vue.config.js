@@ -53,12 +53,12 @@ module.exports = {
   devServer: {
     proxy: {
       "/vcc": {
-        target: "http://iviotp.ethinkbank.com/vcc:7001",
+        target: "http://localhost:7001",
         secure: false,
         pathRewrite: { "^/vcc": "" }
       },
       "/socket.io": {
-        target: "http://iviotp.ethinkbank.com/vcc:7004",
+        target: "http://localhost:7004",
         secure: false,
         changeOrigin: true,
         ws: true
