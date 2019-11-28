@@ -50,12 +50,7 @@ public class FingerUtil {
             cancel = true;
             logger.debug("终止录入=====》：m_bCancel  {}", cancel);
         }
-          cancel=false;
-        try {
-            executorService.awaitTermination(1, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+      
     }
 
 

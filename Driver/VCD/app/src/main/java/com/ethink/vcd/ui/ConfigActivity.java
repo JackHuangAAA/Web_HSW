@@ -63,7 +63,7 @@ public class ConfigActivity extends AppCompatActivity {
         String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://192.168.0.229:8082");
+            etUrl.setText("http://192.168.0.229:8080");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
         } else {
             etUrl.setText(url);
