@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <img src="/static/img/logo.png" class="logo" alt="">
-        <p class="code">设备编号：PT0001</p>
+        <p class="code">设备编号：{{device.code}}</p>
         <p class="tip">安全用药，打印信息，排队接种</p>
         <div class="scanNotice">
             <div>接种信息打印</div>
@@ -31,35 +31,25 @@ export default {
             saveUser: 'saveUser',
             saveDevice: 'saveDevice'
         }),
-        getDevice(){
-            this.$device.getDeviceCode().then(res => {
-                this.deviceId = res;
-                this.saveDevice({id:res})
-            });
-        },
          async scanBarcode(){
-            /*
-            this.$device.subscribe('SCAN_BARCODE', (data) => {
-                console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
+            this.$device.subscribe('SCANNER_RESULT', async (data) => {
+                console.log('SERVER_PUSH==>SCANNER_RESULT,result:' + JSON.stringify(data));
+                if(this.$route.path!='/print/printMain'){
+                    return false;
+                }
+                this.code = JSON.parse(data.data);
+                // this.code = '12306';
+                console.log("这里是扫码获取的结果=====>"+JSON.stringify(this.code));
+                let customer = await this.$api.get('/queue/queryQueueByCondition',{code:this.code});
+                this.customer = customer.data[0];
+                //获取距离上次接种的时间
+                let pre = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
+                let previou_time = pre.data[0].previou.date?pre.data[0].previou.date:new Date();
+                this.$set(this.customer,'intervalTime',moment(new Date()).diff(moment(previou_time),'days'));
                 //扫描结果存入vuex user
-                //this.saveUser();
+                this.saveUser(this.customer);
+                this.$router.push({path:'/print/printInf'});
             });
-            */
-
-            this.code = "12306"
-
-            let customer = await this.$api.get('/queue/queryQueueByCondition',{code:this.code});
-            this.customer = customer.data[0];
-
-            //获取距离上次接种的时间
-            customer = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
-
-            let previou_time = customer.data[0].previou.date?customer.data[0].previou.date:new Date();
-
-            this.customer.intervalTime = moment(new Date()).diff(moment(previou_time),'days');
-
-            this.saveUser(this.customer);
-            this.$router.push({path:'/print/printInf'});
         }
     },
     mounted(){
