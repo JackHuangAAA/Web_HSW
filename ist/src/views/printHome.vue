@@ -14,59 +14,51 @@
 
 </template>
 <script>
-    import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 
-    export default {
-        data () {
-            return {
-                bgShow: true,
-                deviceId:''
-            }
-        },
-        computed: {
-            ...mapGetters({
-                user: 'user',
-                device: 'device'
-            })
-        },
-        watch: {
-            $route(to, from) {
-                if(to.path == '/print/printMain'){
-                    this.bgShow = false;
-                }else{
-                    this.bgShow = true;
-                }
-            }
-        },
-        methods:{
-            ...mapActions({
-                saveUser: 'saveUser',
-                saveDevice: 'saveDevice'
-            }),
-            getDevice(){
-                this.$device.getDeviceCode().then(res => {
-                    this.deviceId = res;
-                    this.saveDevice({id:res})
-                });
-            },
-            scanBarcode(){
-                this.$device.subscribe('SCAN_BARCODE', (data) => {
-                    console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
-                    //扫描结果存入vuex user
-                    this.saveUser();
-                    this.$router.push('/print/printInf');
-                });
-            }
-        },
-        mounted(){
-            //获取设备信息
-            this.getDevice();
-            //监听扫描条形码结果
-            this.scanBarcode();
-            // this.$router.push('/print/printMain');
-            this.$router.push('/print/printInf');
+export default {
+    data () {
+        return {
+            bgShow: true,
+            deviceId:''
         }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'user',
+            device: 'device'
+        })
+    },
+    watch: {
+        $route(to, from) {
+            if(to.path == '/print/printMain'){
+                this.bgShow = false;
+            }else{
+                this.bgShow = true;
+            }
+        }
+    },
+    methods:{
+        ...mapActions({
+            saveUser: 'saveUser',
+            saveDevice: 'saveDevice'
+        }),
+        getDevice(){
+            this.$device.getDeviceCode().then(res => {
+                this.deviceId = res;
+                this.saveDevice({id:res})
+            });
+        },
+    },
+    mounted(){
+        //获取设备信息
+        this.getDevice();
+
+        this.$router.push('/print/printMain');
+        //this.code='12306'
+        //this.$router.push({path:'/print/printInf',query:{code:this.code}});
     }
+}
 </script>
 <style lang="less" scoped>
     @import '~@/style/printHome.less';

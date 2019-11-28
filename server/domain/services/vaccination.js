@@ -109,8 +109,11 @@ module.exports = {
          if (!_.isEmpty(requestBody.unitName)) {
              query.push({"unitName":  new RegExp(requestBody.unitName)});
          }
+         if (!_.isEmpty(requestBody.customerCode)) {
+             query.push({"customer.code":  requestBody.customerCode});
+         }
          query = query.length > 0 ? { "$and": query } : {};
-         return await Domain.models.vaccination.find(query);
+         return await Domain.models.vaccination.find(query).sort({"createDate": -1});
     },
 
     /**

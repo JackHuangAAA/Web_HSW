@@ -16,7 +16,7 @@
                 <div class="complete-notice">请前往等待区，等待接种</div>
                 <div class="complete-message">您当前处于{{sort?sort:''}}号，前面还有{{queueLength?queueLength:''}}位</div>
             </div>
-            <div class="complete-confirm" @click="back()">确认</div>
+            <div class="complete-confirm" @click="back()">返回首页</div>
         </div>
     </div>
 </template>
@@ -31,8 +31,8 @@ export default {
             zero: false,
             timer: '',
             data: null, //接种信息
-            sort:2,
-            queueLength:1
+            sort:null,
+            queueLength:null
         }    
     },
     components:{
@@ -69,11 +69,10 @@ export default {
         },
 
         async queryQueue() {
-            this.customerVaccine = this.user
             //获取最后一个排队编号
             let queue = await this.$api.get('/queue/queryQueueByCondition');
-            let max = queue.data.length;
-            this.sort_now = queue.data[max-1].sort?queue.data[max-1].sort:0;
+            let max = queue.data?queue.data.length:0;
+            this.sort_now = (max!=0)?queue.data[max-1].sort:0;
             this.sort = this.sort_now+1;
             //获取未完成接种的排队人数
             queue = await this.$api.get('/queue/queryQueueByCondition', {
@@ -83,14 +82,19 @@ export default {
 
              await this.$api.post('/queue/saveQueue', {
                 sort: this.sort,
-                code: this.customerVaccine.customer.code,
-                name: this.customerVaccine.customer.name,
-                sex: this.customerVaccine.customer.sex,
-                age: this.customerVaccine.customer.age,
+                code: this.user.customer.code,
+                name: this.user.customer.name,
+                sex: this.user.customer.sex,
+                age: this.user.customer.age,
                 vaccine:{
-                    name: this.customerVaccine.vaccine.name,
-                    code: this.customerVaccine.vaccine.code,
-                    producer:this.customerVaccine.vaccine.product,
+                    name: this.user.vaccine.name,
+                    code: this.user.vaccine.code,
+                    product:this.user.vaccine.product,
+                    batchNo:this.user.vaccine.batchNo,
+                    dosage:this.user.vaccine.dosage,
+                    supervisionCode:this.user.vaccine.supervisionCode,
+                    expiry:this.user.vaccine.expiry,
+                    cost:this.user.vaccine.cost,
                     count:1,
                     date: new Date()
                 },

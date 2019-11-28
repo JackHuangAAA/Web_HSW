@@ -1,6 +1,6 @@
 const routers = [
     {
-        path: '/1',               //显示器页面
+        path: '/2',               //显示器页面
         component: (resolve) => require(['@/views/displayHome.vue'], resolve),
         children: [
             { path: '/display/queue', component: (resolve) => require(['@/views/display/queue.vue'], resolve) }, //叫号综合显示屏

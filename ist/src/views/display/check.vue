@@ -21,7 +21,7 @@
                         {{item.name}}
                     </div>
                     <div class="time">
-                        {{item.time}}分钟
+                        {{item.time>=30?'已完成':30-item.time+'分钟'}}
                     </div>
                 </div>
             </div>
@@ -33,12 +33,13 @@
 </template>
 <script>
 import io from  'socket.io-client';
-
+import moment from 'moment';
 export default {
     data () {
         return {
             socket: io.connect("/"),
-            queue: []
+            queue: [],
+            timer:null
         }    
     },
     methods: {
@@ -51,17 +52,23 @@ export default {
                 this.queryQueue();
             });
         },
-
         async queryQueue(){
             let time_now = new Date();
-            let time_30 = time_now.getTime()-30*60*1000;
+            let time_30 = time_now.getTime()-31*60*1000;
             time_30 = new Date(time_30);
-            let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0,finishDate:{"$gte": time_30,}});
+            let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0,finishDate:time_30});
             this.queue = queue.data;
+            this.time();
+        },
+        time(){
             for(let i =0;i<this.queue.length;i++){
-                let timeFinish = new Date(this.queue[i].finishDate);
-
-                this.queue[i].time=30-parseInt((time_now.getTime()-timeFinish.getTime())/(60*1000));
+                let timeFinish =moment(this.queue[i].finishDate).diff(moment()._d);
+                let time=Math.abs(Math.floor(timeFinish/60000));
+                this.$set(this.queue[i],'time',time);
+                if(this.queue[i].time>=31){
+                    this.queue.shift(i);
+                }
+                // this.queue[i].time=30-parseInt((time_now.getTime()-timeFinish.getTime())/(60*1000));
             }
         }
     },
@@ -69,9 +76,13 @@ export default {
         //建立socket连接
         this.registerSocket();
         //监听事件，刷新数据
+
         this.freshDatas();
         //查询队列中待接种数据
         this.queryQueue();
+        this.timer=setInterval(()=>{
+            this.time();
+        },60000)
         //this.queryQueue();
         __app.$emit("setTitle",{title:"留观显示屏",deviceId:"CK0001"})
 

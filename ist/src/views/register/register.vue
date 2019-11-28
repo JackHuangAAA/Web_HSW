@@ -97,7 +97,9 @@ export default {
             this.$router.push('/main');
         },
         async queryCustomer(){
-            let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:'12306'});
+            //获取主页传过来的扫码内容
+            this.code = this.$route.query.code;
+            let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
             this.customer = customer.data[0];
 
             let planId = customer.data[0].next.plan;

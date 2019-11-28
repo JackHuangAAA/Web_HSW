@@ -1,7 +1,7 @@
 <template>
     <div class="pay">
         <div class="pay-top">
-            <div class="pay-back" @click="back()">返回</div>
+            <div class="pay-back" @click="back()">返回上一页</div>
             <div class="pay-top-title">请选择付费方式，并付费</div>
         </div>
         <div class="pay-content">
