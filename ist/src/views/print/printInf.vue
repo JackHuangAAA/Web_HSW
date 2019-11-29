@@ -61,7 +61,7 @@ export default {
                 num:1,
                 need_name:true,
                 vaccine:this.user.vaccine.name,
-                vaccine_date:moment(this.user.vaccine.date).format('YYYY/MM/DD'),
+                vaccine_date:moment(this.user.vaccine.date).format('YYYYMMDD'),
                 lot_no:this.user.vaccine.batchNo,
                 vaccine_unit:this.device.unitName,
                 vaccine_site:'左手臂',
