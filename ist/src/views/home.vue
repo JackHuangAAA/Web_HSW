@@ -28,7 +28,7 @@ export default {
         })
     },
     watch: {
-        $route(to, from) {console.log(to.path+'----44----'+from.path)
+        $route(to, from) {
             if(to.path == '/main'){
                 this.bgShow = false;
             }else{
