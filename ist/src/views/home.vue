@@ -45,14 +45,13 @@ export default {
             this.$device.getDeviceCode().then(res => {
                 this.deviceId = res;
                 this.saveDevice({id:res})
+                this.$router.push('/main');
             });
         }
     },
     mounted(){
         //获取设备信息
         this.getDevice();
-        // this.$router.push('/main');
-
     }
 }
 </script>

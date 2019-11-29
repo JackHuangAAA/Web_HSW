@@ -44,18 +44,6 @@ export default {
             saveDevice: 'saveDevice'
         }),
         confirm: function(){
-            console.log('调用打印接口');
-            let params={
-                num:1,
-                need_name:true,
-                vaccine:this.user.vaccine.name,
-                vaccine_date:this.user.vaccine.date,
-                lot_no:this.user.vaccine.batchNo,
-                vaccine_unit:this.device.unitName,
-                vaccine_site:'左手臂',
-                signature:this.user.name
-            };
-            console.log(JSON.stringify(params))
             //调用打印接口
             this.$device.printBook({
                 num:1,
@@ -85,8 +73,6 @@ export default {
     mounted(){
         //初始数据
         // this.initData();
-        console.log(this.device)
-        console.log(this.user)
     }
 }
 </script>
