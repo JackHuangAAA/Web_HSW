@@ -61,7 +61,7 @@ export default {
     post: function (url, data) {
         if(config.env == 'development'){
             console.log(`=> ${url}`,data || {});
-            axios.defaults.headers.common['deviceid'] = 'DT0001';  //todo 测试使用
+            axios.defaults.headers.common['deviceid'] = 'IST0001';  //todo 测试使用
             return new Promise((resolve,reject)=>{
                 axios.post(`/ist${url}?t=${new Date().getTime()}`, data)
                     .then(response =>{

@@ -45,25 +45,13 @@ export default {
             this.$device.getDeviceCode().then(res => {
                 this.deviceId = res;
                 this.saveDevice({id:res})
+                this.$router.push('/main');
             });
-        },
-        scanBarcode(){
-            this.$device.subscribe('SCAN_BARCODE', (data) => {
-                //console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
-                this.$router.push({path:'/register/register',query:{code:this.code}});
-
-
-            });
-            this.code = "12306"
         }
     },
     mounted(){
         //获取设备信息
         this.getDevice();
-        //监听扫描条形码结果
-        this.scanBarcode();
-        // this.$router.push('/main');
-
     }
 }
 </script>

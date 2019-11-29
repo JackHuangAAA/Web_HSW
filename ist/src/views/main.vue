@@ -28,16 +28,24 @@ export default {
     },
     methods:{
         async queryQueue() {
-
             //获取未完成接种的排队人数
             let queue = await this.$api.get('/queue/queryQueueByCondition', {
                 status:1
             });
             this.queueLength = queue.data.length?queue.data.length:0;
+        },
+        scanBarcode(){
+            this.$device.subscribe('SCANNER_RESULT', async (data) => {
+                console.log('SERVER_PUSH==>SCANNER_RESULT,result:' + JSON.stringify(data));
+                this.code = JSON.parse(data.data);
+                this.$router.push({path:'/register/register',query:{code:this.code}});
+            });
         }
     },
     mounted(){
-        this.queryQueue()
+        this.queryQueue();
+        //监听扫描条形码结果
+        this.scanBarcode();
     }
 }
 </script>
