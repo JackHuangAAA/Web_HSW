@@ -15,6 +15,7 @@ const vaccinationSchema = mongoose.Schema({
         code: String,   //接种序号
         name: String,   //姓名
         age: Number,    //年龄
+        sex:String,     //性别
         vaccineCode: String,//疫苗编号
         vaccineName: String,//疫苗名称
         vaccineNum: Number //疫苗数量
@@ -24,7 +25,7 @@ const vaccinationSchema = mongoose.Schema({
         vaccineName: String,//疫苗名称
         supervisionCode: String,//药品监管码
         expiry: Date,       //有效日期
-        producer: String    //生产商
+        product: String    //生产商
     },
     result:Number,          //匹配结果(0:不匹配;1:匹配)
     createDate: {type: Date, default: Date.now}  //匹配时间

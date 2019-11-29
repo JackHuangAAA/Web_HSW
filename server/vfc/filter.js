@@ -13,7 +13,9 @@ const excluded = [
     '/user/queryUserByCondition',
     '/alarm/queryAlarmByCondition',
     '/vaccine/queryVaccineNum',
-    '/vaccine/queryVaccineStorageNum'
+    '/vaccine/queryVaccineStorageNum',
+    '/temperature/saveTemperatures'
+
 ];
 
 const bindUserFilter = async (ctx,next) => {

@@ -44,7 +44,7 @@
                             <Checkbox v-model="single" class="personInf-check">{{vaccineName}}</Checkbox>
                         </div>
                         <div class="producter">
-                            生产厂家：北京科兴生物制品有限公司
+                            生产厂家：{{vaccineProduct}}
                         </div>
                         <div class="vaccine-info">
                             <div class="vaccine-info-part">
@@ -68,12 +68,12 @@
                 <div class="vaccineInf" v-if="showScan">
                     <div class="vaccineInf-top">
                         <div><span>{{vaccine.name}}</span></div>
-                        <div>监管码：<span>Y750230-64368</span></div>
+                        <div>监管码：<span>{{vaccine.supervisionCode}}</span></div>
                         <div class="mt24">批次号：<span>Y750230-64368</span></div>
                         <div class="mt24">疫苗剂量：<span>0.5ml/支</span></div>
                     </div>
-                    <div class="vaccineInf-bottom">有效期：<span>2019-09-18 12:30:28   至  2022-12-29 12:20:19</span></div>
-                    <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.producer}}</span></div>
+                    <div class="vaccineInf-bottom">有效期：<span>2019-09-18 12:30:28   至  {{vaccine.expiry}}</span></div>
+                    <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.product}}</span></div>
                     <div class="vaccineInf-bottom">接种份数：<span>1</span></div>
                 </div>
             </div>
@@ -148,7 +148,8 @@
                 confirm:false,
                 ready:false,
                 showScan:false,
-                drawer:{}
+                drawer:{},
+                vaccineProduct:''
             };
         },
         computed: {
@@ -185,7 +186,7 @@
             },
             async confirmVaccine(){
                 //排队状态完成
-                await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
                     console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
                 });
                 this.confirm=true;
@@ -220,6 +221,7 @@
                         code: this.vaccinationData.code,   //接种序号
                         name: this.vaccinationData.name,   //姓名
                         age: this.vaccinationData.age,    //年龄
+                        sex: this.vaccinationData.sex,    //性别
                         vaccineCode: this.vaccinationData.vaccine.code,//疫苗编号
                         vaccineName: this.vaccinationData.vaccine.name,//疫苗名称
                         vaccineNum: this.vaccinationData.vaccine.count //疫苗数量
@@ -229,7 +231,7 @@
                         vaccineName: this.vaccinationData.vaccine.name,//疫苗名称
                         supervisionCode: this.vaccine.supervisionCode,//药品监管码
                         expiry: this.vaccine.expiry,       //有效日期
-                        producer: this.vaccine.producer    //生产商
+                        product: this.vaccine.product    //生产商
                     }
                 }); //todo
             },
@@ -301,6 +303,7 @@
                     this.vaccinationData=res.data[0];
                     console.log(this.vaccinationData);
                     this.vaccineName=res.data[0].vaccine.name;
+                    this.vaccineProduct=res.data[0].vaccine.product;
                 });
                 this.openDrawer(this.vaccinationData);
             },
@@ -309,7 +312,7 @@
                     this.confirm=false; 
                 }else{
                     //未接种点击下一位直接完成
-                    await this.modifyQueue({id:this.vaccinationData._id,status:0}).then(res=>{
+                    await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
                         console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
                     });
                 }
@@ -320,6 +323,7 @@
                     this.vaccinationData=res.data[0];
                     console.log(this.vaccinationData);
                     this.vaccineName=res.data[0].vaccine.name;
+                    this.vaccineProduct=res.data[0].vaccine.product;
                 });
                 this.openDrawer(this.vaccinationData);
             }

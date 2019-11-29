@@ -5,6 +5,7 @@ const paginate = require('mongoose-paginate');
  * 用户信息
  */
 const queueSchema = mongoose.Schema({
+    sort: Number,//接种序号，排队叫号
     code: String, //接种编号
     name: String, //姓名
     sex: String, //性别
@@ -12,8 +13,13 @@ const queueSchema = mongoose.Schema({
     vaccine:{
         name: String, //疫苗名称
         code: String, //疫苗code
-        producer:String, //生产厂家
+        batchNo: String,  //批次号
+        dosage:String, //药剂剂量
+        supervisionCode:String, //监管码
+        product:String, //生产厂家
         count:Number, //接种数量
+        expiry:String,//有效期
+        cost:String,//费用
         date: {type: Date, default: Date.now}  //接种时间
     },
     status: Number, //状态0:完成; 1:排队中;

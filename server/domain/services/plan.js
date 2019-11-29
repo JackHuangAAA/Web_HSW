@@ -66,4 +66,20 @@ module.exports = {
             });
     },
 
+    /**
+     * 根据条件查询客户信息
+     * @param requestBody
+     * @returns {requestBody}
+     */
+    queryPlanByCondition: async function (requestBody) {
+        logger.debug('queryPlanByCondition :' + JSON.stringify(requestBody));
+        let query=[];
+        if(!_.isEmpty(requestBody.id)){
+            query.push({_id:requestBody.id});
+        }
+        query=query.length>0?{$and:query}:{};
+        return await Domain.models.plan.find(query);
+
+    },
+
 };

@@ -49,11 +49,12 @@ export default {
         },
         scanBarcode(){
             this.$device.subscribe('SCAN_BARCODE', (data) => {
-                console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
-                //扫描结果存入vuex user
-                this.saveUser();
+                //console.log('SERVER_PUSH==>SCAN_BARCODE,result:' + JSON.parse(data.res));
+                this.$router.push({path:'/register/register',query:{code:this.code}});
+
 
             });
+            this.code = "12306"
         }
     },
     mounted(){
@@ -62,7 +63,7 @@ export default {
         //监听扫描条形码结果
         this.scanBarcode();
         // this.$router.push('/main');
-        this.$router.push('/register/register');
+
     }
 }
 </script>

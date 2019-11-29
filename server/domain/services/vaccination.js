@@ -75,6 +75,14 @@ module.exports = {
      */
     saveVaccination: async function(requestBody){
         logger.debug(`saveVaccination param: ${JSON.stringify(requestBody)}`);
+        //接种完成的客户信息推送至socket.io，留观屏
+        let channel = "VaccinationCheck";
+        let message={};
+        message.type = channel;
+        message.code = 'IST0001C';
+        message.data =requestBody;
+        message = JSON.stringify(message);
+        Domain.redis.pub.publishAsync(channel, message);
         return await Domain.models.vaccination.create(requestBody);
     },
 
@@ -101,8 +109,11 @@ module.exports = {
          if (!_.isEmpty(requestBody.unitName)) {
              query.push({"unitName":  new RegExp(requestBody.unitName)});
          }
+         if (!_.isEmpty(requestBody.customerCode)) {
+             query.push({"customer.code":  requestBody.customerCode});
+         }
          query = query.length > 0 ? { "$and": query } : {};
-         return await Domain.models.vaccination.find(query);
+         return await Domain.models.vaccination.find(query).sort({"createDate": -1});
     },
 
     /**

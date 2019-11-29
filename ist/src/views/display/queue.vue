@@ -1,8 +1,8 @@
 <template>
     <div class="layout">
-        <div :class="{'inf':index == 0,'infCut': index%2==1,'infCutTwo':index%2 ==0}" v-for="(item,index) in datas" :key="item.code">
+        <div :class="{'inf':index == 0,'infCut': index%2==1,'infCutTwo':index%2 ==0}" v-for="(item,index) in queue" :key="item.sort">
             <div class="code">
-                {{item.code}}
+                {{item.sort}}
             </div>
             <div class="name">
                 {{item.name}}
@@ -10,9 +10,9 @@
             <div class="position">
                 {{item.position}}
             </div>
-            <div class="call">
+            <!-- <div class="call">
                 {{item.call}}
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -23,34 +23,39 @@ export default {
     data () {
         return {
             socket: io.connect("/"),
-            datas:[]
+            queue : []
         }    
     },
     methods: {
         registerSocket(){
-            this.socket.emit("register", JSON.stringify({code:'queue_1'}));
+            this.socket.emit("register", JSON.stringify({code:'IST0001Q'}));
         },
         freshDatas(){
-            this.socket.on('test', data => {
-                console.log('tttt----'+data);
+            this.socket.on('UpdateQueueStatus', data => {
+                console.log(data)
                 this.queryQueue();
             });
         },
-        queryQueue(){
-
-            this.datas = [{code: '0089',name:'黄江华',position:'请到1号接种台',call:'正在呼叫'},
-                {code: '0090',name:'李梦琪',position:'请到2号接种台',call:'等待叫号'}];
+        async queryQueue(){
+            let queue = await this.$api.get('/queue/queryQueueByCondition',{status:1});
+            this.queue = queue.data;
+            for(let i =1;i<this.queue.length;i++){
+                this.$set(this.queue[i],'position',"等待接种");
+            }
+            this.$set(this.queue[0],'position',"请到1号接种台");
+            console.log(this.queue)
         }
     },
 
     mounted(){
         //建立socket连接
         this.registerSocket();
-        //监听事件，刷新数据
+        //监听事件，刷新数据，首位改为呼叫
         this.freshDatas();
-        //查询队列中待接种数据
-        //this.queryQueue();
-        __app.$emit("setTitle",{title:"叫号综合显示屏",deviceId:"CN0001"})
+        //查询队列中待接种数据,全部为等待
+        this.queryQueue();
+        __app.$emit("setTitle",{title:"叫号显示屏",deviceId:"CN0001"})
+
     }
 }
 </script>

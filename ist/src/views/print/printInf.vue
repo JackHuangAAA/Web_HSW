@@ -3,8 +3,8 @@
         <div class="personInf">
             <p>基本信息</p>
             <div>
-                <span class="infTitle">姓名:</span><span class="infContent">黄江华</span><span class="infTitle">性别:</span><span class="infContent">男</span>
-                <span class="infTitle">年龄:</span><span class="infContent">3周岁</span><span class="infTitle">距离上次接种时间:</span><span class="infContent day">28天</span>
+                <span class="infTitle">姓名:</span><span class="infContent">{{customer?customer.name:''}}</span><span class="infTitle">性别:</span><span class="infContent">{{customer?customer.sex:''}}</span>
+                <span class="infTitle">年龄:</span><span class="infContent">{{customer?customer.age:''}}周岁</span><span class="infTitle">距离上次接种时间:</span><span class="infContent day">{{customer?customer.intervalTime:''}}天</span>
             </div>
         </div>
         <div class="vaccineInf">
@@ -26,7 +26,7 @@ import detail from '../../components/detail';
 export default {
     data() {
         return {
-            customer: null
+            customer:{}
         }
     },
     components:{
@@ -52,6 +52,9 @@ export default {
             this.$router.push('/print/printMain')
         },
         initData(){
+            //获取客户信息和疫苗信息
+            this.customer = this.user;
+            console.log(this.customer)
 
         }
     },
