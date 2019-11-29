@@ -14,7 +14,7 @@ import com.ethink.vfd.plugin.SocketPlugin;
 
 public class VFDService extends PluginService {
     public VFDService() {
-        super("VCD", true);
+        super("VFD", true);
     }
 
     @Override
