@@ -41,7 +41,7 @@ private static final String TAG="ScannerPlugin";
             SerialPortSetting setting = new SerialPortSetting(
                     115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
             setting.setReadTimeout(0);
-            scanner = SerialPortManager.getSerialPort("/dev/ttyS4", setting);
+            scanner = SerialPortManager.getSerialPort("/dev/ttyS1", setting);
             logger.info("--------连接扫码-----------");
             thread = new Thread(this);
             thread.start();
@@ -71,12 +71,13 @@ private static final String TAG="ScannerPlugin";
                     //Log.d(TAG, "run: 扫码结果："+scantext);
                    // logger.info("扫码数据"+scantext);
                     //scantext.charAt(scantext.length() - 1) == '\r'
-                    if (scantext.charAt(scantext.length() - 1) == 0x0A) {
+                    if (scantext.charAt(scantext.length() - 1) == 0x0D) {
                         //Log.d(TAG, "run: 扫码枪截取数据："+scantext);
                         //logger.info("扫码枪截取1数据" + scantext);
-                        logger.info("扫码枪截取数据" + scantext.substring(0, scantext.length() - 2));
+                        String []str=scantext.substring(0, scantext.length() - 1).split(" ");
+                        logger.info("扫码枪截取数据" + str[str.length-1]);
                         EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
-                        eventMessage.setString("data", scantext.substring(0, scantext.length() - 2));
+                        eventMessage.setString("data",str[str.length-1]);
                         pluginManager.post(eventMessage);
                         scantext.delete(0,scantext.length());
                     }

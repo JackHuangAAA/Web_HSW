@@ -31,7 +31,8 @@ public class PrintController {
 //        UsbSerialPortSetting setting = new UsbSerialPortSetting(UsbSerialPortSetting.PL2303_VENDOR, UsbSerialPortSetting.PL2303_PRODUCT, 0,
 //                    115200, 8, SerialPortSetting.STOPBITS_1, SerialPortSetting.PARITY_NONE);
         try {
-            setting.setReadTimeout(4000);
+            setting.setReadTimeout(10000);
+            setting.setWriteTimeout(3000);
             serialPort = SerialPortManager.getSerialPort(path, setting);
             logger.info("打印机正常-------------------");
             //usb方法
@@ -272,14 +273,14 @@ public class PrintController {
      * 浙江省疫苗本水平定位
      */
     private boolean provinceHorizontal() {
-        byte[] butter = new byte[]{0x1B, 0x7C, 0x41, 0x31, 0x31, 0x30};
+        byte[] butter = new byte[]{0x1B, 0x7C, 0x41, 0x30, 0x34, 0x30};
         return write(butter, butter.length);
     }
 
     /**
      * 进纸操作
      **/
-    private boolean inPaper() {
+    public boolean inPaper() {
         //进纸命令
         byte[] in = new byte[]{0x1B, 0x6C, 0x1B, 0x6E, 0x1B, 0x2E, 0x07, 0x1B, 0x51, 0x32, 0x32, 0x35, 0x1B, 0x5A, 0x1B, 0x4C, 0x30, 0x30, 0x30};
         return write(in, in.length);
@@ -308,7 +309,7 @@ public class PrintController {
     /***
      * 浙江省疫苗本
      * **/
-    public void zheProvince(int num) {
+    public void zheProvince(int num,String data) {
         ready = true;
         logger.info("打印操作ready状态:{}", ready);
         while (ready) {
@@ -324,7 +325,7 @@ public class PrintController {
                 boolean re = provinceHorizontal();
                 logger.info("水平定位：{}", re);
                 //开始打印操作
-                byte[] da =printData(num,provinceFormat("20191111","xx小学","xxx医院","胳膊","张三"));
+                byte[] da =printData(num,data);
                 //logger.info("数组：{},长度：{}",da,da.length);
                 ByteBuffer buffer = ByteBuffer.allocate(da.length + 4);
                 buffer.put(da);
@@ -337,7 +338,10 @@ public class PrintController {
                 logger.info("打印结果：{}", result);
                 ready = false;
                 break;
-            } else {
+            }
+
+            else {
+
                 if (!inPaperProvince(num)) {
                     ready = false;
                     break;
@@ -374,8 +378,12 @@ public class PrintController {
     /****
      * 浙江省的打印格式
      * */
-    public static  String provinceFormat(String date,String no,String unit,String position,String name){
-        return String.format("%s  %s    %s      %s     %s",date,no,unit,position,name);
+    public static  String provinceFormat(boolean need_name,String vaccine,String date,String no,String unit,String position,String name){
+     if(need_name){
+         return String.format("%s %s   %s     %s        %s   %s",vaccine,date,no,unit,position,name);
+     }else{
+         return String.format("%s  %s    %s      %s     %s",date,no,unit,position,name);
+     }
     }
 
     /****
@@ -388,7 +396,7 @@ public class PrintController {
     /***
      * 杭州市疫苗本
      * **/
-    public void hangCity(int num) {
+    public void hangCity(int num,String data) {
         ready = true;
         logger.info("打印操作ready状态:{}", ready);
         while (ready) {
@@ -417,7 +425,9 @@ public class PrintController {
                 logger.info("打印结果：{}", result);
                 ready = false;
                 break;
-            } else {
+            }
+
+            else {
                 if (!inPaperCity(num)) {
                     ready = false;
                     break;

@@ -27,6 +27,6 @@ private String deviceId;
     @NonNull
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        return chain.proceed(request.newBuilder().addHeader("deviceId", deviceId).build());
+        return chain.proceed(request.newBuilder().addHeader("deviceid", deviceId).build());
     }
 }
