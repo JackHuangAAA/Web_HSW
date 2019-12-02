@@ -45,16 +45,18 @@ export default {
         }),
         getDevice(){
             this.$device.getDeviceCode().then(res => {
-                this.deviceId = res;
-                this.saveDevice({id:res})
+                this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
+                    this.saveDevice(res2.data[0]);
+                    this.deviceId = res2.data[0].code;
+                    this.$router.push('/print/printMain');
+                });
+                
             });
         },
     },
     mounted(){
         //获取设备信息
         this.getDevice();
-
-        this.$router.push('/print/printMain');
         //this.code='12306'
         //this.$router.push({path:'/print/printInf',query:{code:this.code}});
     }
