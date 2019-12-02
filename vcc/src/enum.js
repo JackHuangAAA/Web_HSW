@@ -1,8 +1,7 @@
 /**
  * 静态变量
  */
-'use strict';
-
+'use strict'
 
 export default {
 	

@@ -224,9 +224,9 @@
                     //打开抽屉
                     this.$device.openDrawer({num:this.vaccineOneX+"#"+this.vaccineOneY}).then(res=>{
                             console.log(res);
-                        }).catch(err=>{
+                        })/*.catch(err=>{
                             console.log('open drawer error: '+err.message());
-                        });
+                        });*/
                 }
             },
             cancel(){

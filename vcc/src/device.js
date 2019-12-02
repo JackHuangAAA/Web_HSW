@@ -4,9 +4,9 @@ export default {
     subscribe(eventName, callback) {
       return $d.subscribe(eventName, callback);
     },
-    getVersion() {
-      return $d.invoke('UPDATER', 'GetCurrentVersion');
-    },
+    // getVersion() {
+    //   return $d.invoke('UPDATER', 'GetCurrentVersion');
+    // },
     async getDeviceCode() {
         if (config.env == 'development'){
             return 'DT0001';
