@@ -1,4 +1,4 @@
-package com.ethink.vcd.ui;
+package com.ethink.snd.ui;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,11 +15,11 @@ import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.StringUtils;
-import com.ethink.vcd.App;
-import com.ethink.vcd.Const;
-import com.ethink.vcd.R;
-import com.ethink.vcd.SPUtils;
-import com.ethink.vcd.server.VCDService;
+import com.ethink.snd.App;
+import com.ethink.snd.Const;
+import com.ethink.snd.R;
+import com.ethink.snd.SPUtils;
+import com.ethink.snd.server.SNDService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,8 +63,9 @@ public class ConfigActivity extends AppCompatActivity {
         String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://iviotp.ethinkbank.com");
+            etUrl.setText("http://192.168.0.54:8080");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
+
         } else {
             etUrl.setText(url);
         }
@@ -75,7 +76,7 @@ public class ConfigActivity extends AppCompatActivity {
             etSerial.setText(""+PhoneUtils.getSerial());
         }
         if (socketUrl.isEmpty()) {
-            edSocket.setText("http://iviotp.ethinkbank.com");
+            edSocket.setText("http://192.168.0.229:9996");
         } else {
             edSocket.setText(socketUrl);
         }
@@ -87,6 +88,8 @@ public class ConfigActivity extends AppCompatActivity {
         if (isVersionM()) {
             checkAndRequestPermissions();
         }
+
+
 
     }
 
@@ -127,11 +130,7 @@ public class ConfigActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onStart() {
-        super.onStart();
 
-    }
 
     @OnClick(R.id.bt_ok)
     public void onBtnOkClick() {
@@ -164,11 +163,11 @@ public class ConfigActivity extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
-        Intent startIntent = new Intent(this, VCDService.class);
+        Intent startIntent = new Intent(this, SNDService.class);
         startService(startIntent);
-
-//        Intent finger = new Intent(this, FingerActivity.class);
-//        startActivity(finger);
+//
+//        Intent intent = new Intent(this, PrintActivity.class);
+//        startActivity(intent);
 
         finish();
     }

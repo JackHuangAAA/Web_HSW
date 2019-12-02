@@ -9,6 +9,7 @@ import com.ethink.vcd.plugin.SocketPlugin;
 
 /**
  * ADM链接ADF服务
+ * 疫苗注射柜
  */
 
 public class VCDService extends PluginService {
@@ -19,7 +20,7 @@ public class VCDService extends PluginService {
     @Override
     public void onCreate() {
         //先添加插件再调用父类的方法
-        addPlugin(new ArkPlugin(getApplicationContext()));
+         addPlugin(new ArkPlugin(getApplicationContext()));
         addPlugin(new ServerPlugin(getApplicationContext()));
         addPlugin(new SocketPlugin(getApplicationContext()));
         addPlugin(new FingerPlugin(getApplicationContext()));
