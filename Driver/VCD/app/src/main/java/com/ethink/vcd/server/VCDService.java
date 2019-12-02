@@ -9,6 +9,7 @@ import com.ethink.vcd.plugin.SocketPlugin;
 
 /**
  * ADM链接ADF服务
+ * 疫苗注射柜
  */
 
 public class VCDService extends PluginService {
