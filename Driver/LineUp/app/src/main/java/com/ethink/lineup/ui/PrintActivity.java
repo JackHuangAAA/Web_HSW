@@ -2,6 +2,7 @@ package com.ethink.lineup.ui;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,32 +34,33 @@ public class PrintActivity extends AppCompatActivity {
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+    @BindView(R.id.image)
+    ImageView imageView;
 
     private int[] images = {R.drawable.print1, R.drawable.print2, R.drawable.print3};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setSystemUIVisible(false);
         setContentView(R.layout.activity_print);
         ButterKnife.bind(this);
+
         //  printController = new PrintController(this);
         //   printController.printConnStatus();
 //        logger.info("宽={} 高={}", ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight());
-        List<Fragment> fragmentList = new ArrayList<>();
-        for (int image : images) {
-            fragmentList.add(ImageFragment.newInstance(image));
-        }
-        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), R.string.appbar_scrolling_view_behavior, fragmentList));
-        viewPager.setOnClickListener((v) -> {
-            if (viewPager.getCurrentItem() == 1 && printController != null) {
-                printController.print("疫苗排队", "21", "我的号码21", 10);
-                viewPager.setCurrentItem(2, true);
-            }
-
-        });
+//        List<Fragment> fragmentList = new ArrayList<>();
+//        for (int image : images) {
+//            fragmentList.add(ImageFragment.newInstance(image));
+//        }
+//        viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), R.string.appbar_scrolling_view_behavior, fragmentList));
+//        viewPager.setOnClickListener((v) -> {
+//            if (viewPager.getCurrentItem() == 1 && printController != null) {
+//                printController.print("疫苗排队", "21", "我的号码21", 10);
+//                viewPager.setCurrentItem(2, true);
+//            }
+//
+//        });
 
     }
 
@@ -66,11 +68,8 @@ public class PrintActivity extends AppCompatActivity {
     public void ScanResult(EventMessage eventMessage) {
         logger.info("接受扫码信息-----");
         if (eventMessage != null) {
-            String str = eventMessage.getString("data");
-            Toast.makeText(this, "扫码信息：" + str, Toast.LENGTH_LONG).show();
-            if (viewPager.getCurrentItem() != 1) {
-                viewPager.setCurrentItem(1, true);
-            }
+          //  String str = eventMessage.getString("data");
+            printController.print("疫苗排队", "21", "我的号码21", 10);
         }
     }
     private void setSystemUIVisible(boolean show) {
