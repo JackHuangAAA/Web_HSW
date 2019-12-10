@@ -43,8 +43,6 @@
                 await this.$api.post("/inout/saveManyInout", params);
             },
             async next(){
-                //完成数据入库
-                await this.saveVaccine();
                 //增加入库记录
                 let array = this.datas,result = [];
                 for(let k=0;k<array.length;k++){
@@ -55,8 +53,12 @@
                     result.push(temp);
                 }
                 console.log(result)
-                await this.saveManyInout(result);
-                this.$router.push({ path: '/inout/inStockEnd', query: { datas: this.datas }});
+                if(!_.isEmpty(result)){
+                    //完成数据入库
+                    await this.saveVaccine();
+                    await this.saveManyInout(result)
+                    this.$router.push({ path: '/inout/inStockEnd', query: { datas: this.datas }});
+                }
             }
         },
         mounted() {

@@ -14,6 +14,7 @@ const RSP_CODE = {
 const commonResponseHandler = (response,resolve,reject)=>{
     if(config.env == 'development'){
         console.log(`<= `,response.data);
+        console.log(response)
     }
     if (response.code == RSP_CODE.NO_LOGIN) {
         router.push('/login');
