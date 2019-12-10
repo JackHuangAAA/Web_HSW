@@ -89,5 +89,9 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     //  implementation 'com.orhanobut:logger:2.2.0'
+    //签名板
+    implementation 'com.github.gcacace:signature-pad:1.2.1'
+    // 基础依赖包，必须要依赖
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
 
 }
