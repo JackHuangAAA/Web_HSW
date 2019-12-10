@@ -1,4 +1,5 @@
 <template>
+<template>
         <div class="layout">
             <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>

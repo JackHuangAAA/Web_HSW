@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         registerSocket(){
-            this.socket.emit("register", JSON.stringify({code:'IST0001D'}));
+            this.socket.emit("register", JSON.stringify({code:'DK0001'}));
         },
         freshDatas(){
             this.socket.on('NextVaccination', data => {

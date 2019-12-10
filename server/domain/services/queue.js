@@ -51,7 +51,7 @@ module.exports = {
         let channel = "UpdateQueueStatus";
         let message = {};
         message.type = channel;
-        message.code = 'IST0001Q';
+        message.code = 'CN0001';
         message.data = 'update';
         message = JSON.stringify(message);
         Domain.redis.pub.publishAsync(channel, message);
@@ -79,8 +79,16 @@ module.exports = {
         let channel = "UpdateQueueStatus";
         let message = {};
         message.type = channel;
-        message.code = 'IST0001Q';
+        message.code = 'CN0001';
         message.data = 'update';
+        message = JSON.stringify(message);
+        Domain.redis.pub.publishAsync(channel, message);
+
+        channel = "VaccinationCheck";
+        message={};
+        message.type = channel;
+        message.code = 'CK0001';
+        message.data =requestBody;
         message = JSON.stringify(message);
         Domain.redis.pub.publishAsync(channel, message);
         return await Domain.models.queue.updateOne({'_id': requestBody.id},
@@ -129,10 +137,19 @@ module.exports = {
             let channel = "NextVaccination";
             let message = {};
             message.type = channel;
-            message.code = 'IST0001D';
+            message.code = 'DK0001';
             message.data = result[0];
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
+
+            channel = "UpdateQueueStatus";
+            message = {};
+            message.type = channel;
+            message.code = 'CN0001';
+            message.data = result[0];
+            message = JSON.stringify(message);
+            Domain.redis.pub.publishAsync(channel, message);
+
         }
         return result;
 

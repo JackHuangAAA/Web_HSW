@@ -299,7 +299,7 @@
             //     });
             // },
             async queryQueue(){
-                await this.$api.get('/queue/queryQueueByCondition',{status:1}).then(res=>{
+                await this.$api.get('/queue/queryQueueByCondition',{status:1,next:1}).then(res=>{
                     this.vaccinationData=res.data[0];
                     console.log(this.vaccinationData);
                     this.vaccineName=res.data[0].vaccine.name;
