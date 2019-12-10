@@ -18,8 +18,13 @@ export default {
     },
     //打印机操作
     async printBook(params){
-        console.log("PRINT_BOOK===>PRINT_PROVINCE_ZHEJIANG")
-        return await $d.invoke('PRINT_BOOK','PRINT_PROVINCE_ZHEJIANG',params)
+        console.log("PRINT_BOOK===>PRINT_PROVINCE_ZHEJIANG");
+        return await $d.invoke('PRINT_BOOK','PRINT_PROVINCE_ZHEJIANG',params);
+    },
+    //挂号打印
+    async printTicket(params){
+        console.log("PRINT_TICKET===>PRINT");
+        return await $d.invoke('PRINT_TICKET','PRINT',params);
     }
 };
 
