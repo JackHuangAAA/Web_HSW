@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         registerSocket(){
-            this.socket.emit("register", JSON.stringify({code:'IST0001C'}));
+            this.socket.emit("register", JSON.stringify({code:'CK0001'}));
             console.log("socket已连接")
         },
         freshDatas(){
@@ -57,9 +57,8 @@ export default {
             let time_now = new Date();
             let time_30 = time_now.getTime()-31*60*1000;
             time_30 = new Date(time_30);
-            //let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0,finishDate:time_30});
-            console.log("queryQueue准备执行")
-            let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0});
+            let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0,finishDate:time_30});
+            //let queue = await this.$api.get('/queue/queryQueueByCondition',{status:0});
             this.queue = queue.data;
             console.log(this.queue)
             this.time();
@@ -70,7 +69,7 @@ export default {
                 let time=Math.abs(Math.floor(timeFinish/60000));
                 this.$set(this.queue[i],'time',time);
                 if(this.queue[i].time>=31){
-                    //this.queue.shift(i);
+                    this.queue.shift(i);
                 }
                 // this.queue[i].time=30-parseInt((time_now.getTime()-timeFinish.getTime())/(60*1000));
             }
