@@ -79,7 +79,7 @@ module.exports = {
         let channel = "VaccinationCheck";
         let message={};
         message.type = channel;
-        message.code = 'IST0001C';
+        message.code = 'CK0001';
         message.data =requestBody;
         message = JSON.stringify(message);
         Domain.redis.pub.publishAsync(channel, message);

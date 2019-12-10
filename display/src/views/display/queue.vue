@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         registerSocket(){
-            this.socket.emit("register", JSON.stringify({code:'IST0001Q'}));
+            this.socket.emit("register", JSON.stringify({code:'CN0001'}));
         },
         freshDatas(){
             this.socket.on('UpdateQueueStatus', data => {
@@ -39,15 +39,14 @@ export default {
             });
         },
         async queryQueue(){
-            console.log("queryQueue准备执行");
             let queue = await this.$api.get('/queue/queryQueueByCondition',{status:1});
             this.queue = queue.data;
-            console.log('res======'+JSON.stringify(queue));
+            //console.log('res======'+JSON.stringify(queue));
             for(let i =1;i<this.queue.length;i++){
                 this.$set(this.queue[i],'position',"等待接种");
             }
             this.$set(this.queue[0],'position',"请到1号接种台");
-            console.log(this.queue)
+            //console.log(this.queue)
         }
     },
 

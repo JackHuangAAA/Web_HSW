@@ -79,7 +79,8 @@ export default {
                 status:1
             });
             this.queueLength = queue.data.length?queue.data.length:0;
-
+            //打印凭条
+            this.$device.printTicket({title:'疫苗注射排队',number:String(this.sort),current:this.queueLength});
              await this.$api.post('/queue/saveQueue', {
                 sort: this.sort,
                 code: this.user.customer.code,

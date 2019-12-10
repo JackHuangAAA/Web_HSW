@@ -11,7 +11,7 @@ const resolve = dir => {
 
 //静态文件基础路径//设备测试需要把display去掉
 const BASE_URL = process.env.NODE_ENV === 'production'
-  ? '/display'
+  ? '/'
   : '/'
 
 module.exports = {
