@@ -2,14 +2,10 @@ package com.ethink.lineup.ui;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import com.ethink.lineup.Const;
 import com.ethink.lineup.R;
-import com.ethink.lineup.adapter.ViewPagerAdapter;
 import com.ethink.lineup.controller.PrintController;
-import com.ethink.lineup.ui.fragment.ImageFragment;
-import com.ethink.lineup.widget.NoScrollViewPager;
 import com.ethink.plugin.message.EventMessage;
 
 import org.simple.eventbus.EventBus;
@@ -18,12 +14,7 @@ import org.simple.eventbus.ThreadMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PrintActivity extends AppCompatActivity {
@@ -31,10 +22,7 @@ public class PrintActivity extends AppCompatActivity {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private PrintController printController;
 
-    @BindView(R.id.viewpager)
-    NoScrollViewPager viewPager;
-    @BindView(R.id.emptyView)
-    LinearLayout emptyView;
+
 
     private  int num=1;
     private int current=0;
@@ -50,7 +38,7 @@ public class PrintActivity extends AppCompatActivity {
          printController = new PrintController(this);
            printController.printConnStatus();
 //        logger.info("宽={} 高={}", ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight());
-        List<Fragment> fragmentList = new ArrayList<>();
+      /*  List<Fragment> fragmentList = new ArrayList<>();
         for (int image : images) {
             fragmentList.add(ImageFragment.newInstance(image));
         }
@@ -67,7 +55,7 @@ public class PrintActivity extends AppCompatActivity {
               if(cur==2){
                 viewPager.setCurrentItem(0, false);
             }
-        });
+        });*/
     }
 
 
@@ -75,10 +63,10 @@ public class PrintActivity extends AppCompatActivity {
     @Subscriber(mode = ThreadMode.MAIN,tag = Const.SCAN_EVENT)
     public void ScanResult(EventMessage eventMessage) {
         if (eventMessage != null) {
-            String str = eventMessage.getString("data");
-            if (viewPager.getCurrentItem() != 1) {
-                viewPager.setCurrentItem(1, true);
-            }
+            //String str = eventMessage.getString("data");
+            printController.print("疫苗排队", String.valueOf(current), String.format("我的号码%s",num), num);
+            num++;
+            current+=5;
         }
     }
 

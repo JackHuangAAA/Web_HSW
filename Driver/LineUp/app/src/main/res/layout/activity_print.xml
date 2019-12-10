@@ -7,14 +7,14 @@
     tools:context=".ui.PrintActivity">
  <com.ethink.lineup.widget.NoScrollViewPager
      android:id="@+id/viewpager"
+     android:visibility="gone"
      android:layout_width="match_parent"
      android:layout_height="match_parent"/>
- <LinearLayout
-     android:orientation="vertical"
-     android:layout_gravity="bottom"
-     android:id="@+id/emptyView"
+ <ImageView
+     android:id="@+id/image"
+     android:src="@drawable/print1"
      android:layout_width="match_parent"
-     android:layout_height="800dp"/>
+     android:layout_height="match_parent"/>
 
 
 </FrameLayout>
