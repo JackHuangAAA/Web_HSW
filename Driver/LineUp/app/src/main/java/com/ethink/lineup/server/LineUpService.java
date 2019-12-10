@@ -5,8 +5,6 @@ import com.ethink.lineup.plugin.ScannerPlugin;
 import com.ethink.lineup.plugin.ServerPlugin;
 import com.ethink.plugin.PluginService;
 
-import org.simple.eventbus.EventBus;
-
 /**
  *排队取号机
  * ADM链接ADF服务
@@ -17,22 +15,18 @@ public class LineUpService extends PluginService {
         super("LineUp", true);
     }
 
+
     @Override
     public void onCreate() {
-        EventBus.getDefault().register(this);
         //先添加插件再调用父类的方法
       // addPlugin(new ArkPlugin(getApplicationContext()));
         //  addPlugin(new FingerPlugin(getApplicationContext()));
         addPlugin(new ServerPlugin(getApplicationContext()));
-        addPlugin(new PrintPlugin(getApplicationContext()));
+      //  addPlugin(new PrintPlugin(getApplicationContext()));
         addPlugin(new ScannerPlugin(getApplicationContext()));
       //   addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
+
 }

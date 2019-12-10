@@ -16,6 +16,9 @@
 -->
 
 <resources>
+    <color name="end_color">#FF8847</color>
+    <color name="start_color">#F75520</color>
+    <color name="tip_color">#80000000</color>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>

@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.PrintActivity">
- <androidx.viewpager.widget.ViewPager
+ <com.ethink.lineup.widget.NoScrollViewPager
      android:id="@+id/viewpager"
      android:layout_width="match_parent"
      android:layout_height="match_parent"/>
+ <LinearLayout
+     android:orientation="vertical"
+     android:layout_gravity="bottom"
+     android:id="@+id/emptyView"
+     android:layout_width="match_parent"
+     android:layout_height="800dp"/>
 
 
 </FrameLayout>

@@ -39,7 +39,7 @@ public class ArkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ark);
         ButterKnife.bind(this);
-       // this.arkController = new ArkController("/dev/ttyUSB0", 115200);
+     //   this.arkController = new ArkController("/dev/ttyUSB0", 115200);
     }
 
     @OnClick({R.id.open, R.id.ark_status, R.id.tem_value, R.id.swh_status, R.id.sys_value})
