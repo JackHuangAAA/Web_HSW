@@ -25,6 +25,7 @@ import org.simple.eventbus.EventBus;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,27 +80,30 @@ public class ScannerPlugin extends BasePlugin implements Runnable, USBDeviceFace
     public void run() {
         //     byte[]b=new byte[]{0x16,0x54,0x0D,0x21};
         logger.info("run----------------------------");
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
         while (!Thread.interrupted() && connection != null && mReadEndpoint != null) {
             try {
                 byte[] src = new byte[256];
-                //logger.info("read----------------------------mReadEndpoint size{}",mReadEndpoint.getMaxPacketSize());
-                int len = read(src, 0);
-                if(len > 0)
+                controlOut(9,0x0201,0); //触发中断上送数据
+                int len = read(src, 200);
+                if(len > 0) {
                     logger.info("read: {} len: {}", HexDump.toHexString(src, 0, len), len);
-//                len = read(src, 0);
-//                if(len > 0)
-//                    logger.info("read: {} len: {}", HexDump.toHexString(src, 0, len), len);
-                if (len > 0) {
-                    String tmp = new String(src,6,len-6).replaceAll("\\u0000","");
-
-                    //Log.d(TAG, "run: 扫码结果："+scantext);
-                    logger.info("扫码数据 {} len: {}",tmp,tmp.length());
-                    EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
-                    eventMessage.setString("data", tmp);
-                    pluginManager.post(eventMessage);
-                    messageToast.obtainMessage(1, tmp).sendToTarget();
-                    EventBus.getDefault().post(eventMessage, Const.SCAN_EVENT);
-                    logger.info("发送扫码信息--------");
+                    logger.info("buffer {} {} ",buffer.capacity(),buffer.position());
+                    buffer.put(src,6,len-6);
+                }else{
+                    buffer.flip();
+                    if(buffer.limit() > 0){
+                        String tmp = new String(buffer.array(),0,buffer.limit()).replaceAll("\\u0000","");
+                        //Log.d(TAG, "run: 扫码结果："+scantext);
+                        logger.info("扫码数据 {} len: {}",tmp,tmp.length());
+                        EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
+                        eventMessage.setString("data", tmp);
+                        pluginManager.post(eventMessage);
+                        messageToast.obtainMessage(1, tmp).sendToTarget();
+                        EventBus.getDefault().post(eventMessage, Const.SCAN_EVENT);
+                        logger.info("发送扫码信息--------");
+                    }
+                    buffer.clear();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -211,6 +215,12 @@ public class ScannerPlugin extends BasePlugin implements Runnable, USBDeviceFace
             System.arraycopy(mReadBuffer, 0, dest, 0, numBytesRead);
         }
         return numBytesRead;
+    }
+
+    private int controlOut(int request, int value, int index) {
+        final int REQTYPE_HOST_TO_DEVICE = 0x21;
+        return connection.controlTransfer(REQTYPE_HOST_TO_DEVICE, request,
+                value, index, new byte[]{0x01,0x22,0x01,0x000}, 4, 5000);
     }
 
     public static class MessageToast extends Handler {
