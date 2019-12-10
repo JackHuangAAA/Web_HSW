@@ -39,6 +39,8 @@ public class PrintActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setSystemUIVisible(false);
         setContentView(R.layout.activity_print);
         ButterKnife.bind(this);
