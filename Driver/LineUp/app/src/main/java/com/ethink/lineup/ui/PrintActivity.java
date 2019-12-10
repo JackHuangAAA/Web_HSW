@@ -1,13 +1,13 @@
 package com.ethink.lineup.ui;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import com.blankj.utilcode.util.ScreenUtils;
 import com.ethink.lineup.Const;
 import com.ethink.lineup.R;
 import com.ethink.lineup.adapter.ViewPagerAdapter;
@@ -39,6 +39,7 @@ public class PrintActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setSystemUIVisible(false);
         setContentView(R.layout.activity_print);
         ButterKnife.bind(this);
         //  printController = new PrintController(this);
@@ -70,7 +71,21 @@ public class PrintActivity extends AppCompatActivity {
             }
         }
     }
-
+    private void setSystemUIVisible(boolean show) {
+        if (show) {
+            int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            uiFlags |= 0x00001000;
+            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
+        } else {
+            int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            uiFlags |= 0x00001000;
+            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
+        }
+    }
 
 // 扫码设备usb device vid=1504  pid=6400 name=Symbol Bar Code Scanner
 // 触摸屏usb device vid=9589  pid=1025 name=CoolTouchR System
