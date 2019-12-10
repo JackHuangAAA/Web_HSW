@@ -67,6 +67,7 @@ public class ScannerPlugin extends BasePlugin implements Runnable, USBDeviceFace
         rxManager = new RxManager();
         mReadBuffer = new byte[DEFAULT_READ_BUFFER_SIZE];
         mWriteBuffer = new byte[DEFAULT_WRITE_BUFFER_SIZE];
+        EventBus.getDefault().register(this);
         usbController = new UsbConnectUtil(context, this);
         usbController.requestUsb();
 
@@ -99,9 +100,8 @@ public class ScannerPlugin extends BasePlugin implements Runnable, USBDeviceFace
                         EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
                         eventMessage.setString("data", tmp);
                         pluginManager.post(eventMessage);
-                        messageToast.obtainMessage(1, tmp).sendToTarget();
+                      //  messageToast.obtainMessage(1, tmp).sendToTarget();
                         EventBus.getDefault().post(eventMessage, Const.SCAN_EVENT);
-                        logger.info("发送扫码信息--------");
                     }
                     buffer.clear();
                 }
