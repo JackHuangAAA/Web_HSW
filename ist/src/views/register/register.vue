@@ -84,13 +84,15 @@ export default {
             customerVaccine.customer = this.customer
 
             if(this.single){
-                this.$router.push({path:'/pay/pay',query:{type: this.single}})
+                this.$router.push({path:'/pay/pay',query:{type: this.single}});
                 customerVaccine.vaccine = this.paidVaccineData;
+                console.log(this.paidVaccineData)
             }else{
-                this.$router.push({path:'/register/free'})
-                customerVaccine.vaccine = this.freeVaccineData
+                this.$router.push({path:'/register/free'});
+                customerVaccine.vaccine = this.freeVaccineData;
+                console.log(this.freeVaccineData)
             }
-            this.saveUser(customerVaccine)
+            this.saveUser(customerVaccine);
         },
         quit(){
             this.saveUser(null);
@@ -98,8 +100,7 @@ export default {
         },
         async queryCustomer(){
             //获取主页传过来的扫码内容
-            this.code = this.$route.query.code;
-            let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
+            let customer = this.$route.query.customer;
             this.customer = customer.data[0];
 
             let planId = customer.data[0].next.plan;

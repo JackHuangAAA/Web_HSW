@@ -34,11 +34,14 @@ export default {
             });
             this.queueLength = queue.data.length?queue.data.length:0;
         },
-        scanBarcode(){
-            this.$device.subscribe('SCANNER_RESULT', (data) => {
+        async scanBarcode(){
+            this.$device.subscribe('SCANNER_RESULT',async (data) => {
                 console.log('SERVER_PUSH==>SCANNER_RESULT,result:' + JSON.stringify(data));
                 let code =data.data;
-                this.$router.push({path:'/register/register',query:{code:code}});
+                let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:code});
+                if(customer.data.length!=0){
+                    this.$router.push({path:'/register/register',query:{customer:customer}});
+                }
             });
         }
     },
