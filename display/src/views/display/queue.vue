@@ -42,8 +42,20 @@ export default {
             let queue = await this.$api.get('/queue/queryQueueByCondition',{status:1});
             this.queue = queue.data;
             //console.log('res======'+JSON.stringify(queue));
-            for(let i =1;i<this.queue.length;i++){
+            for(let i =0;i<this.queue.length;i++){
                 this.$set(this.queue[i],'position',"等待接种");
+                let len=String(this.queue[i].sort).length;
+                switch(len){
+                    case 1:
+                        this.$set(this.queue[i],'sort',"000"+this.queue[i].sort);
+                        break;
+                    case 2:
+                        this.$set(this.queue[i],'sort',"00"+this.queue[i].sort);
+                        break;
+                    case 3:
+                        this.$set(this.queue[i],'sort',"0"+this.queue[i].sort);
+                        break;
+                }
             }
             this.$set(this.queue[0],'position',"请到1号接种台");
             //console.log(this.queue)

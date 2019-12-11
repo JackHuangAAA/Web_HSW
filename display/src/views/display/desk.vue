@@ -23,7 +23,7 @@ export default {
         return {
             socket: io.connect("/"),
             nextVaccination: {
-                sort:1,
+                sort:'0001',
                 name:"王晓华",
                 vaccine:{code: 'ym991',name: '卡介苗', batchNo:'B-998',supervisionCode: 'FT20190920001',date: "2020-06-05 12:00", product: '上海生物',dosage:'0.5ml/支',cost:'0.00'}
             }
@@ -36,6 +36,18 @@ export default {
         freshDatas(){
             this.socket.on('NextVaccination', data => {
                 this.nextVaccination = data.data;
+                let len=String(this.nextVaccination.sort).length;
+                switch(len){
+                    case 1:
+                        this.$set(this.nextVaccination,'sort',"000"+this.nextVaccination.sort);
+                        break;
+                    case 2:
+                        this.$set(this.nextVaccination,'sort',"00"+this.nextVaccination.sort);
+                        break;
+                    case 3:
+                        this.$set(this.nextVaccination,'sort',"0"+this.nextVaccination.sort);
+                        break;
+                }
             });
         }
     },

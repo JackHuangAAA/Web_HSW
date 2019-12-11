@@ -22,7 +22,6 @@
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{"温度"+temperature}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
