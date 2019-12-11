@@ -35,10 +35,10 @@ export default {
             this.queueLength = queue.data.length?queue.data.length:0;
         },
         scanBarcode(){
-            this.$device.subscribe('SCANNER_RESULT', async (data) => {
+            this.$device.subscribe('SCANNER_RESULT', (data) => {
                 console.log('SERVER_PUSH==>SCANNER_RESULT,result:' + JSON.stringify(data));
-                this.code = JSON.parse(data.data);
-                this.$router.push({path:'/register/register',query:{code:this.code}});
+                let code =data.data;
+                this.$router.push({path:'/register/register',query:{code:code}});
             });
         }
     },

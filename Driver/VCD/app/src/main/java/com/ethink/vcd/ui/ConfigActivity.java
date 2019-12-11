@@ -167,7 +167,7 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, VCDService.class);
         startService(startIntent);
 
-//        Intent finger = new Intent(this, FingerActivity.class);
+//        Intent finger = new Intent(this, ArkActivity.class);
 //        startActivity(finger);
 
         finish();

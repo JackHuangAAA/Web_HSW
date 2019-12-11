@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="viewcolor">#d2d2d2</color>
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="but1">#ff9000</color>
+    <color name="but2">#0090ff</color>
 </resources>

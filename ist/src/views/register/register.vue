@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="regcontainer">
         <div class="title">基本信息</div>
         <div class="userInfo">
             <div>姓名：<span>{{customer?customer.name:''}}</span></div>
