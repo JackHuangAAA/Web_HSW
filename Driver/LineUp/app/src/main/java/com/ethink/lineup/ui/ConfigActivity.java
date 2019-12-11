@@ -166,8 +166,8 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
 //
-        Intent intent = new Intent(this, PrintActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, PrintActivity.class);
+//        startActivity(intent);
 
         finish();
     }

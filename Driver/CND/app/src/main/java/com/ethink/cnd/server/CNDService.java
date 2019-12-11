@@ -25,7 +25,7 @@ public class CNDService extends PluginService {
          addPlugin(new ServerPlugin(getApplicationContext()));
        // addPlugin(new SocketPlugin(getApplicationContext()));
         addPlugin(new ScannerPlugin(getApplicationContext()));
-         addPlugin(new PrintPlugin(getApplicationContext()));
+       //  addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();
     }
 }
