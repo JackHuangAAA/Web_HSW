@@ -2,9 +2,11 @@
     <div class="container">
         <div class="personInf">
             <p>基本信息</p>
-            <div>
-                <span class="infTitle">姓名:</span><span class="infContent">{{user?user.name:''}}</span><span class="infTitle">性别:</span><span class="infContent">{{user?user.sex:''}}</span>
-                <span class="infTitle">年龄:</span><span class="infContent">{{user?user.age:''}}周岁</span><span class="infTitle">距离上次接种时间:</span><span class="infContent day">{{user?user.intervalTime:''}}天</span>
+            <div class="personInfCont">
+                <div class="infTitle">姓名:<span class="infContent">{{user?user.name:''}}</span></div>
+                <div class="infTitle">性别:<span class="infContent">{{user?user.sex:''}}</span></div>
+                <div class="infTitle">年龄:<span class="infContent">{{user?user.age:''}}周岁</span></div>
+                <div class="infTitle">距离上次接种时间:<span class="infContent day">{{user?user.intervalTime:''}}天</span></div>
             </div>
         </div>
         <div class="vaccineInf">
@@ -15,7 +17,6 @@
             <div class="cancel" @click="back">取消</div>
             <div class="confirm" @click="confirm()">打印信息</div>
         </div>
-        <p class="confirmTip">请将疫苗本放入打印机，点击打印信息按钮</p>
     </div>
 </template>
 

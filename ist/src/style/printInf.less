@@ -1,68 +1,62 @@
+@import './color.less';
 .container{
-    width: 105rem;
-    height: 56rem;
+    width: 94.25%;
+    height: 105rem;
     background-color: white;
-    position: absolute;
-    top: 6.25rem;
-    left: 7.5rem;
+    margin-top: 1.8125rem;
+    margin: 1.8125rem 3.06% 8.1875rem 2.69%;
+    padding: 0 2.25rem;
     border-radius:10px;
 }
 .personInf{
-    width: 74.9375rem;
-    height: 5.625rem;
     margin:  0 auto;
-    margin-top: 4.4375rem;
-}
-.vaccineInf{
-    width: 74.9375rem;
-    height: 10.5rem;
-    margin:  0 auto;
-    margin-top: 5.5625rem;
-    position: relative;
+    padding-top: 6rem;
 }
 .personInf p {
     width: 100%;
-    height: 1.125rem;
-    font-size: 1.125rem;
-    line-height: 1.125rem;
+    font-size: 1.5rem;
     font-weight: bold;
 }
-.personInf div{
-    width: 100%;
-    height: 4.5rem;
+.personInfCont{
+    display: flex;
+    flex-flow: row wrap;
+    div{
+        width: 33.33333%;
+        margin-top: 3.5rem;
+    }
+    div:nth-child(4){
+        width: 50%;
+        margin-top: 3rem;
+    }
 }
 .infTitle{
     font-size: 1.5rem;
     font-weight: bold;
     color: #3E4955;
-    margin-left: 7.25rem;
-}
-.infTitle:nth-child(1){
-    margin-left: 0;
+    line-height: 1;
 }
 .infContent{
     font-size: 1.875rem;
     font-weight: bold;
     color: #3E4955;
     margin-left: 2.625rem;
-    line-height: 4.5rem;
 }
+.vaccineInf{
+    margin-top: 6.0625rem;
+}
+
 .day{
     color: #F4B92C;
 }
 .vaccineInf p{
     width: 100%;
-    height: 1.125rem;
-    line-height: 1.125rem;
     font-weight: bold;
     color: #3E4955;
-    font-size: 1.125rem;
+    font-size: 1.5rem;
+    margin-bottom: 2.1875rem;
 }
 .detail{
-    position: absolute;
-    width: 140%;
-    left: -13rem;
-    bottom: 0;
+    margin: 0;
 }
 .btn-box{
     display: flex;
@@ -70,39 +64,28 @@
     width: 100%;
     height: 8.625rem;
     font-weight: bold;
-    margin-top: 11.6875rem;
+    margin-top: 14.5rem;
     background: white;
     border-radius:10px;
-    div{
-        height: 4rem;
-        line-height: 4rem;
-        font-size: 1.5rem;
+    div{        
+        height: 5.1875rem;
+        line-height: 5.1875rem;
+        font-size: 2rem;
     }
     .cancel{
         background: url('/static/img/cancel.png') no-repeat center;
         background-size: 100%;
-        color: #5647ff;
-        width: 11.6875rem;
+        color: @purple;
+        width: 14.25rem;
         margin-left: 4.3125rem;
         text-align: center;
     }
     .confirm{
         background: url('/static/img/confirm.png') no-repeat center;
         background-size: 100%;
-        width: 16rem;
-        color: white;
-        padding-left: 3.75rem;
+        width: 20.75rem;
+        color: @white;
+        padding-left: 4.5rem;
         margin-left: 1.75rem;
     }
-}
-.confirmTip{
-    width: 19rem;
-    height: 1rem;
-    font-size: 1rem;
-    line-height: 1rem;
-    font-weight: bold;
-    color: #36506B;
-    position: absolute;
-    left: 54.25rem;
-    top: 43rem;
 }

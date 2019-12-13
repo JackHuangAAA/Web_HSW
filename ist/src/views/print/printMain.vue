@@ -4,8 +4,7 @@
         <p class="code">设备编号：{{device.code}}</p>
         <p class="tip">安全用药，打印信息，排队接种</p>
         <div class="scanNotice">
-            <div>接种信息打印</div>
-            <div>请将疫苗本条码对准扫描口，进行扫码</div>
+            <div>请将疫苗本条码对准扫描口进行扫码</div>
         </div>
     </div>
 </template>

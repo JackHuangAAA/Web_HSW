@@ -7,7 +7,7 @@
         <div class="main">
             <router-view></router-view>
         </div>
-        <div class="copyright">银信博荣疫苗接种一体化解决方案</div>
+        <!-- <div class="copyright">银信博荣疫苗接种一体化解决方案</div> -->
     </div>
 
     <router-view v-else></router-view>
