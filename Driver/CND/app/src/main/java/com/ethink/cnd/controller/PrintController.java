@@ -319,7 +319,8 @@ public class PrintController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (paperStatus() == 0x43) {
+            byte by=paperStatus();
+            if ( by== 0x43) {
                 boolean r=verticalSpace();
                 logger.info("行间距：r={}",r);
                 boolean re = provinceHorizontal();
@@ -339,9 +340,11 @@ public class PrintController {
                 ready = false;
                 break;
             }
-
+//            if(by==0x42){
+//                exitPaper();
+//                ready=false;
+//            }
             else {
-
                 if (!inPaperProvince(num)) {
                     ready = false;
                     break;

@@ -8,11 +8,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.ethink.lineup.App;
@@ -27,6 +22,10 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -166,8 +165,8 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
 //
-//        Intent intent = new Intent(this, PrintActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, PrintActivity.class);
+        startActivity(intent);
 
         finish();
     }

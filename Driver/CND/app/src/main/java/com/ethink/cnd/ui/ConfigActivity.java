@@ -63,7 +63,7 @@ public class ConfigActivity extends AppCompatActivity {
         String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
         //自动上报的地址
         if (url.isEmpty()) {
-            etUrl.setText("http://192.168.0.54:8080");
+            etUrl.setText("http://iviotp.ethinkbank.com");
             //   etUrl.setText("http://ads.ethinkbank.com:80");
 
         } else {
@@ -76,7 +76,7 @@ public class ConfigActivity extends AppCompatActivity {
             etSerial.setText(""+PhoneUtils.getSerial());
         }
         if (socketUrl.isEmpty()) {
-            edSocket.setText("http://192.168.0.229:9996");
+            edSocket.setText("http://iviotp.ethinkbank.com");
         } else {
             edSocket.setText(socketUrl);
         }
@@ -163,11 +163,11 @@ public class ConfigActivity extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
-        Intent startIntent = new Intent(this, CNDService.class);
-        startService(startIntent);
-//
-//        Intent intent = new Intent(this, PrintActivity.class);
-//        startActivity(intent);
+      // Intent startIntent = new Intent(this, CNDService.class);
+      //  startService(startIntent);
+
+       Intent intent = new Intent(this, PrintActivity.class);
+        startActivity(intent);
 
         finish();
     }
