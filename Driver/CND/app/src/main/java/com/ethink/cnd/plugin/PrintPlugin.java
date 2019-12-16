@@ -2,16 +2,17 @@ package com.ethink.cnd.plugin;
 
 import android.content.Context;
 
+import com.ethink.cnd.controller.PrintController;
 import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
+import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
-import com.ethink.cnd.controller.PrintController;
 
 /***
  *
  * 存折打印机
  * **/
-public class PrintPlugin extends BasePlugin implements FunctionHandler {
+public class PrintPlugin extends BasePlugin implements FunctionHandler{
     private Context context;
     private PrintController printController;
 
@@ -53,7 +54,15 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler {
                 String vaccine_site = pluginMessage.getString("vaccine_site");
                 String signature = pluginMessage.getString("signature");
                 String data  = PrintController.provinceFormat(need_name,vaccine,vaccine_date,lot_no,vaccine_unit,vaccine_site,signature);
-                printController.zheProvince(6, data);
+                printController.zheProvince(6, data, new PrintResult() {
+                    @Override
+                    public void printResult(Boolean res) {
+                        logger.info("打印结果：{}",res);
+                        EventMessage eventMessage = new EventMessage("PRINT_RESULT");
+                        eventMessage.setBool("data",res);
+                        pluginManager.post(eventMessage);
+                    }
+                });
                 break;
             case "PRINT_CITY_HANGZHOU":
                 int num1 = pluginMessage.getInt("num");
@@ -73,4 +82,12 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler {
         }
         return pluginMessage;
     }
+
+
+
+    public  interface  PrintResult{
+        void printResult(Boolean res);
+    }
+
+
 }
