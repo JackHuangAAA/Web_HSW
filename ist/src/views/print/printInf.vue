@@ -69,7 +69,8 @@ export default {
             });
         },
         back: function(){
-            this.$router.push('/print/printMain')
+            this.$device.printExitPaper();
+            this.$router.push('/print/printMain');
         }
         // initData(){
         //     //获取客户信息和疫苗信息

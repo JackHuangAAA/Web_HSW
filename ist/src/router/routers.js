@@ -1,6 +1,6 @@
 const routers = [
     {
-        path: '/',
+        path: '/1',
         component: (resolve) => require(['@/views/printHome.vue'], resolve),   //补打一体机主页
         children:[
             { path: '/print/printMain', component: (resolve) => require(['@/views/print/printMain.vue'], resolve) },//打印主页
@@ -9,7 +9,7 @@ const routers = [
         ]
     },
     {
-        path: '/1',
+        path: '/',
         component: (resolve) => require(['@/views/home.vue'], resolve),
         children: [
             { path: '/main', component: (resolve) => require(['@/views/main.vue'], resolve) },  //智能接种主页
