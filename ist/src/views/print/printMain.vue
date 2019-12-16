@@ -36,8 +36,8 @@ export default {
                 if(this.$route.path!='/print/printMain'){
                     return false;
                 }
-                this.code = JSON.parse(data.data);
-                // this.code = '12306';
+                this.code = data.data;
+                // this.code = 'A014';
                 console.log("这里是扫码获取的结果=====>"+JSON.stringify(this.code));
                 let customer = await this.$api.get('/queue/queryQueueByCondition',{code:this.code});
                 this.customer = customer.data[0];

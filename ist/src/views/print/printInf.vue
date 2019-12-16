@@ -14,7 +14,7 @@
             <detail class="detail"></detail>
         </div>
         <div class="btn-box">
-            <div class="cancel" @click="back">取消</div>
+            <div class="cancel" @click="back">返回首页</div>
             <div class="confirm" @click="confirm()">打印信息</div>
         </div>
     </div>
@@ -55,11 +55,18 @@ export default {
                 vaccine_unit:this.device.unitName,
                 vaccine_site:'左手臂',
                 signature:this.user.name
-            }).then(res=>{
-                console.log('打印返回结果'+JSON.stringify(res));
-                this.$router.push('/print/printEnd');
             });
-            console.log("这里是末尾")
+            this.$device.subscribe('PRINT_RESULT',(res)=>{
+                console.log('PRINT_RESULT:'+JSON.stringify(res));
+                if(res.data){
+                    this.$router.push('/print/printEnd');
+                }else{
+                    this.$Message.info({
+                        content: '打印失败，请重试',
+                        duration: 10
+                    });
+                }
+            });
         },
         back: function(){
             this.$router.push('/print/printMain')
