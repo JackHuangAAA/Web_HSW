@@ -3,6 +3,7 @@ package com.ethink.cnd.controller;
 import android.util.Log;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.ethink.cnd.plugin.PrintPlugin;
 import com.ethink.tools.serialport.SerialPort;
 import com.ethink.tools.serialport.SerialPortManager;
 import com.ethink.tools.serialport.SerialPortSetting;
@@ -309,7 +310,7 @@ public class PrintController {
     /***
      * 浙江省疫苗本
      * **/
-    public void zheProvince(int num,String data) {
+    public void zheProvince(int num, String data, PrintPlugin.PrintResult printResult) {
         ready = true;
         logger.info("打印操作ready状态:{}", ready);
         while (ready) {
@@ -337,6 +338,9 @@ public class PrintController {
                 buffer.put((byte) 0x4F);
                 boolean result = write(buffer.array(), da.length + 4);
                 logger.info("打印结果：{}", result);
+                if(printResult!=null){
+                    printResult.printResult(result);
+                }
                 ready = false;
                 break;
             }
@@ -347,6 +351,9 @@ public class PrintController {
             else {
                 if (!inPaperProvince(num)) {
                     ready = false;
+                    if(printResult!=null){
+                        printResult.printResult(false);
+                    }
                     break;
                 }
 
