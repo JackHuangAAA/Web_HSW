@@ -1,7 +1,5 @@
 package com.ethink.vcd.service;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import com.ethink.vcd.App;
@@ -23,10 +21,11 @@ import okhttp3.Response;
 
 public class HeaderInterceptor implements Interceptor {
 private String deviceId;
+private String alias;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     public HeaderInterceptor(   ){
         deviceId= SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
-
+        alias= SPUtils.getSharedStringData(App.getAppContext(), Const.ALIAS);
     }
 
     @Override
@@ -34,6 +33,6 @@ private String deviceId;
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         logger.info("请求头：deviceId   "+deviceId);
-        return chain.proceed(request.newBuilder().addHeader("deviceId", deviceId).build());
+        return chain.proceed(request.newBuilder().addHeader("alias",alias).addHeader("deviceId", deviceId).build());
     }
 }

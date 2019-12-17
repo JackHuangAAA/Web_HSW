@@ -164,6 +164,7 @@ public class ConfigActivity extends AppCompatActivity {
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
+//
 //        Intent intent = new Intent(this, PrintActivity.class);
 //        startActivity(intent);
 
