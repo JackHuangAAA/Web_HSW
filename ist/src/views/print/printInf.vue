@@ -61,9 +61,10 @@ export default {
                 if(res.data){
                     this.$router.push('/print/printEnd');
                 }else{
-                    this.$Message.info({
+                    this.$Message.warning({
                         content: '打印失败，请重试',
-                        duration: 10
+                        duration: 5,
+                        closable: true
                     });
                 }
             });

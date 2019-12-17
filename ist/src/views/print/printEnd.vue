@@ -12,7 +12,7 @@
             <div class="complete-detail">
                 <detail/>
             </div>
-            <div class="complete-confirm" @click="confirm()">确认</div>
+            <div class="complete-confirm" @click="confirm()">返回首页</div>
         </div>
     </div>
 </template>
@@ -50,7 +50,7 @@ export default {
                 }
                 if(this.count == 0){
                     clearInterval(this.timer);
-                    this.$router.push('/print/printMain');
+                    // this.$router.push('/print/printMain');
                 }
             }, 1000);
         },

@@ -43,6 +43,7 @@ export default {
         }),
         getDevice(){
             this.$device.getDeviceCode().then(res => {
+                console.log('getDeviceCode result:'+JSON.stringify(res))
                 this.deviceId = res;
                 this.saveDevice({id:res})
                 this.$router.push('/main');
@@ -52,6 +53,7 @@ export default {
     mounted(){
         //获取设备信息
         this.getDevice();
+        
     }
 }
 </script>

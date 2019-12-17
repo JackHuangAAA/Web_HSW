@@ -44,7 +44,9 @@ export default {
             saveDevice: 'saveDevice'
         }),
         getDevice(){
+            console.log("printHome getDevice")
             this.$device.getDeviceCode().then(res => {
+                console.log("getDeviceCode result"+JSON.stringify(res));
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
                     this.saveDevice(res2.data[0]);
                     this.deviceId = res2.data[0].code;
@@ -55,6 +57,7 @@ export default {
         },
     },
     mounted(){
+        console.log("printHome mounted")
         //获取设备信息
         this.getDevice();
         //this.code='12306'
