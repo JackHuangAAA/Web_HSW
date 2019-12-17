@@ -344,9 +344,9 @@ public class PrintController {
                 ready = false;
                 break;
             }
-            if(by==0x42){
-               inPaper();
-            }
+//            if(by==0x42){
+//               inPaper();
+//            }
             else {
                 if (!inPaperProvince(num)) {
                     ready = false;
@@ -372,7 +372,7 @@ public class PrintController {
         StringBuilder stringBuilder = new StringBuilder();
         for (int index = 1; index < num; index++) {
             stringBuilder.append("\r\n");
-            Log.d(TAG, "printData: 换行------{}"+index);
+            Log.d(TAG, "printData: 换行------"+index);
         }
         stringBuilder.append(data);
         try {

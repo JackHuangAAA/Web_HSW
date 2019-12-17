@@ -58,7 +58,7 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler{
                 String vaccine_site = pluginMessage.getString("vaccine_site");
                 String signature = pluginMessage.getString("signature");
                 String data  = PrintController.provinceFormat(need_name,vaccine,vaccine_date,lot_no,vaccine_unit,vaccine_site,signature);
-                printController.zheProvince(6, data, new PrintResult() {
+                printController.zheProvince(num, data, new PrintResult() {
                     @Override
                     public void printResult(Boolean res) {
                         logger.info("打印结果：{}",res);
