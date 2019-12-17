@@ -1,6 +1,5 @@
 package com.ethink.lineup.server;
 
-import com.ethink.lineup.plugin.PrintPlugin;
 import com.ethink.lineup.plugin.ScannerPlugin;
 import com.ethink.lineup.plugin.ServerPlugin;
 import com.ethink.plugin.PluginService;
@@ -22,7 +21,7 @@ public class LineUpService extends PluginService {
       // addPlugin(new ArkPlugin(getApplicationContext()));
         //  addPlugin(new FingerPlugin(getApplicationContext()));
         addPlugin(new ServerPlugin(getApplicationContext()));
-        addPlugin(new PrintPlugin(getApplicationContext()));
+       // addPlugin(new PrintPlugin(getApplicationContext()));
         addPlugin(new ScannerPlugin(getApplicationContext()));
       //   addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();

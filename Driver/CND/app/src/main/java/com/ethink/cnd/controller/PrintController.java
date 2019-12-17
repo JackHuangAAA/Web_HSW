@@ -344,10 +344,9 @@ public class PrintController {
                 ready = false;
                 break;
             }
-//            if(by==0x42){
-//                exitPaper();
-//                ready=false;
-//            }
+            if(by==0x42){
+               inPaper();
+            }
             else {
                 if (!inPaperProvince(num)) {
                     ready = false;
@@ -453,6 +452,7 @@ public class PrintController {
      *退纸
      * */
     public void exitPaper() {
+        ready = false;
         byte[] by = new byte[]{0x1B, 0x4F};
         write(by, by.length);
     }
