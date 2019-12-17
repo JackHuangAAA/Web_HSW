@@ -23,7 +23,7 @@ public class LineUpService extends PluginService {
         //  addPlugin(new FingerPlugin(getApplicationContext()));
         addPlugin(new ServerPlugin(getApplicationContext()));
       //  addPlugin(new PrintPlugin(getApplicationContext()));
-     //   addPlugin(new ScannerPlugin(getApplicationContext()));
+         addPlugin(new ScannerPlugin(getApplicationContext()));
       //   addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();
     }

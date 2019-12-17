@@ -21,8 +21,10 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler{
         this.context = context;
         printController=new PrintController("/dev/ttyS0",19200);
         //解决开机第一次打印无效
+        printController.inPaper();
         printController.exitPaper();
         printController.clearError();
+
 
     }
 
