@@ -50,7 +50,7 @@ export default {
                 }
                 if(this.count == 0){
                     clearInterval(this.timer);
-                    // this.$router.push('/print/printMain');
+                    this.$router.push('/print/printMain');
                 }
             }, 1000);
         },
