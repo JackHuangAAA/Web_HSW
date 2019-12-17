@@ -57,11 +57,8 @@ export default {
         },
     },
     mounted(){
-        console.log("printHome mounted")
         //获取设备信息
         this.getDevice();
-        //this.code='12306'
-        //this.$router.push({path:'/print/printInf',query:{code:this.code}});
     }
 }
 </script>

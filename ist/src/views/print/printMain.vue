@@ -45,6 +45,7 @@ export default {
                 let pre = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
                 let previou_time = pre.data[0].previou.date?pre.data[0].previou.date:new Date();
                 this.$set(this.customer,'intervalTime',moment(new Date()).diff(moment(previou_time),'days'));
+                this.$set(this.customer,'row',pre.data[0].row);
                 //扫描结果存入vuex user
                 this.saveUser(this.customer);
                 this.$router.push({path:'/print/printInf'});
@@ -52,12 +53,8 @@ export default {
         }
     },
     mounted(){
-        //获取设备信息
-        //this.getDevice();
         //监听扫描条形码结果
         this.scanBarcode();
-        //this.$router.push('/print/printInf');
-
     }
 }
 </script>

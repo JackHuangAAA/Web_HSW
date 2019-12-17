@@ -47,7 +47,7 @@ export default {
         confirm: function(){
             //调用打印接口
             this.$device.printBook({
-                num:1,
+                num:this.user.row,
                 need_name:true,
                 vaccine:this.user.vaccine.name,
                 vaccine_date:moment(this.user.vaccine.date).format('YYYYMMDD'),
@@ -73,16 +73,9 @@ export default {
             this.$device.printExitPaper();
             this.$router.push('/print/printMain');
         }
-        // initData(){
-        //     //获取客户信息和疫苗信息
-        //     this.customer = this.user;
-        //     console.log(this.customer)
-
-        // }
     },
     mounted(){
-        //初始数据
-        // this.initData();
+        
     }
 }
 </script>
