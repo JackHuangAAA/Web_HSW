@@ -8,6 +8,11 @@ import com.ethink.tools.serialport.SerialPort;
 import com.ethink.tools.serialport.SerialPortManager;
 import com.ethink.tools.serialport.SerialPortSetting;
 import com.ethink.cnd.service.api.RxManager;
+import com.ethink.tools.serialport.usb.util.HexDump;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -43,6 +48,7 @@ private static final String TAG="ScannerPlugin";
             setting.setReadTimeout(0);
             scanner = SerialPortManager.getSerialPort("/dev/ttyS1", setting);
             logger.info("--------连接扫码-----------");
+            initAuto();
             thread = new Thread(this);
             thread.start();
         } catch (Exception e) {
@@ -52,6 +58,33 @@ private static final String TAG="ScannerPlugin";
             logger.error("open serial failed", e);
         }
     }
+    /***
+     * 开启感应模式
+     * **/
+    private void initAuto(){
+    if(scanner!=null){
+        try {
+        ByteBuffer buffer=ByteBuffer.allocate(10);
+        buffer.put(new byte[]{0x02,(byte) 0xF0,0x03});
+        buffer.put("090901.".getBytes());
+           int r= scanner.write(buffer.array(),0,buffer.array().length);
+           if(r>0){
+               byte []bu=new byte[20];
+               scanner.read(bu,0,bu.length);
+               logger.info("自动读取返回  {}",HexDump.dumpHexString(bu));
+           }
+          //  byte[]buu=new byte[30];
+         //   scanner.write(new byte[]{0x02,(byte) 0xF4,0x03},0,3);
+           // scanner.read(buu,0,30);
+          // logger.info("开启扫码{}",HexDump.dumpHexString(buu));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+    }
+    }
+
 
     /**
      * 读取扫码枪数据
@@ -65,11 +98,12 @@ private static final String TAG="ScannerPlugin";
             try {
                 int ret = scanner.read(buffer, 0, 256);
                 //   scanner.write(b,0,4);
+                logger.info("扫码结果："+ HexDump.toHexString(buffer));
                 if (ret > 0) {
                     String tmp = new String(buffer, 0, ret);
                     scantext.append(tmp);
                     //Log.d(TAG, "run: 扫码结果："+scantext);
-                   // logger.info("扫码数据"+scantext);
+                       logger.info("扫码数据"+scantext);
                     //scantext.charAt(scantext.length() - 1) == '\r'
                     if (scantext.charAt(scantext.length() - 1) == 0x0D) {
                         //Log.d(TAG, "run: 扫码枪截取数据："+scantext);

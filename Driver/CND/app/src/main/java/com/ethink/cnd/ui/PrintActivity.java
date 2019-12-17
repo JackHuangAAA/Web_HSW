@@ -79,7 +79,7 @@ public class PrintActivity extends AppCompatActivity {
                 //fixme \n换行不会到行首 \r\n回车另起一行
                 if(StringUtils.isEmpty(num))return;
               String  data = PrintController.provinceFormat(true,"H7N9","20191128","xxx工厂","xxx医院","手臂","李四");
-                printController.zheProvince(Integer.parseInt(num),data);
+                printController.zheProvince(Integer.parseInt(num),data,null);
                 break;
             case R.id.city:
                 String n=editText.getText().toString();

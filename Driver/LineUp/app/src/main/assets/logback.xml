@@ -1,0 +1,39 @@
+<configuration>
+    <!-- Create a logcat appender -->
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%msg</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/log/adm_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="syslog" class="ch.qos.logback.classic.net.SyslogAppender">
+        <lazy>true</lazy>
+        <syslogHost>127.0.0.1</syslogHost>
+        <port>1514</port>
+        <facility>USER</facility>
+        <suffixPattern>LineUp[%thread]: %msg</suffixPattern>
+        <charset>GBK</charset>
+        <throwableExcluded>true</throwableExcluded>
+    </appender>
+
+    <appender name="async" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="syslog" />
+    </appender>
+
+
+    <root level="TRACE">
+        <appender-ref ref="logcat" />
+        <appender-ref ref="async" />
+    </root>
+</configuration>
