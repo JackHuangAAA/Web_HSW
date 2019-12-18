@@ -10,7 +10,7 @@
                 批次号：<span>{{nextVaccination?nextVaccination.vaccine.batchNo:''}}</span>
             </div>
             <div class="date">
-                有效期：<span>2019-09-18 12:30 至 {{nextVaccination?nextVaccination.vaccine.date:''}}</span>
+                有效期：<span>2019-09-18 12:30 至 {{nextVaccination?nextVaccination.vaccine.date:'2020-09-18 12:30'}}</span>
             </div>
         </div>
     </div>
@@ -22,11 +22,7 @@ export default {
     data () {
         return {
             socket: io.connect("/"),
-            nextVaccination: {
-                sort:'0001',
-                name:"王晓华",
-                vaccine:{code: 'ym991',name: '卡介苗', batchNo:'B-998',supervisionCode: 'FT20190920001',date: "2020-06-05 12:00", product: '上海生物',dosage:'0.5ml/支',cost:'0.00'}
-            }
+            nextVaccination: {}
         }    
     },
     methods: {
