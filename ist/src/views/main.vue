@@ -46,7 +46,7 @@ export default {
         }
     },
     mounted(){
-        this.queryQueue();
+        // this.queryQueue();
         //监听扫描条形码结果
         this.scanBarcode();
     }
