@@ -10,6 +10,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.ethink.lineup.R;
+
 public class PrintBitmapActivity extends Activity {
 	//Parameter variable
 	private int hd_type = 0;
@@ -70,53 +72,13 @@ public class PrintBitmapActivity extends Activity {
 				//Get BitmapName
 				bitmap_name = txtBitmapName.getText().toString();
 				
-				//USB
-				if(MainActivity.port_type == MainActivity.USBPORT)
-				{
-					error_code = testprint.TestPrintBitmap(USBActivity.pos_usb, USBActivity.printMode, bitmap_name, hd_type);
-					if(error_code != POS_SUCCESS)
-					{
-						Toast.makeText(PrintBitmapActivity.this, "Failed to print bitmap.",Toast.LENGTH_LONG).show();
-					}
-				}
-				//COM
-				else if(MainActivity.port_type == MainActivity.SERIALPORT)
-				{
+
 					error_code = testprint.TestPrintBitmap(SerialActivity.pos_com, SerialActivity.printMode, bitmap_name, hd_type);
 					if(error_code != POS_SUCCESS)
 					{
 						Toast.makeText(PrintBitmapActivity.this, "Failed to print bitmap.",Toast.LENGTH_LONG).show();
 					}	
-				}
-				//WIFI
-				else if(MainActivity.port_type == MainActivity.WIFIPORT)
-				{
-					error_code = testprint.TestPrintBitmap(WIFIActivity.pos_wifi, WIFIActivity.printMode, bitmap_name, hd_type);
-					if(error_code != POS_SUCCESS)
-					{
-						Toast.makeText(PrintBitmapActivity.this, "Failed to print bitmap.",Toast.LENGTH_LONG).show();
-					}	
-					
-				}
-				//Bluetooth
-				else if(MainActivity.port_type == MainActivity.BLUETOOTHPORT)
-				{
-					error_code = testprint.TestPrintBitmap(BlueActivity.pos_blue, BlueActivity.printMode, bitmap_name, hd_type);
-					if(error_code != POS_SUCCESS)
-					{
-						Toast.makeText(PrintBitmapActivity.this, "Failed to print bitmap.",Toast.LENGTH_LONG).show();
-					}		
-				}
-				//NET
-				else if(MainActivity.port_type == MainActivity.NETPORT)
-				{
-					error_code = testprint.TestPrintBitmap(NETActivity.pos_net, NETActivity.printMode, bitmap_name, hd_type);
-					if(error_code != POS_SUCCESS)
-					{
-						Toast.makeText(PrintBitmapActivity.this, "Failed to print bitmap.",Toast.LENGTH_LONG).show();
-					}	
-					
-				}
+
 			}});
 		//*************************************************************************************************
 		//Back

@@ -177,7 +177,7 @@ public class PrintTextActivity extends Activity {
 				
 
 
-				{
+
 					error_code = testprint.TestPrintText(SerialActivity.pos_com, SerialActivity.printMode, text_data, DataLength, FontType, FontStyle, 
 							Alignment,HorStartingPosition, VerStartingPosition, LineHeight, HorizontalTimes, VerticalTimes);
 					if(error_code != POS_SUCCESS)

@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 android {
-    compileSdkVersion 28
-    buildToolsVersion "29.0.2"
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    compileSdkVersion 28
+    buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.ethink.lineup"
         minSdkVersion 21
@@ -63,5 +62,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.14.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.14.0'
     implementation 'org.simple:androideventbus:1.0.5.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
     // implementation 'org.greenrobot:eventbus:3.1.1'
 }
