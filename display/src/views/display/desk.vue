@@ -1,5 +1,5 @@
 <template>
-    <div class="layout">
+    <div class="layout" v-if="nextVaccination.sort">
         <div class="title"><span class="titleSpan">请<span style="color:#FF9600;">{{nextVaccination.sort?nextVaccination.sort:''}}</span>号 <span style="color:#FF9600;margin-left:1.7rem;margin-right:1.7rem;">{{nextVaccination.name?nextVaccination.name:''}}</span> 接种</span></div>
         <div class="vaccineInf">
             <p class="vaccineInfTitle">{{nextVaccination.vaccine?nextVaccination.vaccine.name:''}}</p>
