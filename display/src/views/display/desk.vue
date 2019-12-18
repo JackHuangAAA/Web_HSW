@@ -1,16 +1,16 @@
 <template>
     <div class="layout">
-        <div class="title"><span class="titleSpan">请<span style="color:#FF9600;">{{nextVaccination?nextVaccination.sort:''}}</span>号 <span style="color:#FF9600;margin-left:1.7rem;margin-right:1.7rem;">{{nextVaccination?nextVaccination.name:''}}</span> 接种</span></div>
+        <div class="title"><span class="titleSpan">请<span style="color:#FF9600;">{{nextVaccination.sort?nextVaccination.sort:''}}</span>号 <span style="color:#FF9600;margin-left:1.7rem;margin-right:1.7rem;">{{nextVaccination.name?nextVaccination.name:''}}</span> 接种</span></div>
         <div class="vaccineInf">
-            <p class="vaccineInfTitle">{{nextVaccination?nextVaccination.vaccine.name:''}}</p>
+            <p class="vaccineInfTitle">{{nextVaccination.vaccine?nextVaccination.vaccine.name:''}}</p>
             <div class="information">
-                生产厂家：<span>{{nextVaccination?nextVaccination.vaccine.product:''}}</span>
+                生产厂家：<span>{{nextVaccination.vaccine?nextVaccination.vaccine.product:''}}</span>
             </div>
             <div class="code">
-                批次号：<span>{{nextVaccination?nextVaccination.vaccine.batchNo:''}}</span>
+                批次号：<span>{{nextVaccination.vaccine?nextVaccination.vaccine.batchNo:''}}</span>
             </div>
             <div class="date">
-                有效期：<span>2019-09-18 12:30 至 {{nextVaccination?nextVaccination.vaccine.date:'2020-09-18 12:30'}}</span>
+                有效期：<span>{{nextVaccination.vaccine?'2019-09-18 12:30 至 '+nextVaccination.vaccine.date:''}}</span>
             </div>
         </div>
     </div>
