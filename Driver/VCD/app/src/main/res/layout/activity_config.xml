@@ -75,19 +75,7 @@
                 android:background="#ffffff"
                 android:textSize="15sp"
                 android:textStyle="bold" />
-            <EditText
-                android:id="@+id/et_alias"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:inputType="text"
-                android:text="xxxxx"
-                android:layout_marginTop="20dp"
-                android:focusable="true"
-                android:hint="请输入设备别名"
-                android:background="#ffffff"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+
 
             <View
                 android:layout_width="match_parent"

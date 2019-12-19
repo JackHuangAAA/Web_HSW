@@ -59,7 +59,9 @@ public class ServerPlugin extends BasePlugin implements FunctionHandler, Runnabl
             case "GetDeviceId": {
                 //ResponseUtil.success(pluginMessage,"成功",ResponseUtil.data("res", PhoneUtils.getSerial()));
                 pluginMessage.changeToResponse();
+                logger.info("GetDeviceId before");
                 String deviceId= SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
+                logger.info("GetDeviceId after {}",deviceId);
                 pluginMessage.set("deviceId", deviceId);
                 break;
             }

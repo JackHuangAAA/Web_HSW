@@ -14,6 +14,7 @@ import com.ethink.lineup.App;
 import com.ethink.lineup.Const;
 import com.ethink.lineup.R;
 import com.ethink.lineup.SPUtils;
+import com.ethink.lineup.print_nh80m.SerialActivity;
 import com.ethink.lineup.server.LineUpService;
 
 import org.slf4j.Logger;
@@ -165,8 +166,8 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
 //
-//        Intent intent = new Intent(this, PrintActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, SerialActivity.class);
+        startActivity(intent);
 
         finish();
     }

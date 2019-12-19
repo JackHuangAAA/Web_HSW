@@ -34,7 +34,7 @@ module.exports = {
         }
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.alarm.find(query);
-        return result;
+        return {rs: result, total: result.length};
     },
 
     /**
@@ -45,8 +45,15 @@ module.exports = {
     queryAlarm: async function (requestBody) {
         logger.debug(`queryAlarm param: ${JSON.stringify(requestBody)}`);
         let query = [];
+        if (!_.isEmpty(requestBody.ifToday)) {
+            let today = moment();
+            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        }
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
         }
         if (!_.isEmpty(requestBody.deviceType)) {
             query.push({ "deviceType": requestBody.deviceType });
@@ -73,4 +80,32 @@ module.exports = {
         return Domain.models.alarm.create(requestBody);
     },
 
+    /**
+     * 查询报警信息数量
+     * @param {any} requestBody
+     * @returns
+     */
+    queryAlarmNum: async function (requestBody) {
+        logger.debug(`queryAlarm param: ${JSON.stringify(requestBody)}`);
+        let query = [];
+        if (!_.isEmpty(requestBody.ifToday)) {
+            let today = moment();
+            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        }
+        if (!_.isEmpty(requestBody.type)) {
+            query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
+        if (!_.isEmpty(requestBody.deviceType)) {
+            query.push({ "deviceType": requestBody.deviceType });
+        }
+        if (!_.isEmpty(requestBody.unitCode)) {
+            query.push({ "unitCode": requestBody.unitCode });
+        }
+        query = query.length > 0 ? { "$and": query } : {};
+        let result = await Domain.models.alarm.find(query);
+        return {total: result.length};
+    },
 };

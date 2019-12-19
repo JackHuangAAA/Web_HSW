@@ -81,7 +81,7 @@ public class SignatureActivity extends AppCompatActivity {
         //  noticeInfo.setText(info);
         ImmersionBar.with(this).statusBarColor(R.color.white).hideBar(BarHide.FLAG_HIDE_BAR).init();
         SpannableString spannableString2 = new SpannableString("      " + getResources().getString(R.string.vaccine_type));
-        StyleSpan styleSpan2 = new StyleSpan(Typeface.BOLD_ITALIC);
+        StyleSpan styleSpan2 = new StyleSpan(Typeface.BOLD);
         spannableString2.setSpan(styleSpan2, 0, 12, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         vaccineType.setText(spannableString2);
 
@@ -143,13 +143,13 @@ public class SignatureActivity extends AppCompatActivity {
             case R.id.confirm:
                 if (!signaturePad.isEmpty()) {
                     //   -具有白色背景的签名位图。
-                    Bitmap bitmap = signaturePad.getSignatureBitmap();
+                 //   Bitmap bitmap = signaturePad.getSignatureBitmap();
                     //具有透明背景的签名位图。
-                    Bitmap tran_bitmap = signaturePad.getTransparentSignatureBitmap();
+                 //   Bitmap tran_bitmap = signaturePad.getTransparentSignatureBitmap();
                     //签名可缩放矢量图形文档。
-                    String svg = signaturePad.getSignatureSvg();
-                    imageTran.setImageBitmap(tran_bitmap);
-                    signaturePad.clear();
+                 //   String svg = signaturePad.getSignatureSvg();
+                  //  imageTran.setImageBitmap(tran_bitmap);
+
                     View view1 = LayoutInflater.from(this).inflate(R.layout.confirm_ok, null, false);
                     Dialog dialog = new Dialog(this);
                     ImmersionBar.with(this, dialog).init();
@@ -165,7 +165,8 @@ public class SignatureActivity extends AppCompatActivity {
                         ((ImageView) view1.findViewById(R.id.image)).setImageBitmap(bitmap1);
                     }
                     dialog.show();
-
+                   //清除笔迹
+                //    signaturePad.clear();
 
                 }
                 break;

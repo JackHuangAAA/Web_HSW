@@ -345,8 +345,7 @@ public class PrintController {
                 break;
             }
 //            if(by==0x42){
-//                exitPaper();
-//                ready=false;
+//               //inPaper();
 //            }
             else {
                 if (!inPaperProvince(num)) {
@@ -373,7 +372,7 @@ public class PrintController {
         StringBuilder stringBuilder = new StringBuilder();
         for (int index = 1; index < num; index++) {
             stringBuilder.append("\r\n");
-            Log.d(TAG, "printData: 换行------{}"+index);
+            Log.d(TAG, "printData: 换行------"+index);
         }
         stringBuilder.append(data);
         try {
@@ -453,6 +452,7 @@ public class PrintController {
      *退纸
      * */
     public void exitPaper() {
+        ready = false;
         byte[] by = new byte[]{0x1B, 0x4F};
         write(by, by.length);
     }
