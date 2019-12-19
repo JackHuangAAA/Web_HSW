@@ -1,9 +1,7 @@
 package com.ethink.lineup.print_nh80m;
 
-import java.io.UnsupportedEncodingException;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -14,6 +12,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ethink.lineup.R;
+
+import java.io.UnsupportedEncodingException;
 
 public class PrintTextActivity extends Activity {
 	
@@ -176,16 +176,12 @@ public class PrintTextActivity extends Activity {
 				}
 				
 
-
-
-					error_code = testprint.TestPrintText(SerialActivity.pos_com, SerialActivity.printMode, text_data, DataLength, FontType, FontStyle, 
+					error_code = testprint.TestPrintText(USBActivity.pos_usb, USBActivity.printMode, text_data, DataLength, FontType, FontStyle, 
 							Alignment,HorStartingPosition, VerStartingPosition, LineHeight, HorizontalTimes, VerticalTimes);
 					if(error_code != POS_SUCCESS)
 					{
 						Toast.makeText(PrintTextActivity.this, "Failed to print Text.",Toast.LENGTH_LONG).show();
 					}
-
-
 
 			   
 			}});
