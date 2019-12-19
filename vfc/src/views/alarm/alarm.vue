@@ -10,31 +10,33 @@
             </div>
         </div>
         <div class="alarm-main">
-            <Row v-for="(item, index) in datas" class="alarm-card">
-                <Col span="2" class="alarm-card-id">
-                    <div>{{index+1}}</div>
-                </Col>
-                <Row span="22" style="width:100%">
-                    <Col span="11" class="alarm-card-pd">
-                        <div class="alarm-card-title">报警类型:</div>
-                        <div class="alarm-card-info">{{item.type==1?'温度异常':'库存不足'}}</div>
+            <Scroll :on-reach-bottom="handleReachBottom" :loading-text="loadText">
+                <Row v-for="(item, index) in datas" class="alarm-card">
+                    <Col span="2" class="alarm-card-id">
+                        <div>{{index+1}}</div>
                     </Col>
-                    <Col span="13" class="alarm-card-pd">
-                        <div class="alarm-card-title">报警原因:</div>
-                        <div class="alarm-card-info">{{item.reason}}</div>
-                    </Col>
-                    <Col span="11" class="alarm-card-pd row2">
-                        <div class="alarm-card-title">报警时间:</div>
-                        <div class="alarm-card-info">{{getAlarmDate(item.createDate)}}</div>
-                    </Col>
-                    
-                    <Col span="13" class="alarm-card-pd row2">
-                        <div class="alarm-card-title">解决情况:</div>
-                        <div class="alarm-card-info">{{item.solution}}</div>
-                    </Col>
-                </Row>                
-            </Row>
-            <div v-if="nullData" style="width:100%;text-align:center;font-size: 20px;">暂无数据</div>
+                    <Row span="22" style="width:100%">
+                        <Col span="11" class="alarm-card-pd">
+                            <div class="alarm-card-title">报警类型:</div>
+                            <div class="alarm-card-info">{{item.type==1?'温度异常':'库存不足'}}</div>
+                        </Col>
+                        <Col span="13" class="alarm-card-pd">
+                            <div class="alarm-card-title">报警原因:</div>
+                            <div class="alarm-card-info">{{item.reason}}</div>
+                        </Col>
+                        <Col span="11" class="alarm-card-pd row2">
+                            <div class="alarm-card-title">报警时间:</div>
+                            <div class="alarm-card-info">{{getAlarmDate(item.createDate)}}</div>
+                        </Col>
+                        
+                        <Col span="13" class="alarm-card-pd row2">
+                            <div class="alarm-card-title">解决情况:</div>
+                            <div class="alarm-card-info">{{item.solution}}</div>
+                        </Col>
+                    </Row>                
+                </Row>
+                <div v-if="nullData" style="width:100%;text-align:center;font-size: 20px;">暂无数据</div>
+            </Scroll>
         </div>
     </div>
 </template>
@@ -46,7 +48,10 @@
     export default {
         data() {
             return {
-                datas: []
+                datas: [],
+                page:1,
+                size:10,
+                loadText:'正在加载……'
             };
         },
         computed: {
@@ -59,15 +64,32 @@
         },
         methods: {
             getAlarms() {
-                this.$api.get("alarm/queryAlarmByCondition", {
+                this.$api.get("alarm/queryAlarm", {
                         device: this.device._id,
-                        ifToday: "today"
+                        ifToday: "today",
+                        page:this.page,
+                        size:this.size
                     }).then(res => {
-                        this.datas = res.data;
+                        let arr= res.data.rs;
+                        if(arr.length>0){
+                            this.loadText='正在加载……';
+                            this.datas=this.datas.concat(arr);
+                            this.page++;
+                        }else{
+                            this.loadText='已显示所有数据';
+                        }
                     });
             },
             getAlarmDate(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
+            },
+            handleReachBottom () {
+                 return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.getAlarms();
+                        resolve();
+                    }, 2000);
+                });
             }
         },
         mounted() {
