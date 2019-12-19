@@ -99,7 +99,7 @@ public class USBScannerPlugin extends BasePlugin implements Runnable, USBDeviceF
                         logger.info("扫码数据 {} len: {}",tmp,tmp.length());
                         EventMessage eventMessage = new EventMessage("SCANNER_RESULT");
                         eventMessage.setString("data", tmp);
-                        pluginManager.post(eventMessage);
+                       // pluginManager.post(eventMessage);
                       //  messageToast.obtainMessage(1, tmp).sendToTarget();
                         EventBus.getDefault().post(eventMessage, Const.SCAN_EVENT);
                     }
