@@ -52,6 +52,9 @@ module.exports = {
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
         }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
+        }
         if (!_.isEmpty(requestBody.deviceType)) {
             query.push({ "deviceType": requestBody.deviceType });
         }
@@ -91,6 +94,9 @@ module.exports = {
         }
         if (!_.isEmpty(requestBody.type)) {
             query.push({ "type": requestBody.type });
+        }
+        if (!_.isEmpty(requestBody.device)) {
+            query.push({ "device": requestBody.device });
         }
         if (!_.isEmpty(requestBody.deviceType)) {
             query.push({ "deviceType": requestBody.deviceType });
