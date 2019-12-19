@@ -24,7 +24,7 @@ public class LineUpService extends PluginService {
         addPlugin(new ServerPlugin(getApplicationContext()));
       //  addPlugin(new PrintPlugin(getApplicationContext()));
          addPlugin(new ScannerPlugin(getApplicationContext()));
-      //   addPlugin(new PrintPlugin(getApplicationContext()));
+        addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();
     }
 
