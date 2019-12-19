@@ -66,7 +66,8 @@ module.exports = {
             query.push({ "product": new RegExp(requestBody.product)});
         }
         if (!_.isEmpty(requestBody['ids']) || !_.isEmpty(requestBody['ids[]'])) {
-            let temp = _.map(requestBody['ids'], item => {
+            let ids = requestBody.ids.split(',');
+            let temp = _.map(ids, item => {
                 return mongoose.Types.ObjectId(item);
             });
             query.push({ "_id": { $in: temp } });
