@@ -31,7 +31,7 @@ export default {
         },
         freshDatas(){
             this.socket.on('NextVaccination', data => {
-                this.nextVaccination = data.data;
+                this.nextVaccination = data.data?data.data:{};
                 let len=String(this.nextVaccination.sort).length;
                 switch(len){
                     case 1:
