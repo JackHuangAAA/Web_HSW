@@ -187,7 +187,7 @@
             async confirmVaccine(){
                 //排队状态完成
                 await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
-                    console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
+                    
                 });
                 this.confirm=true;
                 //比对成功，疫苗数量减少1、增加出库信息、保存接种信息

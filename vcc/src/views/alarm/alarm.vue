@@ -61,7 +61,7 @@
         },
         methods: {
             getAlarms() {
-                this.$api.get("alarm/queryAlarm", {
+                this.$api.get("/alarm/queryAlarm", {
                         device: this.device._id,
                         ifToday: "today",
                         page:this.page,
