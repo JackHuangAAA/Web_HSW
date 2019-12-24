@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.TimeUtils;
 import com.ethink.lineup.R;
 import com.ethink.lineup.controller.USBDeviceFace;
 import com.ethink.lineup.controller.UsbConnectUtil;
+import com.ethink.lineup.print_nh80m.TestPrintInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +68,13 @@ public class USBPrintActivity extends AppCompatActivity implements USBDeviceFace
         int error_code = 0;
         switch (view.getId()) {
             case R.id.print_text:
+                int error = pos_sdk.systemReset();
+                logger.info("打印机复位 {}", error);
                 logger.info("当前mode {}", mode);
-                strand("疫苗排队系统","4",8);
+          //      strand("疫苗排队系统","4",8);
+        new TestPrintInfo().TestPrintText(pos_sdk, mode,"疫苗排队",4,POSSDK.FontTypeChinese, POSSDK.FontStyleBold,POSSDK.TextAlignmentLeft,20,20,1,3,3);
+
+
                 break;
             case R.id.print_feed_line:
                 error_code = pos_sdk.systemFeedLine(3);

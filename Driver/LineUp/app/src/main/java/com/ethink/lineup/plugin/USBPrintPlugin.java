@@ -98,51 +98,47 @@ public class USBPrintPlugin extends BasePlugin implements FunctionHandler, USBDe
         try {
             byte[] send_buf;
             int error_code = 0;
-            int error = pos_sdk.systemReset();
-            logger.info("打印机复位 {}", error);
+            error_code = pos_sdk.systemSelectPrintMode(POSSDK.PRINT_MODE_STANDARD);
             error_code = pos_sdk.textStandardModeAlignment(POSSDK.TextAlignmentCenter);
-            logger.info("TestPrintText: 打印 -----------textStandardModeAlignment--------" + error_code);
             //set the horizontal and vertical motion units
             error_code = pos_sdk.systemSetMotionUnit(200, 200);
-            logger.info("TestPrintText: 打印 -----------systemSetMotionUnit--------" + error_code);
             //set line height
-            error_code = pos_sdk.textSetLineHeight(30);
-            logger.info("TestPrintText: 打印 -----------textSetLineHeight--------" + error_code);
+            error_code = pos_sdk.textSetLineHeight(1);
             error_code = pos_sdk.textSelectFont( POSSDK.FontTypeChinese, POSSDK.FontStyleBold);
-            logger.info("TestPrintText: 打印 -----------textSelectFont--------" + error_code);
             //set character size
             error_code = pos_sdk.textSelectFontMagnifyTimes(2, 2);
-          //  error_code = pos_sdk.systemFeedLine(1);
+            error_code = pos_sdk.systemFeedLine(1);
             //print text
             send_buf = title.getBytes("GB18030");
             error_code = pos_sdk.textPrint(send_buf, send_buf.length);
             //feed line
-            error_code = pos_sdk.systemFeedLine(2);
+            error_code = pos_sdk.systemFeedLine(3);
             error_code = pos_sdk.textSelectFontMagnifyTimes(3, 3);
             send_buf = num.getBytes("GB18030");
             error_code = pos_sdk.textPrint(send_buf, send_buf.length);
-            error_code = pos_sdk.systemFeedLine(2);
+            error_code = pos_sdk.systemFeedLine(3);
             //改变显示位置
             error_code = pos_sdk.textStandardModeAlignment(POSSDK.TextAlignmentLeft);
             logger.info("TestPrintText: 打印改变位置 -----------textStandardModeAlignment--------" + error_code);
             error_code = pos_sdk.textSelectFontMagnifyTimes(1, 1);
             send_buf = String.format("您前面还有%s位，请注意叫号!",current).getBytes("GB18030");
             error_code = pos_sdk.textPrint(send_buf, send_buf.length);
-            error_code = pos_sdk.systemFeedLine(1);
+            error_code = pos_sdk.systemFeedLine(2);
             String info="您也可以手机扫码实时关注排队情况，以防过号!";
             send_buf = info.getBytes("GB18030");
             error_code = pos_sdk.textPrint(send_buf, send_buf.length);
-            //改变显示位置打印条码
-            error_code = pos_sdk.systemFeedLine(2);
+        //    改变显示位置打印条码
+            error_code = pos_sdk.systemFeedLine(4);
             error_code = pos_sdk.textStandardModeAlignment(POSSDK.TextAlignmentCenter);
-            error_code = pos_sdk.barcodePrintQR(info,info.length(), 0, 7, 1, 0);
-            error_code = pos_sdk.systemFeedLine(1);
+            error_code = pos_sdk.barcodePrintQR(info,info.length(), 0, 6, 1, 0);
+            error_code = pos_sdk.systemFeedLine(4);
             error_code = pos_sdk.textStandardModeAlignment(POSSDK.TextAlignmentRight);
-            String time= TimeUtils.getNowString()+"  ";
+            String time= TimeUtils.getNowString();
             send_buf = time.getBytes("GB18030");
             error_code = pos_sdk.textPrint(send_buf, send_buf.length);
-            error_code = pos_sdk.systemCutPaper(POSSDK.CutPartAfterFeed, 50);
-            logger.info("切纸纸{}", error_code);
+            error_code = pos_sdk.systemFeedLine(1);
+            pos_sdk.systemCutPaper(POSSDK.CutPartAfterFeed, 0);
+//            logger.info("切纸纸{}", error_code);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
