@@ -37,6 +37,12 @@ export default {
 
                 });
             });
+            this.socket.on("NextVaccination",data=>{
+                console.log(data);
+                if(this.queue.length>0){
+                    this.$device.audio({audio_text:`${this.queue[0].sort}号${this.queue[0].name}${this.queue[0].position}`});
+                }
+            })
         },
         async queryQueue(){
             let queue = await this.$api.get('/queue/queryQueueByCondition',{status:1});
