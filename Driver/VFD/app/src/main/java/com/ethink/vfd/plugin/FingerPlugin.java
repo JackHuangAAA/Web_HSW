@@ -123,6 +123,7 @@ public class FingerPlugin extends BasePlugin implements FunctionHandler, FingerP
                 break;
         }
         logger.info("plug {}", JSON.toJSONString(pluginMessage));
+        pluginMessage.changeToResponse();
         return pluginMessage;
     }
 
