@@ -18,7 +18,6 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
-<<<<<<< HEAD
 if (navigator.userAgent.match(/ADF/i) == 'ADF') {
     // 安卓环境使用
     window.$d.onReady = function() {
@@ -30,20 +29,6 @@ if (navigator.userAgent.match(/ADF/i) == 'ADF') {
             render: h => h(App)
         });
     };
-
-}else {
-=======
-if (config.env == 'development') {
->>>>>>> xbz
-    //生产环境显示屏应用仅使用下面的配置，if else 需要注释
-    global.__app = new Vue({
-        el: '#app',
-        router: router,
-        store: store,
-        render: h => h(App)
-    });
-<<<<<<< HEAD
-=======
 }else {
     // 安卓环境使用
     window.$d.onReady = function() {
@@ -55,7 +40,6 @@ if (config.env == 'development') {
             render: h => h(App)
         });
     };
->>>>>>> xbz
 }
 Vue.prototype.$cookies = Cookies;
 Vue.prototype.$api = api;
