@@ -18,22 +18,7 @@ import FastClick from 'fastclick'
 FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
-<<<<<<< HEAD
-if (navigator.userAgent.match(/ADF/i) == 'ADF') {
-    // 安卓环境使用
-    window.$d.onReady = function() {
-        console.log('$d.ready');
-        global.__app = new Vue({
-            el: '#app',
-            router: router,
-            store: store,
-            render: h => h(App)
-        });
-    };
-}else {
-=======
 if(navigator.userAgent.match(/ADF/i) == 'ADF') {
->>>>>>> xbz
     // 安卓环境使用
     window.$d.onReady = function() {
         console.log('$d.ready');

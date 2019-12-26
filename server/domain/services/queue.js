@@ -76,13 +76,13 @@ module.exports = {
     modifyQueue: async function(requestBody){
         logger.debug("modifyQueue:" + JSON.stringify(requestBody));
         //新增排队信息是推送至socket.io,队列显示屏，刷新排队信息
-        let channel = "UpdateQueueStatus";
+        /*let channel = "UpdateQueueStatus";
         let message = {};
         message.type = channel;
         message.code = 'CN0001';
         message.data = 'update';
         message = JSON.stringify(message);
-        Domain.redis.pub.publishAsync(channel, message);
+        Domain.redis.pub.publishAsync(channel, message);*/
 
         channel = "VaccinationCheck";
         message={};
@@ -149,6 +149,7 @@ module.exports = {
             message.data = result[0];
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
+
 
 
         }

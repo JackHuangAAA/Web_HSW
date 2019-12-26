@@ -31,12 +31,10 @@ export default {
             this.socket.emit("register", JSON.stringify({code:'CN0001'}));
         },
         freshDatas(){
-            this.socket.on('UpdateQueueStatus', data => {
+            this.socket.on('UpdateQueueStatus',async data => {
                 console.log("UpdateQueueStatus result"+JSON.stringify(data));
-                this.queryQueue().then(()=>{
-
-                });
-                if(this.queue.length>0){
+                await this.queryQueue();
+                if(this.queue.length>0 && data.data!='update' ){
                     this.$device.audio({audio_text:`${this.queue[0].sort}号${this.queue[0].name}${this.queue[0].position}`});
                 }
             });
