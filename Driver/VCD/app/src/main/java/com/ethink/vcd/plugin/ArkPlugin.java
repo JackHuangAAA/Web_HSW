@@ -138,22 +138,22 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SWITCH_STATUS", this);
         //设置温度
         registerFunction("SET_TEMPERATURE", this);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (arkController != null) {
-                    Set<Integer> set = new HashSet<>();
-                    set.add(1);
-                    set.add(2);
-                    set.add(3);
-                    set.add(4);
-                    set.add(5);
-                    List<Double> list = arkController.temperature(set);
-                  //  messageToast.obtainMessage(1, list).sendToTarget();
-                }
-
-            }
-        }, 30000, 30000);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (arkController != null) {
+//                    Set<Integer> set = new HashSet<>();
+//                    set.add(1);
+//                    set.add(2);
+//                    set.add(3);
+//                    set.add(4);
+//                    set.add(5);
+//                    List<Double> list = arkController.temperature(set);
+//                  //  messageToast.obtainMessage(1, list).sendToTarget();
+//                }
+//
+//            }
+//        }, 30000, 30000);
     }
 
     @Override
@@ -163,8 +163,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
     @Override
     public void run() {
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
+//        Set<Integer> set = new HashSet<>();
+//        set.add(1);
 //        set.add(2);
 //        set.add(3);
 //        set.add(4);

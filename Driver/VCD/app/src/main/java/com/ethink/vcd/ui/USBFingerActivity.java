@@ -1,7 +1,6 @@
 package com.ethink.vcd.ui;
 
 import android.content.Intent;
-import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,8 +19,7 @@ import com.ethink.vcd.Const;
 import com.ethink.vcd.R;
 import com.ethink.vcd.SPUtils;
 import com.ethink.vcd.controller.FingerUtil;
-import com.ethink.vcd.controller.USBDeviceFace;
-import com.ethink.vcd.controller.USBFingerCommon;
+import com.ethink.vcd.controller.UsbFingerController;
 import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.service.HttpUtils;
 
@@ -40,7 +38,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FingerActivity extends AppCompatActivity implements FingerPushMessage, USBDeviceFace {
+public class USBFingerActivity extends AppCompatActivity implements FingerPushMessage {
     private FingerUtil fingerUtil;
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -50,17 +48,18 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
     @BindView(R.id.tv_result)
     TextView textView;
     private String fingerUrl;
-    private String uid = "pppp255";
-    private USBFingerCommon usbFingerCommon;
+    private String uid = "123";
+    private UsbFingerController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_finger);
+        setContentView(R.layout.usb_finger_activity);
         ButterKnife.bind(this);
         //  fingerUtil = new FingerUtil(this, new FingerCommon(this, "/dev/ttyS1", 115200));
         fingerUrl = SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
-        usbFingerCommon = new USBFingerCommon(this, this);
+        controller=new UsbFingerController(this,this);
+
     }
 
 
@@ -107,11 +106,14 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
                 break;
             case R.id.remote_register:
                 //注册并上传
-                fingerUtil.remoteRegister(uid);
+
+              //  fingerUtil.remoteRegister(uid);
+                controller.remoteRegister(uid);
                 break;
             case R.id.remote_verify:
                 //后台比对
-                fingerUtil.remoteVerify();
+               // fingerUtil.remoteVerify();
+                controller.remoteVerify();
                 break;
             case R.id.finger_cancel:
                 fingerUtil.cancel();
@@ -183,21 +185,6 @@ public class FingerActivity extends AppCompatActivity implements FingerPushMessa
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    public boolean checkUSB(UsbDevice usbDevice) {
-        return usbDevice.getVendorId() == 8201 && usbDevice.getProductId() == 30264;
-    }
-
-    @Override
-    public void openUSB(UsbDevice usbDevice) {
-
-    }
-
-    @Override
-    public void deniedPermission() {
-
     }
 
 

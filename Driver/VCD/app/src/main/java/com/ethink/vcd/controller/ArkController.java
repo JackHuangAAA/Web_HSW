@@ -15,11 +15,13 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ArkController {
     private SerialPort serialPort;
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
+    private Lock lock = new ReentrantLock();
     public ArkController(String path, int baudRate) {
         //串口
         SerialPortSetting setting = new SerialPortSetting(
@@ -319,28 +321,30 @@ public class ArkController {
         byteBuffer.put(ch);
         byteBuffer.put((byte) (0xF0));
         byte[] data = byteBuffer.array();
-        if (write(data, data.length)) {
-            //读取
-            byte[] rec = new byte[256];
-            read(rec, 0, 28);
-            if (rec[4] == 0x01) {
-                //0x01正常  0x02异常
-                // PCB 版本号,其中 100 是可变的，“ YM”表  示疫苗，ZKB表示主控板
-                byte[] ban = new byte[11];
-                //原数组, 从元数据的起始位置开始, 目标数组,目标数组的开始起始位置,要copy的数组的长度
-                //   System.arraycopy(ban,0,rec,5,11);
-                logger.info("版本号：" + HexDump.toHexString(ban));
-                //程序版本号
-                byte[] sys = new byte[5];
-                //    System.arraycopy(sys,0,rec,16,5);
-                logger.info("程序版本号：" + HexDump.toHexString(sys));
-                //通信协议版本号，一般只有 0 是可变
-                byte[] xie = new byte[4];
-                //   System.arraycopy(xie,0,rec,21,4);
-                logger.info("程序版本号：" + HexDump.toHexString(xie));
-                //55 AA 16 06 01 5A 59 5F 58 59 4D 47 5F 31 30 30 56 31 2E 30 30 56 31 2E 30 18 F0
+        lock.lock();
+            if (write(data, data.length)) {
+                //读取
+                byte[] rec = new byte[256];
+                read(rec, 0, 28);
+                if (rec[4] == 0x01) {
+                    //0x01正常  0x02异常
+                    // PCB 版本号,其中 100 是可变的，“ YM”表  示疫苗，ZKB表示主控板
+                    byte[] ban = new byte[11];
+                    //原数组, 从元数据的起始位置开始, 目标数组,目标数组的开始起始位置,要copy的数组的长度
+                    //   System.arraycopy(ban,0,rec,5,11);
+                    logger.info("版本号：" + HexDump.toHexString(ban));
+                    //程序版本号
+                    byte[] sys = new byte[5];
+                    //    System.arraycopy(sys,0,rec,16,5);
+                    logger.info("程序版本号：" + HexDump.toHexString(sys));
+                    //通信协议版本号，一般只有 0 是可变
+                    byte[] xie = new byte[4];
+                    //   System.arraycopy(xie,0,rec,21,4);
+                    logger.info("程序版本号：" + HexDump.toHexString(xie));
+                    //55 AA 16 06 01 5A 59 5F 58 59 4D 47 5F 31 30 30 56 31 2E 30 30 56 31 2E 30 18 F0
+                }
             }
-        }
+
     }
 
 
@@ -351,18 +355,22 @@ public class ArkController {
             logger.info("Write: {}", HexDump.toHexString(data, 0, len));
         } catch (Exception e) {
             logger.error("串口写入失败", e);
+        }finally {
+            lock.unlock();
         }
         return ret >= 0;
     }
 
     //55 AA 0B 02 77 03 FF FF FF FF FF FF FF FF 7D F0
-    public boolean read(byte[] buffer, int offset, int maxlen) {
+    public boolean read(byte[] buffer, int offset, int maxlen)  {
         try {
             serialPort.readFull(buffer, offset, maxlen);
             logger.info("Read: {}", HexDump.toHexString(buffer, offset, maxlen));
         } catch (Exception e) {
             logger.error("串口读取失败", e);
             return false;
+        }finally {
+            lock.unlock();
         }
         return true;
     }

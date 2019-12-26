@@ -190,7 +190,7 @@ public class SignatureActivity extends AppCompatActivity {
         }
 
         // 创建对应大小的bitmap 不包含地下按钮
-        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h - 70, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(scrollView.getWidth(), h - 120, Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(bitmap);
         scrollView.draw(canvas);
         // 测试输出

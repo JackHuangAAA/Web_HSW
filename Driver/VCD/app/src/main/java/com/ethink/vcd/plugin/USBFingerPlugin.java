@@ -14,6 +14,7 @@ import com.ethink.vcd.Const;
 import com.ethink.vcd.SPUtils;
 import com.ethink.vcd.controller.FingerCommon;
 import com.ethink.vcd.controller.FingerUtil;
+import com.ethink.vcd.controller.UsbFingerController;
 import com.ethink.vcd.event.FingerPushMessage;
 import com.ethink.vcd.service.HttpUtils;
 import com.ethink.vcd.service.api.NetWorkUtils;
@@ -34,14 +35,14 @@ public class USBFingerPlugin extends BasePlugin implements FunctionHandler, Fing
     private final RxManager rxManager;
     private Context context;
     private String fingerUrl;
-
+    private UsbFingerController controller;
     public USBFingerPlugin(Context context) {
         super("FINGER");
         this.context = context;
         rxManager = new RxManager();
         logger.info("--------连接指纹设备-----------");
         fingerUrl= SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
-
+        controller=new UsbFingerController(context,this);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class USBFingerPlugin extends BasePlugin implements FunctionHandler, Fing
 
     @Override
     public void onStop() {
-
+        if(controller!=null){controller.close();}
     }
 
     @Override
@@ -72,10 +73,13 @@ public class USBFingerPlugin extends BasePlugin implements FunctionHandler, Fing
         String functionName = pluginMessage.getFunctionName();
         switch (functionName) {
             case "OPEN":
+                controller.open();
                 break;
             case "REGISTER":
                 String uid = pluginMessage.getString("userId");
                 logger.info("录入指纹 id：{}",uid);
+                controller.remoteRegister(uid);
+                pluginMessage.changeToResponse();
                 break;
             case "UN_REGISTER":
                 //清除指纹
@@ -88,21 +92,26 @@ public class USBFingerPlugin extends BasePlugin implements FunctionHandler, Fing
                 break;
             case "UN_SEARCH":
                 //终止指纹录取
+                controller.cancel();
+                pluginMessage.changeToResponse();
                 break;
             case "DEL_TEMPLATE_ALL":
                 break;
             case "TEMPLATE_TOTAL":
                 break;
             case "CLOSE":
+                controller.close();
+                pluginMessage.changeToResponse();
                 break;
             case "SEARCH":
+                controller.remoteVerify();
+                pluginMessage.changeToResponse();
                 break;
             case "DOWNLOAD":
                 break;
             case "DEL_ONE_TEMPLATE":
                 break;
         }
-        logger.info("plug {}", JSON.toJSONString(pluginMessage));
         return pluginMessage;
     }
 

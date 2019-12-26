@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.FingerActivity" android:screenOrientation="landscape" />
-
+       <activity android:name=".ui.USBFingerActivity" android:screenOrientation="landscape"/>
         <activity android:name=".ui.CameraActivity" android:screenOrientation="landscape" />
         <activity android:name=".ui.ArkActivity" android:screenOrientation="landscape"/>
         <service android:name=".server.VCDService" />
