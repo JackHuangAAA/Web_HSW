@@ -7,7 +7,7 @@
         <div class="main">
             <router-view></router-view>
         </div>
-        <div class="copyright">银信博荣疫苗接种一体化解决方案</div>
+        <!-- <div class="copyright">银信博荣疫苗接种一体化解决方案</div> -->
     </div>
     <router-view v-else></router-view>
 </template>
@@ -43,6 +43,7 @@ export default {
         }),
         getDevice(){
             this.$device.getDeviceCode().then(res => {
+                console.log('getDeviceCode result:'+JSON.stringify(res))
                 this.deviceId = res;
                 this.saveDevice({id:res})
                 this.$router.push('/main');
@@ -52,6 +53,7 @@ export default {
     mounted(){
         //获取设备信息
         this.getDevice();
+        
     }
 }
 </script>

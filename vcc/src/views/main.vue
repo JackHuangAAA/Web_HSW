@@ -103,12 +103,12 @@
         methods: {
             //查询温度报警
             async queryAlarmByByCondition(){
-                let res = await this.$api.get("/alarm/queryAlarmByCondition",{
+                let res = await this.$api.get("/alarm/queryAlarmNum",{
                     device: this.device._id,
                     type:1,
                     ifToday:'today'
                     });
-                this.alarmNumber = res.data.length;
+                this.alarmNumber = res.data.total;
             },
             //当天服务人数
             async queryVaccinationDailyInfo(){

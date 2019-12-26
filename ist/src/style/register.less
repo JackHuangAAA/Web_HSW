@@ -1,49 +1,59 @@
 @import './color.less';
 .regcontainer{
-    padding-left: 6.3%;
-    padding-right: 6.25%;
-    padding-top: 3rem;
+    padding-left: 2.69%;
+    padding-right: 3.06%;
+    padding-top: 1.8125rem;
     width: 100%;
     height: 100%;
     color: @dark;
 }
+.box{
+    background: @white;
+    border-radius: 10px;
+    padding: 0 2.4375rem;
+    padding-top: 2.25rem;
+}
 .title{
-    font-size: 1.125rem;
+    font-size: 1.5rem;
     font-weight:bold;
-    margin-bottom: 1.125rem;
 }
 .userInfo{
-    height: 7rem;
     width: 100%;
     display: flex;
+    flex-flow: row wrap;
     align-items: center;
     font-size: 1.5rem;
     font-weight: bold;
     background: @white;
     border-radius:10px;
-    margin-bottom: 1.9375rem;
+    margin-top: 3.5rem;
+    margin-bottom: 1.25rem;
     div{
-        margin-left: 8.625rem;
+        width: 33.33333%;
+        line-height: 1;
+    }
+    div:nth-child(4){
+        width: 50%;
+        margin-top: 3rem;
+        margin-bottom: 4.625rem;
     }
     span{
         font-size: 1.875rem;
         margin-left: 2.3125rem;
     }
 }
-.content{
-    height: 27.4375rem;
-    width: 100%;
-    display: flex;
+.vaccine-choose{
+    height: 76%;
+    background: @white;
 }
 .left{
-    width: 50%;
-    padding: 1.875rem 1.6875rem 11.5rem 1.9375rem;
+    width: 100%;
     background: @gray;
-    border-top-left-radius:10px;
-    border-bottom-left-radius:10px;
-    font-size: 1.125rem;
+    font-size: 1.375rem;
     .acitve-title{
         font-weight: bold;
+        margin-top: 2.5rem;
+        margin-left: 1.8125rem;
     }
     .left-left{
         width: 70%;
@@ -52,16 +62,31 @@
         width: 30%;
         text-align: center;
         padding-top: 1.5rem;
-        font-size:1.25rem;
+        font-size:1.5rem;
         font-weight:bold;
-        input{
-            margin-top: 2.25rem;
-        }
     }
 }
+.left-box{
+    margin-top: 1.3125rem;
+    display: flex;
+    border:1px dashed rgba(160,216,255,1);
+    background: @white;
+    height:14.25rem;
+    padding-left: 1.5rem;
+    padding-top: 1.1875rem;
+    div span{
+        font-weight: bold;
+        font-size: 1.25rem;
+    }
+}
+/deep/.ivu-checkbox-wrapper{
+    margin-top: 1.5rem;
+}
 /deep/.ivu-checkbox-inner{
-    width: 2rem;
-    height: 2rem;
+    width: 2.375rem;
+    height: 2.25rem;
+    box-shadow: 0 0 .25rem .25rem #dcdee2;
+    border: 1px solid #999;
     border-radius: 5px;  
 }
 /deep/.ivu-checkbox-checked .ivu-checkbox-inner{
@@ -71,30 +96,17 @@
 /deep/.ivu-checkbox-checked .ivu-checkbox-inner:after{
     top: .25rem;
     left: .75rem;
-    width: .5rem;
-    height: 1rem;
-}
-.left-box{
-    margin-top: 1.0625rem;
-    display: flex;
-    border:1px dashed rgba(160,216,255,1);
-    background: @white;
-    height:11.875rem;
-    padding-left: 1.5rem;
-    padding-top: 1.1875rem;
-    div span{
-        font-weight: bold;
-    }
+    width: .75rem;
+    height: 1.25rem;
 }
 .right{
-    width: 50%;
-    padding: 1.875rem 1.625rem 11.5rem 1.9375rem;
-    border-top-right-radius:10px;
-    border-bottom-right-radius:10px;
+    margin-top: 2.5625rem;
+    width: 100%;
     background: @gray;
-    font-size: 1.125rem;
+    font-size: 1.375rem;
     .acitve-title{
         font-weight: bold;
+        margin-left: 1.8125rem;
     }
     .right-left{
         width: 70%;
@@ -103,11 +115,8 @@
         width: 30%;
         text-align: center;
         padding-top: 1.5rem;
-        font-size:1.25rem;
         font-weight:bold;
-        input{
-            margin-top: 2.25rem;
-        }
+        font-size:1.5rem;
     }
 }
 .right-box{
@@ -115,7 +124,7 @@
     display: flex;
     border:1px dashed rgba(160,216,255,1);
     background: @white;
-    height:11.875rem;
+    height:14.25rem;
     padding-left: 1.5rem;
     padding-top: 1.1875rem;
     div span{
@@ -145,29 +154,28 @@
     width: 100%;
     height: 8.625rem;
     font-weight: bold;
-    margin-top: 0.625rem;
+    margin-top: 14.75rem;
     background: @white;
     border-radius:10px;
-    padding-top: 2.25rem;
-    div{
-        height: 4rem;
-        line-height: 4rem;
-        font-size: 1.5rem;
+    div{        
+        height: 5.1875rem;
+        line-height: 5.1875rem;
+        font-size: 2rem;
     }
     .cancel{
         background: url('/static/img/cancel.png') no-repeat center;
-        background-size: 100%;
+        background-size: 100% 100%;
         color: @purple;
-        width: 11.6875rem;
+        width: 14.25rem;
         margin-left: 4.3125rem;
         text-align: center;
     }
     .confirm{
         background: url('/static/img/confirm.png') no-repeat center;
-        background-size: 100%;
-        width: 16rem;
+        background-size: 100% 100%;
+        width: 20.75rem;
         color: @white;
-        padding-left: 5rem;
+        padding-left: 6.25rem;
         margin-left: 1.75rem;
     }
 }

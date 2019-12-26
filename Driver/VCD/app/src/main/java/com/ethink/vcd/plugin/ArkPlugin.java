@@ -41,13 +41,13 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
     //温度实时上送
     private Thread temThread;
     private Timer timer = new Timer();
-    private MessageToast messageToast;
+   // private MessageToast messageToast;
 
     public ArkPlugin(Context context) {
         super("CONTROLLER_BOARD");
         logger.info("--------------------连接主控板--------------------");
         this.context = context;
-        messageToast = new MessageToast(context);
+     //   messageToast = new MessageToast(context);
         this.arkController = new ArkController("/dev/ttyUSB0", 115200);
 
     }
@@ -149,7 +149,7 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                     set.add(4);
                     set.add(5);
                     List<Double> list = arkController.temperature(set);
-                    messageToast.obtainMessage(1, list).sendToTarget();
+                  //  messageToast.obtainMessage(1, list).sendToTarget();
                 }
 
             }

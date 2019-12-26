@@ -24,13 +24,15 @@
             <Col span="3">{{action}}数量</Col>
         </Row>
         <div class="inoculate-table">
-            <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
-                <Col span="4">{{item.name}}</Col>
-                <Col span="7" class="producer">{{item.product}}</Col>
-                <Col span="4">{{item.code}}</Col>
-                <Col span="6">{{dateFormat(item.expiry)}}</Col>
-                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{action == '入库'?item.total:item.use}}</Col>
-            </Row>
+            <Scroll :on-reach-bottom="handleReachBottom" :loading-text="loadText">
+                <Row v-for="(item, index) in inoutDatas" class="inoculate-table-row row-bg">
+                    <Col span="4">{{item.name}}</Col>
+                    <Col span="7" class="producer">{{item.product}}</Col>
+                    <Col span="4">{{item.code}}</Col>
+                    <Col span="6">{{dateFormat(item.expiry)}}</Col>
+                    <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{action == '入库'?item.total:item.use}}</Col>
+                </Row>
+            </Scroll>
         </div>
     </div>
 </div>
@@ -49,7 +51,10 @@
                 actionType: 2,
                 action:'出库',
                 date: moment().format('YYYY-MM-DD'),
-                inoutDatas:[]
+                inoutDatas:[],
+                page:1,
+                size:25,
+                loadText:'正在加载……'
             }
         },
         computed: {
@@ -61,20 +66,40 @@
         components:{},
         methods: {
             async queryInoutByCondition(){
-                let res = await this.$api.get("/inout/queryInoutByCondition", {
+                let res = await this.$api.get("/inout/queryInouts", {
                     device: this.device._id,
                     type: this.actionType,
-                    date: this.date
+                    date: this.date,
+                    page:this.page,
+                    size:this.size
                 });
-                this.inoutDatas = res.data;
+                let arr=res.data.rs;
+                if(arr.length>0){
+                    this.loadText='正在加载……';
+                    this.inoutDatas = this.inoutDatas.concat(arr);
+                    this.page++;
+                }else{
+                    this.loadText='已显示所有数据';
+                }
+                
             },
             dateFormat(val){
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
             },
             contextChange(){
                 this.actionType == 1?'入库':'出库';
-                this.actionType == 1?this.action='入库':this.action='出库';                
+                this.actionType == 1?this.action='入库':this.action='出库'; 
+                this.page=1;
+                this.inoutDatas=[];      
                 this.queryInoutByCondition();
+            },
+            handleReachBottom () {
+                 return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.queryInoutByCondition();
+                        resolve();
+                    }, 2000);
+                });
             }
         },
         mounted() {

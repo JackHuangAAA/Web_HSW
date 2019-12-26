@@ -153,7 +153,7 @@ public class TestPrintInfo {
 		}
 		
 		//set the horizontal and vertical motion units 
-		error_code = pos_sdk.systemSetMotionUnit(100, 100);
+		error_code = pos_sdk.systemSetMotionUnit(200, 200);
 		if(error_code != POS_SUCCESS)
 		{
 			return error_code;

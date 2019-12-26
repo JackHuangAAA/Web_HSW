@@ -178,10 +178,11 @@ public class PrintTextActivity extends Activity {
 
 					error_code = testprint.TestPrintText(USBActivity.pos_usb, USBActivity.printMode, text_data, DataLength, FontType, FontStyle, 
 							Alignment,HorStartingPosition, VerStartingPosition, LineHeight, HorizontalTimes, VerticalTimes);
-					if(error_code != POS_SUCCESS)
-					{
-						Toast.makeText(PrintTextActivity.this, "Failed to print Text.",Toast.LENGTH_LONG).show();
-					}
+
+				//	if(error_code != POS_SUCCESS)
+				//	{
+						Toast.makeText(PrintTextActivity.this, "print Text. code "+error_code,Toast.LENGTH_LONG).show();
+				//	}
 
 			   
 			}});

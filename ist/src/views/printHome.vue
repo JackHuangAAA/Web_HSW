@@ -7,7 +7,7 @@
         <div class="main">
             <router-view></router-view>
         </div>
-        <div class="copyright">银信博荣疫苗接种一体化解决方案</div>
+        <!-- <div class="copyright">银信博荣疫苗接种一体化解决方案</div> -->
     </div>
 
     <router-view v-else></router-view>
@@ -44,7 +44,9 @@ export default {
             saveDevice: 'saveDevice'
         }),
         getDevice(){
+            console.log("printHome getDevice")
             this.$device.getDeviceCode().then(res => {
+                console.log("getDeviceCode result"+JSON.stringify(res));
                 this.$api.get('/device/queryDeviceByCondition',{code:res}).then((res2)=>{
                     this.saveDevice(res2.data[0]);
                     this.deviceId = res2.data[0].code;
@@ -57,8 +59,6 @@ export default {
     mounted(){
         //获取设备信息
         this.getDevice();
-        //this.code='12306'
-        //this.$router.push({path:'/print/printInf',query:{code:this.code}});
     }
 }
 </script>
