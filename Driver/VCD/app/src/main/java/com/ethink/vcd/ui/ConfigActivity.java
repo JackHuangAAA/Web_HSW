@@ -161,11 +161,11 @@ public class ConfigActivity extends AppCompatActivity {
         SPUtils.setSharedStringData(getApplication(), Const.SOCKET_IO_URL, socketUrl);
         SPUtils.setSharedStringData(getApplication(), Const.CONFIG_URL, url);
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
-//        Intent startIntent = new Intent(this, VCDService.class);
-//        startService(startIntent);
+        Intent startIntent = new Intent(this, VCDService.class);
+        startService(startIntent);
 
-        Intent finger = new Intent(this, USBFingerActivity.class);
-        startActivity(finger);
+//        Intent finger = new Intent(this, USBFingerActivity.class);
+//        startActivity(finger);
 
         finish();
     }
