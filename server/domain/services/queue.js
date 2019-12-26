@@ -150,13 +150,6 @@ module.exports = {
             message = JSON.stringify(message);
             Domain.redis.pub.publishAsync(channel, message);
 
-            channel = "NextVaccination";
-            message = {};
-            message.type = channel;
-            message.code = 'CN0001';
-            message.data = result[0];
-            message = JSON.stringify(message);
-            Domain.redis.pub.publishAsync(channel, message);
 
         }
         return result;
