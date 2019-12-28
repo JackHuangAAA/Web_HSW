@@ -21,7 +21,7 @@ public class VCDService extends PluginService {
     public void onCreate() {
         //先添加插件再调用父类的方法
         addPlugin(new ArkPlugin(getApplicationContext()));
-        addPlugin(new ServerPlugin(getApplicationContext()));
+         addPlugin(new ServerPlugin(getApplicationContext()));
         addPlugin(new SocketPlugin(getApplicationContext()));
         addPlugin(new USBFingerPlugin(getApplicationContext()));
         addPlugin(new ScannerPlugin(getApplicationContext()));

@@ -36,7 +36,7 @@
                 <action android:name="com.ethink.action.BOOT"/>
             </intent-filter>
         </receiver>
-    </application>
+</application>
 
 
     <uses-permission android:name="android.permission.INTERNET" />
