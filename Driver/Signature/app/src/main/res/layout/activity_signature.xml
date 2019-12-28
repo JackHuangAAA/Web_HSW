@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="ui.SignatureActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="5dp">
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/but1"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:background="@color/but2"
+            />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="vertical">
+        <ImageView
+            app:srcCompat="@drawable/logo"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="乙型肝炎疫苗接种知情同意书"
+            android:layout_marginTop="-5dp"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="normal" />
+
+
+        <TextView
+            android:id="@+id/disease"
+            android:layout_width="wrap_content"
+            android:text="疾病简介"
+            android:lineSpacingMultiplier="2"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/vaccine_type"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="疫苗种类"
+            android:lineSpacingMultiplier="2"
+            android:layout_marginTop="25dp"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/border_shape"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:text="疫苗种类"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="重组乙型肝疫苗(汉逊酵母)"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="重组乙型肝疫苗(酒酿酵母)"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="重组乙型肝疫苗(CHO疫苗)"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="0.5dp"
+                android:background="@color/border"
+                android:layout_height="match_parent"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:text="疫苗分类"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="免疫规划疫苗(免费)"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="非免疫规划疫苗(自费)"
+                    />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/border"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:text="非免疫规划疫苗(自费)"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/notice_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="2"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/black"
+            android:text="@string/info_msg"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/iknow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingMultiplier="2"
+            android:layout_marginTop="25dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="我已了解以上事项，我（我的孩子）身体健康，符合接种条件，同意接种下面第  ________  种疫苗"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            >
+
+            <RadioButton
+                android:id="@+id/check1"
+                android:button="@null"
+                android:textSize="18sp"
+                android:drawablePadding="80dp"
+                android:drawableRight="@drawable/radio_check"
+                android:drawableEnd="@drawable/radio_check"
+                android:text="1.重组乙型肝疫苗(汉逊酵母)"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"/>
+            <RadioButton
+                android:id="@+id/check2"
+                android:button="@null"
+                android:textSize="18sp"
+                android:drawablePadding="80dp"
+                android:drawableEnd="@drawable/radio_check"
+                android:drawableRight="@drawable/radio_check"
+                android:text="2.重组乙型肝疫苗(酒酿酵母)"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"/>
+            <RadioButton
+                android:id="@+id/check3"
+                android:button="@null"
+                android:textSize="18sp"
+                android:drawableRight="@drawable/radio_check"
+                android:drawableEnd="@drawable/radio_check"
+                android:text="2.重组乙型肝疫苗(CHO疫苗)"
+                android:layout_width="wrap_content"
+                android:drawablePadding="80dp"
+                android:layout_height="45dp"/>
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:text="电子签名"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="30dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/fingerText"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="录入指纹"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:layout_marginTop="30dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/signure_border"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/image_tran"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center_vertical" />
+
+        <com.github.gcacace.signaturepad.views.SignaturePad
+            android:id="@+id/signature_pad"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:penColor="@android:color/black" />
+    </FrameLayout>
+    <ImageView
+        android:id="@+id/fingerImage"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:scaleType="center"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/signure_border"
+        android:layout_height="300dp"/>
+</LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/clean"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:background="@drawable/button_clean"
+                android:text="重签"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="1dp" />
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="120dp"
+                android:layout_height="45dp"
+                android:background="@drawable/button_ok"
+                android:text="确认"
+                android:textSize="16sp"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
