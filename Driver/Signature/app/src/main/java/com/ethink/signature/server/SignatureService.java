@@ -18,12 +18,9 @@ public class SignatureService extends PluginService {
     @Override
     public void onCreate() {
         //先添加插件再调用父类的方法
-      //  addPlugin(new ArkPlugin(getApplicationContext()));
        addPlugin(new ServerPlugin(getApplicationContext()));
-       // addPlugin(new SocketPlugin(getApplicationContext()));
- //       addPlugin(new USBFingerPlugin(getApplicationContext()));
-        addPlugin(new IDCardPlugin(getApplicationContext()));
-      //  addPlugin(new ScannerPlugin(getApplicationContext()));
+        addPlugin(new USBFingerPlugin(getApplicationContext()));
+     //   addPlugin(new IDCardPlugin(getApplicationContext()));
         super.onCreate();
     }
 }

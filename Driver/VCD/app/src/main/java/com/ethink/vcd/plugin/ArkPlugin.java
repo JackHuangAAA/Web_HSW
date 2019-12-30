@@ -227,7 +227,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
             if (msg.what == 1 && dialog != null) {
                 if (textView != null) {
                     textView.setText("当前温度: \n"+JSON.toJSONString(msg.obj));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0新特性
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        //8.0新特性
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1);
                     } else {
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);

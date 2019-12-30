@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.ethink.signature.App;
 import com.ethink.signature.R;
@@ -164,8 +165,12 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, SignatureService.class);
         startService(startIntent);
 
-//        Intent finger = new Intent(this, IDCardActivity.class);
-//        startActivity(finger);
+        Intent finger = new Intent(this, SignatureActivity.class);
+        startActivity(finger);
+//        int width= ScreenUtils.getScreenWidth();
+//        int height=ScreenUtils.getScreenHeight();
+//       logger.info("宽   {}  高   {}",width,height);
+
 
         finish();
     }
