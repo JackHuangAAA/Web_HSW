@@ -28,13 +28,15 @@
             <Col span="3">库存数量</Col>
         </Row>
         <div class="inoculate-table">
-            <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
-                <Col span="4">{{item.name}}</Col>
-                <Col span="7" class="producer">{{item.product}}</Col>
-                <Col span="4">{{item.code}}</Col>
-                <Col span="6">{{dateFormat(item.expiry)}}</Col>
-                <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus}}</Col>
-            </Row>
+            <Scroll :on-reach-bottom="handleReachBottom" :loading-text="loadText">
+                <Row v-for="(item, index) in vaccineDatas" class="inoculate-table-row row-bg">
+                    <Col span="4">{{item.name}}</Col>
+                    <Col span="7" class="producer">{{item.product}}</Col>
+                    <Col span="4">{{item.code}}</Col>
+                    <Col span="6">{{dateFormat(item.expiry)}}</Col>
+                    <Col span="3" :class="{alarmStatus:item.surplus<=10,dangerStatus:item.surplus==0}">{{item.surplus}}</Col>
+                </Row>
+            </Scroll>
         </div>
     </div>
 </div>
@@ -49,7 +51,10 @@
                 product:'',
                 kindList:[],
                 lackNumber:0,
-                vaccineDatas:[]
+                vaccineDatas:[],
+                page:1,
+                size:25,
+                loadText:'正在加载……'
             }
         },
         computed: {
@@ -60,21 +65,23 @@
         components:{},
         methods: {
             //查询疫苗信息
-            async queryVaccineStorageNum(){
-                let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
-                    device: this.device._id,
-                    code: this.vaccineCode,
-                    product: this.product
-                });
-                this.vaccineDatas = res.data.rs;
-            },
             async lackVaccineNum(){
                 let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
                     device: this.device._id,
                     surplusltTen: true,
                     code: this.vaccineCode,
-                    product: this.product
+                    product: this.product,
+                    page:this.page,
+                    size:this.size
                 });
+                let arr=res.data.rs;
+                if(arr.length>0){
+                    this.loadText='正在加载……';
+                    this.vaccineDatas =this.vaccineDatas.concat(arr);
+                    this.page++;
+                }else{
+                    this.loadText='已显示所有数据';
+                }
                 this.lackNumber = res.data.total;
             },
             async queryVaccineKinds(){
@@ -85,12 +92,20 @@
                 return moment(val).format('YYYY-MM-DD HH:mm:ss');
             },
             contextChange(){
-                this.queryVaccineStorageNum();
+                this.page=1;
+                this.vaccineDatas=[];
                 this.lackVaccineNum();
+            },
+            handleReachBottom () {
+                 return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.lackVaccineNum();
+                        resolve();
+                    }, 2000);
+                });
             }
         },
         mounted() {
-            this.queryVaccineStorageNum();
             this.lackVaccineNum();
             this.queryVaccineKinds();
         }

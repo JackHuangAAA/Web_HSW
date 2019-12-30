@@ -4,8 +4,7 @@
         <p class="code">设备编号：{{device.code}}</p>
         <p class="tip">安全用药，打印信息，排队接种</p>
         <div class="scanNotice">
-            <div>接种信息打印</div>
-            <div>请将疫苗本条码对准扫描口，进行扫码</div>
+            <div>请将疫苗本条码对准扫描口进行扫码</div>
         </div>
     </div>
 </template>
@@ -37,8 +36,8 @@ export default {
                 if(this.$route.path!='/print/printMain'){
                     return false;
                 }
-                this.code = JSON.parse(data.data);
-                // this.code = '12306';
+                this.code = data.data;
+                // this.code = 'A014';
                 console.log("这里是扫码获取的结果=====>"+JSON.stringify(this.code));
                 let customer = await this.$api.get('/queue/queryQueueByCondition',{code:this.code});
                 this.customer = customer.data[0];
@@ -46,6 +45,7 @@ export default {
                 let pre = await this.$api.get('/customer/queryCustomerByCondition',{code:this.code});
                 let previou_time = pre.data[0].previou.date?pre.data[0].previou.date:new Date();
                 this.$set(this.customer,'intervalTime',moment(new Date()).diff(moment(previou_time),'days'));
+                this.$set(this.customer,'row',pre.data[0].row);
                 //扫描结果存入vuex user
                 this.saveUser(this.customer);
                 this.$router.push({path:'/print/printInf'});
@@ -53,12 +53,8 @@ export default {
         }
     },
     mounted(){
-        //获取设备信息
-        //this.getDevice();
         //监听扫描条形码结果
         this.scanBarcode();
-        //this.$router.push('/print/printInf');
-
     }
 }
 </script>

@@ -43,17 +43,19 @@
                     </div>
                 </div>
                 <div class="vaccineContentContent-table">
-                    <div class="vaccineContentContent" v-for="(item,index) in vaccineData">
-                        <div class="vaccineName">
-                            {{item.name}}
+                    <Scroll :on-reach-bottom="handleReachBottom" :loading-text="loadText">
+                        <div class="vaccineContentContent" v-for="(item,index) in vaccineData">
+                            <div class="vaccineName">
+                                {{item.name}}
+                            </div>
+                            <div class="vaccineAllowance">
+                                {{item.surplus}}
+                            </div>
+                            <div class="allowanceStatus" :class="{dangerStatus:item.surplus==0}">
+                                {{item.surplus==0?'库存为零':'缺少库存'}}
+                            </div>
                         </div>
-                        <div class="vaccineAllowance">
-                            {{item.surplus}}
-                        </div>
-                        <div class="allowanceStatus" :class="{dangerStatus:item.surplus==0}">
-                            {{item.surplus==0?'库存为零':'缺少库存'}}
-                        </div>
-                    </div>
+                    </Scroll>
                 </div>
             </div>
         </div>
@@ -79,11 +81,12 @@
             return {
                 alarmNumber: 0,
                 vaccineNumber:0,
-                // temperature: 0,
-                // temperatureDes:'正常',
                 vaccineData:[],
                 lackNumber:0,
-                state:false
+                state:false,
+                page:1,
+                size:15,
+                loadText:'正在加载……'
             }
         },
         computed: {
@@ -114,35 +117,44 @@
             }),
             //查询温度报警
             async queryAlarmByByCondition(){
-                let res = await this.$api.get("/alarm/queryAlarmByCondition",{
+                let res = await this.$api.get("/alarm/queryAlarmNum",{
                     device: this.device._id,
                     type:1,
                     ifToday:'today'
                     });
-                this.alarmNumber = res.data.length;
+                this.alarmNumber = res.data.total;
             },
             //冷藏柜已有疫苗种类
             async queryVaccineNum(){
-                let res = await this.$api.get("/vaccine/queryVaccineNum",{
-                    device: this.device._id
+                let res = await this.$api.get("/vaccine/queryVaccineStorageNum",{
+                    device: this.device._id,
+                    queryNum:true
                 });
                 console.log("result:"+JSON.stringify(res))
-                this.vaccineNumber = res.data.rs.length;
+                this.vaccineNumber = res.data.total;
             },
             //查询预警疫苗信息（数量小于等于10）
             async queryVaccineStorageNum(){
                 let res = await this.$api.get("/vaccine/queryVaccineStorageNum", {
                     device: this.device._id,
-                    surplusltTen: true
+                    surplusltTen: true,
+                    page:this.page,
+                    size:this.size
                 });
-                console.log(JSON.stringify(res))
-                let arr=[];
-                res.data.rs.forEach(item=>{
-                    if(item.surplus<10){
-                        arr.push(item);
-                    }
-                });
-                this.vaccineData = arr;
+                let arr=res.data.rs;
+                // res.data.rs.forEach(item=>{
+                //     if(item.surplus<10){
+                //         arr.push(item);
+                //     }
+                // });
+
+                if(arr.length>0){
+                    this.loadText='正在加载……';
+                    this.vaccineData =this.vaccineData.concat(arr);
+                    this.page++;
+                }else{
+                    this.loadText='已显示所有数据';
+                }
                 this.lackNumber = res.data.total;
             },
             receiveSocketData(){
@@ -163,6 +175,14 @@
             },
             vaccineOut(){
                 this.$router.push('/inout/outStock');
+            },
+            handleReachBottom () {
+                 return new Promise(resolve => {
+                    setTimeout(() => {
+                        this.queryVaccineStorageNum();
+                        resolve();
+                    }, 2000);
+                });
             }
         },
         destroyed(){

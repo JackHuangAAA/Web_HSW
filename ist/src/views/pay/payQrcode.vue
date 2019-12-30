@@ -14,7 +14,6 @@
             </div>
             <div class="vaccineName" :class="{top:ifCash}">
                 {{data?data.vaccine.name:''}}    自费
-
             </div>
             <div class="price">
                 ￥{{data?data.vaccine.cost:''}}
@@ -32,9 +31,9 @@
                     <div class="payName">{{item.payName}}</div>
                 </div>
             </div>
-            <detail />
+            <detail class="payQrCodeDetail"/>
             <div class="cashPay" v-show="ifCash">
-                <!--<div class="cashTip">请前往人工付费窗口支付费用</div>-->
+                <!-- <div class="cashTip">疫苗预选成功，请前往人工付费窗口缴费</div> -->
                 <div class="complete-confirm" @click="back(false)">返回首页</div>
             </div>
         </div>

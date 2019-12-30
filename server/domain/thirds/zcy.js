@@ -154,7 +154,7 @@ module.exports = {
             ["ym996",{code: 'ym996',name: '麻腮风',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '上海生物'}],
             ["ym997",{code: 'ym997',name: 'AC群结合疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '无锡罗益'}],
             ["ym998",{code: 'ym998',name: '水痘减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '长春祁健'}],
-            ["ym999",{code: 'ym999',name: '223价肺炎',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '成都生物'}],
+            ["ym999",{code: 'ym999',name: '23价肺炎',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '成都生物'}],
             ["ym1000",{code: 'ym1000',name: '甲肝减毒活疫苗',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '浙江普康'}],
             ["ym1001",{code: 'ym1001',name: '流脑A群多糖',batchNo:'B-998',supervisionCode: 'jg20190920001',expiry: moment().add(30,'days').format('YYYY-MM-DD HH:mm:ss'),product: '武汉生物'}]
         ]);

@@ -36,7 +36,7 @@
         </div>
         <div class="container">
             <div class="inStockTitle">
-                    <img src="/static/img/back.png" class="back" @click="back()">
+                    <!-- <img src="/static/img/back.png" class="back" @click="back()"> -->
                     <p class="headP">请选择疫苗入库的抽屉</p>
                     <img src="/static/img/vaccineIn.png" class="vaccineIn">
             </div>

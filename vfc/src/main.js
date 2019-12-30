@@ -18,14 +18,7 @@ import FastClick from 'fastclick'
 // FastClick.attach(document.body);
 Vue.use(iView);
 Vue.use(VueAwesomeSwiper);
-if (config.env == 'development') {
-    global.__app = new Vue({
-        el: '#app',
-        router: router,
-        store: store,
-        render: h => h(App)
-    });
-}else {
+if(navigator.userAgent.match(/ADF/i) == 'ADF') {
     // 安卓环境使用
     window.$d.onReady = function() {
         console.log('$d.ready');
@@ -36,6 +29,13 @@ if (config.env == 'development') {
             render: h => h(App)
         });
     };
+}else {
+    global.__app = new Vue({
+        el: '#app',
+        router: router,
+        store: store,
+        render: h => h(App)
+    });
 }
 
 Vue.prototype.$cookies = Cookies;

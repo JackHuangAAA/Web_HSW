@@ -1,5 +1,4 @@
 <template>
-<template>
         <div class="layout">
             <div class="closeMenuList" v-if="ifShowMenu" @click="openCloseMenu()"></div>
             <div class="menuList"  v-bind:class='{menuNone:ifShowMenu == false}'>
@@ -23,7 +22,6 @@
                 <div class="code">{{device &&device.cabinetNo || ''}}</div>
                 <div class="user">
                     <p>{{user.name}}</p>
-                    {{"温度"+temperature}}
                     <img src="/static/img/userph1.png">
                 </div>
                 <div class="out">
