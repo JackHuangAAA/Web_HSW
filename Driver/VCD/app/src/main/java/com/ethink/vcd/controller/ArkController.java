@@ -15,13 +15,10 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ArkController {
     private SerialPort serialPort;
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    private Lock lock = new ReentrantLock();
     public ArkController(String path, int baudRate) {
         //串口
         SerialPortSetting setting = new SerialPortSetting(
@@ -321,7 +318,6 @@ public class ArkController {
         byteBuffer.put(ch);
         byteBuffer.put((byte) (0xF0));
         byte[] data = byteBuffer.array();
-        lock.lock();
             if (write(data, data.length)) {
                 //读取
                 byte[] rec = new byte[256];
@@ -348,29 +344,25 @@ public class ArkController {
     }
 
 
-    private boolean write(byte[] data, int len) {
+    private synchronized boolean write(byte[] data, int len) {
         int ret = -1;
         try {
             ret = serialPort.write(data, 0, len);
             logger.info("Write: {}", HexDump.toHexString(data, 0, len));
         } catch (Exception e) {
             logger.error("串口写入失败", e);
-        }finally {
-            lock.unlock();
         }
         return ret >= 0;
     }
 
     //55 AA 0B 02 77 03 FF FF FF FF FF FF FF FF 7D F0
-    public boolean read(byte[] buffer, int offset, int maxlen)  {
+    public synchronized boolean read(byte[] buffer, int offset, int maxlen)  {
         try {
             serialPort.readFull(buffer, offset, maxlen);
             logger.info("Read: {}", HexDump.toHexString(buffer, offset, maxlen));
         } catch (Exception e) {
             logger.error("串口读取失败", e);
             return false;
-        }finally {
-            lock.unlock();
         }
         return true;
     }
