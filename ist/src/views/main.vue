@@ -2,12 +2,12 @@
     <div class="container">
         <img src="/static/img/logo.png" class="logo" alt="">
         <div class="device">设备编号：{{device.id}}</div>
-        <div class="title">扫描疫苗本，排队挂号，智能接种</div>
+        <div class="title">智能接种，排队挂号，扫描疫苗本</div>
         <div class="scanNotice">
             <div>扫码挂号</div>
             <div>请将疫苗本条码对准扫描口，进行扫码</div>
         </div>
-        <div class="awaitPeople">当前等待接种<span>{{queueLength?queueLength:''}}</span>人</div>
+        <!-- <div class="awaitPeople">当前等待接种<span>{{queueLength?queueLength:''}}</span>人</div> -->
     </div>
 </template>
 
@@ -34,16 +34,19 @@ export default {
             });
             this.queueLength = queue.data.length?queue.data.length:0;
         },
-        scanBarcode(){
-            this.$device.subscribe('SCANNER_RESULT', (data) => {
+        async scanBarcode(){
+            this.$device.subscribe('SCANNER_RESULT',async (data) => {
                 console.log('SERVER_PUSH==>SCANNER_RESULT,result:' + JSON.stringify(data));
                 let code =data.data;
-                this.$router.push({path:'/register/register',query:{code:code}});
+                let customer = await this.$api.get('/customer/queryCustomerByCondition',{code:code});
+                if(customer.data.length!=0){
+                    this.$router.push({path:'/register/register',query:{customer:customer}});
+                }
             });
         }
     },
     mounted(){
-        this.queryQueue();
+        // this.queryQueue();
         //监听扫描条形码结果
         this.scanBarcode();
     }

@@ -59,7 +59,7 @@
                         </div>
                         <div class="vaccine-btnBox">
                             <!-- <button>取消接种</button> -->
-                            <button v-if="single && status && ready" @click="confirmVaccine()" :disabled="confirm">确认接种</button>
+                            <button v-if="single && status && ready && complete" @click="confirmVaccine()" :disabled="confirm">确认接种</button>
                         </div>
                     </div>
                 </div>
@@ -148,6 +148,7 @@
                 confirm:false,
                 ready:false,
                 showScan:false,
+                complete:true,
                 drawer:{},
                 vaccineProduct:''
             };
@@ -187,9 +188,10 @@
             async confirmVaccine(){
                 //排队状态完成
                 await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{
-                    console.log("这里是queue信息修改完成后的结果"+JSON.stringify(res))
+                    
                 });
                 this.confirm=true;
+                this.complete=false;
                 //比对成功，疫苗数量减少1、增加出库信息、保存接种信息
                 //疫苗数量减少1
                 this.modifyVaccineNum({
@@ -309,7 +311,8 @@
             },
             async queryNextQueue(){
                 if(this.confirm){
-                    this.confirm=false; 
+                    this.confirm=false;
+                    this.complete=true;
                 }else{
                     //未接种点击下一位直接完成
                     await this.modifyQueue({id:this.vaccinationData._id,status:0,finishDate:new Date()}).then(res=>{

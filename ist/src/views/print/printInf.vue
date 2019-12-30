@@ -2,9 +2,11 @@
     <div class="container">
         <div class="personInf">
             <p>基本信息</p>
-            <div>
-                <span class="infTitle">姓名:</span><span class="infContent">{{user?user.name:''}}</span><span class="infTitle">性别:</span><span class="infContent">{{user?user.sex:''}}</span>
-                <span class="infTitle">年龄:</span><span class="infContent">{{user?user.age:''}}周岁</span><span class="infTitle">距离上次接种时间:</span><span class="infContent day">{{user?user.intervalTime:''}}天</span>
+            <div class="personInfCont">
+                <div class="infTitle">姓名:<span class="infContent">{{user?user.name:''}}</span></div>
+                <div class="infTitle">性别:<span class="infContent">{{user?user.sex:''}}</span></div>
+                <div class="infTitle">年龄:<span class="infContent">{{user?user.age:''}}周岁</span></div>
+                <div class="infTitle">距离上次接种时间:<span class="infContent day">{{user?user.intervalTime:''}}天</span></div>
             </div>
         </div>
         <div class="vaccineInf">
@@ -12,10 +14,9 @@
             <detail class="detail"></detail>
         </div>
         <div class="btn-box">
-            <div class="cancel" @click="back">取消</div>
+            <div class="cancel" @click="back">返回首页</div>
             <div class="confirm" @click="confirm()">打印信息</div>
         </div>
-        <p class="confirmTip">请将疫苗本放入打印机，点击打印信息按钮</p>
     </div>
 </template>
 
@@ -46,7 +47,7 @@ export default {
         confirm: function(){
             //调用打印接口
             this.$device.printBook({
-                num:1,
+                num:this.user.row,
                 need_name:true,
                 vaccine:this.user.vaccine.name,
                 vaccine_date:moment(this.user.vaccine.date).format('YYYYMMDD'),
@@ -54,25 +55,27 @@ export default {
                 vaccine_unit:this.device.unitName,
                 vaccine_site:'左手臂',
                 signature:this.user.name
-            }).then(res=>{
-                console.log('打印返回结果'+JSON.stringify(res));
-                this.$router.push('/print/printEnd');
             });
-            console.log("这里是末尾")
+            this.$device.subscribe('PRINT_RESULT',(res)=>{
+                console.log('PRINT_RESULT:'+JSON.stringify(res));
+                if(res.data){
+                    this.$router.push('/print/printEnd');
+                }else{
+                    this.$Message.warning({
+                        content: '打印失败，请重试',
+                        duration: 5,
+                        closable: true
+                    });
+                }
+            });
         },
         back: function(){
-            this.$router.push('/print/printMain')
+            this.$device.printExitPaper();
+            this.$router.push('/print/printMain');
         }
-        // initData(){
-        //     //获取客户信息和疫苗信息
-        //     this.customer = this.user;
-        //     console.log(this.customer)
-
-        // }
     },
     mounted(){
-        //初始数据
-        // this.initData();
+        
     }
 }
 </script>

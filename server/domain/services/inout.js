@@ -132,6 +132,7 @@ module.exports = {
      * @returns {Promise.<{rs: *, total: (*|number)}>}
      */
     queryInouts: async function(requestBody){
+        console.log("123")
         logger.debug(`queryInouts param: ${JSON.stringify(requestBody)}`);
         let query = [];
         if (!_.isEmpty(requestBody.deviceId)) {
@@ -155,6 +156,10 @@ module.exports = {
         if (!_.isEmpty(requestBody.batchId)) {
             query.push({"batchId": requestBody.batchId});
         }
+        if (!_.isEmpty(requestBody.ifToday)) {
+            let today = moment();
+            query.push({ "createDate": { '$gte': today.startOf('day').toDate(), '$lte': today.endOf('day').toDate() } });
+        }
         if (!_.isEmpty(requestBody.begin)) {
             let begin = moment(requestBody.begin);
             begin = begin.startOf('day').toDate();
@@ -165,7 +170,11 @@ module.exports = {
             end = end.endOf('day').toDate();
             query.push({"createDate": {"$lte": end}});
         }
-
+        if (!_.isEmpty(requestBody.date)) {
+            let date = moment(requestBody.date);
+            query.push({"createDate": {"$gte": date.startOf('day').toDate()}});
+            query.push({"createDate": {"$lte": date.endOf('day').toDate()}});
+        }
         query = query.length > 0 ? { "$and": query } : {};
         let result = await Domain.models.inout.paginate(query, {
             sort: {"_id": -1},

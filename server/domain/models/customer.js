@@ -9,6 +9,7 @@ const customerSchema = mongoose.Schema({
     name: String, //姓名
     sex: String, //性别
     age: Number, //年龄
+    row:Number,//测试打印行数
     previou:{
         plan: {type:mongoose.Schema.Types.ObjectId, ref:'plan'}, //上一次接种计划
         date: {type: Date, default: Date.now}  //上一次接种计划的时间
