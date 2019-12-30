@@ -1,6 +1,7 @@
 package com.ethink.snd.server;
 
 import com.ethink.plugin.PluginService;
+import com.ethink.snd.plugin.PrintPlugin;
 import com.ethink.snd.plugin.ScannerPlugin;
 import com.ethink.snd.plugin.ServerPlugin;
 
@@ -22,7 +23,7 @@ public class SNDService extends PluginService {
         addPlugin(new ServerPlugin(getApplicationContext()));
        // addPlugin(new SocketPlugin(getApplicationContext()));
         addPlugin(new ScannerPlugin(getApplicationContext()));
-      //   addPlugin(new PrintPlugin(getApplicationContext()));
+      //  addPlugin(new PrintPlugin(getApplicationContext()));
         super.onCreate();
     }
 }

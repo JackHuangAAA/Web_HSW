@@ -3,6 +3,7 @@ package com.ethink.cnd.controller;
 import android.util.Log;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.ethink.cnd.plugin.PrintPlugin;
 import com.ethink.tools.serialport.SerialPort;
 import com.ethink.tools.serialport.SerialPortManager;
 import com.ethink.tools.serialport.SerialPortSetting;
@@ -309,7 +310,7 @@ public class PrintController {
     /***
      * 浙江省疫苗本
      * **/
-    public void zheProvince(int num,String data) {
+    public void zheProvince(int num, String data, PrintPlugin.PrintResult printResult) {
         ready = true;
         logger.info("打印操作ready状态:{}", ready);
         while (ready) {
@@ -319,7 +320,8 @@ public class PrintController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (paperStatus() == 0x43) {
+            byte by=paperStatus();
+            if ( by== 0x43) {
                 boolean r=verticalSpace();
                 logger.info("行间距：r={}",r);
                 boolean re = provinceHorizontal();
@@ -336,14 +338,21 @@ public class PrintController {
                 buffer.put((byte) 0x4F);
                 boolean result = write(buffer.array(), da.length + 4);
                 logger.info("打印结果：{}", result);
+                if(printResult!=null){
+                    printResult.printResult(result);
+                }
                 ready = false;
                 break;
             }
-
+//            if(by==0x42){
+//               //inPaper();
+//            }
             else {
-
                 if (!inPaperProvince(num)) {
                     ready = false;
+                    if(printResult!=null){
+                        printResult.printResult(false);
+                    }
                     break;
                 }
 
@@ -363,7 +372,7 @@ public class PrintController {
         StringBuilder stringBuilder = new StringBuilder();
         for (int index = 1; index < num; index++) {
             stringBuilder.append("\r\n");
-            Log.d(TAG, "printData: 换行------{}"+index);
+            Log.d(TAG, "printData: 换行------"+index);
         }
         stringBuilder.append(data);
         try {
@@ -443,6 +452,7 @@ public class PrintController {
      *退纸
      * */
     public void exitPaper() {
+        ready = false;
         byte[] by = new byte[]{0x1B, 0x4F};
         write(by, by.length);
     }

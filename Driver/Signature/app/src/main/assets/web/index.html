@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./bridge.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <img style="width: 500px; height: 300px;" src="./1.jpg" id="img" alt="">
+    <div>这里是提示信息</div>
+    <div id="msg">123213</div>
+</body>
+<script>
+    window.$d.subscribe('FINGER_MESSAGE',(data)=>{
+        console.log("result "+ JSON.stringify(data));
+        if(data.tyep==1){
+            document.getElementById('msg').src=data.msg;
+        }else{
+            document.getElementById('img').src=data.msg;
+        }
+    })
+    window.$d.invoke('FINGER','SEARCH',data=>{
+        console.log(JSON.stringify(data))
+    });
+</script>
+</html>

@@ -8,4 +8,5 @@
     <color name="white">#ffffff</color>
     <color name="but1">#ff9000</color>
     <color name="but2">#0090ff</color>
+    <color name="border">#999999</color>
 </resources>

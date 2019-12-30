@@ -8,17 +8,13 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import com.blankj.utilcode.util.PhoneUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.ethink.lineup.App;
 import com.ethink.lineup.Const;
 import com.ethink.lineup.R;
 import com.ethink.lineup.SPUtils;
+import com.ethink.lineup.print_nh80m.SerialActivity;
 import com.ethink.lineup.server.LineUpService;
 
 import org.slf4j.Logger;
@@ -27,6 +23,10 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -165,9 +165,9 @@ public class ConfigActivity extends AppCompatActivity {
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
-//
-        Intent intent = new Intent(this, PrintActivity.class);
-        startActivity(intent);
+////
+//        Intent intent = new Intent(this, USBPrintActivity.class);
+//        startActivity(intent);
 
         finish();
     }

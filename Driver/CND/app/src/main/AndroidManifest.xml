@@ -13,10 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".ui.PrintActivity"  android:screenOrientation="landscape"/>
+        <activity android:name=".ui.PrintActivity"  android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.ConfigActivity"
-            android:screenOrientation="landscape">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -27,10 +27,10 @@
         </activity>
         <activity
             android:name=".ui.FingerActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.CameraActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.ArkActivity"
             android:screenOrientation="landscape" />

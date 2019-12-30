@@ -1,6 +1,18 @@
 package com.ethink.vcd.plugin;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blankj.utilcode.util.StringUtils;
@@ -8,12 +20,16 @@ import com.ethink.plugin.BasePlugin;
 import com.ethink.plugin.FunctionHandler;
 import com.ethink.plugin.message.EventMessage;
 import com.ethink.plugin.message.PluginMessage;
+import com.ethink.vcd.R;
 import com.ethink.vcd.controller.ArkController;
 import com.ethink.vcd.utils.DrawerData;
 
+import java.lang.ref.WeakReference;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /***
  * 疫苗柜控制插件
@@ -24,12 +40,16 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
     private ArkController arkController;
     //温度实时上送
     private Thread temThread;
+    private Timer timer = new Timer();
+   // private MessageToast messageToast;
 
     public ArkPlugin(Context context) {
         super("CONTROLLER_BOARD");
         logger.info("--------------------连接主控板--------------------");
         this.context = context;
+     //   messageToast = new MessageToast(context);
         this.arkController = new ArkController("/dev/ttyUSB0", 115200);
+
     }
 
     @Override
@@ -74,8 +94,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                     }
                 }*/
                 pluginMessage.changeToResponse();
-                String a= arkController.temperatureArk();
-                pluginMessage.set("res",a);
+                String a = arkController.temperatureArk();
+                pluginMessage.set("res", a);
                 break;
             case "ARK_STATUS":
                 if (arkController.arkStatus() == 1) {
@@ -92,8 +112,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
             case "SET_TEMPERATURE":
                 String tem = pluginMessage.getString("num");
                 pluginMessage.changeToResponse();
-                boolean result= arkController.setTemperature(Integer.parseInt(tem));
-                pluginMessage.setBool("rsp",result);
+                boolean result = arkController.setTemperature(Integer.parseInt(tem));
+                pluginMessage.setBool("rsp", result);
                 break;
 
         }
@@ -118,6 +138,22 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SWITCH_STATUS", this);
         //设置温度
         registerFunction("SET_TEMPERATURE", this);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (arkController != null) {
+//                    Set<Integer> set = new HashSet<>();
+//                    set.add(1);
+//                    set.add(2);
+//                    set.add(3);
+//                    set.add(4);
+//                    set.add(5);
+//                    List<Double> list = arkController.temperature(set);
+//                  //  messageToast.obtainMessage(1, list).sendToTarget();
+//                }
+//
+//            }
+//        }, 30000, 30000);
     }
 
     @Override
@@ -127,8 +163,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
     @Override
     public void run() {
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
+//        Set<Integer> set = new HashSet<>();
+//        set.add(1);
 //        set.add(2);
 //        set.add(3);
 //        set.add(4);
@@ -141,8 +177,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                     EventMessage eventMessage = new EventMessage("NOW_TEMPERATURE");
 //                    List<Double> list = arkController.temperature(set);
 //                   eventMessage.setString("res",JSON.toJSONString(list));
-                    String a= arkController.temperatureArk();
-                    eventMessage.setString("res",a);
+                    String a = arkController.temperatureArk();
+                    eventMessage.setString("res", a);
                     eventMessage.setBool("message", true);
                     logger.info("温度主动上报：" + a);
                     pluginManager.post(eventMessage);
@@ -158,4 +194,51 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
         }
     }
+
+    public static class MessageToast extends Handler {
+        private WeakReference<Context> weakReference;
+        private Dialog dialog;
+    private TextView textView;
+        MessageToast(Context context) {
+            weakReference = new WeakReference<>(context);
+            if (weakReference.get() != null) {
+                View view = LayoutInflater.from(weakReference.get()).inflate(R.layout.popup_layout, null, false);
+                textView=view.findViewById(R.id.text);
+                dialog=new Dialog(weakReference.get());
+                dialog.setCanceledOnTouchOutside(true);
+                Window window = dialog.getWindow();
+                window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+               // window.setLayout(ConvertUtils.dp2px(500), ConvertUtils.dp2px(400));
+                dialog.setContentView(view);
+                WindowManager.LayoutParams attr = window.getAttributes();
+                if (attr != null) {
+                    attr.height = 200;
+                    attr.width = 200;
+                    attr.gravity = Gravity.CENTER;
+                    window.setAttributes(attr);
+                }
+            }
+
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1 && dialog != null) {
+                if (textView != null) {
+                    textView.setText("当前温度: \n"+JSON.toJSONString(msg.obj));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0新特性
+                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1);
+                    } else {
+                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);
+                    }
+                    if (!dialog.isShowing())
+                        dialog.show();
+                }
+
+            }
+        }
+    }
+
+
 }

@@ -1,7 +1,5 @@
 package com.ethink.vcd.service;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import com.ethink.vcd.App;
@@ -26,7 +24,6 @@ private String deviceId;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     public HeaderInterceptor(   ){
         deviceId= SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
-
     }
 
     @Override

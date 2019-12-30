@@ -4,10 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".ui.PrintActivity">
- <androidx.viewpager.widget.ViewPager
+ <com.ethink.lineup.widget.NoScrollViewPager
      android:id="@+id/viewpager"
+     android:visibility="gone"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"/>
+ <ImageView
+     android:id="@+id/image"
+     android:src="@drawable/print1"
      android:layout_width="match_parent"
      android:layout_height="match_parent"/>
 

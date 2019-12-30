@@ -45,7 +45,7 @@ public class Bills {
 			mUsbDriver.write(PrintCmd.PrintFeedline(2)); // 打印走纸2行
 			// 二维码
 			mUsbDriver.write(PrintCmd.SetAlignment(1));   
-			mUsbDriver.write(PrintCmd.PrintQrcode(codeStr, 25, 6, 1));           // 【1】MS-D347,13 52指令二维码接口，环绕模式1
+			mUsbDriver.write(PrintCmd.PrintQrcode(codeStr, 0, 6, 1));           // 【1】MS-D347,13 52指令二维码接口，环绕模式1
 //			mUsbDriver.write(PrintCmd.PrintQrcode(codeStr, 12, 2, 0));           // 【2】MS-D245,MSP-100二维码，左边距、size、环绕模式0
 //			mUsbDriver.write(PrintCmd.PrintQrCodeT500II(5,Constant.WebAddress_zh));// 【3】MS-532II+T500II二维码接口
 			mUsbDriver.write(PrintCmd.PrintFeedline(2));
@@ -57,7 +57,7 @@ public class Bills {
 			mUsbDriver.write(PrintCmd.SetAlignment(0));
 			// 一维条码
 			mUsbDriver.write(PrintCmd.SetAlignment(1));
-			mUsbDriver.write(PrintCmd.Print1Dbar(2, 100, 0, 2, 10, "A12345678Z"));// 一维条码打印
+			mUsbDriver.write(PrintCmd.Print1Dbar(2, 100, 0, 2, 10, "A12345678Z"));// *一维条码打印
 			mUsbDriver.write(PrintCmd.SetAlignment(0));
 			// 走纸换行、切纸、清理缓存
 			mUsbDriver.write(PrintCmd.PrintMarkcutpaper(1)); // 不干胶（黑标）切纸
