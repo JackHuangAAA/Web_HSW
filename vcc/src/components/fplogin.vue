@@ -74,7 +74,6 @@ export default {
           this.fingerLogin();
           clearTimeout(this.timer);
         },1500)
-        
       }
     });
     //激活指纹模块
