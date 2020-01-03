@@ -19,6 +19,7 @@ import java.util.Set;
 public class ArkController {
     private SerialPort serialPort;
     protected Logger logger = LoggerFactory.getLogger(getClass());
+    private final Object object=new Object();
     public ArkController(String path, int baudRate) {
         //串口
         SerialPortSetting setting = new SerialPortSetting(
@@ -43,7 +44,8 @@ public class ArkController {
     /**
      * 打开抽屉
      **/
-    public String openDrawer(Set<Integer> set) {
+    public   String openDrawer(Set<Integer> set) {
+        synchronized (object){
         ByteBuffer buffer1 = ByteBuffer.allocate(8);
         ByteBuffer buffer2 = ByteBuffer.allocate(8);
         for (Integer door:set){
@@ -73,7 +75,8 @@ public class ArkController {
             logger.info("转换后：" + s);
             return s;
         }
-        return "000";
+        return "-1";
+        }
     }
 
     public static byte por(byte[] buffer, int offset, int length, byte iv) {
@@ -179,7 +182,8 @@ public class ArkController {
      *
      * 查询内部温度
      * **/
-    public String temperatureArk(){
+    public   String temperatureArk(){
+        synchronized (object){
         byte []da=new byte[]{0x55, (byte) 0xAA, 0x01, 0x08};
         ByteBuffer buffer=ByteBuffer.allocate(7);
         buffer.put(da);
@@ -209,6 +213,7 @@ public class ArkController {
 
         }
         return "查询错误！";
+        }
     }
     /**
      * 设置冷藏柜温度
@@ -355,7 +360,7 @@ public class ArkController {
         return ret >= 0;
     }
 
-    //55 AA 0B 02 77 03 FF FF FF FF FF FF FF FF 7D F0
+
     public synchronized boolean read(byte[] buffer, int offset, int maxlen)  {
         try {
             serialPort.readFull(buffer, offset, maxlen);

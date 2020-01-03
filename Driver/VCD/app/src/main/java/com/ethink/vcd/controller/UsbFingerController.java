@@ -133,11 +133,12 @@ public class UsbFingerController implements USBDeviceFace {
                 String res = fingerPushMessage.upload("/match", fingerImage);
                 if (!StringUtils.isEmpty(res)) {
                     fingerPushMessage.message(2, res);
+                    cancel=true;
                     return;
                 }
 
             }
-            fingerPushMessage.message(3, "验证失败！");
+            fingerPushMessage.message(3, "验证失败，请重试！");
         }).start();
     }
 
@@ -163,6 +164,11 @@ public class UsbFingerController implements USBDeviceFace {
     private int Capturing() {
         int w_nRet;
         while (true) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             w_nRet = common.Run_GetImage();
             if (w_nRet == USBFingerCommon.ERR_CONNECTION) {
                 logger.info("连接错误---");
