@@ -20,6 +20,12 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler{
         super("PRINT_BOOK");
         this.context = context;
         printController=new PrintController("/dev/ttyS0",19200);
+        //解决开机第一次打印无效
+        printController.inPaper();
+        printController.exitPaper();
+        printController.clearError();
+
+
     }
 
     @Override
@@ -54,7 +60,7 @@ public class PrintPlugin extends BasePlugin implements FunctionHandler{
                 String vaccine_site = pluginMessage.getString("vaccine_site");
                 String signature = pluginMessage.getString("signature");
                 String data  = PrintController.provinceFormat(need_name,vaccine,vaccine_date,lot_no,vaccine_unit,vaccine_site,signature);
-                printController.zheProvince(6, data, new PrintResult() {
+                printController.zheProvince(num, data, new PrintResult() {
                     @Override
                     public void printResult(Boolean res) {
                         logger.info("打印结果：{}",res);

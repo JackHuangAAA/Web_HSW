@@ -12,7 +12,7 @@
             <div class="complete-detail">
                 <detail/>
             </div>
-            <div class="complete-confirm" @click="confirm()">确认</div>
+            <div class="complete-confirm" @click="confirm()">返回首页</div>
         </div>
     </div>
 </template>

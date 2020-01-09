@@ -14,7 +14,8 @@ const excluded = [
     '/alarm/queryAlarmByCondition',
     '/vaccine/queryVaccineNum',
     '/vaccine/queryVaccineStorageNum',
-    '/temperature/saveTemperatures'
+    '/temperature/saveTemperatures',
+    '/alarm/queryAlarmNum'
 
 ];
 

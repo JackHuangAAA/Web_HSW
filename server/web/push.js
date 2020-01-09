@@ -17,7 +17,7 @@ let map = {
 let push = {
     init(io) {
         io.on('connection', (socket) => {
-            logger.info('set socket.id: ' + socket.id)
+            logger.info('set socket.id: ' + socket.id);
             //接收客户端
             socket.on('register', function (msg) {
                 let _msg = JSON.parse(msg)

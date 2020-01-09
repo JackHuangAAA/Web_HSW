@@ -15,8 +15,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.hardware.usb.accessory" />
 
-
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -25,13 +23,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.PrintActivity"/>
+        <activity android:name=".ui.USBPrintActivity"></activity>
+        <activity android:name=".ui.PrintActivity" />
         <activity android:name=".ui.ConfigActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
                 android:resource="@xml/device_filter" />
@@ -41,6 +42,7 @@
         <service android:name=".server.LineUpService" />
 
         <activity android:name=".ui.StartActivity" />
+
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
@@ -49,6 +51,13 @@
                 <action android:name="com.ethink.action.BOOT" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".print_nh80m.SerialActivity" />
+        <activity android:name=".print_nh80m.PrintTextActivity" />
+        <activity android:name=".print_nh80m.BarCodeActivity" />
+        <activity android:name=".print_nh80m.QRCodeActivity" />
+        <activity android:name=".print_nh80m.PrintBitmapActivity" />
+        <activity android:name=".print_nh80m.RasterBitmapActivity" />
     </application>
 
 </manifest>

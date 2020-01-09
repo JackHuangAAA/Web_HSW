@@ -49,14 +49,25 @@ module.exports = {
     queryVaccineStorageNum: async function (requestBody) {
         logger.debug(`queryVaccineStorageNum param: ${JSON.stringify(requestBody)}`);
         let query = [];
+        if (!_.isEmpty(requestBody.device)) {
+            let deviceId = mongoose.Types.ObjectId(requestBody.device);
+            query.push({device: deviceId});
+        }
+        if (!_.isEmpty(requestBody.code)) {
+            query.push({ "code": requestBody.code });
+        }
         if (!_.isEmpty(requestBody.name)) {
-            query.push({ "name": {'$lte':10}});
+            query.push({ "name": requestBody.name });
+        }
+        if (!_.isEmpty(requestBody.batchNo)) {
+            query.push({ "batchNo": requestBody.batchNo });
         }
         if (!_.isEmpty(requestBody.product)) {
             query.push({ "product": new RegExp(requestBody.product)});
         }
-        if (!_.isEmpty(requestBody['ids[]'])) {
-            let temp = _.map(requestBody['ids[]'], item => {
+        if (!_.isEmpty(requestBody['ids']) || !_.isEmpty(requestBody['ids[]'])) {
+            let ids = requestBody.ids.split(',');
+            let temp = _.map(ids, item => {
                 return mongoose.Types.ObjectId(item);
             });
             query.push({ "_id": { $in: temp } });
@@ -64,14 +75,23 @@ module.exports = {
         if (requestBody.surplusltTen) {
             query.push({ "surplus": {'$lte':10}});
         }
-        let deviceId = mongoose.Types.ObjectId(requestBody.device);
-        query.push({device: deviceId});
+        let page = requestBody.page?requestBody.page:1;
+        let size = requestBody.size?requestBody.size:10;
+
+
         let result = await Domain.models.vaccine.aggregate([
             { $match: { "$and": query } },
             { $group: { _id: '$code', num_movie: { $sum: 1 }, name: { "$first": "$name" }, code: { "$first": "$code" }, total: { "$sum": "$total" }, surplus: { "$sum": "$surplus" }, product: { "$first": "$product" },updateDate: { "$first": "$updateDate" } } },
-            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, product:1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } }
+            { $project: { _id: 1, num_movie: 1, name: 1, code: 1, total: 1, surplus: 1, product:1, updateDate: 1, use: { "$subtract": ["$total", "$surplus"] } } },
+            {$skip:(page-1)*size},
+            {$limit:parseInt(size)}
         ]);
-        return { rs: result, total: result.length, device: requestBody }
+        if (requestBody.queryNum) {
+            return { total: result.length }
+        }else {
+            return { rs: result, total: result.length, device: requestBody }
+        }
+
     },
     /**
      *  出库后 数量、 剩余数量清零

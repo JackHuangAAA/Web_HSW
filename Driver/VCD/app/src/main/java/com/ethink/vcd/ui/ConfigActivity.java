@@ -51,8 +51,6 @@ public class ConfigActivity extends AppCompatActivity {
     EditText edSocket;
     @BindView(R.id.et_finger)
     EditText etFinger;
-    @BindView(R.id.et_alias)
-    EditText edAlias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +61,7 @@ public class ConfigActivity extends AppCompatActivity {
         String socketUrl = SPUtils.getSharedStringData(this, Const.SOCKET_IO_URL);
         String serial = SPUtils.getSharedStringData(App.getAppContext(), Const.SERIAL_NO);
         String finger=SPUtils.getSharedStringData(App.getAppContext(), Const.FINGER_URL);
-        String alias=SPUtils.getSharedStringData(this,Const.ALIAS);
-        if(!StringUtils.isEmpty(alias)){
-            edAlias.setText(alias);
-        }
+
         //自动上报的地址
         if (url.isEmpty()) {
             etUrl.setText("http://iviotp.ethinkbank.com");
@@ -145,11 +140,6 @@ public class ConfigActivity extends AppCompatActivity {
         String socketUrl = edSocket.getText().toString();
         String serial = etSerial.getText().toString();
         String finger_url=etFinger.getText().toString();
-        String alias=edAlias.getText().toString();
-        if(StringUtils.isEmpty(alias)){
-            Toast.makeText(this, "请输入设备别名", Toast.LENGTH_LONG).show();
-            return;
-        }
         if (url.isEmpty()) {
             Toast.makeText(this, "请输入服务地址", Toast.LENGTH_LONG).show();
             return;
@@ -166,7 +156,6 @@ public class ConfigActivity extends AppCompatActivity {
             Toast.makeText(this, "请输入指纹服务地址！", Toast.LENGTH_LONG).show();
             return;
         }
-        SPUtils.setSharedStringData(getApplication(), Const.ALIAS, alias);
         SPUtils.setSharedStringData(getApplication(), Const.FINGER_URL, finger_url);
         SPUtils.setSharedStringData(getApplication(), Const.SERIAL_NO, serial);
         SPUtils.setSharedStringData(getApplication(), Const.SOCKET_IO_URL, socketUrl);
@@ -175,7 +164,7 @@ public class ConfigActivity extends AppCompatActivity {
         Intent startIntent = new Intent(this, VCDService.class);
         startService(startIntent);
 
-//        Intent finger = new Intent(this, ArkActivity.class);
+//        Intent finger = new Intent(this, USBFingerActivity.class);
 //        startActivity(finger);
 
         finish();

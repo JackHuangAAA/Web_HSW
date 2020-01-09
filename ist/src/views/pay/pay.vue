@@ -6,7 +6,7 @@
         </div>
         <div class="pay-content">
             <div class="pay-content-title">{{data?data.vaccine.name:''}}<span>自费</span></div>
-            <div class="pay-content-price">{{data?data.vaccine.cost:''}}</div>
+            <div class="pay-content-price">￥{{data?data.vaccine.cost:''}}</div>
             <div class="pay-content-notice">请选择您要支付的方式:</div>
             <div class="pay-content-box">
                 <div class="pay-content-choose" v-for="(item,index) in payWays" :key="item.payWay" @click="selectPayWays(item.type)">
@@ -15,7 +15,7 @@
                     <div class="payDescribe">{{item.payWay}}</div>
                 </div>
             </div>
-            <detail/>
+            <detail class="detail"/>
         </div>
         
     </div>
@@ -57,7 +57,7 @@ export default {
         },
         initData(){
             //从vuex user 里获取接种数据
-            this.data = this.user
+            this.data = this.user;
         },
     },
     mounted(){

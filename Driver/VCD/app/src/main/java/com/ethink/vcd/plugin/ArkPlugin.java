@@ -41,13 +41,13 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
     //温度实时上送
     private Thread temThread;
     private Timer timer = new Timer();
-    private MessageToast messageToast;
+   // private MessageToast messageToast;
 
     public ArkPlugin(Context context) {
         super("CONTROLLER_BOARD");
         logger.info("--------------------连接主控板--------------------");
         this.context = context;
-        messageToast = new MessageToast(context);
+     //   messageToast = new MessageToast(context);
         this.arkController = new ArkController("/dev/ttyUSB0", 115200);
 
     }
@@ -138,22 +138,22 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SWITCH_STATUS", this);
         //设置温度
         registerFunction("SET_TEMPERATURE", this);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (arkController != null) {
-                    Set<Integer> set = new HashSet<>();
-                    set.add(1);
-                    set.add(2);
-                    set.add(3);
-                    set.add(4);
-                    set.add(5);
-                    List<Double> list = arkController.temperature(set);
-                    messageToast.obtainMessage(1, list).sendToTarget();
-                }
-
-            }
-        }, 30000, 30000);
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                if (arkController != null) {
+//                    Set<Integer> set = new HashSet<>();
+//                    set.add(1);
+//                    set.add(2);
+//                    set.add(3);
+//                    set.add(4);
+//                    set.add(5);
+//                    List<Double> list = arkController.temperature(set);
+//                  //  messageToast.obtainMessage(1, list).sendToTarget();
+//                }
+//
+//            }
+//        }, 30000, 30000);
     }
 
     @Override
@@ -163,8 +163,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
     @Override
     public void run() {
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
+//        Set<Integer> set = new HashSet<>();
+//        set.add(1);
 //        set.add(2);
 //        set.add(3);
 //        set.add(4);
@@ -227,7 +227,8 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
             if (msg.what == 1 && dialog != null) {
                 if (textView != null) {
                     textView.setText("当前温度: \n"+JSON.toJSONString(msg.obj));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {//8.0新特性
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        //8.0新特性
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY - 1);
                     } else {
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_TOAST);

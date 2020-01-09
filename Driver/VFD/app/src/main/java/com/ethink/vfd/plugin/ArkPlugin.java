@@ -80,13 +80,16 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
                 if (arkController.arkStatus() == 1) {
                     //   ResponseUtil.success(pluginMessage, "状态正常", null);
                 }
+                pluginMessage.changeToResponse();
                 break;
             case "SYS_VALUES":
                 arkController.sysValue();
+                pluginMessage.changeToResponse();
                 // ResponseUtil.success(pluginMessage, "系统信息", null);
                 break;
             case "SWITCH_STATUS":
                 arkController.switchStatus();
+                pluginMessage.changeToResponse();
                 break;
             case "OPEN_DOOR":
                 pluginMessage.changeToResponse();
@@ -106,9 +109,7 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
 
     @Override
     public void onStart() throws Throwable {
-        //服务链接检测线程
-        temThread = new Thread(this);
-        temThread.start();
+
         //开锁
         registerFunction("OPEN_DRAWER", this);
         //冷藏柜开门
@@ -124,6 +125,9 @@ public class ArkPlugin extends BasePlugin implements FunctionHandler, Runnable {
         registerFunction("SWITCH_STATUS", this);
         //设置温度
         registerFunction("SET_TEMPERATURE", this);
+        //服务链接检测线程
+        temThread = new Thread(this);
+        temThread.start();
     }
 
     @Override

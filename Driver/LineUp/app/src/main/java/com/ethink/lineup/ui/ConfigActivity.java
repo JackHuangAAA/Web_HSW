@@ -14,6 +14,7 @@ import com.ethink.lineup.App;
 import com.ethink.lineup.Const;
 import com.ethink.lineup.R;
 import com.ethink.lineup.SPUtils;
+import com.ethink.lineup.print_nh80m.SerialActivity;
 import com.ethink.lineup.server.LineUpService;
 
 import org.slf4j.Logger;
@@ -164,8 +165,8 @@ public class ConfigActivity extends AppCompatActivity {
         Toast.makeText(this, "配置地址已经生效", Toast.LENGTH_LONG).show();
         Intent startIntent = new Intent(this, LineUpService.class);
         startService(startIntent);
-//
-//        Intent intent = new Intent(this, PrintActivity.class);
+////
+//        Intent intent = new Intent(this, USBPrintActivity.class);
 //        startActivity(intent);
 
         finish();

@@ -61,25 +61,25 @@
 			console.log("$d ready");
 		},
 		invoke: function(pluginName,functionName,data){
-			console.log("$d.call",pluginName,functionName,data)
+			console.log("$d.call"+pluginName+functionName+data)
 			return Promise.reject("not support");
 		},
 		subscribe: function(eventName,cb){
-			console.log("$d.subscribe",eventName)
+			console.log("$d.subscribe"+eventName)
 		},
 		log: function(msg){
-			console.log("$d.log",msg)
+			console.log("$d.log"+msg)
 		},
 		getPluginList: function(){
 			console.log("$d.getPluginList")
 			return Promise.reject("not support");
 		},
 		getPluginEventList: function(pluginName){
-			console.log("$d.getPluginEventList",pluginName)
+			console.log("$d.getPluginEventList"+pluginName)
 			return Promise.reject("not support");
 		},
 		getPluginFunctionList: function(pluginName){
-			console.log("$d.getPluginFunctionList",pluginName)
+			console.log("$d.getPluginFunctionList"+pluginName)
 			return Promise.reject("not support");
 		}
 	};

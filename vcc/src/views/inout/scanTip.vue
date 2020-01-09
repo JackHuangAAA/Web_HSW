@@ -39,7 +39,7 @@
                 commonData: null,
                 lists:[
                     { title: '选择出库疫苗' },
-                    {title:'取出疫苗'},
+                    { title:'取出疫苗' },
                     { title: '出库完成' }
                 ],
                 active:1,
