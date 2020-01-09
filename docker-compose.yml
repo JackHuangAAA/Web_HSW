@@ -1,0 +1,39 @@
+version: '3'
+services:
+  web:
+    restart: always
+    image: node
+    working_dir: /home/node/app
+    command: npm run web
+    volumes:
+      - ./server:/home/node/app
+    ports:
+      - 7000:7000
+      - 7004:7004
+  vcc:
+    restart: always
+    image: node
+    working_dir: /home/node/app
+    command: npm run vcc
+    volumes:
+      - ./server:/home/node/app
+    ports:
+      - 7001:7001
+  vfc:
+    restart: always
+    image: node
+    working_dir: /home/node/app
+    command: npm run vfc
+    volumes:
+      - ./server:/home/node/app
+    ports:
+      - 7002:7002
+  ist:
+    restart: always
+    image: node
+    working_dir: /home/node/app
+    command: npm run ist
+    volumes:
+      - ./server:/home/node/app
+    ports:
+      - 7003:7003
