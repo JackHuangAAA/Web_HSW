@@ -10,7 +10,7 @@
                 批次号：<span>{{nextVaccination.vaccine?nextVaccination.vaccine.batchNo:''}}</span>
             </div>
             <div class="date">
-                有效期：<span>{{nextVaccination.vaccine?'2019-09-18 12:30 至 '+getTime(nextVaccination.vaccine.date):''}}</span>
+                有效期：<span>{{nextVaccination.vaccine?'2019-09-18 12:30 至 '+getTime(nextVaccination.vaccine.expiry):''}}</span>
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@ export default {
             });
         },
         getTime(val){
-            return moment(val).format('YYYY-MM-DD HH:mm:ss')
+            return moment(val).format('YYYY-MM-DD HH:mm')
         }
     },
     mounted(){
