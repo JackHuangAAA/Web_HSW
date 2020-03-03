@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       message:'',
+      timer:null
     };
   },
   computed:{
@@ -69,7 +70,10 @@ export default {
         }
       }else if(data.type==3){
         this.message=data.msg;
-        this.fingerLogin();
+        this.timer=setTimeout(()=>{
+          this.fingerLogin();
+          clearTimeout(this.timer);
+        },1500)
       }
     });
     //激活指纹模块

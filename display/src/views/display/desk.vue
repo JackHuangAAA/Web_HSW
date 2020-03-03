@@ -10,14 +10,14 @@
                 批次号：<span>{{nextVaccination.vaccine?nextVaccination.vaccine.batchNo:''}}</span>
             </div>
             <div class="date">
-                有效期：<span>{{nextVaccination.vaccine?'2019-09-18 12:30 至 '+nextVaccination.vaccine.date:''}}</span>
+                有效期：<span>{{nextVaccination.vaccine?'2019-09-18 12:30 至 '+getTime(nextVaccination.vaccine.expiry):''}}</span>
             </div>
         </div>
     </div>
 </template>
 <script>
 import io from  'socket.io-client';
-
+import moment from 'moment';
 export default {
     data () {
         return {
@@ -45,6 +45,9 @@ export default {
                         break;
                 }
             });
+        },
+        getTime(val){
+            return moment(val).format('YYYY-MM-DD HH:mm')
         }
     },
     mounted(){

@@ -72,7 +72,7 @@
                         <div class="mt24">批次号：<span>Y750230-64368</span></div>
                         <div class="mt24">疫苗剂量：<span>0.5ml/支</span></div>
                     </div>
-                    <div class="vaccineInf-bottom">有效期：<span>2019-09-18 12:30:28   至  {{vaccine.expiry}}</span></div>
+                    <div class="vaccineInf-bottom">有效期：<span>2019-09-18 12:30:28   至  {{getExpiryDate(vaccine.expiry)}}</span></div>
                     <div class="vaccineInf-bottom">生产厂家：<span>{{vaccine.product}}</span></div>
                     <div class="vaccineInf-bottom">接种份数：<span>1</span></div>
                 </div>
