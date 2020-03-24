@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "web": "node web/main.js dev",
-    "vcc": "node vcc/main.js dev",
-    "vfc": "node vfc/main.js dev",
-    "ist": "node ist/main.js dev",
     "build": "node build/build.js"
   },
   "dependencies": {
